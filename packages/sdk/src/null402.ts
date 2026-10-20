@@ -101,7 +101,7 @@ export async function verifyNull402(req: Null402Request, opts: { rpc?: string } 
   } catch {
     throw new VerifyError('proof or public signals are not decimal field elements');
   }
-  const rpc = opts.rpc ?? process.env.ZPV_FUJI_RPC ?? NULL402_FUJI.rpc;
+  const rpc = opts.rpc ?? (typeof process !== 'undefined' ? process.env?.ZPV_FUJI_RPC : undefined) ?? NULL402_FUJI.rpc;
   const c = client(rpc);
   const blockNumber = await c.getBlockNumber();
   const at = { blockNumber };

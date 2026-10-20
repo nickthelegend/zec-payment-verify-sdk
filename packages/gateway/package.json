@@ -6,11 +6,17 @@
   "type": "module",
   "main": "dist/server.js",
   "types": "dist/server.d.ts",
-  "exports": { ".": { "types": "./dist/server.d.ts", "import": "./dist/server.js" } },
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/main.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "api": "tsx src/api.ts"
   },
   "dependencies": {
     "@zpv/sdk": "workspace:*"

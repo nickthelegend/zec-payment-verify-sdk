@@ -10,6 +10,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./null402": {
+      "types": "./dist/null402.d.ts",
+      "import": "./dist/null402.js"
     }
   },
   "files": [
