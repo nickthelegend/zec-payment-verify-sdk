@@ -1,0 +1,23 @@
+{
+  "name": "@zpv/mcp",
+  "version": "0.1.0",
+  "description": "MCP server: verify_zcash_payment (merchant incoming viewing key) and verify_null402_settlement (Fuji)",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "zpv-mcp": "dist/main.js" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "@zpv/sdk": "workspace:*",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.7"
+  }
+}
