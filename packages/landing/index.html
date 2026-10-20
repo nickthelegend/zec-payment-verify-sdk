@@ -67,15 +67,18 @@ if (!r.ok) console.log(r.reasons);   // MEMO_MISMATCH, AMOUNT_TOO_LOW, TRANSPARE
           <table>
             <thead><tr><th>Payment</th><th>Verdict</th></tr></thead>
             <tbody>
-              <tr><td>x402 payment <code>030c3cbf…</code>, with the merchant's published key</td><td>paid, 100,000 zat, memo matches</td></tr>
-              <tr><td>same payment, another invoice memo</td><td>MEMO_MISMATCH</td></tr>
-              <tr><td>an auction deposit, with the x402 key</td><td>NO_OUTPUT_TO_KEY</td></tr>
-              <tr><td>a real null-402 <code>settle()</code> on Fuji</td><td>proof valid, root known, NULLIFIER_SPENT (a replay)</td></tr>
+              <tr><td>paywall: 10,000 zat with the challenge memo <a href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16"><code>7c1f6cc0…</code></a></td><td>paid → HTTP 200</td></tr>
+              <tr><td>the same price with another memo <a href="https://testnet.zcashexplorer.app/transactions/1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0"><code>1620eccc…</code></a></td><td>MEMO_MISMATCH, AMOUNT_TOO_LOW</td></tr>
+              <tr><td>half the price <a href="https://testnet.zcashexplorer.app/transactions/f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2"><code>f9db1841…</code></a></td><td>AMOUNT_TOO_LOW</td></tr>
+              <tr><td>right memo and amount, plus a transparent output <a href="https://testnet.zcashexplorer.app/transactions/bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec"><code>bb8d8842…</code></a></td><td>TRANSPARENT_PART</td></tr>
+              <tr><td>payslip, checked by a lender with the employee's key <a href="https://testnet.zcashexplorer.app/transactions/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869"><code>38958ceb…</code></a></td><td>paid, 50,000 zat, memo matches</td></tr>
+              <tr><td>the zec-shielded-x402 demo payment, with its merchant's published key <a href="https://testnet.zcashexplorer.app/transactions/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351"><code>030c3cbf…</code></a></td><td>paid, 100,000 zat</td></tr>
+              <tr><td>a real null-402 <code>settle()</code> on Fuji <a href="https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"><code>0x8596f52d…</code></a></td><td>proof valid, root known, NULLIFIER_SPENT (a replay)</td></tr>
               <tr><td>the same proof claiming another amount</td><td>BAD_PROOF on the deployed verifier</td></tr>
             </tbody>
           </table>
         </div>
-        <p>The live paywall, refused payments and payslip check from the testnet run are listed in the README.</p>
+        <p>Every row is a real transaction on Zcash testnet or Avalanche Fuji; the first five were made by this project's live run.</p>
       </section>
 
       <section>

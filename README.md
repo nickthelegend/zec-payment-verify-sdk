@@ -63,7 +63,7 @@ pnpm --filter @zpv/dashboard dev   # http://localhost:5180
 scripts/clean-install.sh           # tarball + cargo install in an empty dir, verifies a real payment
 ```
 
-Demo video: `grokbot/videos/zec-payment-verify-demo.mp4` (live re-checks of the run's transactions).
+Demo video: `zec-payment-verify-demo.mp4` (shared separately until hosted) (live re-checks of the run's transactions).
 
 ## Honest limits
 
@@ -73,7 +73,7 @@ Demo video: `grokbot/videos/zec-payment-verify-demo.mp4` (live re-checks of the 
 - The paywall keeps memo nonces and used txids in memory.
 - A null-402 proof that passes all three checks is not shown live: it needs null-402's pool operator
   to register a new root (`NULL402_OPERATOR_KEY`, not held). **BLOCKED** on that.
-- Not published to npm or crates.io (needs Nick's accounts); installable from the packed tarball.
+- Not published to npm or crates.io (needs the maintainer's npm and crates.io accounts); installable from the packed tarball.
 - Portfolio piece; the Zecathon entry is Shielded x402.
 
 MIT — Copyright (c) 2026 Nivesh Gajengi.

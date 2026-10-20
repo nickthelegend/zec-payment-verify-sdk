@@ -9,7 +9,7 @@ purpose (`fixtures/testnet.json`).
 |---|---|---|---|
 | core (Rust, `cargo test`) | — | 3 | rules: exact payment counts only matching memos; one reason per failure; transparent allowed when asked |
 | core (Rust, `tests/live.rs`) | Zcash testnet | 5 | the x402 payment verifies with the merchant key; wrong memo / higher amount refused; someone else's payment → `NO_OUTPUT_TO_KEY` and the right key sees it; unknown txid, bad key, bad txid; unreachable lightwalletd is an error |
-| core doc example | — | 1 | the README example compiles |
+| core doc example | — | 1 | the crate doc example (`src/lib.rs`) compiles |
 | sdk | Zcash testnet + Fuji | 7 | both rails: pass, each refusal, errors vs verdicts, missing binary; real settled null-402 proof (valid, root known, replay), tampered signals, merchant expectations |
 | gateway | Zcash testnet | 4 | 402 + ZIP-321; a real payment answers its challenge → 200, then the txid is refused; wrong payment, unknown memo, garbage; `/api/verify` + CORS |
 | mcp | Zcash testnet + Fuji, stdio MCP client | 4 | tools listed read-only; Zcash ok and refused; null-402 settle; Setup required |

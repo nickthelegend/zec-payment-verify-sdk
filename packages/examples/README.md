@@ -6,3 +6,9 @@
   x402 payment and a real null-402 settle on Fuji. Needs `ZPV_FUNDER_WALLET` (zingo data dir of a
   funded demo wallet; the treasury wallet is refused by path).
 - `demo` — re-checks the recorded run live through the CLI, the paywall, the SDK and Fuji (the video).
+
+```sh
+CARGO_TARGET_DIR=<where zpay-verify is built> ZPV_FUNDER_WALLET=<zingo data dir of a funded demo wallet> pnpm --filter @zpv/examples run-live
+pnpm --filter @zpv/examples demo     # re-checks deployments/testnet.json live (no new transactions)
+```
+
