@@ -8,85 +8,142 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='8' width='22' height='16' rx='3' fill='none' stroke='%231E7A4C' stroke-width='3' transform='rotate(-8 16 16)'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
     <style>
-      :root { --paper: #eef2ef; --sheet: #fafcfa; --ink: #102a26; --muted: #55706a; --rule: #c8d6d0; --ok: #1e7a4c; --no: #b42318; --link: #0f5c8c; color-scheme: light; }
-      @media (prefers-color-scheme: dark) { :root { --paper: #0c1715; --sheet: #132320; --ink: #e3eeea; --muted: #8fa9a2; --rule: #26403b; --ok: #4cc38a; --no: #ff7b6e; --link: #7cc4f0; color-scheme: dark; } }
+      :root { --desk: #e5e8e2; --paper: #fbfbf7; --ink: #151a17; --muted: #5d6a63; --rule: #cbd2ca; --lime: #d6f264; --ok: #1e7a4c; --no: #b42318; --link: #0f5c8c; color-scheme: light; }
+      @media (prefers-color-scheme: dark) { :root { --desk: #101512; --paper: #171e1a; --ink: #e6ede8; --muted: #93a39a; --rule: #2a352f; --lime: #c4e350; --ok: #4cc38a; --no: #ff7b6e; --link: #7cc4f0; color-scheme: dark; } }
       * { box-sizing: border-box; }
-      body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.65 'Familjen Grotesk', system-ui, sans-serif; overflow-x: hidden; }
+      body { margin: 0; background: var(--desk); color: var(--ink); font: 400 17px/1.65 'Hanken Grotesk', system-ui, sans-serif; overflow-x: hidden; }
       a { color: var(--link); text-underline-offset: 3px; }
-      :focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
-      code, pre { font: 0.85em 'JetBrains Mono', monospace; }
-      .wrap { max-width: 900px; margin: 0 auto; padding: 0 16px; }
-      header { padding: 60px 0 34px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
-      .brand { font: 600 1rem 'JetBrains Mono', monospace; margin: 0 0 32px; }
-      h1 { font: 700 clamp(2.4rem, 7vw, 4.2rem)/1 'Familjen Grotesk', sans-serif; letter-spacing: -0.03em; margin: 0 0 18px; }
-      header p { color: var(--muted); max-width: 54ch; }
-      .stamp { font: 800 1.5rem/1 'Familjen Grotesk', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ok); border: 4px double currentColor; border-radius: 8px; padding: 18px 14px; transform: rotate(-6deg); white-space: nowrap; }
-      h2 { font: 700 1.4rem/1.2 'Familjen Grotesk', sans-serif; margin: 0 0 12px; }
-      section { padding: 38px 0; border-top: 1px solid var(--rule); }
-      pre { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; overflow-x: auto; line-height: 1.55; }
-      .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-      .cta a { font-weight: 600; text-decoration: none; padding: 10px 16px; border-radius: 4px; border: 1px solid var(--ink); color: var(--ink); }
-      .cta a:first-child { background: var(--ink); color: var(--sheet); }
-      .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--sheet); }
-      table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
-      th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
-      th { color: var(--muted); font-size: 0.8rem; }
-      tr:last-child td { border-bottom: 0; }
-      footer { padding: 28px 0 44px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--rule); }
-      @media (max-width: 640px) { header { grid-template-columns: 1fr; padding-top: 36px; } .stamp { justify-self: start; } }
+      :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+      code, pre { font: 0.84em 'JetBrains Mono', monospace; }
+      code { overflow-wrap: anywhere; }
+      .wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+      .top { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; font: 600 1rem 'JetBrains Mono', monospace; }
+      .top a { font: 600 0.9rem 'Hanken Grotesk', sans-serif; color: var(--ink); text-decoration: none; padding: 8px 14px; border-radius: 8px; background: var(--lime); color: #151a17; }
+
+      .hero { display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: center; padding: 48px 0 88px; }
+      h1 { font: 800 clamp(3rem, 8vw, 6rem)/0.92 'Hanken Grotesk', sans-serif; letter-spacing: -0.045em; margin: 0 0 24px; }
+      .lede { color: var(--muted); max-width: 52ch; margin: 0 0 28px; font-size: 1.1rem; }
+      .note { display: inline-block; background: var(--lime); color: #151a17; padding: 14px 16px; border-radius: 4px; transform: rotate(-1.5deg); box-shadow: 0 10px 24px -14px rgba(0,0,0,.4); font-size: 0.95rem; max-width: 36ch; }
+      .note b { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; margin-bottom: 4px; }
+
+      /* The receipt: a real check result, with the stamp landing on each verdict in turn. */
+      .receipt { position: relative; background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 26px 24px 110px; box-shadow: 0 24px 48px -28px rgba(0,0,0,.35); }
+      .receipt h3 { margin: 0 0 16px; font: 600 0.82rem 'JetBrains Mono', monospace; color: var(--muted); }
+      .receipt dl { margin: 0; display: grid; grid-template-columns: 96px 1fr; gap: 8px 12px; font-size: 0.95rem; }
+      .receipt dt { color: var(--muted); }
+      .receipt dd { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; overflow-wrap: anywhere; }
+      .receipt hr { border: 0; border-top: 1px dashed var(--rule); margin: 18px 0 14px; }
+      .stamp { position: absolute; right: 18px; bottom: 22px; font: 800 1.15rem/1.1 'Hanken Grotesk', sans-serif; letter-spacing: 0.03em; text-transform: uppercase; border: 4px double currentColor; border-radius: 8px; padding: 10px 12px; transform: rotate(-8deg); color: var(--ok); max-width: 210px; text-align: center; }
+      .stamp.no { color: var(--no); }
+      .stamp.thump { animation: thump .45s cubic-bezier(.2,1.6,.4,1); }
+      @keyframes thump { from { transform: rotate(-8deg) scale(1.6); opacity: 0; } to { transform: rotate(-8deg) scale(1); opacity: 1; } }
+      .dots { display: flex; gap: 6px; margin-top: 16px; }
+      .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); }
+      .dots i.on { background: var(--ink); }
+
+      section { padding: 88px 0; border-top: 1px solid var(--rule); }
+      h2 { font: 800 clamp(1.8rem, 3.8vw, 2.8rem)/1.02 'Hanken Grotesk', sans-serif; letter-spacing: -0.03em; margin: 0 0 14px; }
+      .sub { color: var(--muted); max-width: 62ch; margin: 0 0 32px; }
+      pre { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 18px 20px; overflow-x: auto; line-height: 1.6; margin: 0 0 18px; }
+      .surfaces { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+      .surface { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; }
+      .surface b { display: block; margin-bottom: 4px; }
+      .surface span { color: var(--muted); font-size: 0.93rem; }
+
+      .checks { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+      .check { display: grid; grid-template-columns: 1fr 260px; gap: 16px; padding: 13px 20px; border-top: 1px solid var(--rule); align-items: baseline; font-size: 0.95rem; }
+      .check:first-child { border-top: 0; }
+      .check .v { font: 600 0.8rem 'JetBrains Mono', monospace; }
+      .check .v.ok { color: var(--ok); } .check .v.no { color: var(--no); }
+      .limits { color: var(--muted); max-width: 72ch; }
+      footer { border-top: 1px solid var(--rule); padding: 28px 0 48px; color: var(--muted); font-size: 0.86rem; }
+
+      @media (max-width: 900px) {
+        .hero { grid-template-columns: 1fr; gap: 40px; padding-top: 24px; }
+        .surfaces { grid-template-columns: 1fr 1fr; }
+        .check { grid-template-columns: 1fr; gap: 2px; }
+        .receipt dl { grid-template-columns: 80px 1fr; }
+        .stamp { position: static; display: inline-block; margin-top: 18px; } .receipt { padding-bottom: 30px; }
+        section { padding: 64px 0; }
+      }
+      @media (prefers-reduced-motion: reduce) { .stamp.thump { animation: none; } }
     </style>
   </head>
   <body>
     <div class="wrap">
-      <header>
+      <div class="top"><span>zpay-verify</span><a href="https://github.com/nickthelegend/zec-payment-verify-sdk">Source</a></div>
+      <header class="hero">
         <div>
-          <p class="brand">zpay-verify</p>
           <h1>Was I paid?</h1>
-          <p>Check an incoming shielded Zcash payment (amount, memo, confirmations, nothing transparent) with only your incoming viewing key. The same call checks a null-402 payment proof against the contracts on Avalanche Fuji.</p>
-          <div class="cta">
-            <a href="https://github.com/nickthelegend/zec-payment-verify-sdk">Source</a>
-            <a href="https://github.com/nickthelegend/zec-payment-verify-sdk/tree/main/packages/docs">Rules and API</a>
-          </div>
+          <p class="lede">Check an incoming shielded Zcash payment, its amount, memo and confirmations, with only your incoming viewing key. The same call checks a null-402 payment proof against the contracts on Avalanche Fuji.</p>
+          <p class="note"><b>reasons, not a yes or no</b>Every check returns the exact rule that failed, so a paywall or an agent knows what to tell the payer.</p>
         </div>
-        <div class="stamp" aria-hidden="true">Paid</div>
+        <div class="receipt" aria-live="polite">
+          <h3>zcash testnet · checked with a viewing key</h3>
+          <dl><dt>payment</dt><dd id="r-what"></dd><dt>tx</dt><dd id="r-tx"></dd><dt>asked for</dt><dd>10,000 zat + the challenge memo</dd></dl>
+          <hr />
+          <span class="stamp" id="stamp"></span>
+          <div class="dots" id="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </div>
       </header>
+    </div>
 
-      <section>
-        <h2>Three lines</h2>
-<pre>import { verify } from '@zpv/sdk';
+    <main class="wrap">
+      <section aria-labelledby="use">
+        <h2 id="use">Three lines</h2>
+        <pre>import { verify } from '@zpv/sdk';
 const r = await verify({ rail: 'zcash', uivk, txid, amountZat: 10_000, memo: 'zpv-…' });
 if (!r.ok) console.log(r.reasons);   // MEMO_MISMATCH, AMOUNT_TOO_LOW, TRANSPARENT_PART, …</pre>
-        <p>Also a Rust crate and CLI (<code>zpay-verify verify &lt;txid&gt; --amount --memo</code>, exit 0 / 1 / 2), an x402 paywall that answers 402 with a memo nonce, and an MCP server so an agent checks before it delivers.</p>
-      </section>
-
-      <section>
-        <h2>Checked on real transactions</h2>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Payment</th><th>Verdict</th></tr></thead>
-            <tbody>
-              <tr><td>paywall: 10,000 zat with the challenge memo <a href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16"><code>7c1f6cc0…</code></a></td><td>paid → HTTP 200</td></tr>
-              <tr><td>the same price with another memo <a href="https://testnet.zcashexplorer.app/transactions/1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0"><code>1620eccc…</code></a></td><td>MEMO_MISMATCH, AMOUNT_TOO_LOW</td></tr>
-              <tr><td>half the price <a href="https://testnet.zcashexplorer.app/transactions/f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2"><code>f9db1841…</code></a></td><td>AMOUNT_TOO_LOW</td></tr>
-              <tr><td>right memo and amount, plus a transparent output <a href="https://testnet.zcashexplorer.app/transactions/bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec"><code>bb8d8842…</code></a></td><td>TRANSPARENT_PART</td></tr>
-              <tr><td>payslip, checked by a lender with the employee's key <a href="https://testnet.zcashexplorer.app/transactions/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869"><code>38958ceb…</code></a></td><td>paid, 50,000 zat, memo matches</td></tr>
-              <tr><td>the zec-shielded-x402 demo payment, with its merchant's published key <a href="https://testnet.zcashexplorer.app/transactions/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351"><code>030c3cbf…</code></a></td><td>paid, 100,000 zat</td></tr>
-              <tr><td>a real null-402 <code>settle()</code> on Fuji <a href="https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"><code>0x8596f52d…</code></a></td><td>proof valid, root known, NULLIFIER_SPENT (a replay)</td></tr>
-              <tr><td>the same proof claiming another amount</td><td>BAD_PROOF on the deployed verifier</td></tr>
-            </tbody>
-          </table>
+        <div class="surfaces">
+          <div class="surface"><b>Rust crate + CLI</b><span><code>zpay-verify verify &lt;txid&gt;</code>, exit 0 / 1 / 2</span></div>
+          <div class="surface"><b>TypeScript SDK</b><span>One <code>verify()</code> for Zcash and null-402</span></div>
+          <div class="surface"><b>x402 paywall</b><span>Answers 402 with a memo nonce, 200 once paid</span></div>
+          <div class="surface"><b>MCP server</b><span>An agent checks before it delivers</span></div>
         </div>
-        <p>Every row is a real transaction on Zcash testnet or Avalanche Fuji; the first five were made by this project's live run.</p>
       </section>
 
-      <section>
-        <h2>Limits</h2>
-        <p>Testnet only. The checker trusts lightwalletd not to withhold transactions (it recomputes every txid). A viewing key shows every incoming payment to its wallet, so share it only with whoever should see them. A fully passing null-402 check needs null-402's pool operator to register a new root, which this project cannot do.</p>
+      <section aria-labelledby="real">
+        <h2 id="real">Checked on real transactions</h2>
+        <p class="sub">Every row is a real transaction on Zcash testnet or Avalanche Fuji. The first five were made by this project's live run.</p>
+        <div class="checks" role="table" aria-label="Checks on real transactions">
+          <div class="check" role="row"><span>Paywall: 10,000 zat with the challenge memo <a href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16"><code>7c1f6cc0…</code></a></span><span class="v ok">paid → HTTP 200</span></div>
+          <div class="check" role="row"><span>The same price with another memo <a href="https://testnet.zcashexplorer.app/transactions/1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0"><code>1620eccc…</code></a></span><span class="v no">MEMO_MISMATCH, AMOUNT_TOO_LOW</span></div>
+          <div class="check" role="row"><span>Half the price <a href="https://testnet.zcashexplorer.app/transactions/f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2"><code>f9db1841…</code></a></span><span class="v no">AMOUNT_TOO_LOW</span></div>
+          <div class="check" role="row"><span>Right memo and amount, plus a transparent output <a href="https://testnet.zcashexplorer.app/transactions/bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec"><code>bb8d8842…</code></a></span><span class="v no">TRANSPARENT_PART</span></div>
+          <div class="check" role="row"><span>A payslip, checked by a lender with the employee's key <a href="https://testnet.zcashexplorer.app/transactions/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869"><code>38958ceb…</code></a></span><span class="v ok">paid, 50,000 zat, memo matches</span></div>
+          <div class="check" role="row"><span>The zec-shielded-x402 demo payment <a href="https://testnet.zcashexplorer.app/transactions/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351"><code>030c3cbf…</code></a></span><span class="v ok">paid, 100,000 zat</span></div>
+          <div class="check" role="row"><span>A real null-402 <code>settle()</code> on Fuji <a href="https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"><code>0x8596f52d…</code></a></span><span class="v no">proof valid, root known, NULLIFIER_SPENT</span></div>
+          <div class="check" role="row"><span>The same proof claiming another amount</span><span class="v no">BAD_PROOF</span></div>
+        </div>
       </section>
 
-      <footer>MIT · Copyright (c) 2026 Nivesh Gajengi · extracted from zec-shielded-x402</footer>
-    </div>
+      <section aria-labelledby="limits">
+        <h2 id="limits">Limits</h2>
+        <p class="limits">Testnet only. The checker trusts lightwalletd not to withhold transactions, and recomputes every txid. A viewing key shows every incoming payment to its wallet, so share it only with whoever should see them. A fully passing null-402 check needs null-402's pool operator to register a new root, which this project cannot do. Not audited.</p>
+      </section>
+    </main>
+    <footer class="wrap">MIT · Copyright (c) 2026 Nivesh Gajengi · extracted from zec-shielded-x402</footer>
+    <script>
+      // The four paywall checks from this project's live run, shown in turn.
+      const runs = [
+        { what: '10,000 zat, challenge memo', tx: '7c1f6cc0…', stamp: 'Paid', ok: true },
+        { what: '10,000 zat, another memo', tx: '1620eccc…', stamp: 'Memo mismatch + amount too low', ok: false },
+        { what: '5,000 zat, challenge memo', tx: 'f9db1841…', stamp: 'Amount too low', ok: false },
+        { what: 'right memo + a transparent output', tx: 'bb8d8842…', stamp: 'Transparent part', ok: false },
+      ];
+      const $ = (id) => document.getElementById(id), dots = [...$('dots').children];
+      let i = 0;
+      const show = () => {
+        const r = runs[i];
+        $('r-what').textContent = r.what; $('r-tx').textContent = r.tx;
+        const s = $('stamp'); s.textContent = r.stamp; s.className = 'stamp' + (r.ok ? '' : ' no');
+        void s.offsetWidth; s.classList.add('thump');
+        dots.forEach((d, k) => d.classList.toggle('on', k === i));
+      };
+      show();
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => { i = (i + 1) % runs.length; show(); }, 2800);
+    </script>
   </body>
 </html>
