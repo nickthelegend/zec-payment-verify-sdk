@@ -1,4 +1,4 @@
-# zpay-verify: API, rules and trust
+# Hanko: API, rules and trust
 
 ## The question it answers
 

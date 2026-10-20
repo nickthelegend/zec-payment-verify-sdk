@@ -1,4 +1,4 @@
-# zec-payment-verify-sdk — submission draft (portfolio; DO NOT SUBMIT)
+# Hanko (zec-payment-verify-sdk) — submission draft (portfolio; DO NOT SUBMIT)
 
 Zecathon allows one entry per team, and that entry is Shielded x402. This is a portfolio piece (it
 would fit Core & Tooling). Every fact below is verified in this repo.

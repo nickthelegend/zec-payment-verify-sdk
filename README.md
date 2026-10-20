@@ -1,4 +1,4 @@
-# zec-payment-verify-sdk — zpay-verify
+# Hanko — verify shielded Zcash payments with a viewing key
 
 **"Was I paid?" for shielded Zcash.** Check that a transaction paid you at least N zatoshi with
 memo M, with enough confirmations and no transparent part, using only your **incoming viewing key**
