@@ -1,0 +1,12 @@
+{
+  "name": "zec-payment-verify-sdk",
+  "private": true,
+  "license": "MIT",
+  "packageManager": "pnpm@10.29.2",
+  "scripts": {
+    "build:core": "cd packages/core && cargo build --release",
+    "test:core": "cd packages/core && cargo test --release",
+    "build": "pnpm build:core && pnpm -r --if-present build",
+    "test": "pnpm build && pnpm test:core && pnpm -r --workspace-concurrency=1 --if-present test"
+  }
+}

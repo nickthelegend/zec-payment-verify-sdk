@@ -1,0 +1,30 @@
+{
+  "name": "@zpv/sdk",
+  "version": "0.1.0",
+  "description": "One verify() for two payment rails: a shielded Zcash payment checked with an incoming viewing key, or a null-402 Groth16 payment proof checked against the deployed Fuji contracts",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "viem": "2.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.7"
+  }
+}
