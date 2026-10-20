@@ -11,6 +11,6 @@ pnpm --filter @zpv/gateway api        # needs zpay-verify built (packages/core)
 pnpm --filter @zpv/dashboard dev      # http://localhost:5180
 ```
 
-API down → "Setup required: the verify API is not reachable…". Light and dark; 375 px without horizontal scroll.
+API down → "Setup required: the verify API is not reachable…". One dark app frame on the brand colour; 375 px without horizontal scroll.
 
 `VITE_ZPV_API` points the dashboard at another verify API (default `http://127.0.0.1:8403`).
