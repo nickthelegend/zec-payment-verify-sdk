@@ -1,0 +1,189 @@
+{
+  "network": "zcash-testnet",
+  "ranAt": "2026-10-20T16:17:11.344Z",
+  "lightwalletd": "https://testnet.zec.rocks:443",
+  "tipAtEnd": 4522628,
+  "wallets": {
+    "merchant": {
+      "address": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+      "uivk": "uivktest1kllf3w6sxt9fdt6fuxtlw8mt337mphs5hu2ulml8hh5lcpvrv57dyc0c3akelrahs3urxgp2sf9mmhcu7hqzexw6g9xztksucvntt5t34t7z0lsqasljrwclnsxgwm3kvsjzwr7hp6m5wsfrcexsge5seddrvt6gvl00qnwyeaaf63ptp54088nl6fnrktagu023fxwfra07ksgmvec94rmywjpwft8l8qxhnf9gjq66vvt6e6p"
+    },
+    "payer": {
+      "address": "utest1a5t3sczutyx6llyuw5fpp5eejhsr9meg2q8w2ruyav5tuzla65r9e3nt9zy92ge3htcg2vjpcxl6mj6zewnvp2p2qlaj76wpgy2pms2m",
+      "transparent": "tmHVEDu2YCNDTfKSnQbzGBAa5R7uNQbFKMG"
+    },
+    "employee": {
+      "address": "utest190s53lu5ddn34grm9x7cwxy0vtwuqusfa6s6740uw7aqdkc6jlp0fqmhn9yv96d8px33dferke3jn76th6u5g8zsgknmgksnmg4wtr09",
+      "uivk": "uivktest1nxc8q6zqxpndaewa3eqhjtvy4jlt9sz7tp9k8sfw9mcpmatxg3906s49n465xe7ahhtzesj3txnup975k39e7kgu4z3zs5nw3c7nyjuzsklqza0hf3drmav64pjn3jpx4zj4gzdptdymhrdg9h47t4jxuukrchkz7cqdlf9u2tq3rkwezkrfd9x43c68aeveskyqs670m9c8hz8srfypfv5763eejm5yy0xp6494r8h527pzln2"
+    }
+  },
+  "fundTx": "a2c0578b58c7c76d989f60292dd445f364fc40e40d1c21f89fc48ece7dfb57d3",
+  "paywall": {
+    "priceZat": "10000",
+    "minConf": 1,
+    "cases": {
+      "paywall": {
+        "txid": "7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16",
+        "challengeMemo": "zpv-c3d1529ba80d3f1a28658921",
+        "sentMemo": "zpv-c3d1529ba80d3f1a28658921",
+        "amountZat": "10000",
+        "http": 200,
+        "reasons": [],
+        "error": null,
+        "paid": {
+          "txid": "7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16",
+          "height": 4522621,
+          "confirmations": 1,
+          "paidZat": 10000,
+          "memo": "zpv-c3d1529ba80d3f1a28658921",
+          "lightwalletd": "https://testnet.zec.rocks:443"
+        }
+      },
+      "wrong-memo": {
+        "txid": "1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0",
+        "challengeMemo": "zpv-54a3e415500a1434263becdb",
+        "sentMemo": "zpv-not-the-challenge",
+        "amountZat": "10000",
+        "http": 402,
+        "reasons": [
+          "MEMO_MISMATCH",
+          "AMOUNT_TOO_LOW"
+        ],
+        "error": "payment refused: MEMO_MISMATCH, AMOUNT_TOO_LOW",
+        "paid": null
+      },
+      "underpaid": {
+        "txid": "f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2",
+        "challengeMemo": "zpv-826fce7c54e46328748cefc7",
+        "sentMemo": "zpv-826fce7c54e46328748cefc7",
+        "amountZat": "5000",
+        "http": 402,
+        "reasons": [
+          "AMOUNT_TOO_LOW"
+        ],
+        "error": "payment refused: AMOUNT_TOO_LOW",
+        "paid": null
+      },
+      "transparent-part": {
+        "txid": "bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec",
+        "challengeMemo": "zpv-d7289a63fabd56ff2f8a7261",
+        "sentMemo": "zpv-d7289a63fabd56ff2f8a7261",
+        "amountZat": "10000",
+        "http": 402,
+        "reasons": [
+          "TRANSPARENT_PART"
+        ],
+        "error": "payment refused: TRANSPARENT_PART",
+        "paid": null
+      }
+    }
+  },
+  "payslip": {
+    "txid": "38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869",
+    "amountZat": "50000",
+    "memo": "payslip 2026-10 #7: net 0.0005 TAZ",
+    "lender": {
+      "ok": true,
+      "reasons": [],
+      "paidZat": 50000,
+      "height": 4522626,
+      "confirmations": 1,
+      "outputs": [
+        {
+          "pool": "Ironwood",
+          "value": 50000,
+          "memo": "payslip 2026-10 #7: net 0.0005 TAZ",
+          "memo_binary": false
+        }
+      ],
+      "pools": {
+        "sapling": false,
+        "orchard": false,
+        "ironwood": true,
+        "transparent": false
+      }
+    },
+    "claimedDouble": {
+      "ok": false,
+      "reasons": [
+        "AMOUNT_TOO_LOW"
+      ],
+      "paidZat": 50000,
+      "height": 4522626,
+      "confirmations": 1,
+      "outputs": [
+        {
+          "pool": "Ironwood",
+          "value": 50000,
+          "memo": "payslip 2026-10 #7: net 0.0005 TAZ",
+          "memo_binary": false
+        }
+      ],
+      "pools": {
+        "sapling": false,
+        "orchard": false,
+        "ironwood": true,
+        "transparent": false
+      }
+    },
+    "merchantKey": {
+      "ok": false,
+      "reasons": [
+        "NO_OUTPUT_TO_KEY"
+      ],
+      "paidZat": 0,
+      "height": 4522626,
+      "confirmations": 1,
+      "outputs": [],
+      "pools": {
+        "sapling": false,
+        "orchard": false,
+        "ironwood": true,
+        "transparent": false
+      }
+    }
+  },
+  "thirdParty": {
+    "x402": {
+      "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+      "ok": true,
+      "reasons": [],
+      "paidZat": 100000,
+      "height": 4521112,
+      "confirmations": 1515,
+      "outputs": [
+        {
+          "pool": "Ironwood",
+          "value": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3",
+          "memo_binary": false
+        }
+      ],
+      "pools": {
+        "sapling": false,
+        "orchard": false,
+        "ironwood": true,
+        "transparent": false
+      }
+    },
+    "null402": {
+      "settleTx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "checks": {
+        "proofValid": true,
+        "rootKnown": true,
+        "nullifierSpent": true
+      },
+      "reasons": [
+        "NULLIFIER_SPENT"
+      ],
+      "provenance": {
+        "rpc": "https://api.avax-test.network/ext/bc/C/rpc",
+        "chainId": 43113,
+        "verifier": "0x0b44836dDc460f589ce4EB97f276e533A2bE6060",
+        "pool": "0x39a9C4EfabEBA954545Ecb4b16Ba1d92ec46cA1C",
+        "blockNumber": "59740672",
+        "checkedAt": "2026-10-20T16:17:11.344Z"
+      }
+    }
+  }
+}
