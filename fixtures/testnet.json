@@ -1,0 +1,27 @@
+{
+  "_note": "Published incoming viewing keys of demo-only testnet wallets (they reveal incoming payments to those wallets, cannot spend). Sources: zec-shielded-x402 README (merchant), zec-sealed-bid-auction deployments/testnet.json (auction).",
+  "x402": {
+    "source": "https://github.com/nickthelegend/zec-shielded-x402#check-it-yourself",
+    "uivk": "uivktest1ma9hgu9cmmmkv5f5npk7aktj8tradzqyxzwerez5trhku0xxgx7vsh0azzurz44pfdhmyrzxnur3n282f5t0glhje7kay4fw79njmg64g2wupcznmpfpy0gh6wngu0qw07ry404hnh6rq9vuj264gcjfxucylma4c8cuygxezqx2xwph5x66nckx4095pgvjzuq5rudsmr9dztnyv9f2w74unppttta6cu7fr3tx494zqstn2hv",
+    "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+    "memo": "x402z-f19a63da20cbc0749ea800b3",
+    "amountZat": 100000,
+    "height": 4521112,
+    "pool": "Ironwood"
+  },
+  "auction": {
+    "source": "zec-sealed-bid-auction deployments/testnet.json",
+    "uivk": "uivktest13q05lhhc5ha8m7dhcsccm80qlcka82drx4cs4p9whv24w3uvcnevfu0np504u9zngp7ld4f8tmvu9mzzfh54j3w4gpjmnvx2c44tgd7ywpnmrjqdflccgemweunqapxx8r8huh8xph4jv5vhs9ja0eltcw0fhw9weyfulkzjtmcgs8u974a27xl6vd77cpfulah046gjd92d75qsxuec95mjsyh07lzf23v95lwydm6n7kkt60z",
+    "deposit": {
+      "txid": "06d121813387444ca3ecc9720e73160b5b80645d9204c6c411e51cef3a190af1",
+      "memo": "sba1:6201170948318861529:4625148566346356633467925861742323288356315185240091082404763733094706206802",
+      "amountZat": 2000000,
+      "height": 4522268
+    },
+    "memoMismatch": {
+      "txid": "76b0b9bb76aee301fe5640fe7b1c3ff0746a999c743d9a4199dbf60375c39aa0",
+      "memo": "hello auction",
+      "amountZat": 100000
+    }
+  }
+}

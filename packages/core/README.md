@@ -1,5 +1,38 @@
-# core
+# zpay-verify (Rust)
 
-Rust crate `zpay-verify`: verify a shielded payment by UIVK + memo + amount + confirmations (extracted from x402)
+Verify an incoming shielded Zcash payment with only the receiver's **incoming viewing key** (UIVK).
+Extracted from zec-shielded-x402's facilitator `check_uivk` (same author, MIT); same pinned
+pre-release librustzcash line (NU7 / Ironwood on testnet), Rust 1.89.
 
-_Placeholder — not built yet. Spec: grokbot/specs/zec-payment-verify-sdk.md._
+```rust
+let v = zpay_verify::verify(lwd_url, uivk, txid, &Expect { amount_zat: 100_000, memo: Some("inv-42".into()), min_conf: 1, shielded_only: true }).await?;
+if v.verdict.ok { /* paid */ } else { println!("{:?}", v.verdict.reasons) }
+```
+
+It fetches the tx from lightwalletd, re-computes the txid, trial-decrypts every Sapling, Orchard and
+Ironwood output with the key, then applies the rules in `check()`:
+
+| Reason | When |
+|---|---|
+| `TX_NOT_FOUND` | lightwalletd does not know the txid (or only on an orphaned fork) |
+| `NO_OUTPUT_TO_KEY` | the tx exists but pays nothing this key can see |
+| `MEMO_MISMATCH` | outputs to the key exist, none with the expected memo |
+| `AMOUNT_TOO_LOW` | outputs with the expected memo sum below the amount |
+| `NOT_CONFIRMED` | fewer confirmations than `min_conf` (0 while in the mempool) |
+| `TRANSPARENT_PART` | `shielded_only` and the tx has a transparent input or output |
+
+Bad keys, bad txids and network failures are errors, never verdicts.
+
+## CLI
+
+```sh
+ZPV_UIVK=uivktest1… zpay-verify verify <txid> --amount 100000 --memo inv-42 [--min-conf 1] [--allow-transparent]
+#   prints {"report":…,"verdict":…,"lightwalletd":…}; exit 0 paid, 1 not paid, 2 could not check
+ZPV_UIVK=… zpay-verify inspect <txid>...     # what the key sees, no rules
+ZPV_UFVK=… zpay-verify derive                # UFVK → UIVK (share the incoming-only key)
+```
+
+The key is read from the environment only. `ZPV_LWD_URL` overrides `https://testnet.zec.rocks:443`.
+
+Tests: `cargo test` — 3 rule tests + 5 live tests on real testnet txs decrypted with keys their
+owners published (`../../fixtures/testnet.json`) + the doc example compiles.
