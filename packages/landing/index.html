@@ -3,147 +3,411 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>zpay-verify</title>
-    <meta name="description" content="Check a shielded Zcash payment with only an incoming viewing key, or a null-402 payment proof on Avalanche Fuji. Rust crate, CLI, TypeScript SDK, x402 paywall, MCP." />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='8' width='22' height='16' rx='3' fill='none' stroke='%231E7A4C' stroke-width='3' transform='rotate(-8 16 16)'/%3E%3C/svg%3E" />
+    <title>Hanko — was I paid? Verify shielded Zcash payments</title>
+    <meta name="description" content="Hanko checks that a shielded Zcash transaction paid you at least N zatoshi with memo M, with enough confirmations and no transparent part, using only your incoming viewing key. Rust crate, CLI, TypeScript SDK, x402 paywall and MCP server." />
+    <meta name="theme-color" content="#161616" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='7' fill='%23e2401f'/%3E%3Crect x='7.5' y='7.5' width='17' height='17' rx='4' fill='none' stroke='%23fff' stroke-width='2'/%3E%3Cpath d='M11.5 16.5l3 3 6-7' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
-      :root { --desk: #e5e8e2; --paper: #fbfbf7; --ink: #151a17; --muted: #5d6a63; --rule: #cbd2ca; --lime: #d6f264; --ok: #1e7a4c; --no: #b42318; --link: #0f5c8c; color-scheme: light; }
-      @media (prefers-color-scheme: dark) { :root { --desk: #101512; --paper: #171e1a; --ink: #e6ede8; --muted: #93a39a; --rule: #2a352f; --lime: #c4e350; --ok: #4cc38a; --no: #ff7b6e; --link: #7cc4f0; color-scheme: dark; } }
-      * { box-sizing: border-box; }
-      body { margin: 0; background: var(--desk); color: var(--ink); font: 400 17px/1.65 'Hanken Grotesk', system-ui, sans-serif; overflow-x: hidden; }
-      a { color: var(--link); text-underline-offset: 3px; }
-      :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
-      code, pre { font: 0.84em 'JetBrains Mono', monospace; }
-      code { overflow-wrap: anywhere; }
-      .wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
-      .top { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; font: 600 1rem 'JetBrains Mono', monospace; }
-      .top a { font: 600 0.9rem 'Hanken Grotesk', sans-serif; color: var(--ink); text-decoration: none; padding: 8px 14px; border-radius: 8px; background: var(--lime); color: #151a17; }
+      :root { --font: 'Hanken Grotesk', system-ui, sans-serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+        --deep: #161616; --deep-text: #161616; --accent: #e2401f; --accent-ink: #1a0602; --tint: #fdebe5; --tint-2: #f4f1ea;
+        --paper: #ffffff; --ink: #161616; --muted: #6b625e; --line: rgba(22, 22, 22, .09); --line-strong: rgba(22, 22, 22, .24);
+        --ink-red: #c9361a; color-scheme: light; }
+      /* landing-kit base: Polaris-grade structure. Each page sets the theme variables and its own font. */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--font);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+code,.mono{font-family:var(--mono);font-size:.86em;letter-spacing:0;overflow-wrap:anywhere}
+.wrap{max-width:1360px;margin:0 auto;padding:0 40px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
-      .hero { display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: center; padding: 48px 0 88px; }
-      h1 { font: 800 clamp(3rem, 8vw, 6rem)/0.92 'Hanken Grotesk', sans-serif; letter-spacing: -0.045em; margin: 0 0 24px; }
-      .lede { color: var(--muted); max-width: 52ch; margin: 0 0 28px; font-size: 1.1rem; }
-      .note { display: inline-block; background: var(--lime); color: #151a17; padding: 14px 16px; border-radius: 4px; transform: rotate(-1.5deg); box-shadow: 0 10px 24px -14px rgba(0,0,0,.4); font-size: 0.95rem; max-width: 36ch; }
-      .note b { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; margin-bottom: 4px; }
+/* type */
+.h-hero{font-weight:500;font-size:clamp(46px,6.3vw,96px);line-height:.95;letter-spacing:-.05em;margin:0}
+.h-sec{font-weight:500;font-size:clamp(36px,4.6vw,68px);line-height:1;letter-spacing:-.045em;margin:0}
+.h-card{font-weight:500;font-size:clamp(26px,2.4vw,36px);line-height:1.05;letter-spacing:-.035em;margin:0}
+.lead{font-size:clamp(18px,1.5vw,21px);line-height:1.4;letter-spacing:-.02em}
+.muted{color:var(--muted)}
+.strong{color:var(--ink)}
 
-      /* The receipt: a real check result, with the stamp landing on each verdict in turn. */
-      .receipt { position: relative; background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 26px 24px 110px; box-shadow: 0 24px 48px -28px rgba(0,0,0,.35); }
-      .receipt h3 { margin: 0 0 16px; font: 600 0.82rem 'JetBrains Mono', monospace; color: var(--muted); }
-      .receipt dl { margin: 0; display: grid; grid-template-columns: 96px 1fr; gap: 8px 12px; font-size: 0.95rem; }
-      .receipt dt { color: var(--muted); }
-      .receipt dd { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; overflow-wrap: anywhere; }
-      .receipt hr { border: 0; border-top: 1px dashed var(--rule); margin: 18px 0 14px; }
-      .stamp { position: absolute; right: 18px; bottom: 22px; font: 800 1.15rem/1.1 'Hanken Grotesk', sans-serif; letter-spacing: 0.03em; text-transform: uppercase; border: 4px double currentColor; border-radius: 8px; padding: 10px 12px; transform: rotate(-8deg); color: var(--ok); max-width: 210px; text-align: center; }
-      .stamp.no { color: var(--no); }
-      .stamp.thump { animation: thump .45s cubic-bezier(.2,1.6,.4,1); }
-      @keyframes thump { from { transform: rotate(-8deg) scale(1.6); opacity: 0; } to { transform: rotate(-8deg) scale(1); opacity: 1; } }
-      .dots { display: flex; gap: 6px; margin-top: 16px; }
-      .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); }
-      .dots i.on { background: var(--ink); }
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;height:52px;padding:0 24px;border-radius:999px;font:500 17px/1 var(--font);letter-spacing:-.02em;text-decoration:none;border:0;cursor:pointer;white-space:nowrap;transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn svg{width:18px;height:18px}
+.btn-accent{background:var(--accent);color:var(--accent-ink)}
+.btn-white{background:#fff;color:var(--deep)}
+.btn-dark{background:var(--deep);color:#fff}
+.btn-outline{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-strong)}
+.btn-ghost-light{background:transparent;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.btn-sm{height:44px;padding:0 18px;font-size:16px}
 
-      section { padding: 88px 0; border-top: 1px solid var(--rule); }
-      h2 { font: 800 clamp(1.8rem, 3.8vw, 2.8rem)/1.02 'Hanken Grotesk', sans-serif; letter-spacing: -0.03em; margin: 0 0 14px; }
-      .sub { color: var(--muted); max-width: 62ch; margin: 0 0 32px; }
-      pre { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 18px 20px; overflow-x: auto; line-height: 1.6; margin: 0 0 18px; }
-      .surfaces { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-      .surface { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; }
-      .surface b { display: block; margin-bottom: 4px; }
-      .surface span { color: var(--muted); font-size: 0.93rem; }
+/* nav: links left, logo centre, actions right */
+.nav{position:absolute;inset:0 0 auto 0;z-index:30}
+.nav .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:100px}
+.nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0}
+.nav ul a{text-decoration:none;font-size:17px;letter-spacing:-.02em;opacity:.92}
+.nav ul a:hover{opacity:1}
+.nav .act{display:flex;justify-content:flex-end;align-items:center;gap:18px}
+.nav .act>a:not(.btn){text-decoration:none;font-size:17px}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-size:24px;letter-spacing:-.04em}
+.logo svg{width:30px;height:30px}
+.nav.on-dark{color:#fff}
+.nav.on-light{color:var(--ink)}
 
-      .checks { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
-      .check { display: grid; grid-template-columns: 1fr 260px; gap: 16px; padding: 13px 20px; border-top: 1px solid var(--rule); align-items: baseline; font-size: 0.95rem; }
-      .check:first-child { border-top: 0; }
-      .check .v { font: 600 0.8rem 'JetBrains Mono', monospace; }
-      .check .v.ok { color: var(--ok); } .check .v.no { color: var(--no); }
-      .limits { color: var(--muted); max-width: 72ch; }
-      footer { border-top: 1px solid var(--rule); padding: 28px 0 48px; color: var(--muted); font-size: 0.86rem; }
+/* hero shells */
+.hero{position:relative;isolation:isolate;overflow:hidden}
+.hero-bleed{min-height:max(720px,100svh);padding-top:140px;background:var(--deep);color:#fff;display:flex;align-items:flex-end}
+.hero-bleed .wrap{width:100%;padding-bottom:56px;display:grid;grid-template-columns:1.25fr 1fr;align-items:end;gap:40px}
+.hero-bleed .h-hero{max-width:11ch}
+.hero-bleed .lead{max-width:34ch;margin:26px 0 34px;color:rgba(255,255,255,.86)}
+.hero-centre{background:var(--deep);color:#fff;padding:168px 0 0;text-align:center}
+.hero-centre .h-hero{max-width:14ch;margin:0 auto}
+.hero-centre .lead{max-width:44ch;margin:26px auto 36px;color:rgba(255,255,255,.82)}
+.hero-centre .cta{justify-content:center}
+.hero-split{background:var(--deep);color:#fff;padding:150px 0 90px}
+.hero-split .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+.hero-split .lead{max-width:38ch;margin:26px 0 34px;color:rgba(255,255,255,.84)}
+.hero-light{background:var(--paper);color:var(--ink);padding:160px 0 40px}
+.hero-light .h-hero{max-width:13ch;color:var(--deep-text)}
+.hero-light .lead{max-width:44ch;margin:26px 0 34px;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.glow{position:absolute;z-index:-1;border-radius:50%;filter:blur(10px);pointer-events:none}
 
-      @media (max-width: 900px) {
-        .hero { grid-template-columns: 1fr; gap: 40px; padding-top: 24px; }
-        .surfaces { grid-template-columns: 1fr 1fr; }
-        .check { grid-template-columns: 1fr; gap: 2px; }
-        .receipt dl { grid-template-columns: 80px 1fr; }
-        .stamp { position: static; display: inline-block; margin-top: 18px; } .receipt { padding-bottom: 30px; }
-        section { padding: 64px 0; }
-      }
+/* floating white widget (hero) */
+.widget{justify-self:end;width:min(100%,360px);background:#fff;color:var(--deep-text);border-radius:28px;padding:24px;box-shadow:0 40px 80px -30px rgba(0,0,0,.55)}
+.widget .w-top{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.widget .w-title{font-weight:500;font-size:26px;letter-spacing:-.04em}
+.tag{display:inline-flex;align-items:center;height:28px;padding:0 11px;border-radius:999px;font-size:13px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
+.tag-deep{background:var(--deep);color:var(--accent)}
+.tag-tint{background:var(--tint);color:var(--deep-text)}
+.tag-accent{background:var(--accent);color:var(--accent-ink)}
+.tag-no{background:#fde2e1;color:#b42318}
+.tag-ok{background:#dcf5e7;color:#14714b}
+.widget .w-note{font-size:14px;color:#6b7280;margin-top:14px}
+
+/* built-on strip */
+.built{padding:100px 0 40px;text-align:center}
+.built .pill{display:inline-block;padding:10px 26px;border-radius:999px;background:var(--tint);color:var(--deep-text);font-size:20px;letter-spacing:-.02em}
+.marquee{overflow:hidden;margin-top:44px;-webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marquee .track{display:flex;gap:64px;width:max-content;animation:mq 34s linear infinite}
+.marquee span{display:inline-flex;align-items:center;gap:12px;font-weight:500;font-size:32px;letter-spacing:-.04em;color:var(--deep-text);white-space:nowrap}
+.marquee span i{width:26px;height:26px;border-radius:8px;background:var(--deep-text);opacity:.85;display:inline-block}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* sections */
+section{padding:110px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:56px}
+.sec-head .h-sec{color:var(--deep-text);max-width:16ch}
+.sec-head p{max-width:46ch;margin:18px 0 0}
+.intro{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+.intro .h-sec{color:var(--deep-text)}
+.intro .copy p{margin:0 0 18px;color:var(--muted)}
+.intro .copy p b{color:var(--deep-text);font-weight:500}
+
+/* bento cards */
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{position:relative;border-radius:28px;padding:32px;min-height:420px;gap:28px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
+.c-tint{background:var(--tint);color:var(--deep-text)}
+.c-tint-2{background:var(--tint-2);color:var(--deep-text)}
+.c-deep{background:var(--deep);color:#fff}
+.c-deep .h-card{color:var(--accent)}
+.c-accent{background:var(--accent);color:var(--accent-ink)}
+.card p{margin:12px 0 0;font-size:16px;line-height:1.45}
+.c-deep p{color:rgba(255,255,255,.72)}
+.ui{background:#fff;color:var(--deep-text);border-radius:22px;padding:22px;box-shadow:0 24px 50px -28px rgba(0,0,0,.35)}
+.ui .big{font-weight:500;font-size:44px;letter-spacing:-.05em;line-height:1}
+.ui .big small{font-size:16px;letter-spacing:-.01em;color:#6b7280;margin-left:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{height:40px;display:inline-flex;align-items:center;padding:0 16px;border-radius:999px;background:var(--tint);color:var(--deep-text);font-size:16px;letter-spacing:-.02em}
+.chips span.on{background:var(--deep);color:#fff}
+.bar{display:flex;height:12px;border-radius:4px;overflow:hidden;gap:3px;margin-top:22px}
+.bar i{display:block}
+
+/* dark proof / FAQ section */
+.dark{background:var(--deep);color:#fff}
+.dark .h-sec{color:var(--accent)}
+.dark .muted{color:rgba(255,255,255,.62)}
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.faq details{border-top:1px solid rgba(255,255,255,.14);padding:26px 0}
+.faq details:last-child{border-bottom:1px solid rgba(255,255,255,.14)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;font-weight:500;font-size:clamp(22px,2vw,30px);letter-spacing:-.035em;color:var(--accent)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-weight:300;font-size:32px;line-height:1}
+.faq details[open] summary::after{content:'–'}
+.faq details p{margin:16px 0 0;color:rgba(255,255,255,.72);font-size:18px;max-width:52ch}
+
+/* evidence list */
+.ev{border-radius:28px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1px var(--line)}
+.ev .row{display:grid;grid-template-columns:1fr auto 130px;gap:18px;align-items:center;padding:18px 26px;border-top:1px solid var(--line);font-size:16px}
+.ev .row:first-child{border-top:0}
+.ev .row a{font-family:var(--mono);font-size:14px;text-align:right;color:var(--deep-text)}
+.dark .ev{background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.dark .ev .row{border-color:rgba(255,255,255,.08)}
+.dark .ev .row a{color:var(--accent)}
+
+/* stat row */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.stat{border-radius:24px;padding:28px;background:var(--tint)}
+.stat b{display:block;font-weight:500;font-size:clamp(40px,4vw,60px);letter-spacing:-.05em;line-height:1;color:var(--deep-text)}
+.stat span{display:block;margin-top:12px;color:var(--muted);font-size:16px}
+
+/* centred CTA */
+.talk{padding:130px 0 120px;text-align:center;background:linear-gradient(180deg,var(--paper) 0%,var(--tint) 100%)}
+.talk .h-sec{color:var(--deep-text);margin:0 auto}
+.talk p{max-width:46ch;margin:22px auto 34px;color:var(--muted)}
+.talk pre{display:inline-block;text-align:left;margin:0 0 30px;padding:18px 24px;border-radius:18px;background:var(--deep);color:var(--accent);font:400 15px/1.7 var(--mono);max-width:100%;overflow-x:auto}
+
+/* footer */
+.foot{background:var(--tint);padding:0 40px 40px}
+.foot .box{max-width:1360px;margin:0 auto;background:var(--deep);color:#fff;border-radius:40px;padding:56px 48px 40px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px}
+.foot p{color:rgba(255,255,255,.62);max-width:44ch;margin:22px 0 0}
+.foot nav{display:flex;flex-wrap:wrap;gap:12px 36px;align-content:start}
+.foot nav a{text-decoration:none;font-size:18px;letter-spacing:-.02em}
+.foot .legal{grid-column:1/-1;display:flex;justify-content:space-between;gap:20px;padding-top:40px;color:rgba(255,255,255,.55);font-size:14px}
+
+/* reveal: transform only, so content is never hidden */
+.rv{animation:rv 1s cubic-bezier(.2,.7,.2,1) both}
+.rv.d1{animation-delay:.08s}.rv.d2{animation-delay:.16s}.rv.d3{animation-delay:.26s}.rv.d4{animation-delay:.36s}
+@keyframes rv{from{transform:translateY(22px)}to{transform:none}}
+
+@media (max-width:1024px){
+  .wrap{padding:0 24px}
+  .nav ul{display:none}
+  .nav .wrap{grid-template-columns:auto 1fr;height:84px}
+  .nav .logo{order:-1}
+  .hero-bleed .wrap,.hero-split .wrap,.intro,.faq{grid-template-columns:1fr}
+  .widget{justify-self:start}
+  .bento{grid-template-columns:1fr 1fr}
+  .bento .card:first-child{grid-column:span 2;min-height:0}
+  .stats{grid-template-columns:1fr 1fr}
+  .foot .box{grid-template-columns:1fr}
+  .sec-head{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 16px}
+  section{padding:76px 0}
+  .nav .act>a:not(.btn){display:none}
+  .hero-bleed{min-height:auto;padding-top:120px}
+  .hero-bleed .wrap{padding-bottom:36px}
+  .hero-centre{padding-top:130px}
+  .hero-split{padding:124px 0 64px}
+  .hero-light{padding-top:120px}
+  .bento{grid-template-columns:1fr}
+  .bento .card:first-child{grid-column:auto}
+  .card{min-height:0;padding:24px;gap:28px}
+  .stats{grid-template-columns:1fr 1fr;gap:12px}
+  .stat{padding:20px}
+  .ev .row{grid-template-columns:1fr;gap:6px;padding:16px 18px}
+  .ev .row a{text-align:left}
+  .marquee span{font-size:24px}
+  .talk{padding:90px 0}
+  .foot{padding:0 12px 12px}
+  .foot .box{padding:36px 22px 26px;border-radius:28px}
+  .foot .legal{flex-direction:column}
+  .btn{height:48px;padding:0 20px;font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rv,.marquee .track{animation:none}.btn{transition:none}}
+
+      /* Hanko: a receipt on the desk, and the stamp that lands on it */
+      .hero-split { background: radial-gradient(45% 65% at 22% 55%, rgba(226, 64, 31, .2), rgba(226, 64, 31, 0) 70%), var(--deep); }
+      .hero-split .wrap { grid-template-columns: .95fr 1.05fr; }
+      .hero-split .h-hero { max-width: 8ch; }
+      .hero-split .h-hero span { color: var(--accent); }
+      .receipt { order: -1; position: relative; justify-self: start; width: min(100%, 410px); background: #fff; color: var(--deep-text); padding: 28px 26px 44px; border-radius: 22px 22px 0 0; box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .6);
+        -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 22px 100%; mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 22px 100%; }
+      .r-head { display: flex; justify-content: space-between; gap: 12px; font: 400 12px var(--mono); color: #8a817d; text-transform: uppercase; letter-spacing: .06em; }
+      .r-title { margin: 18px 0 6px; font-weight: 500; font-size: 28px; letter-spacing: -.04em; }
+      .receipt dl { margin: 0; display: grid; grid-template-columns: auto 1fr; }
+      .receipt dt, .receipt dd { padding: 11px 0; border-top: 1px dashed rgba(22, 22, 22, .18); font-size: 15px; }
+      .receipt dt { color: #7b726e; padding-right: 14px; }
+      .receipt dd { margin: 0; text-align: right; }
+      .receipt dd a, .receipt dd code { font: 400 13px var(--mono); color: var(--deep-text); }
+      #r-why { color: var(--ink-red); }
+      .r-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 14px; padding-top: 16px; border-top: 1px dashed rgba(22, 22, 22, .18); }
+      .r-foot p { margin: 0; font-size: 14px; color: #7b726e; line-height: 1.45; }
+      .r-foot p b { display: block; color: var(--deep-text); font-weight: 500; font-size: 15px; }
+      .stamp { flex: none; width: 124px; height: 124px; border-radius: 18px; display: grid; place-items: center; align-content: center; gap: 4px; text-align: center; color: var(--accent); box-shadow: inset 0 0 0 4px currentColor, inset 0 0 0 8px #fff, inset 0 0 0 10px currentColor; transform: rotate(-12deg); mix-blend-mode: multiply; pointer-events: none; }
+      .stamp b { font-weight: 600; font-size: 26px; letter-spacing: .02em; line-height: 1; }
+      .stamp small { font: 500 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+      .stamp.thump { animation: thump .5s cubic-bezier(.2, .9, .3, 1.2); }
+      @keyframes thump { from { transform: rotate(-12deg) scale(1.45); } to { transform: rotate(-12deg) scale(1); } }
+      .picks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+      .picks button { flex: 1 1 auto; min-width: 0; padding: 0 10px; height: 34px; border: 0; border-radius: 999px; background: var(--tint-2); color: var(--deep-text); font: 500 13px var(--font); cursor: pointer; }
+      .picks button[aria-pressed='true'] { background: var(--deep); color: #fff; }
+      .code3 { margin: 0; font: 400 13px/1.7 var(--mono); background: var(--deep); color: #f3ede9; border-radius: 16px; padding: 16px; white-space: pre-wrap; overflow-wrap: anywhere; }
+      .code3 b { color: #ff8a6f; font-weight: 400; }
+      .code3 i { color: #8f8783; font-style: normal; }
+      .chk { display: grid; gap: 10px; }
+      .chk div { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: rgba(255, 255, 255, .06); border-radius: 16px; padding: 14px 16px; }
+      .chk b { font-weight: 500; letter-spacing: -.02em; }
+      .ev .row .oc { font: 400 14px var(--mono); text-align: right; color: rgba(255, 255, 255, .42); }
+      @media (max-width: 1024px) { .hero-split .wrap { grid-template-columns: 1fr; } .receipt { order: 0; } }
+      @media (max-width: 640px) { .receipt { padding: 22px 18px 40px; } .r-title { font-size: 24px; } .stamp { width: 100px; height: 100px; } .stamp b { font-size: 21px; } .ev .row .oc { text-align: left; } }
       @media (prefers-reduced-motion: reduce) { .stamp.thump { animation: none; } }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <div class="top"><span>zpay-verify</span><a href="https://github.com/nickthelegend/zec-payment-verify-sdk">Source</a></div>
-      <header class="hero">
+    <nav class="nav on-dark" aria-label="Main">
+      <div class="wrap">
+        <ul><li><a href="#how">How it works</a></li><li><a href="#checks">Real checks</a></li><li><a href="#faq">FAQ</a></li></ul>
+        <a class="logo" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="7" fill="#e2401f" /><rect x="7.5" y="7.5" width="17" height="17" rx="4" fill="none" stroke="#fff" stroke-width="2" /><path d="M11.5 16.5l3 3 6-7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>Hanko</a>
+        <div class="act"><a href="https://github.com/nickthelegend/zec-payment-verify-sdk/tree/main/packages/docs">Docs</a><a class="btn btn-white btn-sm" href="https://github.com/nickthelegend/zec-payment-verify-sdk">Get the code</a></div>
+      </div>
+    </nav>
+
+    <header class="hero hero-split" id="top">
+      <div class="wrap">
         <div>
-          <h1>Was I paid?</h1>
-          <p class="lede">Check an incoming shielded Zcash payment, its amount, memo and confirmations, with only your incoming viewing key. The same call checks a null-402 payment proof against the contracts on Avalanche Fuji.</p>
-          <p class="note"><b>reasons, not a yes or no</b>Every check returns the exact rule that failed, so a paywall or an agent knows what to tell the payer.</p>
+          <h1 class="h-hero rv">Was I <span>paid?</span></h1>
+          <p class="lead rv d1">Check that a shielded Zcash transaction paid you at least the price, with your memo, enough confirmations and no transparent part, using only your incoming viewing key. It sees payments come in; it cannot spend.</p>
+          <div class="cta rv d2"><a class="btn btn-accent" href="#checks">See every real check <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a><a class="btn btn-ghost-light" href="https://github.com/nickthelegend/zec-payment-verify-sdk">Read the code</a></div>
         </div>
-        <div class="receipt" aria-live="polite">
-          <h3>zcash testnet · checked with a viewing key</h3>
-          <dl><dt>payment</dt><dd id="r-what"></dd><dt>tx</dt><dd id="r-tx"></dd><dt>asked for</dt><dd>10,000 zat + the challenge memo</dd></dl>
-          <hr />
-          <span class="stamp" id="stamp"></span>
-          <div class="dots" id="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="receipt rv d3" aria-live="polite">
+          <div class="r-head"><span>Zcash testnet · paywall check</span><span>Oct 20, 2026</span></div>
+          <div class="r-title">GET /api/quote</div>
+          <dl>
+            <dt>asked for</dt><dd>10,000 zat + the challenge memo</dd>
+            <dt>payment</dt><dd id="r-what">10,000 zat, challenge memo</dd>
+            <dt>tx</dt><dd><a id="r-tx" href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">7c1f6cc0…</a></dd>
+            <dt>reasons</dt><dd><code id="r-why">none · HTTP 200</code></dd>
+          </dl>
+          <div class="r-foot"><p><b>Checked with a viewing key</b>it can see this payment arrive, never spend it</p><div class="stamp" id="stamp" aria-hidden="true"><b id="s-word">PAID</b><small>zpay-verify</small></div></div>
+          <div class="picks" role="group" aria-label="The four paywall payments from the live run">
+            <button type="button" aria-pressed="true">Paid</button><button type="button" aria-pressed="false">Memo</button><button type="button" aria-pressed="false">Short</button><button type="button" aria-pressed="false">Transparent</button>
+          </div>
         </div>
-      </header>
+      </div>
+    </header>
+
+    <div class="built">
+      <span class="pill">Built for Zcash, with viewing keys only</span>
+      <div class="marquee" aria-hidden="true"><div class="track">
+        <span><i></i>Zcash</span><span><i></i>Sapling</span><span><i></i>Orchard</span><span><i></i>Viewing keys</span><span><i></i>lightwalletd</span><span><i></i>ZIP-321</span><span><i></i>x402</span><span><i></i>Avalanche Fuji</span><span><i></i>MCP</span><span><i></i>Rust</span>
+        <span><i></i>Zcash</span><span><i></i>Sapling</span><span><i></i>Orchard</span><span><i></i>Viewing keys</span><span><i></i>lightwalletd</span><span><i></i>ZIP-321</span><span><i></i>x402</span><span><i></i>Avalanche Fuji</span><span><i></i>MCP</span><span><i></i>Rust</span>
+      </div></div>
     </div>
 
-    <main class="wrap">
-      <section aria-labelledby="use">
-        <h2 id="use">Three lines</h2>
-        <pre>import { verify } from '@zpv/sdk';
-const r = await verify({ rail: 'zcash', uivk, txid, amountZat: 10_000, memo: 'zpv-…' });
-if (!r.ok) console.log(r.reasons);   // MEMO_MISMATCH, AMOUNT_TOO_LOW, TRANSPARENT_PART, …</pre>
-        <div class="surfaces">
-          <div class="surface"><b>Rust crate + CLI</b><span><code>zpay-verify verify &lt;txid&gt;</code>, exit 0 / 1 / 2</span></div>
-          <div class="surface"><b>TypeScript SDK</b><span>One <code>verify()</code> for Zcash and null-402</span></div>
-          <div class="surface"><b>x402 paywall</b><span>Answers 402 with a memo nonce, 200 once paid</span></div>
-          <div class="surface"><b>MCP server</b><span>An agent checks before it delivers</span></div>
+    <main>
+      <section>
+        <div class="wrap intro">
+          <div>
+            <h2 class="h-sec">A yes you can show, a no you can explain</h2>
+            <div class="cta" style="margin-top: 34px"><a class="btn btn-dark" href="https://github.com/nickthelegend/zec-payment-verify-sdk">Add it to your app <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a><a class="btn btn-outline" href="https://github.com/nickthelegend/zec-payment-verify-sdk/tree/main/packages/docs">The rules</a></div>
+          </div>
+          <div class="copy lead">
+            <p><b>No spend key anywhere.</b> The checker trial-decrypts the transaction with an incoming viewing key and recomputes its txid.</p>
+            <p><b>Reasons, not just a verdict.</b> A paywall or an agent learns exactly which rule failed, so it knows what to tell the payer.</p>
+          </div>
         </div>
       </section>
 
-      <section aria-labelledby="real">
-        <h2 id="real">Checked on real transactions</h2>
-        <p class="sub">Every row is a real transaction on Zcash testnet or Avalanche Fuji. The first five were made by this project's live run.</p>
-        <div class="checks" role="table" aria-label="Checks on real transactions">
-          <div class="check" role="row"><span>Paywall: 10,000 zat with the challenge memo <a href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16"><code>7c1f6cc0…</code></a></span><span class="v ok">paid → HTTP 200</span></div>
-          <div class="check" role="row"><span>The same price with another memo <a href="https://testnet.zcashexplorer.app/transactions/1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0"><code>1620eccc…</code></a></span><span class="v no">MEMO_MISMATCH, AMOUNT_TOO_LOW</span></div>
-          <div class="check" role="row"><span>Half the price <a href="https://testnet.zcashexplorer.app/transactions/f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2"><code>f9db1841…</code></a></span><span class="v no">AMOUNT_TOO_LOW</span></div>
-          <div class="check" role="row"><span>Right memo and amount, plus a transparent output <a href="https://testnet.zcashexplorer.app/transactions/bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec"><code>bb8d8842…</code></a></span><span class="v no">TRANSPARENT_PART</span></div>
-          <div class="check" role="row"><span>A payslip, checked by a lender with the employee's key <a href="https://testnet.zcashexplorer.app/transactions/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869"><code>38958ceb…</code></a></span><span class="v ok">paid, 50,000 zat, memo matches</span></div>
-          <div class="check" role="row"><span>The zec-shielded-x402 demo payment <a href="https://testnet.zcashexplorer.app/transactions/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351"><code>030c3cbf…</code></a></span><span class="v ok">paid, 100,000 zat</span></div>
-          <div class="check" role="row"><span>A real null-402 <code>settle()</code> on Fuji <a href="https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"><code>0x8596f52d…</code></a></span><span class="v no">proof valid, root known, NULLIFIER_SPENT</span></div>
-          <div class="check" role="row"><span>The same proof claiming another amount</span><span class="v no">BAD_PROOF</span></div>
+      <section id="how" style="padding-top: 0">
+        <div class="wrap">
+          <div class="sec-head"><h2 class="h-sec">One check, wherever you need it</h2><a class="btn btn-outline btn-sm" href="https://github.com/nickthelegend/zec-payment-verify-sdk/tree/main/packages/docs">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a></div>
+          <div class="bento">
+            <div class="card c-tint">
+              <div class="ui"><pre class="code3"><b>const</b> r = <b>await</b> verify({ rail: 'zcash',
+  uivk, txid, amountZat: 10_000,
+  memo: 'zpv-…' });
+r.reasons <i>// [] or MEMO_MISMATCH, …</i></pre></div>
+              <div><h3 class="h-card">The exact reason</h3><p>TX_NOT_FOUND, NO_OUTPUT_TO_KEY, MEMO_MISMATCH, AMOUNT_TOO_LOW, NOT_CONFIRMED or TRANSPARENT_PART.</p></div>
+            </div>
+            <div class="card c-tint-2">
+              <div><h3 class="h-card">Four ways in</h3><p>A Rust crate and CLI that exits 0, 1 or 2; a TypeScript SDK; an x402 paywall; an MCP server so an agent checks before it delivers.</p></div>
+              <div class="chips"><span class="on">Rust crate + CLI</span><span>TypeScript SDK</span><span>x402 paywall</span><span>MCP server</span></div>
+            </div>
+            <div class="card c-deep">
+              <div><h3 class="h-card">And null-402 on Fuji</h3><p>The same <code>verify()</code> checks a null-402 Groth16 settlement against the contracts null-402 deployed on Avalanche Fuji.</p></div>
+              <div class="chk"><div><b>Proof valid</b><span class="tag tag-ok">yes</span></div><div><b>Root known</b><span class="tag tag-ok">yes</span></div><div><b>Nullifier</b><span class="tag tag-accent">already spent</span></div></div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section aria-labelledby="limits">
-        <h2 id="limits">Limits</h2>
-        <p class="limits">Testnet only. The checker trusts lightwalletd not to withhold transactions, and recomputes every txid. A viewing key shows every incoming payment to its wallet, so share it only with whoever should see them. A fully passing null-402 check needs null-402's pool operator to register a new root, which this project cannot do. Not audited.</p>
+      <section style="padding-top: 0">
+        <div class="wrap stats">
+          <div class="stat"><b>23</b><span>live tests, plus a doc example</span></div>
+          <div class="stat"><b>6</b><span>reason codes, one per failed rule</span></div>
+          <div class="stat"><b>5</b><span>testnet payments made and checked by the live run</span></div>
+          <div class="stat"><b>0</b><span>contracts deployed, and no spend key</span></div>
+        </div>
+      </section>
+
+      <section class="dark" id="checks">
+        <div class="wrap">
+          <div class="sec-head"><div><h2 class="h-sec">Stamped on real transactions</h2><p class="muted lead">Oct 20, 2026. The demo wallets are new, and their incoming viewing keys are published in the run record on purpose. Every mined transaction was re-checked with the merchant's or the employee's key.</p></div></div>
+          <div class="ev" role="list" aria-label="Checks on real transactions">
+            <div class="row" role="listitem"><span>Paywall: 10,000 zat with the challenge memo, block 4,522,621</span><span class="tag tag-ok">200, paid</span><a href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">7c1f6cc0…</a></div>
+            <div class="row" role="listitem"><span>10,000 zat with another memo</span><span class="tag tag-no">MEMO_MISMATCH, AMOUNT_TOO_LOW</span><a href="https://testnet.zcashexplorer.app/transactions/1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0">1620eccc…</a></div>
+            <div class="row" role="listitem"><span>5,000 zat with the right memo</span><span class="tag tag-no">AMOUNT_TOO_LOW</span><a href="https://testnet.zcashexplorer.app/transactions/f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2">f9db1841…</a></div>
+            <div class="row" role="listitem"><span>The right memo and amount, plus a transparent output</span><span class="tag tag-no">TRANSPARENT_PART</span><a href="https://testnet.zcashexplorer.app/transactions/bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec">bb8d8842…</a></div>
+            <div class="row" role="listitem"><span>A payslip of 50,000 zat, checked by a lender with the employee's key</span><span class="tag tag-ok">ok</span><a href="https://testnet.zcashexplorer.app/transactions/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869">38958ceb…</a></div>
+            <div class="row" role="listitem"><span>The same payslip, claimed as twice the pay</span><span class="tag tag-no">AMOUNT_TOO_LOW</span><a href="https://testnet.zcashexplorer.app/transactions/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869">38958ceb…</a></div>
+            <div class="row" role="listitem"><span>The same payslip, checked with the merchant's key</span><span class="tag tag-no">NO_OUTPUT_TO_KEY</span><a href="https://testnet.zcashexplorer.app/transactions/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869">38958ceb…</a></div>
+            <div class="row" role="listitem"><span>Kage's demo payment, with its merchant's published key</span><span class="tag tag-ok">ok, 100,000 zat</span><a href="https://testnet.zcashexplorer.app/transactions/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351">030c3cbf…</a></div>
+            <div class="row" role="listitem"><span>A Fuin auction deposit: Kage's key, then the auction's</span><span class="tag tag-tint">NO_OUTPUT_TO_KEY / ok</span><a href="https://testnet.zcashexplorer.app/transactions/06d121813387444ca3ecc9720e73160b5b80645d9204c6c411e51cef3a190af1">06d12181…</a></div>
+            <div class="row" role="listitem"><span>A null-402 <code>settle()</code> on Fuji: proof valid, root known</span><span class="tag tag-no">NULLIFIER_SPENT</span><a href="https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593">0x8596f52d…</a></div>
+            <div class="row" role="listitem"><span>The same proof, claiming ten times the amount</span><span class="tag tag-no">BAD_PROOF</span><span class="oc">no new tx</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dark" id="faq" style="padding-top: 0">
+        <div class="wrap faq">
+          <div><h2 class="h-sec">Frequently asked questions</h2><p class="muted lead" style="margin-top: 18px">What a viewing key shows, and what the check trusts.</p></div>
+          <div>
+            <details open><summary>What does my viewing key reveal?</summary><p>Every incoming payment to its wallet, and nothing that can spend. Share it only with whoever should see those payments. The keys published here are demo-only.</p></details>
+            <details><summary>What does the check trust?</summary><p>lightwalletd, not to withhold or lag transactions. The checker recomputes every txid, so it cannot be handed a different transaction. The paywall keeps memo nonces and used txids in memory.</p></details>
+            <details><summary>Does a null-402 proof fully pass?</summary><p>Not live yet: BLOCKED. A proof that passes all three checks needs null-402's pool operator to register a new root, and that key (<code>NULL402_OPERATOR_KEY</code>) is not held.</p></details>
+            <details><summary>Can I install it from npm?</summary><p>Not yet: publishing to npm and crates.io needs the maintainer's accounts. It installs from the packed tarball. Testnet only, not audited.</p></details>
+          </div>
+        </div>
+      </section>
+
+      <section class="talk">
+        <div class="wrap">
+          <h2 class="h-sec">Stamp your first payment</h2>
+          <p class="lead">Build the Rust core and the packages, run the 23 live tests, then install the packed SDK into an empty directory and verify a real payment from there.</p>
+          <pre>pnpm install && pnpm test
+scripts/clean-install.sh</pre>
+          <div class="cta" style="justify-content: center"><a class="btn btn-dark" href="https://github.com/nickthelegend/zec-payment-verify-sdk">Get the code <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a></div>
+        </div>
       </section>
     </main>
-    <footer class="wrap">MIT · Copyright (c) 2026 Nivesh Gajengi · extracted from zec-shielded-x402</footer>
+
+    <footer class="foot">
+      <div class="box">
+        <div><a class="logo" href="#top" style="color: #fff"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="7" fill="#e2401f" /><rect x="7.5" y="7.5" width="17" height="17" rx="4" fill="none" stroke="#fff" stroke-width="2" /><path d="M11.5 16.5l3 3 6-7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>Hanko</a><p>判子, the Japanese seal stamp. Was I paid? Verify a shielded Zcash payment with a viewing key.</p></div>
+        <nav aria-label="Footer"><a href="#how">How it works</a><a href="#checks">Real checks</a><a href="#faq">FAQ</a><a href="https://github.com/nickthelegend/zec-payment-verify-sdk">GitHub</a><a href="https://github.com/nickthelegend/zec-payment-verify-sdk/blob/main/deployments/testnet.json">Run record</a></nav>
+        <div class="legal"><span>MIT · Copyright (c) 2026 Nivesh Gajengi</span><span>Zcash testnet · not audited</span></div>
+      </div>
+    </footer>
     <script>
-      // The four paywall checks from this project's live run, shown in turn.
+      // The four paywall payments from the live run, each stamped with what zpay-verify said.
+      const X = 'https://testnet.zcashexplorer.app/transactions/';
       const runs = [
-        { what: '10,000 zat, challenge memo', tx: '7c1f6cc0…', stamp: 'Paid', ok: true },
-        { what: '10,000 zat, another memo', tx: '1620eccc…', stamp: 'Memo mismatch + amount too low', ok: false },
-        { what: '5,000 zat, challenge memo', tx: 'f9db1841…', stamp: 'Amount too low', ok: false },
-        { what: 'right memo + a transparent output', tx: 'bb8d8842…', stamp: 'Transparent part', ok: false },
+        { what: '10,000 zat, challenge memo', tx: '7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16', why: 'none · HTTP 200', word: 'PAID' },
+        { what: '10,000 zat, another memo', tx: '1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0', why: 'MEMO_MISMATCH, AMOUNT_TOO_LOW', word: 'UNPAID' },
+        { what: '5,000 zat, challenge memo', tx: 'f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2', why: 'AMOUNT_TOO_LOW', word: 'UNPAID' },
+        { what: '10,000 zat + a transparent output', tx: 'bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec', why: 'TRANSPARENT_PART', word: 'UNPAID' },
       ];
-      const $ = (id) => document.getElementById(id), dots = [...$('dots').children];
-      let i = 0;
-      const show = () => {
-        const r = runs[i];
-        $('r-what').textContent = r.what; $('r-tx').textContent = r.tx;
-        const s = $('stamp'); s.textContent = r.stamp; s.className = 'stamp' + (r.ok ? '' : ' no');
-        void s.offsetWidth; s.classList.add('thump');
-        dots.forEach((d, k) => d.classList.toggle('on', k === i));
+      const $ = (id) => document.getElementById(id), btns = [...document.querySelectorAll('.picks button')];
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let i = 0, timer = null;
+      const show = (k) => {
+        i = k; const r = runs[k];
+        $('r-what').textContent = r.what; $('r-why').textContent = r.why; $('s-word').textContent = r.word;
+        $('r-tx').textContent = r.tx.slice(0, 8) + '…'; $('r-tx').href = X + r.tx;
+        btns.forEach((b, j) => b.setAttribute('aria-pressed', String(j === k)));
+        if (!reduce) { const s = $('stamp'); s.classList.remove('thump'); void s.offsetWidth; s.classList.add('thump'); }
       };
-      show();
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => { i = (i + 1) % runs.length; show(); }, 2800);
+      btns.forEach((b, j) => b.addEventListener('click', () => { clearInterval(timer); show(j); }));
+      if (!reduce) { setTimeout(() => show(0), 900); timer = setInterval(() => show((i + 1) % runs.length), 3200); }
     </script>
   </body>
 </html>
