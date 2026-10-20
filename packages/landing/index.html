@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>zpay-verify</title>
+    <meta name="description" content="Check a shielded Zcash payment with only an incoming viewing key, or a null-402 payment proof on Avalanche Fuji. Rust crate, CLI, TypeScript SDK, x402 paywall, MCP." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='8' width='22' height='16' rx='3' fill='none' stroke='%231E7A4C' stroke-width='3' transform='rotate(-8 16 16)'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+      :root { --paper: #eef2ef; --sheet: #fafcfa; --ink: #102a26; --muted: #55706a; --rule: #c8d6d0; --ok: #1e7a4c; --no: #b42318; --link: #0f5c8c; color-scheme: light; }
+      @media (prefers-color-scheme: dark) { :root { --paper: #0c1715; --sheet: #132320; --ink: #e3eeea; --muted: #8fa9a2; --rule: #26403b; --ok: #4cc38a; --no: #ff7b6e; --link: #7cc4f0; color-scheme: dark; } }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.65 'Familjen Grotesk', system-ui, sans-serif; overflow-x: hidden; }
+      a { color: var(--link); text-underline-offset: 3px; }
+      :focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+      code, pre { font: 0.85em 'JetBrains Mono', monospace; }
+      .wrap { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+      header { padding: 60px 0 34px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
+      .brand { font: 600 1rem 'JetBrains Mono', monospace; margin: 0 0 32px; }
+      h1 { font: 700 clamp(2.4rem, 7vw, 4.2rem)/1 'Familjen Grotesk', sans-serif; letter-spacing: -0.03em; margin: 0 0 18px; }
+      header p { color: var(--muted); max-width: 54ch; }
+      .stamp { font: 800 1.5rem/1 'Familjen Grotesk', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ok); border: 4px double currentColor; border-radius: 8px; padding: 18px 14px; transform: rotate(-6deg); white-space: nowrap; }
+      h2 { font: 700 1.4rem/1.2 'Familjen Grotesk', sans-serif; margin: 0 0 12px; }
+      section { padding: 38px 0; border-top: 1px solid var(--rule); }
+      pre { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; overflow-x: auto; line-height: 1.55; }
+      .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+      .cta a { font-weight: 600; text-decoration: none; padding: 10px 16px; border-radius: 4px; border: 1px solid var(--ink); color: var(--ink); }
+      .cta a:first-child { background: var(--ink); color: var(--sheet); }
+      .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--sheet); }
+      table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+      th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+      th { color: var(--muted); font-size: 0.8rem; }
+      tr:last-child td { border-bottom: 0; }
+      footer { padding: 28px 0 44px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--rule); }
+      @media (max-width: 640px) { header { grid-template-columns: 1fr; padding-top: 36px; } .stamp { justify-self: start; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div>
+          <p class="brand">zpay-verify</p>
+          <h1>Was I paid?</h1>
+          <p>Check an incoming shielded Zcash payment (amount, memo, confirmations, nothing transparent) with only your incoming viewing key. The same call checks a null-402 payment proof against the contracts on Avalanche Fuji.</p>
+          <div class="cta">
+            <a href="https://github.com/nickthelegend/zec-payment-verify-sdk">Source</a>
+            <a href="https://github.com/nickthelegend/zec-payment-verify-sdk/tree/main/packages/docs">Rules and API</a>
+          </div>
+        </div>
+        <div class="stamp" aria-hidden="true">Paid</div>
+      </header>
+
+      <section>
+        <h2>Three lines</h2>
+<pre>import { verify } from '@zpv/sdk';
+const r = await verify({ rail: 'zcash', uivk, txid, amountZat: 10_000, memo: 'zpv-…' });
+if (!r.ok) console.log(r.reasons);   // MEMO_MISMATCH, AMOUNT_TOO_LOW, TRANSPARENT_PART, …</pre>
+        <p>Also a Rust crate and CLI (<code>zpay-verify verify &lt;txid&gt; --amount --memo</code>, exit 0 / 1 / 2), an x402 paywall that answers 402 with a memo nonce, and an MCP server so an agent checks before it delivers.</p>
+      </section>
+
+      <section>
+        <h2>Checked on real transactions</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Payment</th><th>Verdict</th></tr></thead>
+            <tbody>
+              <tr><td>x402 payment <code>030c3cbf…</code>, with the merchant's published key</td><td>paid, 100,000 zat, memo matches</td></tr>
+              <tr><td>same payment, another invoice memo</td><td>MEMO_MISMATCH</td></tr>
+              <tr><td>an auction deposit, with the x402 key</td><td>NO_OUTPUT_TO_KEY</td></tr>
+              <tr><td>a real null-402 <code>settle()</code> on Fuji</td><td>proof valid, root known, NULLIFIER_SPENT (a replay)</td></tr>
+              <tr><td>the same proof claiming another amount</td><td>BAD_PROOF on the deployed verifier</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The live paywall, refused payments and payslip check from the testnet run are listed in the README.</p>
+      </section>
+
+      <section>
+        <h2>Limits</h2>
+        <p>Testnet only. The checker trusts lightwalletd not to withhold transactions (it recomputes every txid). A viewing key shows every incoming payment to its wallet, so share it only with whoever should see them. A fully passing null-402 check needs null-402's pool operator to register a new root, which this project cannot do.</p>
+      </section>
+
+      <footer>MIT · Copyright (c) 2026 Nivesh Gajengi · extracted from zec-shielded-x402</footer>
+    </div>
+  </body>
+</html>

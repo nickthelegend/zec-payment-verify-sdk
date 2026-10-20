@@ -1,5 +1,3 @@
 # landing
 
-Landing
-
-_Placeholder — not built yet. Spec: grokbot/specs/zec-payment-verify-sdk.md._
+One static page (`index.html`, no build): what it answers, three lines of code, real verdicts, limits.
