@@ -8,20 +8,24 @@ const ZEC_TX = 'https://testnet.zcashexplorer.app/transactions/';
 const REPO = 'https://github.com/nickthelegend/zec-payment-verify-sdk';
 const SETTLE = '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593';
 
+type EndpointAnswer = { lightwalletd: string; answered: boolean; ok?: boolean; reasons?: string[]; height?: number | null; tip?: number; error?: string };
 type ZcashResult = {
   rail: 'zcash';
   ok: boolean;
+  verdict?: 'paid' | 'refused' | 'unverified';
   reasons: string[];
   paidZat: number;
-  report: { txid: string; found: boolean; height: number | null; confirmations: number; tip: number; outputs: { pool: string; value: number; memo: string | null; memo_binary: boolean }[]; pools: Record<string, boolean> };
+  /** null when the lightwalletd endpoints disagreed or too few answered */
+  report: { txid: string; found: boolean; height: number | null; confirmations: number; tip: number; outputs: { pool: string; value: number; memo: string | null; memo_binary: boolean }[]; pools: Record<string, boolean> } | null;
   provenance: { lightwalletd: string; tip: number; checkedAt: string };
+  crossCheck?: { quorum: number; agreed: boolean; endpoints: EndpointAnswer[] };
 };
 type Outcome =
   | { kind: 'zcash'; r: ZcashResult; status: number; ms: number }
   | { kind: 'null402'; r: Null402Result; settledIn: string; ms: number }
   | { kind: 'error'; message: string; setup?: boolean; status?: number; body?: unknown };
 type Rail = 'zcash' | 'null402';
-type Verdict = 'paid' | 'pending' | 'not-paid';
+type Verdict = 'paid' | 'pending' | 'not-paid' | 'unverified';
 type LogEntry = { id: number; rail: Rail; status: Verdict | 'error' | 'setup'; ref: string; reasons: string[]; at: string };
 type Health = 'checking' | 'up' | 'down';
 
@@ -39,6 +43,8 @@ const WHY: Record<string, string> = {
   AMOUNT_MISMATCH: 'The proof authorises a different amount.',
   CONTEXT_MISMATCH: 'The proof is bound to a different request.',
   UNBOUND: 'No expected payee and amount were given, so nothing ties this proof to you.',
+  UNVERIFIED_DISAGREEMENT: 'The lightwalletd endpoints gave different answers, so there is no verdict. Neither paid nor refused: retry, or check the endpoints.',
+  UNVERIFIED_QUORUM: 'Too few lightwalletd endpoints answered to reach the quorum, so there is no verdict.',
 };
 
 const short = (s: string, a = 8, b = 6) => (s.length > a + b + 1 ? `${s.slice(0, a)}…${s.slice(-b)}` : s);
@@ -52,6 +58,7 @@ const PRESETS = [
 
 function verdictOf(o: Outcome): Verdict | null {
   if (o.kind === 'error') return null;
+  if (o.kind === 'zcash' && o.r.verdict === 'unverified') return 'unverified';
   if (o.r.ok) return 'paid';
   if (o.kind === 'zcash' && o.r.reasons.length === 1 && o.r.reasons[0] === 'NOT_CONFIRMED') return 'pending';
   return 'not-paid';
@@ -69,14 +76,15 @@ function SealMark({ size = 28 }: { size?: number }) {
   );
 }
 
-const STAMP_WORD: Record<Verdict, [string, string]> = { paid: ['PAID', 'VIEWING KEY'], pending: ['WAIT', 'UNCONFIRMED'], 'not-paid': ['UNPAID', 'SEE REASONS'] };
+const STAMP_WORD: Record<Verdict, [string, string]> = { paid: ['PAID', 'VIEWING KEY'], pending: ['WAIT', 'UNCONFIRMED'], 'not-paid': ['UNPAID', 'SEE REASONS'], unverified: ['HOLD', 'NO CONSENSUS'] };
+const VERDICT_WORD: Record<Verdict, string> = { paid: 'Paid', pending: 'Pending', 'not-paid': 'Not paid', unverified: 'Unverified' };
 
 /** The seal that lands on a response. Keyed by the caller so each new verdict presses again. */
 function Stamp({ v }: { v: Verdict }) {
   const [word, sub] = STAMP_WORD[v];
-  const color = v === 'paid' ? '#e2401f' : v === 'pending' ? '#c9a27a' : '#8f8783';
+  const color = v === 'paid' ? '#e2401f' : v === 'pending' ? '#c9a27a' : v === 'unverified' ? '#a8681a' : '#8f8783';
   return (
-    <svg className={`stamp stamp-${v}`} viewBox="0 0 132 132" role="img" aria-label={`Verdict: ${v === 'paid' ? 'paid' : v === 'pending' ? 'pending' : 'not paid'}`}>
+    <svg className={`stamp stamp-${v}`} viewBox="0 0 132 132" role="img" aria-label={`Verdict: ${VERDICT_WORD[v].toLowerCase()}`}>
       <defs>
         <filter id={`ink-${v}`} x="-10%" y="-10%" width="120%" height="120%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n" />
@@ -192,15 +200,61 @@ function Reasons({ reasons }: { reasons: string[] }) {
 
 /* ---------- verdict prose (centre column) ---------- */
 
+/** What each lightwalletd said, when the API cross-checks (ZPV_LWD_URLS on the verify API). */
+function CrossCheckTable({ c }: { c: NonNullable<ZcashResult['crossCheck']> }) {
+  const answered = c.endpoints.filter((e) => e.answered).length;
+  return (
+    <>
+      <h3>Cross-check</h3>
+      <p className="muted">
+        {answered} of {c.endpoints.length} endpoints answered; quorum {c.quorum}; {c.agreed ? 'every answer agreed.' : 'no verdict.'}
+      </p>
+      <div className="tbl-wrap">
+        <table className="tbl">
+          <thead>
+            <tr>
+              <th scope="col">Endpoint</th>
+              <th scope="col">Said</th>
+            </tr>
+          </thead>
+          <tbody>
+            {c.endpoints.map((e) => (
+              <tr key={e.lightwalletd}>
+                <td>
+                  <code>{e.lightwalletd.replace(/^https?:\/\//, '')}</code>
+                </td>
+                <td className="xc-said">{e.answered ? (e.ok ? 'paid' : (e.reasons ?? []).join(', ') || 'not paid') + (e.height ? ` · block ${e.height.toLocaleString('en-US')}` : '') : <span className="muted">no answer: {e.error}</span>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
 function ZcashVerdict({ r }: { r: ZcashResult }) {
   const v = verdictOf({ kind: 'zcash', r, status: 200, ms: 0 })!;
+  if (!r.report) {
+    return (
+      <>
+        <p className="v-line">
+          <span className={`v-badge v-${v}`}>{VERDICT_WORD[v]}</span>
+          No verdict: this payment is neither paid nor refused.
+        </p>
+        <Reasons reasons={r.reasons} />
+        {r.crossCheck && <CrossCheckTable c={r.crossCheck} />}
+      </>
+    );
+  }
   return (
     <>
       <p className="v-line">
-        <span className={`v-badge v-${v}`}>{v === 'paid' ? 'Paid' : v === 'pending' ? 'Pending' : 'Not paid'}</span>
+        <span className={`v-badge v-${v}`}>{VERDICT_WORD[v]}</span>
         {r.ok ? `${taz(r.paidZat)} reached this key with the expected memo.` : r.report.found ? `Counted toward this check: ${taz(r.paidZat)}.` : 'No such transaction.'}
       </p>
       <Reasons reasons={r.reasons} />
+      {r.crossCheck && <CrossCheckTable c={r.crossCheck} />}
       {r.report.found && (
         <>
           <h3>What the viewing key sees</h3>
@@ -314,6 +368,8 @@ export function App() {
   const [out, setOut] = useState<Outcome | null>(null);
   const [log, setLog] = useState<LogEntry[]>([]);
   const [health, setHealth] = useState<Health>('checking');
+  /** The lightwalletd endpoints the verify API checks against, from GET /api/health. */
+  const [lwd, setLwd] = useState<{ urls: string[]; quorum: number } | null>(null);
   const [seq, setSeq] = useState(0);
   const logId = useRef(0);
 
@@ -323,6 +379,7 @@ export function App() {
     try {
       const r = await fetch(`${API}/api/health`);
       setHealth(r.ok ? 'up' : 'down');
+      if (r.ok) setLwd(((await r.json()) as { lightwalletd?: { urls: string[]; quorum: number } }).lightwalletd ?? null);
     } catch {
       setHealth('down');
     }
@@ -448,7 +505,7 @@ export function App() {
               <h1>{rail === 'zcash' ? 'Was I paid?' : 'Is this proof a payment to me?'}</h1>
               <p className="lede">
                 {rail === 'zcash'
-                  ? 'Paste a transaction and your incoming viewing key. The local verify API fetches it from lightwalletd, decrypts what is yours and applies the rules.'
+                  ? 'Paste a transaction and your incoming viewing key. The local verify API fetches it from lightwalletd (from several, when it cross-checks), decrypts what is yours and applies the rules. Endpoints that disagree give no verdict, never a Paid.'
                   : 'Read a proof back out of a null-402 settle() on Fuji and check it against the deployed verifier and pool, from this browser.'}
               </p>
 
@@ -547,7 +604,9 @@ export function App() {
                     {busy ? 'Checking…' : 'Send request'}
                   </button>
                   <span className="muted small" id="send-note">
-                    {rail === 'zcash' ? `to ${API}` : `to ${new URL(NULL402_FUJI.rpc).host}`}
+                    {rail === 'zcash'
+                      ? `to ${API}${lwd ? (lwd.urls.length > 1 ? ` · cross-checks ${lwd.urls.length} lightwalletd, quorum ${lwd.quorum}` : ` · one lightwalletd, ${lwd.urls[0].replace(/^https?:\/\//, '')}`) : ''}`
+                      : `to ${new URL(NULL402_FUJI.rpc).host}`}
                   </span>
                 </div>
               </form>
@@ -579,7 +638,7 @@ export function App() {
                         <span className="log-main">
                           <span>
                             {e.rail === 'zcash' ? 'Zcash' : 'null-402'} · {e.at} ·{' '}
-                            <b>{e.status === 'paid' ? 'Paid' : e.status === 'pending' ? 'Pending' : e.status === 'not-paid' ? 'Not paid' : e.status === 'setup' ? 'Setup required' : 'Error'}</b>
+                            <b>{e.status === 'setup' ? 'Setup required' : e.status === 'error' ? 'Error' : VERDICT_WORD[e.status]}</b>
                           </span>
                           {/^(0x)?[0-9a-fA-F]{64}$/.test(e.ref) ? (
                             <a href={e.rail === 'zcash' ? ZEC_TX + e.ref : `${NULL402_FUJI.explorer}/tx/${e.ref}`} target="_blank" rel="noreferrer">

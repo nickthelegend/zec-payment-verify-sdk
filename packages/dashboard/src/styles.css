@@ -123,6 +123,8 @@ h1 { font-weight: 600; font-size: clamp(34px, 4vw, 52px); line-height: 1.02; let
 .v-paid { background: var(--verm); color: #fff; }
 .v-pending { background: var(--wait-tint); color: var(--wait); }
 .v-not-paid { background: var(--ink); color: #fff; }
+.v-unverified { background: var(--wait-tint); color: var(--wait); outline: 1.5px dashed var(--wait); outline-offset: -1.5px; }
+.xc-said { font: 400 13px var(--mono); overflow-wrap: anywhere; }
 .reasons { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
 .reasons li { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; font-size: 15px; }
 .tbl-wrap { overflow-x: auto; }
@@ -146,6 +148,7 @@ h1 { font-weight: 600; font-size: clamp(34px, 4vw, 52px); line-height: 1.02; let
 .dot-v.v-paid { background: var(--verm); }
 .dot-v.v-not-paid { background: var(--ink); }
 .dot-v.v-pending, .dot-v.v-setup { background: #d29a3a; }
+.dot-v.v-unverified { background: transparent; border: 1.5px dashed #a8681a; }
 
 /* dark panes */
 .pane { position: relative; background: var(--code-surface); border: 1px solid var(--code-line); border-radius: 10px; overflow: hidden; color: var(--code-text); min-width: 0; }

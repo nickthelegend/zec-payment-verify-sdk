@@ -2,12 +2,15 @@
 
 "Was I paid?" as an API console, in the same three-column archetype as the landing: endpoints on the
 left, the request's parameters and the human verdict in the centre, and the exact request and the
-real response on the right, where a seal (Paid / Unpaid / Wait) presses onto each new response.
+real response on the right, where a seal (Paid / Unpaid / Wait / Hold) presses onto each new response.
 
 - **Zcash payment** (`POST /api/verify` on the local verify API, `pnpm --filter @zpv/gateway api`,
   :8403): viewing key + txid + amount + memo + confirmations → verdict, reasons in plain words, every
   output the key decrypts, provenance (block, confirmations, pools, lightwalletd, tip). The key goes
-  only to that API; the request pane shows it shortened.
+  only to that API; the request pane shows it shortened. When the API cross-checks
+  (`ZPV_LWD_URLS`), the send row says how many endpoints and the quorum (from `GET /api/health`),
+  every verdict lists what each endpoint said, and endpoints that disagree or too few answers give an
+  **Unverified** badge and a HOLD seal, never Paid.
 - **null-402 proof**: a Fuji `settle()` tx → the proof is read from it and checked in the browser
   with read-only calls to the deployed verifier and pool (viem). `expect.payTo` and
   `expect.requiredAmount` are needed for a "Paid"; leave them empty to see `UNBOUND`. Optional
