@@ -66,8 +66,8 @@ async function sendOnce(label: string, from: string, to: Receiver[]): Promise<st
 async function waitMined(txid: string, uivk: string) {
   for (let i = 0; i < 60; i++) {
     const r = await verify({ rail: 'zcash', uivk, txid, amountZat: 0, minConf: 1, allowTransparent: true });
-    if (r.report.confirmations >= 1) return r;
-    say(`  … ${txid.slice(0, 10)} ${r.report.found ? 'in the mempool' : 'not seen yet'}`);
+    if ((r.report?.confirmations ?? 0) >= 1) return r;
+    say(`  … ${txid.slice(0, 10)} ${r.report?.found ? 'in the mempool' : r.verdict === 'unverified' ? `unverified (${r.reasons.join(', ')})` : 'not seen yet'}`);
     await sleep(20_000);
   }
   throw new Error(`${txid} not mined after 20 minutes`);
@@ -151,7 +151,7 @@ async function main() {
   const lender = await verify({ rail: 'zcash', uivk: keys.employee, txid: slip, amountZat: PAYSLIP, memo: PAYSLIP_MEMO });
   const inflated = await verify({ rail: 'zcash', uivk: keys.employee, txid: slip, amountZat: PAYSLIP * 2n, memo: PAYSLIP_MEMO });
   const otherKey = await verify({ rail: 'zcash', uivk: keys.merchant, txid: slip, amountZat: PAYSLIP, memo: PAYSLIP_MEMO });
-  say(`${lender.ok ? '✓' : '✗'} payslip with the employee key: ${lender.paidZat} zat "${lender.report.outputs[0]?.memo}"`);
+  say(`${lender.ok ? '✓' : '✗'} payslip with the employee key: ${lender.paidZat} zat "${lender.report?.outputs[0]?.memo}"`);
   say(`✓ claiming twice the pay: ${inflated.reasons.join(', ')}; the merchant's key on the payslip: ${otherKey.reasons.join(', ')}`);
   if (!lender.ok || inflated.ok || otherKey.ok) throw new Error('payslip checks did not come out as expected');
 
@@ -161,7 +161,7 @@ async function main() {
   const n402 = await verify({ rail: 'null402', proof: settled.proof, publicSignals: settled.publicSignals });
   say(`✓ published x402 payment: ${x402.ok}; null-402 settle on Fuji: proof valid ${n402.checks.proofValid}, root known ${n402.checks.rootKnown}, ${n402.reasons.join(', ')}`);
 
-  const brief = (r: ZcashResult) => ({ ok: r.ok, reasons: r.reasons, paidZat: r.paidZat, height: r.report.height, confirmations: r.report.confirmations, outputs: r.report.outputs, pools: r.report.pools });
+  const brief = (r: ZcashResult) => ({ ok: r.ok, reasons: r.reasons, paidZat: r.paidZat, verdict: r.verdict, height: r.report?.height ?? null, confirmations: r.report?.confirmations ?? null, outputs: r.report?.outputs ?? [], pools: r.report?.pools ?? null });
   writeFileSync(
     resolve(ROOT, 'deployments/testnet.json'),
     JSON.stringify(

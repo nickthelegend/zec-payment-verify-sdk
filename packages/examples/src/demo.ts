@@ -53,7 +53,7 @@ async function main() {
   await say('\n3. Payslip: a lender checks the employee\'s pay with the employee\'s viewing key only');
   const p = run.payslip;
   const ok = await verify({ rail: 'zcash', uivk: run.wallets.employee.uivk, txid: p.txid, amountZat: BigInt(p.amountZat), memo: p.memo });
-  await say(`   ${short(p.txid)}: ok=${ok.ok}, ${ok.paidZat} zat, memo "${ok.report.outputs[0]?.memo}"`);
+  await say(`   ${short(p.txid)}: ok=${ok.ok}, ${ok.paidZat} zat, memo "${ok.report?.outputs[0]?.memo}"`);
   const twice = await verify({ rail: 'zcash', uivk: run.wallets.employee.uivk, txid: p.txid, amountZat: BigInt(p.amountZat) * 2n, memo: p.memo });
   await say(`   claiming twice the pay: ok=${twice.ok}, ${twice.reasons.join(', ')}`);
 

@@ -31,7 +31,7 @@ export function createServer(): McpServer {
     {
       title: 'Check a shielded Zcash payment to the merchant',
       description:
-        'Did transaction `txid` pay the merchant at least `amount_zat` zatoshis with memo `memo`, with at least `min_conf` confirmations and no transparent part? Checked live on Zcash testnet with the merchant’s incoming viewing key. Returns ok, reasons (TX_NOT_FOUND, NO_OUTPUT_TO_KEY, MEMO_MISMATCH, AMOUNT_TOO_LOW, NOT_CONFIRMED, TRANSPARENT_PART) and what the key saw.',
+        'Did transaction `txid` pay the merchant at least `amount_zat` zatoshis with memo `memo`, with at least `min_conf` confirmations and no transparent part? Checked live on Zcash testnet with the merchant’s incoming viewing key. Returns ok, verdict (paid, refused, or unverified when ZPV_LWD_URLS lists several lightwalletd endpoints and they disagree or too few answer), reasons (TX_NOT_FOUND, NO_OUTPUT_TO_KEY, MEMO_MISMATCH, AMOUNT_TOO_LOW, NOT_CONFIRMED, TRANSPARENT_PART, UNVERIFIED_DISAGREEMENT, UNVERIFIED_QUORUM) and what the key saw.',
       inputSchema: {
         txid: z.string().regex(/^[0-9a-fA-F]{64}$/),
         amount_zat: z.number().int().nonnegative(),
@@ -45,7 +45,18 @@ export function createServer(): McpServer {
         const uivk = process.env.ZPV_MERCHANT_UIVK;
         if (!uivk) throw new SetupRequiredError('ZPV_MERCHANT_UIVK');
         const r = await verify({ rail: 'zcash', uivk, txid: a.txid, amountZat: a.amount_zat, memo: a.memo, minConf: a.min_conf ?? 1 });
-        return { ok: r.ok, reasons: r.reasons, paid_zat: r.paidZat, height: r.report.height, confirmations: r.report.confirmations, outputs: r.report.outputs, transparent: r.report.pools.transparent, lightwalletd: r.provenance.lightwalletd };
+        return {
+          ok: r.ok,
+          verdict: r.verdict,
+          reasons: r.reasons,
+          paid_zat: r.paidZat,
+          height: r.report?.height ?? null,
+          confirmations: r.report?.confirmations ?? null,
+          outputs: r.report?.outputs ?? [],
+          transparent: r.report?.pools.transparent ?? null,
+          lightwalletd: r.provenance.lightwalletd,
+          ...(r.crossCheck ? { cross_check: r.crossCheck } : {}),
+        };
       }),
   );
 
