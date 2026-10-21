@@ -6,6 +6,9 @@
 import { randomBytes } from 'node:crypto';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
+import { MemoryStore, type PaywallStore } from './store.js';
+
+export { MemoryStore, SqliteStore, type PaywallStore, type Claim } from './store.js';
 
 export interface PaywallOptions {
   /** The merchant's unified address (utest1…). */
@@ -24,6 +27,13 @@ export interface PaywallOptions {
   corsOrigins?: string[];
   /** Payment memo for a new challenge (default: zpv-<24 random hex>). */
   issueMemo?: () => string;
+  /**
+   * Challenges and claimed memos/txids (default: a MemoryStore, forgotten on restart). Use a
+   * SqliteStore so a restart cannot re-unlock a paid response and several processes can share one file.
+   */
+  store?: PaywallStore;
+  /** How long a check may hold its claim before another request may take it over (default 5 min). */
+  claimLeaseMs?: number;
 }
 
 export interface Challenge {
@@ -46,12 +56,11 @@ export function createPaywall(o: PaywallOptions): Server {
   const minConf = o.minConf ?? 1;
   const ttl = o.challengeTtlMs ?? 60 * 60_000;
   const maxOpen = o.maxOpenChallenges ?? 10_000;
-  const open = new Map<string, Challenge>();
-  /** Lower-case txids that already paid for a request. */
-  const usedTxids = new Set<string>();
-  /** Memos and txids whose check is in progress. Claimed before the await, so two concurrent
-   *  requests carrying the same payment cannot both be served. */
-  const checking = new Set<string>();
+  const leaseMs = o.claimLeaseMs ?? 5 * 60_000;
+  /** Open challenges, and memos and lower-case txids that are being checked or already paid. A
+   *  payment is claimed before the await, so two concurrent requests (or two processes sharing a
+   *  SqliteStore) carrying the same payment cannot both be served. */
+  const store = o.store ?? new MemoryStore();
 
   const json = (req: IncomingMessage, res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}) => {
     const origin = req.headers.origin;
@@ -59,18 +68,7 @@ export function createPaywall(o: PaywallOptions): Server {
     res.writeHead(status, { 'content-type': 'application/json', ...cors, ...headers }).end(JSON.stringify(body, (_k, v) => (typeof v === 'bigint' ? v.toString() : v)));
   };
 
-  /** Expired challenges are dropped; a Map iterates in insertion order, so the oldest come first. */
-  function prune() {
-    const now = Date.now();
-    for (const [memo, c] of open) {
-      if (c.expiresAt >= now) break;
-      open.delete(memo);
-    }
-  }
-
   function challenge(path: string, price: bigint): Challenge | null {
-    prune();
-    if (open.size >= maxOpen) return null;
     const memo = o.issueMemo?.() ?? `zpv-${randomBytes(12).toString('hex')}`;
     const c: Challenge = {
       x402Version: 1,
@@ -84,9 +82,7 @@ export function createPaywall(o: PaywallOptions): Server {
       expiresAt: Date.now() + ttl,
       zip321: `zcash:${o.payTo}?amount=${(Number(price) / 1e8).toFixed(8).replace(/0+$/, '').replace(/\.$/, '')}&memo=${b64url(memo)}`,
     };
-    open.delete(memo); // re-insert at the end so insertion order stays expiry order
-    open.set(memo, c);
-    return c;
+    return store.issue(c, maxOpen, Date.now()) ? c : null;
   }
 
   async function readBody(req: IncomingMessage): Promise<unknown> {
@@ -139,35 +135,31 @@ export function createPaywall(o: PaywallOptions): Server {
     if (!isObject || (p.memo !== undefined && typeof p.memo !== 'string') || (p.txid !== undefined && typeof p.txid !== 'string')) {
       return json(req, res, 400, { error: 'X-PAYMENT must be base64 JSON {memo: string, txid: string}' });
     }
-    const c = p.memo ? open.get(p.memo) : undefined;
+    const c = p.memo ? store.challenge(p.memo) : undefined;
     if (!c || c.resource !== url.pathname || c.expiresAt < Date.now()) {
       const f = fresh();
       return json(req, res, f.status, f.status === 402 ? { ...f.body, error: 'unknown or expired payment memo' } : f.body);
     }
     if (!p.txid) return json(req, res, 402, { error: 'X-PAYMENT has no txid', accepts: [c] });
     const txid = p.txid.toLowerCase();
-    if (usedTxids.has(txid)) return json(req, res, 402, { error: 'this transaction already paid for a request', accepts: [c] });
-    const memoKey = `memo:${c.memo}`;
-    const txKey = `tx:${txid}`;
-    if (checking.has(memoKey) || checking.has(txKey)) return json(req, res, 402, { error: 'this payment is already being checked by another request; retry', accepts: [c] });
-    checking.add(memoKey);
-    checking.add(txKey);
+    const claim = store.claim(c.memo, txid, Date.now(), leaseMs);
+    if (!claim.ok) {
+      const error = claim.why === 'used' ? 'this transaction already paid for a request' : 'this payment is already being checked by another request; retry';
+      return json(req, res, 402, { error, accepts: [c] });
+    }
     let r;
     try {
       r = await verify({ rail: 'zcash', uivk: o.uivk, txid, amountZat: price, memo: c.memo, minConf }, { lwdUrl: o.lwdUrl });
     } catch (e) {
+      store.release(c.memo, txid, claim.token);
       return json(req, res, e instanceof VerifyError ? 400 : 502, { error: (e as Error).message });
-    } finally {
-      checking.delete(memoKey);
-      checking.delete(txKey);
     }
     if (!r.ok) {
+      store.release(c.memo, txid, claim.token);
       const pendingOnly = r.reasons.length === 1 && r.reasons[0] === 'NOT_CONFIRMED';
       return json(req, res, 402, { error: pendingOnly ? `payment seen, ${r.report.confirmations}/${minConf} confirmations` : `payment refused: ${r.reasons.join(', ')}`, reasons: r.reasons, paidZat: r.paidZat, accepts: [c] });
     }
-    // Synchronous from here to the response: no other request can interleave.
-    open.delete(c.memo);
-    usedTxids.add(txid);
+    if (!store.settle(c.memo, txid, claim.token)) return json(req, res, 402, { error: 'this payment was claimed by another request while it was being checked', accepts: [c] });
     const receipt = { txid, height: r.report.height, confirmations: r.report.confirmations, paidZat: r.paidZat, memo: c.memo, lightwalletd: r.provenance.lightwalletd };
     return json(req, res, 200, { paid: receipt, data: o.content(url.pathname) }, { 'x-payment-response': Buffer.from(JSON.stringify(receipt)).toString('base64') });
   }

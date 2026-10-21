@@ -6,6 +6,9 @@
   "type": "module",
   "main": "dist/server.js",
   "types": "dist/server.d.ts",
+  "engines": {
+    "node": ">=22.13"
+  },
   "exports": {
     ".": {
       "types": "./dist/server.d.ts",
