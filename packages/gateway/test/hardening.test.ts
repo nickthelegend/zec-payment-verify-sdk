@@ -57,6 +57,7 @@ describe('paywall hardening', () => {
     const body = (await r.json()) as { reasons: string[]; data?: unknown };
     expect(body.reasons).toEqual(['UNVERIFIED_DISAGREEMENT']);
     expect(body.data).toBeUndefined();
+    expect(await (await fetch(`${split}/api/health`)).json()).toMatchObject({ lightwalletd: { urls: ['https://testnet.zec.rocks:443', 'https://zec.rocks:443'], quorum: 2 } });
     // the same server reached twice agrees with itself: the retry is served
     const agree = await start({ lwdUrls: ['https://testnet.zec.rocks:443', 'https://testnet.zec.rocks'] });
     await fetch(`${agree}/api/quote`);

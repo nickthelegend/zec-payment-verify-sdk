@@ -5,7 +5,7 @@
 // The gateway holds only the merchant's incoming viewing key: it can see payments, never spend.
 import { randomBytes } from 'node:crypto';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
-import { SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
+import { crossCheckFromEnv, SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
 import { MemoryStore, type PaywallStore } from './store.js';
 
 export { MemoryStore, SqliteStore, type PaywallStore, type Claim } from './store.js';
@@ -66,6 +66,13 @@ export function createPaywall(o: PaywallOptions): Server {
    *  SqliteStore) carrying the same payment cannot both be served. */
   const store = o.store ?? new MemoryStore();
   const lwdOpts = o.lwdUrls ? { lwdUrls: o.lwdUrls, quorum: o.lwdQuorum } : { lwdUrl: o.lwdUrl };
+  /** Which lightwalletd endpoints a zcash check uses (for /api/health), resolved as the SDK does. */
+  const lightwalletd = () => {
+    if (o.lwdUrls) return { urls: o.lwdUrls, quorum: o.lwdQuorum ?? o.lwdUrls.length };
+    const env = o.lwdUrl ? undefined : crossCheckFromEnv();
+    if (env) return { urls: env.lwdUrls, quorum: env.quorum ?? env.lwdUrls.length };
+    return { urls: [o.lwdUrl ?? process.env.ZPV_LWD_URL ?? 'https://testnet.zec.rocks:443'], quorum: 1 };
+  };
 
   const json = (req: IncomingMessage, res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}) => {
     const origin = req.headers.origin;
@@ -116,7 +123,7 @@ export function createPaywall(o: PaywallOptions): Server {
         return json(req, res, status, { error: (e as Error).message });
       }
     }
-    if (url.pathname === '/api/health') return json(req, res, 200, { ok: true, payTo: o.payTo, paths: Object.keys(o.prices) });
+    if (url.pathname === '/api/health') return json(req, res, 200, { ok: true, payTo: o.payTo, paths: Object.keys(o.prices), lightwalletd: lightwalletd() });
 
     const price = o.prices[url.pathname];
     if (price === undefined) return json(req, res, 404, { error: 'not found' });
