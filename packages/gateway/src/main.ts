@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Env: ZPV_PAY_TO (merchant unified address), ZPV_MERCHANT_UIVK (its incoming viewing key),
 // ZPV_PRICE_ZAT (default 10000), ZPV_MIN_CONF (default 1), ZPV_PORT (default 8403),
-// ZPV_CORS (comma-separated browser origins for /api/verify), ZPV_LWD_URL,
+// ZPV_CORS (comma-separated browser origins for /api/verify), ZPV_LWD_URL (or ZPV_LWD_URLS +
+// ZPV_LWD_QUORUM: every payment cross-checked, disagreement answered with 503 and never served),
 // ZPV_STORE (SQLite file for challenges and claimed payments; without it the state is in memory and a
 // restart forgets which payments were already served).
 import { SetupRequiredError } from '@zpv/sdk';

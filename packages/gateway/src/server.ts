@@ -23,6 +23,10 @@ export interface PaywallOptions {
   /** Most unanswered challenges kept at once (default 10,000). When full, a new one is a 503. */
   maxOpenChallenges?: number;
   lwdUrl?: string;
+  /** Cross-check every payment against these lightwalletd endpoints. Without lwdUrls and lwdUrl, the SDK reads ZPV_LWD_URLS. */
+  lwdUrls?: string[];
+  /** With lwdUrls: how many must answer (default all). Disagreement is never served. */
+  lwdQuorum?: number;
   /** Origins allowed to call /api/verify from a browser. */
   corsOrigins?: string[];
   /** Payment memo for a new challenge (default: zpv-<24 random hex>). */
@@ -61,6 +65,7 @@ export function createPaywall(o: PaywallOptions): Server {
    *  payment is claimed before the await, so two concurrent requests (or two processes sharing a
    *  SqliteStore) carrying the same payment cannot both be served. */
   const store = o.store ?? new MemoryStore();
+  const lwdOpts = o.lwdUrls ? { lwdUrls: o.lwdUrls, quorum: o.lwdQuorum } : { lwdUrl: o.lwdUrl };
 
   const json = (req: IncomingMessage, res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}) => {
     const origin = req.headers.origin;
@@ -105,7 +110,7 @@ export function createPaywall(o: PaywallOptions): Server {
       if (req.method !== 'POST') return json(req, res, 405, { error: 'POST a verify request' });
       try {
         const body = (await readBody(req)) as VerifyRequest;
-        return json(req, res, 200, await verify(body, { lwdUrl: o.lwdUrl }));
+        return json(req, res, 200, await verify(body, lwdOpts));
       } catch (e) {
         const status = e instanceof SetupRequiredError ? 503 : e instanceof VerifyError ? 400 : 502;
         return json(req, res, status, { error: (e as Error).message });
@@ -149,15 +154,20 @@ export function createPaywall(o: PaywallOptions): Server {
     }
     let r;
     try {
-      r = await verify({ rail: 'zcash', uivk: o.uivk, txid, amountZat: price, memo: c.memo, minConf }, { lwdUrl: o.lwdUrl });
+      r = await verify({ rail: 'zcash', uivk: o.uivk, txid, amountZat: price, memo: c.memo, minConf }, lwdOpts);
     } catch (e) {
       store.release(c.memo, txid, claim.token);
       return json(req, res, e instanceof VerifyError ? 400 : 502, { error: (e as Error).message });
     }
-    if (!r.ok) {
+    if (r.verdict === 'unverified') {
+      // The lightwalletd endpoints disagreed or too few answered: no verdict, so neither serve nor refuse.
+      store.release(c.memo, txid, claim.token);
+      return json(req, res, 503, { error: `payment could not be verified: ${r.reasons.join(', ')}; retry later`, reasons: r.reasons, crossCheck: r.crossCheck, accepts: [c] }, { 'retry-after': '30' });
+    }
+    if (!r.ok || !r.report) {
       store.release(c.memo, txid, claim.token);
       const pendingOnly = r.reasons.length === 1 && r.reasons[0] === 'NOT_CONFIRMED';
-      return json(req, res, 402, { error: pendingOnly ? `payment seen, ${r.report.confirmations}/${minConf} confirmations` : `payment refused: ${r.reasons.join(', ')}`, reasons: r.reasons, paidZat: r.paidZat, accepts: [c] });
+      return json(req, res, 402, { error: pendingOnly ? `payment seen, ${r.report?.confirmations ?? 0}/${minConf} confirmations` : `payment refused: ${r.reasons.join(', ')}`, reasons: r.reasons, paidZat: r.paidZat, accepts: [c] });
     }
     if (!store.settle(c.memo, txid, claim.token)) return json(req, res, 402, { error: 'this payment was claimed by another request while it was being checked', accepts: [c] });
     const receipt = { txid, height: r.report.height, confirmations: r.report.confirmations, paidZat: r.paidZat, memo: c.memo, lightwalletd: r.provenance.lightwalletd };

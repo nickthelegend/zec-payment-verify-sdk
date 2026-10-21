@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Verify API only (no paywall): POST /api/verify, GET /api/health. For the dashboard.
-// Env: ZPV_PORT (default 8403), ZPV_CORS (default http://localhost:5180), ZPV_LWD_URL.
+// Env: ZPV_PORT (default 8403), ZPV_CORS (default http://localhost:5180), ZPV_LWD_URL, or ZPV_LWD_URLS + ZPV_LWD_QUORUM
+// to cross-check every zcash verdict against several lightwalletd endpoints.
 import { createPaywall } from './server.js';
 
 const port = Number(process.env.ZPV_PORT ?? 8403);

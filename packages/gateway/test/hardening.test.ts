@@ -46,4 +46,20 @@ describe('paywall hardening', () => {
       expect(r.status, JSON.stringify(p)).toBe(400);
     }
   });
+
+  it('lightwalletd endpoints that disagree → 503 unverified, nothing served, and the payment stays claimable', async () => {
+    // testnet.zec.rocks has the payment; zec.rocks (a real mainnet lightwalletd) does not, like a server withholding it.
+    const split = await start({ lwdUrls: ['https://testnet.zec.rocks:443', 'https://zec.rocks:443'] });
+    await fetch(`${split}/api/quote`);
+    const r = await fetch(`${split}/api/quote`, { headers: header({ memo: fx.x402.memo, txid: fx.x402.txid }) });
+    expect(r.status).toBe(503);
+    expect(r.headers.get('retry-after')).toBe('30');
+    const body = (await r.json()) as { reasons: string[]; data?: unknown };
+    expect(body.reasons).toEqual(['UNVERIFIED_DISAGREEMENT']);
+    expect(body.data).toBeUndefined();
+    // the same server reached twice agrees with itself: the retry is served
+    const agree = await start({ lwdUrls: ['https://testnet.zec.rocks:443', 'https://testnet.zec.rocks'] });
+    await fetch(`${agree}/api/quote`);
+    expect((await fetch(`${agree}/api/quote`, { headers: header({ memo: fx.x402.memo, txid: fx.x402.txid }) })).status).toBe(200);
+  });
 });
