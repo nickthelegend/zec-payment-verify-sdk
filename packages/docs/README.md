@@ -59,12 +59,16 @@ constants and fails against the dashboard key, so a proof made with those files 
 
 - The checker trusts lightwalletd to serve the chain honestly. The txid is recomputed, so it
   cannot swap transactions, but it could withhold one (`TX_NOT_FOUND`) or lag (fewer
-  confirmations). Run your own lightwalletd/Zaino for stronger guarantees.
+  confirmations). Cross-check against several endpoints (`lwdUrls` / `ZPV_LWD_URLS`, with a
+  `quorum`): any disagreement, or too few answers, is `unverified`, never `paid`. Only two public
+  testnet indexers exist (testnet.zec.rocks and zaino.testnet.unsafe.zec.rocks, one operator), so
+  for real independence run your own lightwalletd/Zaino as one of the endpoints.
 - A UIVK reveals every incoming payment to that wallet: amounts, memos and which of its addresses
   received each one. Give it only to whoever should see that. The demo keys in `fixtures/` and
   `deployments/` belong to demo-only testnet wallets and are published on purpose.
-- The gateway keeps memo nonces and used txids in memory. A restart forgets them, so a production
-  paywall needs a store.
+- The gateway keeps memo nonces and claimed txids in a `PaywallStore`. The default is in memory (a
+  restart forgets them); `SqliteStore` / `ZPV_STORE` keeps them in a SQLite file shared by restarts
+  and by several paywall processes.
 - Testnet only. The binary decodes testnet keys only.
 
 ## API

@@ -10,4 +10,7 @@
 The merchant key comes from `ZPV_MERCHANT_UIVK` and never passes through the model; without it the
 tool answers `Setup required: ZPV_MERCHANT_UIVK`. `ZPV_MCP_LOG` writes one JSON line per call.
 
+`verify_zcash_payment` returns `verdict` (`paid` / `refused` / `unverified`); with `ZPV_LWD_URLS`
+(+ `ZPV_LWD_QUORUM`) in its environment it cross-checks every payment and adds `cross_check`.
+
 Tests (`pnpm test`, 4): a real MCP client over stdio against live testnet and Fuji.

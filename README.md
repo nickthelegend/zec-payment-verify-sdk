@@ -11,6 +11,10 @@ extracted from [zec-shielded-x402](https://github.com/nickthelegend/zec-shielded
 ```ts
 const r = await verify({ rail: 'zcash', uivk, txid, amountZat: 10_000, memo: 'zpv-…' });
 r.ok; r.reasons;   // [] or TX_NOT_FOUND / NO_OUTPUT_TO_KEY / MEMO_MISMATCH / AMOUNT_TOO_LOW / NOT_CONFIRMED / TRANSPARENT_PART
+
+// Don't trust one lightwalletd: any disagreement, or fewer than `quorum` answers, is 'unverified', never paid
+const x = await verify({ rail: 'zcash', uivk, txid, amountZat: 10_000, memo }, { lwdUrls: [a, b, c], quorum: 2 });
+x.verdict;         // 'paid' | 'refused' | 'unverified'
 ```
 
 ## Live on Zcash testnet
@@ -43,8 +47,8 @@ No contracts are deployed by this project.
 | Package | What |
 |---|---|
 | [`packages/core`](packages/core) | `zpay-verify` Rust crate + CLI: fetch, recompute the txid, trial-decrypt Sapling/Orchard/Ironwood with a UIVK, rules with reason codes, exit 0/1/2 |
-| [`packages/sdk`](packages/sdk) | `@zpv/sdk`: `verify()` with the `zcash` and `null402` rails, `proofFromSettleTx`; `@zpv/sdk/null402` runs in the browser |
-| [`packages/gateway`](packages/gateway) | x402 paywall (memo nonce, ZIP-321 URI; memo and txid single-use, claimed before the check so concurrent requests cannot share a payment; capped open challenges) + `POST /api/verify` |
+| [`packages/sdk`](packages/sdk) | `@zpv/sdk`: `verify()` with the `zcash` and `null402` rails, a lightwalletd cross-check with a quorum (`lwdUrls` / `ZPV_LWD_URLS`), `proofFromSettleTx`; `@zpv/sdk/null402` runs in the browser |
+| [`packages/gateway`](packages/gateway) | x402 paywall (memo nonce, ZIP-321 URI; memo and txid single-use, claimed before the check so concurrent requests cannot share a payment; capped open challenges; state in memory or in a SQLite file shared across restarts and processes, `ZPV_STORE`; an unverified cross-check is a 503) + `POST /api/verify` |
 | [`packages/mcp`](packages/mcp) | `zpv-mcp`: `verify_zcash_payment`, `verify_null402_settlement` (read-only; merchant key from the environment) |
 | [`packages/examples`](packages/examples) | `run-live` (the table above) and `demo` (the video) |
 | [`packages/dashboard`](packages/dashboard) | "Was I paid?" API console: parameters, the exact request, the real response with a seal, reasons, decrypted outputs, provenance |
@@ -53,11 +57,11 @@ No contracts are deployed by this project.
 
 ## Run it
 
-Needs Node 22+, pnpm 10, Rust 1.89 (pinned in `packages/core`).
+Needs Node 22.13+ (`node:sqlite`), pnpm 10, Rust 1.89 (pinned in `packages/core`).
 
 ```sh
 pnpm install
-pnpm test                          # builds zpay-verify + packages; 27 tests (17 touch a chain) + 1 doc example (TESTING.md)
+pnpm test                          # builds zpay-verify + packages; 38 tests (25 touch a chain) + 1 doc example (TESTING.md)
 pnpm --filter @zpv/gateway api &   # verify API for the dashboard
 pnpm --filter @zpv/dashboard dev   # http://localhost:5180
 scripts/clean-install.sh           # tarball + cargo install in an empty dir, verifies a real payment
@@ -65,14 +69,24 @@ scripts/clean-install.sh           # tarball + cargo install in an empty dir, ve
 
 CI: `.github/workflows/ci.yml` runs the same `pnpm test` (it has not run on GitHub yet: nothing is pushed).
 A demo video from Oct 20 exists but is not hosted publicly. Review of Oct 21: [`docs/JUDGE-2026-10-21.md`](docs/JUDGE-2026-10-21.md).
+ZIP 311 payment disclosures are not built: [`docs/ZIP-311-DESIGN.md`](docs/ZIP-311-DESIGN.md) says why.
 
 ## Honest limits
 
-- Testnet only. The checker trusts lightwalletd not to withhold or lag transactions; it recomputes
-  every txid, so it cannot be handed a different transaction.
+- Testnet only. With one lightwalletd, the checker trusts it not to withhold or lag transactions; it
+  recomputes every txid, so it cannot be handed a different transaction. A cross-check
+  (`ZPV_LWD_URLS`) removes the single point of trust only if the endpoints are independent. On
+  Oct 22, 2026 hosh.zec.rocks lists only two online public testnet indexers:
+  `testnet.zec.rocks` (lightwalletd) and `zaino.testnet.unsafe.zec.rocks` (Zaino, same operator,
+  answering 503 that day). The tests that need two agreeing answers use testnet.zec.rocks twice,
+  under two URLs, and say so; real independence means running your own lightwalletd or Zaino.
 - A UIVK reveals every incoming payment to its wallet. The keys published here are demo-only.
-- The paywall keeps memo nonces and used txids in memory (a restart forgets them). `ZPV_MIN_CONF=0`
+- The paywall keeps its state in memory by default (a restart forgets which txids paid); set
+  `ZPV_STORE` to a SQLite file to keep it across restarts and share it between processes on one
+  machine (SQLite file locking; not a network database). `ZPV_MIN_CONF=0`
   accepts mempool transactions, which can still be replaced; keep it at 1 or more.
+- ZIP 311 payment disclosures (prove one payment without the receiver's key) are not built: the ZIP
+  is a draft with no Orchard/Ironwood support, no encoding and no implementation.
 - A null-402 check is `ok` only with an expected payTo and amount (otherwise `UNBOUND`).
 - A null-402 proof that passes all three checks is not shown live: it needs null-402's pool operator
   to register a new root (`NULL402_OPERATOR_KEY`, not held). **BLOCKED** on that.
