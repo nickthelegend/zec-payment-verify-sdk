@@ -14,7 +14,7 @@ cannot see spends or change.
 | `ZPV_UIVK=<x402 merchant key> zpay-verify verify 030c3cbf…8351 --amount 100000 --memo x402z-f19a63da20cbc0749ea800b3` | `"ok":true`, `paid_zat 100000`, Ironwood output, block 4,521,112; exit 0 |
 | the same with `--memo x402z-other` | `MEMO_MISMATCH, AMOUNT_TOO_LOW`; exit 1 |
 | the same key on the auction deposit `06d12181…0af1` | `NO_OUTPUT_TO_KEY` (real tx, not ours) |
-| `verify({rail: 'null402', …proofFromSettleTx('0x8596f52d…a593')})` | proof valid on the Fuji verifier, root known, `NULLIFIER_SPENT` |
+| `verify({rail: 'null402', …proofFromSettleTx('0x8596f52d…a593')})` | proof valid on the Fuji verifier, root known, `NULLIFIER_SPENT`, `UNBOUND` (no expectations given) |
 | `GET /api/quote` on the gateway, pay the challenge, retry with `X-PAYMENT` | `402` → `200` with a receipt; the same txid is refused next time |
 | dashboard, "Auction deposit, checked with the x402 key" | stamp "Not paid", the reason in words, provenance |
 
@@ -42,8 +42,9 @@ A key that does not parse, a malformed txid, an unreachable lightwalletd or a tx
 null-402 (Avalanche, same author) pays per API call with a Groth16 proof of an unspent note. The rail
 makes three read-only `eth_call`s on Fuji at one block: `verifier.verifyProof(a, b, c, pub)`,
 `pool.knownRoot(merkleRoot)` (else the proof could be about a made-up tree) and
-`pool.spent(nullifier)` (else it is a replay). Optional merchant expectations: `payTo`,
-`requiredAmount`, `contextHash`.
+`pool.spent(nullifier)` (else it is a replay). Merchant expectations: `payTo` and
+`requiredAmount` (both needed for `ok`; without them the reason `UNBOUND` is added, because a valid,
+unspent proof that pays someone else is not a payment to you) and optionally `contextHash`.
 
 **Not shown live:** a proof that passes all three. It needs a new deposit whose root null-402's
 operator registers (`NULL402_OPERATOR_KEY`) and the prover key that matches the deployed verifier.

@@ -27,7 +27,9 @@ export interface Null402Request {
   proof: SnarkProof;
   /** [nullifier, merkleRoot, payTo, requiredAmount, contextHash] as decimal strings */
   publicSignals: string[];
-  /** What the merchant expects; each one given must match the proof's public signal. */
+  /** What the merchant expects; each one given must match the proof's public signal. Without both
+   *  `payTo` and `requiredAmount` nothing ties the proof to the caller, so the result is never ok
+   *  (reason `UNBOUND`): a valid, unspent proof that pays someone else is not "paid". */
   expect?: { payTo?: string; requiredAmount?: string | bigint; contextHash?: string };
 }
 
@@ -118,6 +120,7 @@ export async function verifyNull402(req: Null402Request, opts: { rpc?: string } 
   if (e.payTo !== undefined && BigInt(e.payTo) !== pub[2]) reasons.push('PAY_TO_MISMATCH');
   if (e.requiredAmount !== undefined && BigInt(e.requiredAmount) !== pub[3]) reasons.push('AMOUNT_MISMATCH');
   if (e.contextHash !== undefined && BigInt(e.contextHash) !== pub[4]) reasons.push('CONTEXT_MISMATCH');
+  if (e.payTo === undefined || e.requiredAmount === undefined) reasons.push('UNBOUND');
   return {
     rail: 'null402',
     ok: reasons.length === 0,

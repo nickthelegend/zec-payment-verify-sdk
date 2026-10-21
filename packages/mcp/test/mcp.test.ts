@@ -41,7 +41,9 @@ describe('zpv-mcp', () => {
   it('verify_null402_settlement: a real Fuji settle is a valid proof whose nullifier is already spent', async () => {
     const r = JSON.parse((await call(client, 'verify_null402_settlement', { settle_tx: '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593' })).text);
     expect(r.checks).toEqual({ proofValid: true, rootKnown: true, nullifierSpent: true });
-    expect(r.reasons).toEqual(['NULLIFIER_SPENT']);
+    expect(r.reasons).toEqual(['NULLIFIER_SPENT', 'UNBOUND']);
+    const bound = JSON.parse((await call(client, 'verify_null402_settlement', { settle_tx: '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593', expect_pay_to: r.signals.payTo, expect_amount: r.signals.requiredAmount })).text);
+    expect(bound.reasons).toEqual(['NULLIFIER_SPENT']);
   });
 
   it('without the merchant key: Setup required, not a verdict', async () => {

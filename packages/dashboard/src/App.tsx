@@ -32,6 +32,7 @@ const WHY: Record<string, string> = {
   PAY_TO_MISMATCH: 'The proof pays someone else.',
   AMOUNT_MISMATCH: 'The proof authorises a different amount.',
   CONTEXT_MISMATCH: 'The proof is bound to a different request.',
+  UNBOUND: 'No expected payee and amount were given, so nothing ties this proof to you.',
 };
 
 const short = (s: string, a = 8, b = 6) => (s.length > a + b + 1 ? `${s.slice(0, a)}…${s.slice(-b)}` : s);

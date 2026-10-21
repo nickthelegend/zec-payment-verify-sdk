@@ -43,8 +43,19 @@ describe('null402 rail (Avalanche Fuji)', () => {
     const s = await proofFromSettleTx(SETTLE_TX);
     const r = await verify({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals });
     expect(r.checks).toEqual({ proofValid: true, rootKnown: true, nullifierSpent: true });
-    expect(r.reasons).toEqual(['NULLIFIER_SPENT']);
+    expect(r.reasons).toEqual(['NULLIFIER_SPENT', 'UNBOUND']);
     expect(Number(r.provenance.blockNumber)).toBeGreaterThan(Number(s.blockNumber));
+  });
+
+  it('without an expected payTo and amount the result is never ok: UNBOUND', async () => {
+    const s = await proofFromSettleTx(SETTLE_TX);
+    for (const expectation of [undefined, { payTo: s.publicSignals[2] }, { requiredAmount: s.publicSignals[3] }]) {
+      const r = await verify({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals, expect: expectation });
+      expect(r.ok).toBe(false);
+      expect(r.reasons).toContain('UNBOUND');
+    }
+    const bound = await verify({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals, expect: { payTo: s.publicSignals[2], requiredAmount: s.publicSignals[3] } });
+    expect(bound.reasons).not.toContain('UNBOUND');
   });
 
   it('the same proof with its nullifier or amount changed fails the deployed verifier', async () => {

@@ -54,7 +54,7 @@ export function createServer(): McpServer {
     {
       title: 'Check a null-402 payment proof on Avalanche Fuji',
       description:
-        'Reads the proof out of a null-402 settle() transaction on Fuji and checks it against the deployed verifier and pool with read-only calls: proof valid, Merkle root known to the pool, nullifier spent. Optional expected payTo / required amount.',
+        'Reads the proof out of a null-402 settle() transaction on Fuji and checks it against the deployed verifier and pool with read-only calls: proof valid, Merkle root known to the pool, nullifier spent. Pass expect_pay_to and expect_amount: without both the result is never ok (reason UNBOUND), because nothing ties the proof to you.',
       inputSchema: {
         settle_tx: z.string().regex(/^0x[0-9a-fA-F]{64}$/),
         expect_pay_to: z.string().regex(/^\d+$/).optional(),

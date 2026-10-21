@@ -34,7 +34,7 @@ Third-party payments, no new transaction:
 |---|---|---|
 | zec-shielded-x402 demo payment [`030c3cbf…8351`](https://testnet.zcashexplorer.app/transactions/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351) | x402 merchant's published UIVK | ok, 100,000 zat, memo `x402z-f19a63da20cbc0749ea800b3` |
 | sealed-bid auction deposit [`06d12181…0af1`](https://testnet.zcashexplorer.app/transactions/06d121813387444ca3ecc9720e73160b5b80645d9204c6c411e51cef3a190af1) | x402 key / auction's key | `NO_OUTPUT_TO_KEY` / ok |
-| null-402 `settle()` on Fuji [`0x8596f52d…a593`](https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593) | verifier [`0x0b44836d…6060`](https://testnet.snowtrace.io/address/0x0b44836dDc460f589ce4EB97f276e533A2bE6060), pool [`0x39a9C4Ef…cA1C`](https://testnet.snowtrace.io/address/0x39a9C4EfabEBA954545Ecb4b16Ba1d92ec46cA1C) | proof valid, root known, `NULLIFIER_SPENT`; 10× the amount → `BAD_PROOF` |
+| null-402 `settle()` on Fuji [`0x8596f52d…a593`](https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593) | verifier [`0x0b44836d…6060`](https://testnet.snowtrace.io/address/0x0b44836dDc460f589ce4EB97f276e533A2bE6060), pool [`0x39a9C4Ef…cA1C`](https://testnet.snowtrace.io/address/0x39a9C4EfabEBA954545Ecb4b16Ba1d92ec46cA1C) | proof valid, root known, `NULLIFIER_SPENT`; 10× the amount → `BAD_PROOF` (run of Oct 20; since Oct 21 a check without an expected payTo and amount also says `UNBOUND`) |
 
 No contracts are deployed by this project.
 
