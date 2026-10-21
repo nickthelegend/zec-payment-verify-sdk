@@ -1,0 +1,33 @@
+# Runs the same `pnpm test` as locally: the Rust core (rule tests + live testnet tests) and every
+# package against Zcash testnet (testnet.zec.rocks) and Avalanche Fuji (public RPC). No mocks.
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Rust toolchain (pinned in packages/core/rust-toolchain.toml)
+        working-directory: packages/core
+        run: rustup show active-toolchain || rustup toolchain install
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            packages/core/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('packages/core/Cargo.lock', 'packages/core/rust-toolchain.toml') }}
+      - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
