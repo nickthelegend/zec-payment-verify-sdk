@@ -44,7 +44,11 @@ export function createPaywall(o: PaywallOptions): Server {
   const minConf = o.minConf ?? 1;
   const ttl = o.challengeTtlMs ?? 60 * 60_000;
   const open = new Map<string, Challenge>();
+  /** Lower-case txids that already paid for a request. */
   const usedTxids = new Set<string>();
+  /** Memos and txids whose check is in progress. Claimed before the await, so two concurrent
+   *  requests carrying the same payment cannot both be served. */
+  const checking = new Set<string>();
 
   const json = (req: IncomingMessage, res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}) => {
     const origin = req.headers.origin;
@@ -111,20 +115,31 @@ export function createPaywall(o: PaywallOptions): Server {
     }
     const c = p.memo ? open.get(p.memo) : undefined;
     if (!c || c.resource !== url.pathname || c.expiresAt < Date.now()) return json(req, res, 402, { error: 'unknown or expired payment memo', accepts: [challenge(url.pathname, price)] });
-    if (!p.txid || usedTxids.has(p.txid)) return json(req, res, 402, { error: p.txid ? 'this transaction already paid for a request' : 'X-PAYMENT has no txid', accepts: [c] });
+    if (!p.txid) return json(req, res, 402, { error: 'X-PAYMENT has no txid', accepts: [c] });
+    const txid = p.txid.toLowerCase();
+    if (usedTxids.has(txid)) return json(req, res, 402, { error: 'this transaction already paid for a request', accepts: [c] });
+    const memoKey = `memo:${c.memo}`;
+    const txKey = `tx:${txid}`;
+    if (checking.has(memoKey) || checking.has(txKey)) return json(req, res, 402, { error: 'this payment is already being checked by another request; retry', accepts: [c] });
+    checking.add(memoKey);
+    checking.add(txKey);
     let r;
     try {
-      r = await verify({ rail: 'zcash', uivk: o.uivk, txid: p.txid, amountZat: price, memo: c.memo, minConf }, { lwdUrl: o.lwdUrl });
+      r = await verify({ rail: 'zcash', uivk: o.uivk, txid, amountZat: price, memo: c.memo, minConf }, { lwdUrl: o.lwdUrl });
     } catch (e) {
       return json(req, res, e instanceof VerifyError ? 400 : 502, { error: (e as Error).message });
+    } finally {
+      checking.delete(memoKey);
+      checking.delete(txKey);
     }
     if (!r.ok) {
       const pendingOnly = r.reasons.length === 1 && r.reasons[0] === 'NOT_CONFIRMED';
       return json(req, res, 402, { error: pendingOnly ? `payment seen, ${r.report.confirmations}/${minConf} confirmations` : `payment refused: ${r.reasons.join(', ')}`, reasons: r.reasons, paidZat: r.paidZat, accepts: [c] });
     }
+    // Synchronous from here to the response: no other request can interleave.
     open.delete(c.memo);
-    usedTxids.add(p.txid);
-    const receipt = { txid: p.txid, height: r.report.height, confirmations: r.report.confirmations, paidZat: r.paidZat, memo: c.memo, lightwalletd: r.provenance.lightwalletd };
+    usedTxids.add(txid);
+    const receipt = { txid, height: r.report.height, confirmations: r.report.confirmations, paidZat: r.paidZat, memo: c.memo, lightwalletd: r.provenance.lightwalletd };
     return json(req, res, 200, { paid: receipt, data: o.content(url.pathname) }, { 'x-payment-response': Buffer.from(JSON.stringify(receipt)).toString('base64') });
   }
 
