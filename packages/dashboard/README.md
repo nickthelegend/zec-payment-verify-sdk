@@ -1,16 +1,27 @@
 # dashboard
 
-"Was I paid?": paste a payment, get a verdict with where it came from.
+"Was I paid?" as an API console, in the same three-column archetype as the landing: endpoints on the
+left, the request's parameters and the human verdict in the centre, and the exact request and the
+real response on the right, where a seal (Paid / Unpaid / Wait) presses onto each new response.
 
-- **Zcash payment:** incoming viewing key + txid + amount + memo + confirmations → `POST /api/verify` on the local verify API (`pnpm --filter @zpv/gateway api`, :8403) → a stamp (Paid / Not paid / Pending), the reasons in plain words, every output the key decrypts, and provenance (block, confirmations, pools, lightwalletd and tip). The key goes only to that local API.
-- **null-402 proof:** a Fuji `settle()` tx → the proof is read from it and checked in the browser with read-only calls to the deployed verifier and pool (viem), optionally with 10× the amount claimed.
-- Presets are real: the published x402 payment, the same payment with another invoice memo, and an auction deposit checked with the wrong key.
+- **Zcash payment** (`POST /api/verify` on the local verify API, `pnpm --filter @zpv/gateway api`,
+  :8403): viewing key + txid + amount + memo + confirmations → verdict, reasons in plain words, every
+  output the key decrypts, provenance (block, confirmations, pools, lightwalletd, tip). The key goes
+  only to that API; the request pane shows it shortened.
+- **null-402 proof**: a Fuji `settle()` tx → the proof is read from it and checked in the browser
+  with read-only calls to the deployed verifier and pool (viem). `expect.payTo` and
+  `expect.requiredAmount` are needed for a "Paid"; leave them empty to see `UNBOUND`. Optional
+  tamper: claim 10× the amount.
+- Examples are real: the published x402 payment, the same payment with another invoice memo, and an
+  auction deposit checked with the wrong key.
+- States: the top bar pings `GET /api/health` on load; API down or not allowing this origin →
+  "Setup required" with the fix and a re-check button. Empty, waiting and error panes.
+  375 px without horizontal scroll; reduced motion skips the stamp animation.
 
 ```sh
 pnpm --filter @zpv/gateway api        # needs zpay-verify built (packages/core)
-pnpm --filter @zpv/dashboard dev      # http://localhost:5180
+pnpm --filter @zpv/dashboard dev      # http://localhost:5180 (the API allows this origin by default)
 ```
 
-API down → "Setup required: the verify API is not reachable…". One dark app frame on the brand colour; 375 px without horizontal scroll.
-
-`VITE_ZPV_API` points the dashboard at another verify API (default `http://127.0.0.1:8403`).
+`VITE_ZPV_API` points the dashboard at another verify API (default `http://127.0.0.1:8403`);
+`ZPV_CORS` on the API lists the origins it answers.

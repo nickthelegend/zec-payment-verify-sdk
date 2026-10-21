@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react';
 import { proofFromSettleTx, verifyNull402, NULL402_FUJI, type Null402Result } from '@zpv/sdk/null402';
 import fx from '@fixtures/testnet.json';
 
@@ -6,18 +6,24 @@ const API = import.meta.env.VITE_ZPV_API ?? 'http://127.0.0.1:8403';
 const API_FROM_ENV = Boolean(import.meta.env.VITE_ZPV_API);
 const ZEC_TX = 'https://testnet.zcashexplorer.app/transactions/';
 const REPO = 'https://github.com/nickthelegend/zec-payment-verify-sdk';
+const SETTLE = '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593';
 
 type ZcashResult = {
+  rail: 'zcash';
   ok: boolean;
   reasons: string[];
   paidZat: number;
   report: { txid: string; found: boolean; height: number | null; confirmations: number; tip: number; outputs: { pool: string; value: number; memo: string | null; memo_binary: boolean }[]; pools: Record<string, boolean> };
   provenance: { lightwalletd: string; tip: number; checkedAt: string };
 };
-type Outcome = { kind: 'zcash'; r: ZcashResult } | { kind: 'null402'; r: Null402Result; settledIn: string } | { kind: 'error'; message: string; setup?: boolean };
-
-/** One line in this session's check log (kept in memory only, never stored). */
-type LogEntry = { id: number; rail: 'zcash' | 'null402'; status: 'paid' | 'pending' | 'not-paid' | 'error' | 'setup'; ref: string; reasons: string[]; at: string };
+type Outcome =
+  | { kind: 'zcash'; r: ZcashResult; status: number; ms: number }
+  | { kind: 'null402'; r: Null402Result; settledIn: string; ms: number }
+  | { kind: 'error'; message: string; setup?: boolean; status?: number; body?: unknown };
+type Rail = 'zcash' | 'null402';
+type Verdict = 'paid' | 'pending' | 'not-paid';
+type LogEntry = { id: number; rail: Rail; status: Verdict | 'error' | 'setup'; ref: string; reasons: string[]; at: string };
+type Health = 'checking' | 'up' | 'down';
 
 const WHY: Record<string, string> = {
   TX_NOT_FOUND: 'Lightwalletd does not know this transaction.',
@@ -36,42 +42,138 @@ const WHY: Record<string, string> = {
 };
 
 const short = (s: string, a = 8, b = 6) => (s.length > a + b + 1 ? `${s.slice(0, a)}…${s.slice(-b)}` : s);
-const taz = (z: number) => `${(z / 1e8).toLocaleString(undefined, { maximumFractionDigits: 8 })} TAZ`;
-const DECIMAL = (1.5).toLocaleString().charAt(1);
+const taz = (z: number) => `${(z / 1e8).toLocaleString('en-US', { maximumFractionDigits: 8 })} TAZ`;
 
 const PRESETS = [
-  { label: 'x402 payment (published merchant key)', zcash: { uivk: fx.x402.uivk, txid: fx.x402.txid, amount: String(fx.x402.amountZat), memo: fx.x402.memo, minConf: '1' } },
-  { label: 'Same payment, wrong invoice memo', zcash: { uivk: fx.x402.uivk, txid: fx.x402.txid, amount: String(fx.x402.amountZat), memo: 'x402z-another-invoice', minConf: '1' } },
-  { label: 'Auction deposit, checked with the x402 key', zcash: { uivk: fx.x402.uivk, txid: fx.auction.deposit.txid, amount: '1', memo: '', minConf: '1' } },
+  { label: 'x402 payment', note: 'published merchant key', zcash: { uivk: fx.x402.uivk, txid: fx.x402.txid, amount: String(fx.x402.amountZat), memo: fx.x402.memo, minConf: '1' } },
+  { label: 'Wrong invoice memo', note: 'same payment', zcash: { uivk: fx.x402.uivk, txid: fx.x402.txid, amount: String(fx.x402.amountZat), memo: 'x402z-another-invoice', minConf: '1' } },
+  { label: 'Someone else’s payment', note: 'auction deposit, x402 key', zcash: { uivk: fx.x402.uivk, txid: fx.auction.deposit.txid, amount: '1', memo: '', minConf: '1' } },
 ];
-const SETTLE = '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593';
-const UNREACHABLE = 'Setup required: the verify API is not reachable';
 
-/** Zatoshi as TAZ, with the decimals faded like a balance. */
-function Amount({ zat }: { zat: number }) {
-  const s = (zat / 1e8).toLocaleString(undefined, { maximumFractionDigits: 8 });
-  const i = s.indexOf(DECIMAL);
-  return (
-    <span className="amount">
-      {i === -1 ? s : s.slice(0, i)}
-      {i !== -1 && <span className="amount-frac">{s.slice(i)}</span>}
-      <span className="amount-unit">TAZ</span>
-    </span>
-  );
+function verdictOf(o: Outcome): Verdict | null {
+  if (o.kind === 'error') return null;
+  if (o.r.ok) return 'paid';
+  if (o.kind === 'zcash' && o.r.reasons.length === 1 && o.r.reasons[0] === 'NOT_CONFIRMED') return 'pending';
+  return 'not-paid';
 }
 
-function Seal({ size = 32 }: { size?: number }) {
+/* ---------- small pieces ---------- */
+
+function SealMark({ size = 28 }: { size?: number }) {
   return (
-    <svg className="seal" width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
-      <rect x="1" y="1" width="30" height="30" rx="8" fill="#e2401f" />
-      <rect x="5" y="5" width="22" height="22" rx="4" fill="none" stroke="#fdebe5" strokeWidth="1.6" />
+    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="2" y="2" width="28" height="28" rx="5" fill="#e2401f" />
+      <rect x="5.5" y="5.5" width="21" height="21" rx="3" fill="none" stroke="#fdebe5" strokeWidth="1.6" />
       <path d="M11.5 10v12M20.5 10v12M11.5 16h9" stroke="#fdebe5" strokeWidth="2.6" strokeLinecap="round" fill="none" />
     </svg>
   );
 }
 
-function Stamp({ ok, pending }: { ok: boolean; pending?: boolean }) {
-  return <div className={`stamp ${ok ? 'stamp-ok' : pending ? 'stamp-pending' : 'stamp-no'}`}>{ok ? 'Paid' : pending ? 'Pending' : 'Not paid'}</div>;
+const STAMP_WORD: Record<Verdict, [string, string]> = { paid: ['PAID', 'VIEWING KEY'], pending: ['WAIT', 'UNCONFIRMED'], 'not-paid': ['UNPAID', 'SEE REASONS'] };
+
+/** The seal that lands on a response. Keyed by the caller so each new verdict presses again. */
+function Stamp({ v }: { v: Verdict }) {
+  const [word, sub] = STAMP_WORD[v];
+  const color = v === 'paid' ? '#e2401f' : v === 'pending' ? '#c9a27a' : '#8f8783';
+  return (
+    <svg className={`stamp stamp-${v}`} viewBox="0 0 132 132" role="img" aria-label={`Verdict: ${v === 'paid' ? 'paid' : v === 'pending' ? 'pending' : 'not paid'}`}>
+      <defs>
+        <filter id={`ink-${v}`} x="-10%" y="-10%" width="120%" height="120%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" result="d" />
+          <feComponentTransfer in="n" result="holes">
+            <feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 0 0 1" />
+          </feComponentTransfer>
+          <feComposite in="d" in2="holes" operator="out" />
+        </filter>
+      </defs>
+      <g filter={`url(#ink-${v})`} fill="none" stroke={color}>
+        <rect x="8" y="8" width="116" height="116" rx="14" strokeWidth="5" />
+        <rect x="17" y="17" width="98" height="98" rx="8" strokeWidth="1.6" />
+        <path d="M40 46h52" strokeWidth="1.6" />
+        <text x="66" y="71" textAnchor="middle" fill={color} stroke="none" fontFamily="Hanken Grotesk, sans-serif" fontWeight="600" fontSize={word.length > 4 ? 25 : 31} letterSpacing="1">
+          {word}
+        </text>
+        <text x="66" y="92" textAnchor="middle" fill={color} stroke="none" fontFamily="JetBrains Mono, monospace" fontWeight="500" fontSize="8.5" letterSpacing="1.2">
+          {sub}
+        </text>
+      </g>
+    </svg>
+  );
+}
+
+/** Pretty-printed, highlighted JSON as React nodes (no HTML strings: memos come from the chain). */
+function Json({ v, ind = '' }: { v: unknown; ind?: string }): ReactNode {
+  const pad = ind + '  ';
+  if (v === null || v === undefined) return <span className="j-n">null</span>;
+  if (typeof v === 'boolean' || typeof v === 'number' || typeof v === 'bigint') return <span className="j-n">{String(v)}</span>;
+  if (typeof v === 'string') return <span className="j-s">"{v}"</span>;
+  if (Array.isArray(v)) {
+    if (!v.length) return <span className="j-p">[]</span>;
+    if (v.every((x) => typeof x !== 'object' || x === null))
+      return (
+        <>
+          <span className="j-p">[</span>
+          {v.map((x, i) => (
+            <Fragment key={i}>
+              {i > 0 && <span className="j-p">, </span>}
+              <Json v={x} />
+            </Fragment>
+          ))}
+          <span className="j-p">]</span>
+        </>
+      );
+    return (
+      <>
+        <span className="j-p">[</span>
+        {'\n'}
+        {v.map((x, i) => (
+          <Fragment key={i}>
+            {pad}
+            <Json v={x} ind={pad} />
+            {i < v.length - 1 && <span className="j-p">,</span>}
+            {'\n'}
+          </Fragment>
+        ))}
+        {ind}
+        <span className="j-p">]</span>
+      </>
+    );
+  }
+  const entries = Object.entries(v as Record<string, unknown>);
+  if (!entries.length) return <span className="j-p">{'{}'}</span>;
+  return (
+    <>
+      <span className="j-p">{'{'}</span>
+      {'\n'}
+      {entries.map(([k, x], i) => (
+        <Fragment key={k}>
+          {pad}
+          <span className="j-k">"{k}"</span>
+          <span className="j-p">: </span>
+          <Json v={x} ind={pad} />
+          {i < entries.length - 1 && <span className="j-p">,</span>}
+          {'\n'}
+        </Fragment>
+      ))}
+      {ind}
+      <span className="j-p">{'}'}</span>
+    </>
+  );
+}
+
+function Param({ name, type, req, children, input }: { name: string; type: string; req?: string; children?: ReactNode; input: ReactNode }) {
+  return (
+    <li className="param">
+      <div className="p-head">
+        <span className="p-name">{name}</span>
+        <span className="p-type">{type}</span>
+        {req && <span className={req === 'required' || req === 'required for ok' ? 'p-req' : 'p-opt'}>{req}</span>}
+      </div>
+      {children && <p className="p-desc">{children}</p>}
+      {input}
+    </li>
+  );
 }
 
 function Reasons({ reasons }: { reasons: string[] }) {
@@ -80,7 +182,7 @@ function Reasons({ reasons }: { reasons: string[] }) {
     <ul className="reasons" aria-label="Reasons">
       {reasons.map((x) => (
         <li key={x}>
-          <code className={`pill ${x === 'NOT_CONFIRMED' ? 'pill-wait' : 'pill-no'}`}>{x}</code>
+          <code className={`tag ${x === 'NOT_CONFIRMED' ? 'tag-wait' : 'tag-no'}`}>{x}</code>
           <span>{WHY[x] ?? ''}</span>
         </li>
       ))}
@@ -88,30 +190,25 @@ function Reasons({ reasons }: { reasons: string[] }) {
   );
 }
 
-function ZcashView({ r }: { r: ZcashResult }) {
-  const pendingOnly = r.reasons.length === 1 && r.reasons[0] === 'NOT_CONFIRMED';
+/* ---------- verdict prose (centre column) ---------- */
+
+function ZcashVerdict({ r }: { r: ZcashResult }) {
+  const v = verdictOf({ kind: 'zcash', r, status: 200, ms: 0 })!;
   return (
-    <div className="result">
-      <div className="result-head">
-        <Stamp ok={r.ok} pending={pendingOnly} />
-        <span className="pill pill-muted">Zcash testnet</span>
-      </div>
-      <div className="figure">
-        <span className="figure-label">{r.ok ? 'Received' : 'Counted toward this check'}</span>
-        {r.report.found ? <Amount zat={r.paidZat} /> : <span className="amount amount-none">—</span>}
-      </div>
-      <p className="lead">
-        {r.ok ? `${taz(r.paidZat)} received with the expected memo.` : r.report.found ? `Counted ${taz(r.paidZat)}.` : 'No such transaction.'}
+    <>
+      <p className="v-line">
+        <span className={`v-badge v-${v}`}>{v === 'paid' ? 'Paid' : v === 'pending' ? 'Pending' : 'Not paid'}</span>
+        {r.ok ? `${taz(r.paidZat)} reached this key with the expected memo.` : r.report.found ? `Counted toward this check: ${taz(r.paidZat)}.` : 'No such transaction.'}
       </p>
       <Reasons reasons={r.reasons} />
       {r.report.found && (
         <>
           <h3>What the viewing key sees</h3>
           {r.report.outputs.length === 0 ? (
-            <p className="muted note">No output decrypts to this key.</p>
+            <p className="muted">No output in this transaction decrypts to this key.</p>
           ) : (
-            <div className="table-wrap">
-              <table>
+            <div className="tbl-wrap">
+              <table className="tbl">
                 <thead>
                   <tr>
                     <th scope="col">Pool</th>
@@ -122,9 +219,7 @@ function ZcashView({ r }: { r: ZcashResult }) {
                 <tbody>
                   {r.report.outputs.map((o, i) => (
                     <tr key={i}>
-                      <td>
-                        <span className="pill pill-muted">{o.pool}</span>
-                      </td>
+                      <td>{o.pool}</td>
                       <td className="num">{taz(o.value)}</td>
                       <td>{o.memo ? <code>{o.memo}</code> : <span className="muted">{o.memo_binary ? 'binary' : 'none'}</span>}</td>
                     </tr>
@@ -141,417 +236,472 @@ function ZcashView({ r }: { r: ZcashResult }) {
           <dt>Transaction</dt>
           <dd>
             <a href={ZEC_TX + r.report.txid} target="_blank" rel="noreferrer">
-              <code>{short(r.report.txid)}</code>
-              <span className="ext" aria-hidden="true">↗</span>
+              <code>{short(r.report.txid)}</code> ↗
             </a>
           </dd>
         </div>
         <div>
           <dt>Mined</dt>
-          <dd>{r.report.height ? `block ${r.report.height.toLocaleString()}, ${r.report.confirmations.toLocaleString()} confirmations` : r.report.found ? 'in the mempool' : '—'}</dd>
+          <dd>{r.report.height ? `block ${r.report.height.toLocaleString('en-US')}, ${r.report.confirmations.toLocaleString('en-US')} confirmations` : r.report.found ? 'in the mempool' : '—'}</dd>
         </div>
         <div>
-          <dt>Pools in the tx</dt>
-          <dd>{Object.entries(r.report.pools).filter(([, v]) => v).map(([k]) => k).join(', ') || '—'}</dd>
+          <dt>Pools</dt>
+          <dd>{Object.entries(r.report.pools).filter(([, on]) => on).map(([k]) => k).join(', ') || '—'}</dd>
         </div>
         <div>
           <dt>Checked via</dt>
           <dd>
-            {r.provenance.lightwalletd} at tip {r.provenance.tip.toLocaleString()}, {new Date(r.provenance.checkedAt).toLocaleTimeString()}
+            {new URL(r.provenance.lightwalletd).host} at tip {r.provenance.tip.toLocaleString('en-US')}, {new Date(r.provenance.checkedAt).toLocaleTimeString()}
           </dd>
         </div>
       </dl>
-    </div>
+    </>
   );
 }
 
-function Null402View({ r, settledIn }: { r: Null402Result; settledIn: string }) {
+function Null402Verdict({ r, settledIn }: { r: Null402Result; settledIn: string }) {
+  const v = r.ok ? 'paid' : 'not-paid';
   return (
-    <div className="result">
-      <div className="result-head">
-        <Stamp ok={r.ok} />
-        <span className="pill pill-muted">Avalanche Fuji</span>
-      </div>
-      <p className="lead">{r.ok ? 'The proof is valid, its tree is the pool’s, and the note is unspent.' : 'This proof should not be accepted as a new payment.'}</p>
+    <>
+      <p className="v-line">
+        <span className={`v-badge v-${v}`}>{r.ok ? 'Paid' : 'Not paid'}</span>
+        {r.ok ? 'Valid, the pool’s tree, unspent, and it pays what you expect.' : 'Do not accept this proof as a new payment to you.'}
+      </p>
       <Reasons reasons={r.reasons} />
-      <h3>Checks on Avalanche Fuji (read-only calls)</h3>
+      <h3>Read-only calls on Fuji</h3>
       <ul className="checks">
         <li>
           <code>verifier.verifyProof</code>
-          <span className={`pill ${r.checks.proofValid ? 'pill-ok' : 'pill-no'}`}>{String(r.checks.proofValid)}</span>
+          <span className={`tag ${r.checks.proofValid ? 'tag-ok' : 'tag-no'}`}>{String(r.checks.proofValid)}</span>
         </li>
         <li>
           <code>pool.knownRoot(root)</code>
-          <span className={`pill ${r.checks.rootKnown ? 'pill-ok' : 'pill-no'}`}>{String(r.checks.rootKnown)}</span>
+          <span className={`tag ${r.checks.rootKnown ? 'tag-ok' : 'tag-no'}`}>{String(r.checks.rootKnown)}</span>
         </li>
         <li>
           <code>pool.spent(nullifier)</code>
-          <span className={`pill ${r.checks.nullifierSpent ? 'pill-no' : 'pill-ok'}`}>{String(r.checks.nullifierSpent)}</span>
+          <span className={`tag ${r.checks.nullifierSpent ? 'tag-no' : 'tag-ok'}`}>{String(r.checks.nullifierSpent)}</span>
         </li>
       </ul>
       <h3>Provenance</h3>
       <dl className="prov">
         <div>
           <dt>Proof from</dt>
-          <dd>settle() in Fuji block {Number(settledIn).toLocaleString()}</dd>
-        </div>
-        <div>
-          <dt>Amount</dt>
-          <dd>{r.signals.requiredAmount}</dd>
-        </div>
-        <div>
-          <dt>Verifier</dt>
-          <dd>
-            <a href={`${NULL402_FUJI.explorer}/address/${r.provenance.verifier}`} target="_blank" rel="noreferrer">
-              <code>{short(r.provenance.verifier, 8, 4)}</code>
-              <span className="ext" aria-hidden="true">↗</span>
-            </a>
-          </dd>
+          <dd>settle() in Fuji block {Number(settledIn).toLocaleString('en-US')}</dd>
         </div>
         <div>
           <dt>Checked at</dt>
-          <dd>Fuji block {Number(r.provenance.blockNumber).toLocaleString()} via {new URL(r.provenance.rpc).host}</dd>
+          <dd>
+            Fuji block {Number(r.provenance.blockNumber).toLocaleString('en-US')} via {new URL(r.provenance.rpc).host}
+          </dd>
         </div>
       </dl>
-    </div>
+    </>
   );
 }
 
-const STATUS_LABEL: Record<LogEntry['status'], string> = { paid: 'Paid', pending: 'Pending', 'not-paid': 'Not paid', error: 'Error', setup: 'Setup required' };
-const STATUS_PILL: Record<LogEntry['status'], string> = { paid: 'pill-ok', pending: 'pill-wait', 'not-paid': 'pill-no', error: 'pill-no', setup: 'pill-wait' };
-const refLink = (rail: LogEntry['rail'], ref: string) => (rail === 'zcash' ? ZEC_TX + ref : `${NULL402_FUJI.explorer}/tx/${ref}`);
+/* ---------- app ---------- */
 
 export function App() {
-  const [rail, setRail] = useState<'zcash' | 'null402'>('zcash');
+  const [rail, setRail] = useState<Rail>('zcash');
+  const [preset, setPreset] = useState(0);
   const [z, setZ] = useState(PRESETS[0].zcash);
   const [settleTx, setSettleTx] = useState(SETTLE);
+  const [expPayTo, setExpPayTo] = useState('');
+  const [expAmount, setExpAmount] = useState('');
   const [tamper, setTamper] = useState(false);
   const [busy, setBusy] = useState(false);
   const [out, setOut] = useState<Outcome | null>(null);
   const [log, setLog] = useState<LogEntry[]>([]);
+  const [health, setHealth] = useState<Health>('checking');
+  const [seq, setSeq] = useState(0);
   const logId = useRef(0);
 
-  // Record every finished check in this session's log, exactly as the verdict panel shows it.
+  // Is the verify API there? A real request, not an assumption.
+  async function ping() {
+    setHealth('checking');
+    try {
+      const r = await fetch(`${API}/api/health`);
+      setHealth(r.ok ? 'up' : 'down');
+    } catch {
+      setHealth('down');
+    }
+  }
   useEffect(() => {
-    if (!out) return;
-    const ref = out.kind === 'zcash' ? out.r.report.txid : out.kind === 'null402' ? settleTx.trim() : rail === 'zcash' ? z.txid.trim() : settleTx.trim();
-    const entryRail = out.kind === 'error' ? rail : out.kind;
-    let status: LogEntry['status'];
-    if (out.kind === 'error') status = out.setup ? 'setup' : 'error';
-    else if (out.r.ok) status = 'paid';
-    else if (out.kind === 'zcash' && out.r.reasons.length === 1 && out.r.reasons[0] === 'NOT_CONFIRMED') status = 'pending';
-    else status = 'not-paid';
-    const reasons = out.kind === 'error' ? [] : out.r.reasons;
-    logId.current += 1;
-    const entry: LogEntry = { id: logId.current, rail: entryRail, status, ref, reasons, at: new Date().toLocaleTimeString() };
-    setLog((l) => [entry, ...l].slice(0, 8));
-  }, [out]);
+    void ping();
+  }, []);
 
-  async function check(e: React.FormEvent) {
+  function record(o: Outcome, ref: string, r: Rail) {
+    const v = verdictOf(o);
+    logId.current += 1;
+    const entry: LogEntry = { id: logId.current, rail: r, status: o.kind === 'error' ? (o.setup ? 'setup' : 'error') : v!, ref, reasons: o.kind === 'error' ? [] : o.r.reasons, at: new Date().toLocaleTimeString() };
+    setLog((l) => [entry, ...l].slice(0, 10));
+  }
+
+  async function send(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setOut(null);
+    const t0 = performance.now();
+    let o: Outcome;
+    const ref = rail === 'zcash' ? z.txid.trim() : settleTx.trim();
     try {
       if (rail === 'zcash') {
         let res: Response;
         try {
-          res = await fetch(`${API}/api/verify`, {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ rail: 'zcash', uivk: z.uivk.trim(), txid: z.txid.trim(), amountZat: Number(z.amount), memo: z.memo || undefined, minConf: Number(z.minConf || 1) }),
-          });
+          res = await fetch(`${API}/api/verify`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(zcashBody()) });
         } catch {
-          setOut({ kind: 'error', setup: true, message: `Setup required: the verify API is not reachable at ${API}. Start it with: pnpm --filter @zpv/gateway api` });
-          return;
+          setHealth('down');
+          throw Object.assign(new Error(`Setup required: the verify API is not reachable at ${API}. Start it with pnpm --filter @zpv/gateway api`), { setup: true });
         }
+        setHealth('up');
         const body = await res.json();
-        if (!res.ok) setOut({ kind: 'error', message: body.error ?? `HTTP ${res.status}`, setup: res.status === 503 });
-        else setOut({ kind: 'zcash', r: body });
+        o = res.ok ? { kind: 'zcash', r: body, status: res.status, ms: Math.round(performance.now() - t0) } : { kind: 'error', message: body.error ?? `HTTP ${res.status}`, setup: res.status === 503, status: res.status, body };
       } else {
         const s = await proofFromSettleTx(settleTx.trim() as `0x${string}`);
         const pub = [...s.publicSignals];
         if (tamper) pub[3] = (BigInt(pub[3]) * 10n).toString();
-        setOut({ kind: 'null402', r: await verifyNull402({ rail: 'null402', proof: s.proof, publicSignals: pub }), settledIn: s.blockNumber });
+        const expect = { payTo: expPayTo.trim() || undefined, requiredAmount: expAmount.trim() || undefined };
+        const r = await verifyNull402({ rail: 'null402', proof: s.proof, publicSignals: pub, expect });
+        o = { kind: 'null402', r, settledIn: s.blockNumber, ms: Math.round(performance.now() - t0) };
       }
     } catch (err) {
-      setOut({ kind: 'error', message: (err as Error).message.split('\n')[0] });
-    } finally {
-      setBusy(false);
+      const message = (err as Error).message.split('\n')[0];
+      o = { kind: 'error', message, setup: Boolean((err as { setup?: boolean }).setup) };
     }
+    setOut(o);
+    setSeq((n) => n + 1);
+    record(o, ref, rail);
+    setBusy(false);
   }
 
-  const amountIsZat = /^\d+$/.test(z.amount);
+  function zcashBody() {
+    return { rail: 'zcash', uivk: z.uivk.trim(), txid: z.txid.trim(), amountZat: Number(z.amount), memo: z.memo || undefined, minConf: Number(z.minConf || 1) };
+  }
+
+  function pickRail(r: Rail) {
+    setRail(r);
+    setOut(null);
+  }
+
+  // The request as it will be sent. The key is shown shortened: this pane is for reading, not copying secrets.
+  const requestBody = rail === 'zcash' ? { ...zcashBody(), uivk: z.uivk.trim() ? `${z.uivk.trim().slice(0, 14)}…` : '' } : null;
+  const v = out ? verdictOf(out) : null;
+  const amountOk = /^\d+$/.test(z.amount);
 
   return (
-    <div className="page">
-      <a className="skip" href="#check">
-        Skip to the check
+    <div className="app">
+      <a className="skip" href="#params">
+        Skip to the parameters
       </a>
-      <div className="frame">
-        <header className="bar">
-          <a className="brand" href="#top" aria-label="Hanko, home">
-            <Seal />
-            <span className="wordmark">Hanko</span>
+      <header className="top">
+        <a className="brand" href={REPO} aria-label="Hanko on GitHub">
+          <SealMark />
+          Hanko
+        </a>
+        <span className="ver">console · testnet</span>
+        <div className="top-end">
+          <span className={`health health-${health}`} role="status">
+            <span className="dot" aria-hidden="true" />
+            {rail === 'null402' ? 'Fuji, straight from this browser' : health === 'up' ? 'verify API reachable' : health === 'down' ? 'verify API not reachable' : 'checking the verify API…'}
+          </span>
+          <a href={REPO} target="_blank" rel="noreferrer">
+            GitHub
           </a>
-          <nav className="nav" aria-label="Sections">
-            <a href="#check">Check</a>
-            <a href="#verdict">Verdict</a>
-            <a href="#history">History</a>
-            <a href="#evidence">Evidence</a>
+        </div>
+      </header>
+
+      <div className="layout">
+        <aside className="side" aria-label="Endpoints">
+          <nav>
+            <h2>Check</h2>
+            <ul>
+              <li>
+                <button type="button" aria-current={rail === 'zcash'} onClick={() => pickRail('zcash')}>
+                  <span className="verb">POST</span> Zcash payment
+                </button>
+              </li>
+              <li>
+                <button type="button" aria-current={rail === 'null402'} onClick={() => pickRail('null402')}>
+                  <span className="verb">CALL</span> null-402 proof
+                </button>
+              </li>
+            </ul>
+            <h2>This page</h2>
+            <ul>
+              <li>
+                <a href="#history">
+                  History <span className="count">{log.length}</span>
+                </a>
+              </li>
+              <li>
+                <a href="#evidence">Real payments</a>
+              </li>
+            </ul>
           </nav>
-          <div className="bar-end">
-            <span className="net">
-              <span className="dot" aria-hidden="true" />
-              <span className="net-long">Zcash testnet · Fuji</span>
-              <span className="net-short">Testnet</span>
-            </span>
-            <a className="gh" href={REPO} target="_blank" rel="noreferrer">
-              GitHub <span aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </header>
+        </aside>
 
-        <main className="grid" id="top">
-          <div className="col col-main">
-            <section className="hero">
-              <p className="eyebrow">判子 · shielded payment checks</p>
-              <h1>Was I paid?</h1>
+        <main className="doc" id="main">
+          <div className="row">
+            <div className="prose">
+              <p className="kicker">{rail === 'zcash' ? 'POST /api/verify · rail zcash' : 'null-402 · Avalanche Fuji · read-only'}</p>
+              <h1>{rail === 'zcash' ? 'Was I paid?' : 'Is this proof a payment to me?'}</h1>
               <p className="lede">
-                Check a shielded Zcash payment with only your incoming viewing key, or a null-402 payment proof against the contracts on Fuji. Every answer comes from a live
-                check, with where it came from.
+                {rail === 'zcash'
+                  ? 'Paste a transaction and your incoming viewing key. The local verify API fetches it from lightwalletd, decrypts what is yours and applies the rules.'
+                  : 'Read a proof back out of a null-402 settle() on Fuji and check it against the deployed verifier and pool, from this browser.'}
               </p>
-            </section>
 
-            <section className="panel verdict" id="verdict" aria-live="polite" aria-busy={busy}>
-              <div className="panel-head">
-                <h2>Verdict</h2>
-                {out && out.kind !== 'error' && <span className="muted small">Live check</span>}
-              </div>
-              {!out && !busy && (
-                <div className="state empty">
-                  <div className="ghost-stamp" aria-hidden="true">
-                    <Seal size={40} />
-                  </div>
-                  <p className="state-title">No verdict yet</p>
-                  <p className="muted">The verdict appears here.</p>
+              {health === 'down' && rail === 'zcash' && (
+                <div className="banner" role="alert">
+                  <span className="tag tag-wait">Setup required</span>
+                  <p>
+                    The verify API is not reachable at <code>{API}</code>
+                    {API_FROM_ENV ? '' : ' (default; set VITE_ZPV_API to change it)'}, or it does not allow this page's origin (<code>ZPV_CORS</code>). Start it with <code>pnpm --filter @zpv/gateway api</code>, then{' '}
+                    <button type="button" className="link" onClick={() => void ping()}>
+                      check again
+                    </button>
+                    .
+                  </p>
                 </div>
               )}
-              {busy && (
-                <div className="state loading">
-                  <span className="spinner" aria-hidden="true" />
-                  <p className="state-title">Checking…</p>
-                  <p className="muted">{rail === 'zcash' ? `Asking the verify API at ${API}.` : 'Reading the null-402 contracts on Avalanche Fuji.'}</p>
-                </div>
-              )}
-              {out?.kind === 'error' &&
-                (out.setup ? (
-                  <div className="state setup" role="alert">
-                    <span className="pill pill-wait">{out.message.startsWith(UNREACHABLE) ? 'Setup required: VITE_ZPV_API' : 'Setup required'}</span>
-                    <p className="state-msg">{out.message}</p>
-                    {out.message.startsWith(UNREACHABLE) && (
-                      <p className="muted small">
-                        Point the dashboard at your verify API with <code>VITE_ZPV_API</code> in <code>packages/dashboard/.env</code>
-                        {API_FROM_ENV ? '' : ` (unset, so it uses ${API})`}.
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <div className="state bad" role="alert">
-                    <span className="pill pill-no">Check failed</span>
-                    <p className="state-msg">{out.message}</p>
-                  </div>
-                ))}
-              {out?.kind === 'zcash' && <ZcashView r={out.r} />}
-              {out?.kind === 'null402' && <Null402View r={out.r} settledIn={out.settledIn} />}
-            </section>
 
-            <section className="panel" id="evidence">
-              <div className="panel-head">
-                <h2>Real testnet payments</h2>
-                <span className="muted small">Explorer links</span>
-              </div>
-              <ul className="rows">
-                <li className="row">
-                  <div className="row-main">
-                    <span className="row-title">x402 merchant payment</span>
-                    <a className="mono-link" href={ZEC_TX + fx.x402.txid} target="_blank" rel="noreferrer">
-                      <code>{short(fx.x402.txid)}</code>
-                      <span className="ext" aria-hidden="true">↗</span>
-                    </a>
-                  </div>
-                  <span className="pill pill-muted">Zcash testnet</span>
-                </li>
-                <li className="row">
-                  <div className="row-main">
-                    <span className="row-title">Sealed-bid auction deposit</span>
-                    <a className="mono-link" href={ZEC_TX + fx.auction.deposit.txid} target="_blank" rel="noreferrer">
-                      <code>{short(fx.auction.deposit.txid)}</code>
-                      <span className="ext" aria-hidden="true">↗</span>
-                    </a>
-                  </div>
-                  <span className="pill pill-muted">Zcash testnet</span>
-                </li>
-                <li className="row">
-                  <div className="row-main">
-                    <span className="row-title">null-402 settle()</span>
-                    <a className="mono-link" href={`${NULL402_FUJI.explorer}/tx/${SETTLE}`} target="_blank" rel="noreferrer">
-                      <code>{short(SETTLE)}</code>
-                      <span className="ext" aria-hidden="true">↗</span>
-                    </a>
-                  </div>
-                  <span className="pill pill-muted">Fuji</span>
-                </li>
-              </ul>
-            </section>
-          </div>
-
-          <div className="col col-side">
-            <form className="panel send" id="check" onSubmit={check}>
-              <div className="tabs" role="tablist" aria-label="Payment rail">
-                <button type="button" role="tab" aria-selected={rail === 'zcash'} className={rail === 'zcash' ? 'tab on' : 'tab'} onClick={() => { setRail('zcash'); setOut(null); }}>
-                  Zcash payment
-                </button>
-                <button type="button" role="tab" aria-selected={rail === 'null402'} className={rail === 'null402' ? 'tab on' : 'tab'} onClick={() => { setRail('null402'); setOut(null); }}>
-                  null-402 proof
-                </button>
-              </div>
-
-              {rail === 'zcash' ? (
-                <div className="fields">
-                  <label className="card">
-                    <span className="card-label">Try a real one</span>
-                    <select onChange={(e) => { setZ(PRESETS[Number(e.target.value)].zcash); setOut(null); }} defaultValue="0">
-                      {PRESETS.map((p, i) => (
-                        <option key={p.label} value={i}>
-                          {p.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="card">
-                    <span className="card-label">Incoming viewing key</span>
-                    <input className="mono" value={z.uivk} onChange={(e) => setZ({ ...z, uivk: e.target.value })} placeholder="uivktest1…" spellCheck={false} autoComplete="off" required />
-                  </label>
-                  <label className="card">
-                    <span className="card-label">Transaction id</span>
-                    <input className="mono" value={z.txid} onChange={(e) => setZ({ ...z, txid: e.target.value })} placeholder="64 hex characters" spellCheck={false} pattern="[0-9a-fA-F]{64}" required />
-                  </label>
-                  <label className="card card-amount">
-                    <span className="card-row">
-                      <span className="card-label">Expected amount</span>
-                      <span className="card-label">zatoshi</span>
-                    </span>
-                    <input className="big" value={z.amount} onChange={(e) => setZ({ ...z, amount: e.target.value })} inputMode="numeric" pattern="\d+" required />
-                    <span className="card-row">
-                      <span className="card-label">At least</span>
-                      <span className="conv">{amountIsZat ? taz(Number(z.amount)) : 'Whole zatoshi only'}</span>
-                    </span>
-                  </label>
-                  <div className="pair">
-                    <label className="card">
-                      <span className="card-label">Memo</span>
-                      <input className="mono" value={z.memo} onChange={(e) => setZ({ ...z, memo: e.target.value })} placeholder="any memo" spellCheck={false} />
-                    </label>
-                    <label className="card card-conf">
-                      <span className="card-label">Confirmations</span>
-                      <input value={z.minConf} onChange={(e) => setZ({ ...z, minConf: e.target.value })} inputMode="numeric" pattern="\d+" />
-                    </label>
-                  </div>
-                </div>
-              ) : (
-                <div className="fields">
-                  <label className="card">
-                    <span className="card-label">null-402 settle() transaction on Fuji</span>
-                    <input className="mono" value={settleTx} onChange={(e) => setSettleTx(e.target.value)} spellCheck={false} pattern="0x[0-9a-fA-F]{64}" required />
-                  </label>
-                  <label className="toggle">
-                    <input type="checkbox" checked={tamper} onChange={(e) => setTamper(e.target.checked)} />
-                    <span>Claim 10× the amount the proof authorises</span>
-                  </label>
-                  <dl className="contracts">
-                    <div>
-                      <dt>Verifier</dt>
-                      <dd>
-                        <a href={`${NULL402_FUJI.explorer}/address/${NULL402_FUJI.verifier}`} target="_blank" rel="noreferrer">
-                          <code>{short(NULL402_FUJI.verifier, 8, 4)}</code>
-                          <span className="ext" aria-hidden="true">↗</span>
-                        </a>
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>Pool</dt>
-                      <dd>
-                        <a href={`${NULL402_FUJI.explorer}/address/${NULL402_FUJI.pool}`} target="_blank" rel="noreferrer">
-                          <code>{short(NULL402_FUJI.pool, 8, 4)}</code>
-                          <span className="ext" aria-hidden="true">↗</span>
-                        </a>
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              )}
-              <button className="go" disabled={busy}>
-                {busy ? 'Checking…' : 'Check payment'}
-              </button>
-              <p className="api-note">
+              <form id="params" onSubmit={send} aria-describedby="send-note">
                 {rail === 'zcash' ? (
                   <>
-                    Verify API <code>{API}</code>
-                    {API_FROM_ENV ? '' : ' (default; set VITE_ZPV_API to change it)'}
+                    <h3>Examples</h3>
+                    <div className="chips" role="radiogroup" aria-label="Real examples">
+                      {PRESETS.map((p, i) => (
+                        <button
+                          key={p.label}
+                          type="button"
+                          role="radio"
+                          aria-checked={preset === i}
+                          className="chip"
+                          onClick={() => {
+                            setPreset(i);
+                            setZ(p.zcash);
+                            setOut(null);
+                          }}
+                        >
+                          <span>{p.label}</span>
+                          <small>{p.note}</small>
+                        </button>
+                      ))}
+                    </div>
+                    <h3>Body parameters</h3>
+                    <ul className="params">
+                      <Param name="uivk" type="string" req="required" input={<input className="mono" aria-label="uivk" value={z.uivk} onChange={(e) => setZ({ ...z, uivk: e.target.value })} placeholder="uivktest1…" spellCheck={false} autoComplete="off" required />}>
+                        Your incoming viewing key. It goes only to the verify API.
+                      </Param>
+                      <Param name="txid" type="string, 64 hex" req="required" input={<input className="mono" aria-label="txid" value={z.txid} onChange={(e) => setZ({ ...z, txid: e.target.value })} placeholder="64 hex characters" spellCheck={false} pattern="[0-9a-fA-F]{64}" required />} />
+                      <Param
+                        name="amountZat"
+                        type="integer"
+                        req="required"
+                        input={
+                          <div className="with-unit">
+                            <input className="mono" aria-label="amountZat" value={z.amount} onChange={(e) => setZ({ ...z, amount: e.target.value })} inputMode="numeric" pattern="\d+" required />
+                            <span className="unit">{amountOk ? `= ${taz(Number(z.amount))}` : 'whole zatoshi'}</span>
+                          </div>
+                        }
+                      >
+                        At least this many zatoshi, in outputs with the memo.
+                      </Param>
+                      <Param name="memo" type="string" req="optional" input={<input className="mono" aria-label="memo" value={z.memo} onChange={(e) => setZ({ ...z, memo: e.target.value })} placeholder="any memo" spellCheck={false} />}>
+                        Only outputs with exactly this memo count.
+                      </Param>
+                      <Param name="minConf" type="integer" req="default 1" input={<input className="mono narrow" aria-label="minConf" value={z.minConf} onChange={(e) => setZ({ ...z, minConf: e.target.value })} inputMode="numeric" pattern="\d+" />} />
+                    </ul>
                   </>
                 ) : (
-                  <>Read-only calls straight to Fuji from this browser</>
+                  <>
+                    <h3>Parameters</h3>
+                    <ul className="params">
+                      <Param name="settle_tx" type="0x hash" req="required" input={<input className="mono" aria-label="settle_tx" value={settleTx} onChange={(e) => setSettleTx(e.target.value)} spellCheck={false} pattern="0x[0-9a-fA-F]{64}" required />}>
+                        A null-402 <code>settle()</code> transaction on Fuji; the proof is read from it.
+                      </Param>
+                      <Param name="expect.payTo" type="decimal field element" req="required for ok" input={<input className="mono" aria-label="expect.payTo" value={expPayTo} onChange={(e) => setExpPayTo(e.target.value)} placeholder="leave empty to see UNBOUND" spellCheck={false} pattern="\d*" />}>
+                        Who you are, as the proof's <code>payTo</code> signal.
+                      </Param>
+                      <Param name="expect.requiredAmount" type="integer" req="required for ok" input={<input className="mono" aria-label="expect.requiredAmount" value={expAmount} onChange={(e) => setExpAmount(e.target.value)} placeholder="e.g. 1000" inputMode="numeric" pattern="\d*" />}>
+                        What you charge.
+                      </Param>
+                      <Param
+                        name="tamper"
+                        type="demo"
+                        req="optional"
+                        input={
+                          <label className="check">
+                            <input type="checkbox" checked={tamper} onChange={(e) => setTamper(e.target.checked)} />
+                            <span>Claim 10× the amount the proof authorises</span>
+                          </label>
+                        }
+                      />
+                    </ul>
+                  </>
                 )}
-              </p>
-            </form>
+                <div className="send-row">
+                  <button className="send" disabled={busy}>
+                    <SealMark size={18} />
+                    {busy ? 'Checking…' : 'Send request'}
+                  </button>
+                  <span className="muted small" id="send-note">
+                    {rail === 'zcash' ? `to ${API}` : `to ${new URL(NULL402_FUJI.rpc).host}`}
+                  </span>
+                </div>
+              </form>
 
-            <section className="panel" id="history">
-              <div className="panel-head">
-                <h2>This session</h2>
-                <span className="muted small">Not saved</span>
-              </div>
-              {log.length === 0 ? (
-                <p className="muted note">No checks yet. Each one you run is listed here with its verdict and reasons.</p>
-              ) : (
-                <ul className="rows">
-                  {log.map((e) => (
-                    <li className="row" key={e.id}>
-                      <div className="row-main">
-                        <span className="row-title">
-                          {e.rail === 'zcash' ? 'Zcash' : 'null-402'} · {e.at}
-                        </span>
-                        {/^(0x)?[0-9a-fA-F]{64}$/.test(e.ref) ? (
-                          <a className="mono-link" href={refLink(e.rail, e.ref)} target="_blank" rel="noreferrer">
-                            <code>{short(e.ref)}</code>
-                            <span className="ext" aria-hidden="true">↗</span>
-                          </a>
-                        ) : (
-                          <code className="muted">{e.ref ? short(e.ref) : '—'}</code>
-                        )}
-                        {e.reasons.length > 0 && (
-                          <span className="row-reasons">
-                            {e.reasons.map((x) => (
-                              <code key={x} className="pill pill-quiet">
-                                {x}
-                              </code>
-                            ))}
+              <section className="verdict" aria-live="polite" aria-busy={busy} aria-labelledby="h-verdict">
+                <h2 id="h-verdict">Verdict</h2>
+                {!out && !busy && <p className="muted">Nothing checked yet. Pick an example or fill the parameters, then send the request.</p>}
+                {busy && <p className="muted">Checking live…</p>}
+                {out?.kind === 'error' && (
+                  <div className={out.setup ? 'banner' : 'banner banner-bad'} role="alert">
+                    <span className={`tag ${out.setup ? 'tag-wait' : 'tag-no'}`}>{out.setup ? 'Setup required' : 'Could not check'}</span>
+                    <p>{out.message}</p>
+                  </div>
+                )}
+                {out?.kind === 'zcash' && <ZcashVerdict r={out.r} />}
+                {out?.kind === 'null402' && <Null402Verdict r={out.r} settledIn={out.settledIn} />}
+              </section>
+
+              <section id="history" aria-labelledby="h-history">
+                <h2 id="h-history">History</h2>
+                <p className="muted small">This session only; nothing is stored.</p>
+                {log.length === 0 ? (
+                  <p className="muted">No checks yet. Each one you send is listed here with its verdict and reasons.</p>
+                ) : (
+                  <ul className="log">
+                    {log.map((e) => (
+                      <li key={e.id}>
+                        <span className={`dot-v v-${e.status}`} aria-hidden="true" />
+                        <span className="log-main">
+                          <span>
+                            {e.rail === 'zcash' ? 'Zcash' : 'null-402'} · {e.at} ·{' '}
+                            <b>{e.status === 'paid' ? 'Paid' : e.status === 'pending' ? 'Pending' : e.status === 'not-paid' ? 'Not paid' : e.status === 'setup' ? 'Setup required' : 'Error'}</b>
                           </span>
-                        )}
-                      </div>
-                      <span className={`pill ${STATUS_PILL[e.status]}`}>{STATUS_LABEL[e.status]}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
+                          {/^(0x)?[0-9a-fA-F]{64}$/.test(e.ref) ? (
+                            <a href={e.rail === 'zcash' ? ZEC_TX + e.ref : `${NULL402_FUJI.explorer}/tx/${e.ref}`} target="_blank" rel="noreferrer">
+                              <code>{short(e.ref)}</code> ↗
+                            </a>
+                          ) : (
+                            <code className="muted">{e.ref ? short(e.ref) : '—'}</code>
+                          )}
+                          {e.reasons.length > 0 && <span className="log-reasons">{e.reasons.join(' · ')}</span>}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+
+              <section id="evidence" aria-labelledby="h-evidence">
+                <h2 id="h-evidence">Real payments to try</h2>
+                <div className="tbl-wrap">
+                  <table className="tbl">
+                    <tbody>
+                      <tr>
+                        <td>Shielded x402 merchant payment</td>
+                        <td>
+                          <a href={ZEC_TX + fx.x402.txid} target="_blank" rel="noreferrer">
+                            <code>{short(fx.x402.txid)}</code> ↗
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Sealed-bid auction deposit</td>
+                        <td>
+                          <a href={ZEC_TX + fx.auction.deposit.txid} target="_blank" rel="noreferrer">
+                            <code>{short(fx.auction.deposit.txid)}</code> ↗
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>null-402 settle() on Fuji</td>
+                        <td>
+                          <a href={`${NULL402_FUJI.explorer}/tx/${SETTLE}`} target="_blank" rel="noreferrer">
+                            <code>{short(SETTLE)}</code> ↗
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+
+            <div className="code" aria-label="Request and response">
+              <div className="code-stick">
+                <div className="pane">
+                  <div className="pane-head">
+                    <span className="pane-title">
+                      <b>Request</b>
+                    </span>
+                    <span className="pane-sub">{rail === 'zcash' ? 'POST /api/verify' : '3 × eth_call'}</span>
+                  </div>
+                  <pre>
+                    {rail === 'zcash' ? (
+                      <code>
+                        <span className="j-p">curl -s {API}/api/verify \{'\n'}  -H 'content-type: application/json' \{'\n'}  -d </span>
+                        <Json v={requestBody} ind="  " />
+                      </code>
+                    ) : (
+                      <code>
+                        <span className="j-c"># proof read from settle() {short(settleTx.trim() || '—')}</span>
+                        {'\n'}
+                        <span className="j-p">verifier </span>
+                        <span className="j-s">{short(NULL402_FUJI.verifier, 6, 4)}</span>
+                        <span className="j-p">.verifyProof(a, b, c, signals{tamper ? ' with amount × 10' : ''}){'\n'}pool     </span>
+                        <span className="j-s">{short(NULL402_FUJI.pool, 6, 4)}</span>
+                        <span className="j-p">.knownRoot(root){'\n'}pool     </span>
+                        <span className="j-s">{short(NULL402_FUJI.pool, 6, 4)}</span>
+                        <span className="j-p">.spent(nullifier){'\n'}</span>
+                        <span className="j-c"># expect </span>
+                        <Json v={{ payTo: expPayTo.trim() || null, requiredAmount: expAmount.trim() || null }} />
+                      </code>
+                    )}
+                  </pre>
+                  {rail === 'zcash' && <div className="pane-foot">The key is shortened here; the full key is sent.</div>}
+                </div>
+
+                <div className="pane response">
+                  <div className="pane-head">
+                    <span className="pane-title">
+                      <b>Response</b>
+                    </span>
+                    {out?.kind === 'zcash' && <span className={`status ${v === 'paid' ? 'ok' : ''}`}>{`${out.status} · ${out.ms} ms`}</span>}
+                    {out?.kind === 'null402' && <span className={`status ${v === 'paid' ? 'ok' : ''}`}>{`block ${Number(out.r.provenance.blockNumber).toLocaleString('en-US')} · ${out.ms} ms`}</span>}
+                    {out?.kind === 'error' && <span className="status">{out.status ? `HTTP ${out.status}` : out.setup ? 'setup required' : 'error'}</span>}
+                  </div>
+                  {!out && !busy && <p className="pane-empty">No request sent yet.</p>}
+                  {busy && (
+                    <p className="pane-empty">
+                      <span className="pulse" aria-hidden="true" />
+                      Waiting for {rail === 'zcash' ? new URL(API).host : 'Fuji'}…
+                    </p>
+                  )}
+                  {out && (
+                    <pre>
+                      <code>
+                        <Json v={out.kind === 'error' ? (out.body ?? { error: out.message }) : out.r} />
+                      </code>
+                    </pre>
+                  )}
+                  {v && (
+                    <div className="stamp-slot" key={seq}>
+                      <Stamp v={v} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       </div>
       <footer className="foot">
-        <span>
-          <strong>Hanko</strong> · MIT · Copyright (c) 2026 Nivesh Gajengi
-        </span>
-        <span>testnet only · the viewing key is sent only to your local verify API</span>
+        <span>Hanko · MIT · Copyright (c) 2026 Nivesh Gajengi</span>
+        <span>testnet only · the viewing key is sent only to your verify API</span>
       </footer>
     </div>
   );
