@@ -44,12 +44,12 @@ No contracts are deployed by this project.
 |---|---|
 | [`packages/core`](packages/core) | `zpay-verify` Rust crate + CLI: fetch, recompute the txid, trial-decrypt Sapling/Orchard/Ironwood with a UIVK, rules with reason codes, exit 0/1/2 |
 | [`packages/sdk`](packages/sdk) | `@zpv/sdk`: `verify()` with the `zcash` and `null402` rails, `proofFromSettleTx`; `@zpv/sdk/null402` runs in the browser |
-| [`packages/gateway`](packages/gateway) | x402 paywall (memo nonce, ZIP-321 URI, single-use memo and txid) + `POST /api/verify` |
+| [`packages/gateway`](packages/gateway) | x402 paywall (memo nonce, ZIP-321 URI; memo and txid single-use, claimed before the check so concurrent requests cannot share a payment; capped open challenges) + `POST /api/verify` |
 | [`packages/mcp`](packages/mcp) | `zpv-mcp`: `verify_zcash_payment`, `verify_null402_settlement` (read-only; merchant key from the environment) |
 | [`packages/examples`](packages/examples) | `run-live` (the table above) and `demo` (the video) |
-| [`packages/dashboard`](packages/dashboard) | "Was I paid?": verdict stamp, reasons, decrypted outputs, provenance |
+| [`packages/dashboard`](packages/dashboard) | "Was I paid?" API console: parameters, the exact request, the real response with a seal, reasons, decrypted outputs, provenance |
 | [`packages/docs`](packages/docs) | rules, do X → see Y, trust model, API, the null-402 key mismatch finding |
-| [`packages/landing`](packages/landing) | one-page landing |
+| [`packages/landing`](packages/landing) | the API reference page: section nav, prose, dark request/response panes of real output |
 
 ## Run it
 
@@ -57,20 +57,23 @@ Needs Node 22+, pnpm 10, Rust 1.89 (pinned in `packages/core`).
 
 ```sh
 pnpm install
-pnpm test                          # builds zpay-verify + packages; 23 live tests + 1 doc example (TESTING.md)
+pnpm test                          # builds zpay-verify + packages; 27 tests (17 touch a chain) + 1 doc example (TESTING.md)
 pnpm --filter @zpv/gateway api &   # verify API for the dashboard
 pnpm --filter @zpv/dashboard dev   # http://localhost:5180
 scripts/clean-install.sh           # tarball + cargo install in an empty dir, verifies a real payment
 ```
 
-Demo video: `zec-payment-verify-demo.mp4` (shared separately until hosted) (live re-checks of the run's transactions).
+CI: `.github/workflows/ci.yml` runs the same `pnpm test` (it has not run on GitHub yet: nothing is pushed).
+A demo video from Oct 20 exists but is not hosted publicly. Review of Oct 21: [`docs/JUDGE-2026-10-21.md`](docs/JUDGE-2026-10-21.md).
 
 ## Honest limits
 
 - Testnet only. The checker trusts lightwalletd not to withhold or lag transactions; it recomputes
   every txid, so it cannot be handed a different transaction.
 - A UIVK reveals every incoming payment to its wallet. The keys published here are demo-only.
-- The paywall keeps memo nonces and used txids in memory.
+- The paywall keeps memo nonces and used txids in memory (a restart forgets them). `ZPV_MIN_CONF=0`
+  accepts mempool transactions, which can still be replaced; keep it at 1 or more.
+- A null-402 check is `ok` only with an expected payTo and amount (otherwise `UNBOUND`).
 - A null-402 proof that passes all three checks is not shown live: it needs null-402's pool operator
   to register a new root (`NULL402_OPERATOR_KEY`, not held). **BLOCKED** on that.
 - Not published to npm or crates.io (needs the maintainer's npm and crates.io accounts); installable from the packed tarball.

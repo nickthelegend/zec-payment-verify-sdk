@@ -6,7 +6,7 @@ would fit Core & Tooling). Every fact below is verified in this repo.
 **Name:** zpay-verify — Zcash payment verify SDK
 **One line:** "Was I paid?" for shielded Zcash: check amount, memo, confirmations and no transparent part with only an incoming viewing key; the same call checks null-402 proofs on Fuji.
 **Repo:** github.com/nickthelegend/zec-payment-verify-sdk (public before submission)
-**Video:** `zec-payment-verify-demo.mp4` (shared separately until hosted)
+**Video:** a demo video from Oct 20 exists but is not hosted publicly yet
 
 ## What it does
 A Rust crate + CLI (`zpay-verify`), a TypeScript SDK (`@zpv/sdk`, one `verify()` for two rails), a
@@ -17,7 +17,10 @@ receiver's UIVK and applies explicit rules with reason codes.
 ## Proof it works
 - Live testnet run: see README "Live on Zcash testnet" (paywall 200, refused wrong memo / underpaid / transparent output, payslip).
 - Third-party payments checked: the published x402 payment `030c3cbf…8351`; a real null-402 settle on Fuji `0x8596f52d…a593`.
-- 23 tests (20 live on Zcash testnet / Fuji, 3 offline rule tests) + 1 doc example, 0 skipped (TESTING.md).
+- 27 tests + 1 doc example, 0 skipped, on Oct 21, 2026 (TESTING.md). 17 touch a chain (Zcash testnet
+  through lightwalletd, or Fuji); 10 are offline on purpose (rules, bad input, challenge cap, …).
+- Paywall hardening with attack tests: one payment cannot be served to two concurrent requests;
+  open challenges are capped; a null-402 check is never ok without an expected payee and amount.
 
 ## Pre-existing work (disclosure)
 The decryption core is extracted from zec-shielded-x402's `check_uivk` (same author). x402 and
