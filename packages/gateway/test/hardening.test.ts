@@ -28,4 +28,14 @@ describe('paywall hardening', () => {
     ]);
     expect([a.status, b.status].sort()).toEqual([200, 402]);
   });
+
+  it('open challenges are capped and expired ones are dropped', async () => {
+    let n = 0;
+    const base = await start({ issueMemo: () => `zpv-test-${n++}`, maxOpenChallenges: 3, challengeTtlMs: 150 });
+    const statuses = [];
+    for (let i = 0; i < 4; i++) statuses.push((await fetch(`${base}/api/quote`)).status);
+    expect(statuses).toEqual([402, 402, 402, 503]);
+    await new Promise((r) => setTimeout(r, 200));
+    expect((await fetch(`${base}/api/quote`)).status).toBe(402);
+  });
 });

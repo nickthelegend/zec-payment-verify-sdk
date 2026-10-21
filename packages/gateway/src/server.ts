@@ -17,6 +17,8 @@ export interface PaywallOptions {
   content: (path: string) => unknown;
   minConf?: number;
   challengeTtlMs?: number;
+  /** Most unanswered challenges kept at once (default 10,000). When full, a new one is a 503. */
+  maxOpenChallenges?: number;
   lwdUrl?: string;
   /** Origins allowed to call /api/verify from a browser. */
   corsOrigins?: string[];
@@ -43,6 +45,7 @@ const b64url = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
 export function createPaywall(o: PaywallOptions): Server {
   const minConf = o.minConf ?? 1;
   const ttl = o.challengeTtlMs ?? 60 * 60_000;
+  const maxOpen = o.maxOpenChallenges ?? 10_000;
   const open = new Map<string, Challenge>();
   /** Lower-case txids that already paid for a request. */
   const usedTxids = new Set<string>();
@@ -56,7 +59,18 @@ export function createPaywall(o: PaywallOptions): Server {
     res.writeHead(status, { 'content-type': 'application/json', ...cors, ...headers }).end(JSON.stringify(body, (_k, v) => (typeof v === 'bigint' ? v.toString() : v)));
   };
 
-  function challenge(path: string, price: bigint): Challenge {
+  /** Expired challenges are dropped; a Map iterates in insertion order, so the oldest come first. */
+  function prune() {
+    const now = Date.now();
+    for (const [memo, c] of open) {
+      if (c.expiresAt >= now) break;
+      open.delete(memo);
+    }
+  }
+
+  function challenge(path: string, price: bigint): Challenge | null {
+    prune();
+    if (open.size >= maxOpen) return null;
     const memo = o.issueMemo?.() ?? `zpv-${randomBytes(12).toString('hex')}`;
     const c: Challenge = {
       x402Version: 1,
@@ -70,6 +84,7 @@ export function createPaywall(o: PaywallOptions): Server {
       expiresAt: Date.now() + ttl,
       zip321: `zcash:${o.payTo}?amount=${(Number(price) / 1e8).toFixed(8).replace(/0+$/, '').replace(/\.$/, '')}&memo=${b64url(memo)}`,
     };
+    open.delete(memo); // re-insert at the end so insertion order stays expiry order
     open.set(memo, c);
     return c;
   }
@@ -105,7 +120,14 @@ export function createPaywall(o: PaywallOptions): Server {
     const price = o.prices[url.pathname];
     if (price === undefined) return json(req, res, 404, { error: 'not found' });
     const header = req.headers['x-payment'];
-    if (!header || typeof header !== 'string') return json(req, res, 402, { error: 'payment required', accepts: [challenge(url.pathname, price)] });
+    const fresh = () => {
+      const c = challenge(url.pathname, price);
+      return c ? { status: 402, body: { error: 'payment required', accepts: [c] } } : { status: 503, body: { error: 'too many open payment challenges; retry later' } };
+    };
+    if (!header || typeof header !== 'string') {
+      const f = fresh();
+      return json(req, res, f.status, f.body, f.status === 503 ? { 'retry-after': '60' } : {});
+    }
 
     let p: { memo?: string; txid?: string };
     try {
@@ -114,7 +136,10 @@ export function createPaywall(o: PaywallOptions): Server {
       return json(req, res, 400, { error: 'X-PAYMENT is not base64 JSON {memo, txid}' });
     }
     const c = p.memo ? open.get(p.memo) : undefined;
-    if (!c || c.resource !== url.pathname || c.expiresAt < Date.now()) return json(req, res, 402, { error: 'unknown or expired payment memo', accepts: [challenge(url.pathname, price)] });
+    if (!c || c.resource !== url.pathname || c.expiresAt < Date.now()) {
+      const f = fresh();
+      return json(req, res, f.status, f.status === 402 ? { ...f.body, error: 'unknown or expired payment memo' } : f.body);
+    }
     if (!p.txid) return json(req, res, 402, { error: 'X-PAYMENT has no txid', accepts: [c] });
     const txid = p.txid.toLowerCase();
     if (usedTxids.has(txid)) return json(req, res, 402, { error: 'this transaction already paid for a request', accepts: [c] });
