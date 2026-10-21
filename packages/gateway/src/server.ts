@@ -135,6 +135,10 @@ export function createPaywall(o: PaywallOptions): Server {
     } catch {
       return json(req, res, 400, { error: 'X-PAYMENT is not base64 JSON {memo, txid}' });
     }
+    const isObject = typeof p === 'object' && p !== null && !Array.isArray(p);
+    if (!isObject || (p.memo !== undefined && typeof p.memo !== 'string') || (p.txid !== undefined && typeof p.txid !== 'string')) {
+      return json(req, res, 400, { error: 'X-PAYMENT must be base64 JSON {memo: string, txid: string}' });
+    }
     const c = p.memo ? open.get(p.memo) : undefined;
     if (!c || c.resource !== url.pathname || c.expiresAt < Date.now()) {
       const f = fresh();

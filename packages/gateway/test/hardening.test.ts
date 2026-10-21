@@ -38,4 +38,12 @@ describe('paywall hardening', () => {
     await new Promise((r) => setTimeout(r, 200));
     expect((await fetch(`${base}/api/quote`)).status).toBe(402);
   });
+
+  it('an X-PAYMENT that is JSON but not {memo, txid} strings is a 400, not a crash', async () => {
+    const base = await start();
+    for (const p of [null, 7, ['x'], { memo: 1, txid: 2 }]) {
+      const r = await fetch(`${base}/api/quote`, { headers: header(p) });
+      expect(r.status, JSON.stringify(p)).toBe(400);
+    }
+  });
 });
