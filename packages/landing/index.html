@@ -610,12 +610,13 @@ curl -s 127.0.0.1:8403/api/verify \
           <div class="prose">
             <p class="kicker">Proof</p>
             <h2 class="t" id="h-evidence">Live testnet run</h2>
-            <p>Oct 20, 2026, <code>pnpm --filter @zpv/examples run-live</code>. New demo-only wallets; their incoming viewing keys are published in <code>deployments/testnet.json</code> on purpose, so anyone can re-check these.</p>
+            <p>Oct 20, 2026, <code>pnpm --filter @zpv/examples run-live</code>, and on Oct 22 one payment through the current paywall with nothing pinned (<code>paywall-live</code>). Demo-only wallets; their incoming viewing keys are published in <code>deployments/testnet.json</code> on purpose, so anyone can re-check these.</p>
             <div class="tbl-wrap">
               <table class="tbl">
                 <thead><tr><th scope="col">Case</th><th scope="col">Transaction</th><th scope="col">Answer</th></tr></thead>
                 <tbody>
-                  <tr><td>Paywall: 10,000 zat with the challenge memo</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">7c1f6cc0…4c16</a></td><td><span class="code-tag ok">200</span></td></tr>
+                  <tr><td>Current paywall, Oct 22: 10,000 zat with a stateless HMAC memo, presented with Shielded x402's <code>fetchWithPayment</code>; then the same payment again</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/2867d542496452326ce241ad3ba647deb7e6e8eb1b889397ffae20dceecb664f">2867d542…664f</a></td><td><span class="code-tag ok">200</span> then <span class="code-tag no">402</span></td></tr>
+                  <tr><td>Paywall, Oct 20: 10,000 zat with the challenge memo</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">7c1f6cc0…4c16</a></td><td><span class="code-tag ok">200</span></td></tr>
                   <tr><td>10,000 zat with another memo</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0">1620eccc…49c0</a></td><td><span class="code-tag no">MEMO_MISMATCH</span></td></tr>
                   <tr><td>5,000 zat with the right memo</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2">f9db1841…dce2</a></td><td><span class="code-tag no">AMOUNT_TOO_LOW</span></td></tr>
                   <tr><td>Right memo and amount, plus a transparent output</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec">bb8d8842…82ec</a></td><td><span class="code-tag no">TRANSPARENT_PART</span></td></tr>
@@ -643,22 +644,23 @@ curl -s 127.0.0.1:8403/api/verify \
           <div class="prose">
             <p class="kicker">Proof</p>
             <h2 class="t" id="h-tests">Tests</h2>
-            <p>No mocked clients and no stub RPCs. A test that touches a chain talks to Zcash testnet through a real lightwalletd or to Fuji through its public RPC, using real mined transactions. Counts are from the run on Oct 22, 2026. The browser suite (Playwright in Google Chrome against the real stack, 1280 px and 375 px) adds 56 passing tests.</p>
+            <p>No mocked clients and no stub RPCs. A test that touches a chain talks to Zcash testnet through a real lightwalletd or to Fuji through its public RPC, using real mined transactions. Counts are from the run on Oct 23, 2026 (IST). The browser suite (Playwright in Google Chrome against the real stack, 1280 px and 375 px) adds 62 passing tests.</p>
             <div class="tbl-wrap">
               <table class="tbl" id="test-table">
                 <thead><tr><th scope="col">Package</th><th scope="col">Tests</th><th scope="col">Touch a chain</th></tr></thead>
                 <tbody>
                   <tr><td>core rules (Rust)</td><td>3</td><td>0</td></tr>
                   <tr><td>core live (Rust)</td><td>7</td><td>6</td></tr>
+                  <tr><td>core proofs and signatures (Rust)</td><td>4</td><td>4</td></tr>
                   <tr><td>core transport + CLI (Rust)</td><td>10</td><td>2</td></tr>
-                  <tr><td>sdk</td><td>25</td><td>17</td></tr>
-                  <tr><td>gateway</td><td>29</td><td>11</td></tr>
-                  <tr><td>mcp</td><td>7</td><td>4</td></tr>
-                  <tr><td><b>Total</b></td><td><b>81</b> + 1 doc example</td><td><b>40</b></td></tr>
+                  <tr><td>sdk</td><td>35</td><td>19</td></tr>
+                  <tr><td>gateway</td><td>37</td><td>14</td></tr>
+                  <tr><td>mcp</td><td>8</td><td>4</td></tr>
+                  <tr><td><b>Total</b></td><td><b>104</b> + 1 doc example</td><td><b>49</b></td></tr>
                 </tbody>
               </table>
             </div>
-            <p>The other 41 run offline on purpose: the rules, bad input and status codes, plaintext and proxy refusals, <code>owns</code>, a silent server killed, the process limit, issuing challenges (and 10,000 of them), forged memos, the x402 envelope checks, startup checks, the tool list, "Setup required", cross-check settings, a restart and a lease takeover.</p>
+            <p>The other 55 run offline on purpose: the rules, bad input and status codes, plaintext and proxy refusals, <code>owns</code>, a silent server killed, the process limit, issuing challenges (and 10,000 of them), forged memos, the x402 envelope checks, startup checks, the tool list, "Setup required", cross-check settings, a restart and a lease takeover.</p>
           </div>
           <div class="code">
             <div class="code-stick">
