@@ -10,8 +10,15 @@ merchant's **incoming viewing key**: it can see payments, never spend.
   usual). A challenge is payable for `challengeTtlMs` (default 15 min). `OPTIONS` is 204; other
   methods on a paid path are 405. A custom memo (`issueMemo`) is stored instead, capped by
   `maxOpenChallenges`.
-- The payer sends that amount with that memo, then retries with `X-PAYMENT: base64({memo, txid})`.
-- The gateway runs `@zpv/sdk` `verify({rail: "zcash", …})`. Paid → `200` with the data and an `X-PAYMENT-RESPONSE` receipt; the memo and the txid are burned and can never pay again. Not yet confirmed → `402` "payment seen, n/m confirmations". Anything else → `402` with the reasons.
+- The 402 body is an x402 v1 `PaymentRequiredResponse` (`{x402Version: 1, error, accepts}`); each
+  entry carries `maxAmountRequired`, `asset: "ZEC"`, `maxTimeoutSeconds` and
+  `extra: {memoNonce, expiresAt (unix s), paymentUri}`, the shape Shielded x402 (Kage) uses for the same
+  `zcash-shielded` scheme, plus Hanko's own `amountZat`, `memo`, `minConf`, `zip321`, `expiresAt` (ms).
+- The payer sends that amount with that memo, then retries with `X-PAYMENT`: the x402 v1 envelope
+  `base64({x402Version: 1, scheme: "zcash-shielded", network: "zcash-testnet", payload: {txid, memoNonce}})`
+  (what Kage's client sends) or Hanko's earlier `base64({memo, txid})`. Another scheme, network or
+  version is a 400.
+- The gateway runs `@zpv/sdk` `verify({rail: "zcash", …})`. Paid → `200` with `{paid: receipt, data}` and `X-PAYMENT-RESPONSE: base64({success: true, transaction: txid, network: "zcash-testnet", payer: ""})` (refusals carry `success: false` and an `errorReason`); the memo and the txid are burned and can never pay again. Not yet confirmed → `402` "payment seen, n/m confirmations". Anything else → `402` with the reasons.
 - With `lwdUrls` (or `ZPV_LWD_URLS` + `ZPV_LWD_QUORUM`) each payment is checked against several lightwalletd endpoints. If they disagree or too few answer → `503` + `Retry-After` with `UNVERIFIED_*` and each endpoint's answer; nothing is served and the payment stays claimable.
 - `POST /api/verify` → the SDK verdict for either rail (used by the dashboard; CORS for `ZPV_CORS`).
 

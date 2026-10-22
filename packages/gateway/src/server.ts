@@ -1,7 +1,9 @@
 // Reference x402 paywall over a shielded Zcash payment, plus a verify API for the dashboard.
 //   GET <paid path>                    → 402 with {payTo, amountZat, memo, minConf, zip321}; the memo is
 //                                        zpv-<expiry>-<nonce>-<HMAC>, so nothing is stored until a payment
-//   same path + X-PAYMENT {memo, txid} → @zpv/sdk verify (receiver's incoming viewing key) → 200
+//   same path + X-PAYMENT              → x402 v1 {x402Version, scheme, network, payload: {txid, memoNonce}}
+//                                        (as Shielded x402 sends it) or {memo, txid} → @zpv/sdk verify
+//                                        with the receiver's incoming viewing key → 200 + X-PAYMENT-RESPONSE
 //   POST /api/verify {rail, …}         → the SDK verdict as JSON (both rails)
 // The gateway holds only the merchant's incoming viewing key: it can see payments, never spend.
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
@@ -46,18 +48,60 @@ export interface PaywallOptions {
   claimLeaseMs?: number;
 }
 
+/**
+ * One entry of the 402's `accepts`: an x402 v1 PaymentRequirements for the `zcash-shielded` scheme, in the
+ * shape Shielded x402 (Kage) uses (`maxAmountRequired`, `extra: {memoNonce, expiresAt, paymentUri}`),
+ * plus Hanko's own names for the same values (`amountZat`, `memo`, `minConf`, `zip321`, and `expiresAt`
+ * in milliseconds; `extra.expiresAt` is unix seconds).
+ */
 export interface Challenge {
-  x402Version: 1;
   scheme: 'zcash-shielded';
   network: 'zcash-testnet';
+  /** Zatoshi, decimal. */
+  maxAmountRequired: string;
+  resource: string;
+  description: string;
+  mimeType: 'application/json';
   payTo: string;
+  maxTimeoutSeconds: number;
+  asset: 'ZEC';
+  extra: { memoNonce: string; expiresAt: number; paymentUri: string; minConf: number };
   amountZat: string;
   memo: string;
   minConf: number;
-  resource: string;
+  /** Milliseconds since the epoch. */
   expiresAt: number;
   /** ZIP-321 payment URI a wallet can open. */
   zip321: string;
+}
+
+/** X-PAYMENT-RESPONSE (x402 v1 SettlementResponse). A shielded payer is unknown to everyone: payer is "". */
+const settlement = (success: boolean, transaction: string, errorReason?: string) =>
+  Buffer.from(JSON.stringify({ success, ...(errorReason ? { errorReason } : {}), transaction, network: 'zcash-testnet', payer: '' })).toString('base64');
+
+type Presented = { memo?: string; txid?: string } | { bad: string };
+
+/**
+ * X-PAYMENT, either the x402 v1 envelope {x402Version: 1, scheme: "zcash-shielded", network:
+ * "zcash-testnet", payload: {txid, memoNonce}} (as Shielded x402 sends it) or Hanko's earlier
+ * {memo, txid}. Both base64 JSON.
+ */
+function parsePayment(header: string): Presented {
+  let p: Record<string, unknown>;
+  try {
+    p = JSON.parse(Buffer.from(header, 'base64').toString('utf8'));
+  } catch {
+    return { bad: 'X-PAYMENT is not base64 JSON {memo, txid}' };
+  }
+  if (typeof p !== 'object' || p === null || Array.isArray(p)) return { bad: 'X-PAYMENT must be base64 JSON {memo: string, txid: string}' };
+  if ('x402Version' in p || 'payload' in p || 'scheme' in p) {
+    if (p.x402Version !== 1 || p.scheme !== 'zcash-shielded' || p.network !== 'zcash-testnet') return { bad: 'X-PAYMENT must be x402Version 1, scheme zcash-shielded, network zcash-testnet' };
+    const pl = p.payload as Record<string, unknown> | null;
+    if (typeof pl !== 'object' || pl === null || typeof pl.txid !== 'string' || typeof pl.memoNonce !== 'string') return { bad: 'X-PAYMENT payload must be {txid: string, memoNonce: string}' };
+    return { memo: pl.memoNonce, txid: pl.txid };
+  }
+  if ((p.memo !== undefined && typeof p.memo !== 'string') || (p.txid !== undefined && typeof p.txid !== 'string')) return { bad: 'X-PAYMENT must be base64 JSON {memo: string, txid: string}' };
+  return { memo: p.memo as string | undefined, txid: p.txid as string | undefined };
 }
 
 const b64url = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
@@ -110,17 +154,23 @@ export function createPaywall(o: PaywallOptions): Server {
     createHmac('sha256', store.secret()).update(`zpv1|${o.payTo}|${path}|${price}|${exp}|${nonce}`).digest('base64url').slice(0, 22);
 
   function make(memo: string, path: string, price: bigint, expiresAt: number): Challenge {
+    const zip321 = `zcash:${o.payTo}?amount=${(Number(price) / 1e8).toFixed(8).replace(/0+$/, '').replace(/\.$/, '')}&memo=${b64url(memo)}`;
     return {
-      x402Version: 1,
       scheme: 'zcash-shielded',
       network: 'zcash-testnet',
+      maxAmountRequired: price.toString(),
+      resource: path,
+      description: `${path}: send ${price} zatoshi to payTo with the memo ${memo}, then retry with X-PAYMENT`,
+      mimeType: 'application/json',
       payTo: o.payTo,
+      maxTimeoutSeconds: Math.round(ttl / 1000),
+      asset: 'ZEC',
+      extra: { memoNonce: memo, expiresAt: Math.floor(expiresAt / 1000), paymentUri: zip321, minConf },
       amountZat: price.toString(),
       memo,
       minConf,
-      resource: path,
       expiresAt,
-      zip321: `zcash:${o.payTo}?amount=${(Number(price) / 1e8).toFixed(8).replace(/0+$/, '').replace(/\.$/, '')}&memo=${b64url(memo)}`,
+      zip321,
     };
   }
 
@@ -183,34 +233,28 @@ export function createPaywall(o: PaywallOptions): Server {
     const header = req.headers['x-payment'];
     const fresh = () => {
       const c = challenge(url.pathname, price);
-      return c ? { status: 402, body: { error: 'payment required', accepts: [c] } } : { status: 503, body: { error: 'too many open payment challenges; retry later' } };
+      return c ? { status: 402, body: { x402Version: 1, error: 'payment required', accepts: [c] } } : { status: 503, body: { x402Version: 1, error: 'too many open payment challenges; retry later', accepts: [] } };
     };
     if (!header || typeof header !== 'string') {
       const f = fresh();
       return json(req, res, f.status, f.body, f.status === 503 ? { 'retry-after': '60' } : {});
     }
 
-    let p: { memo?: string; txid?: string };
-    try {
-      p = JSON.parse(Buffer.from(header, 'base64').toString('utf8'));
-    } catch {
-      return json(req, res, 400, { error: 'X-PAYMENT is not base64 JSON {memo, txid}' });
-    }
-    const isObject = typeof p === 'object' && p !== null && !Array.isArray(p);
-    if (!isObject || (p.memo !== undefined && typeof p.memo !== 'string') || (p.txid !== undefined && typeof p.txid !== 'string')) {
-      return json(req, res, 400, { error: 'X-PAYMENT must be base64 JSON {memo: string, txid: string}' });
-    }
+    const p = parsePayment(header);
+    if ('bad' in p) return json(req, res, 400, { error: p.bad }, { 'x-payment-response': settlement(false, '', 'invalid_payload') });
     const c = p.memo ? lookup(p.memo, url.pathname, price) : undefined;
     if (!c || c.expiresAt < now()) {
       const f = fresh();
-      return json(req, res, f.status, f.status === 402 ? { ...f.body, error: 'unknown or expired payment memo' } : f.body);
+      return json(req, res, f.status, f.status === 402 ? { ...f.body, error: 'unknown or expired payment memo' } : f.body, { 'x-payment-response': settlement(false, '', 'unknown_challenge') });
     }
-    if (!p.txid) return json(req, res, 402, { error: 'X-PAYMENT has no txid', accepts: [c] });
-    const txid = p.txid.toLowerCase();
+    // One challenge per answer: the entry the payer answered.
+    const challenged = (error: string, extra: Record<string, unknown> = {}) => ({ x402Version: 1, error, ...extra, accepts: [c] });
+    if (!p.txid) return json(req, res, 402, challenged('X-PAYMENT has no txid'));
+    const txid = p.txid.trim().toLowerCase();
     const claim = store.claim(c.memo, txid, now(), leaseMs);
     if (!claim.ok) {
       const error = claim.why === 'used' ? 'this transaction already paid for a request' : 'this payment is already being checked by another request; retry';
-      return json(req, res, 402, { error, accepts: [c] });
+      return json(req, res, 402, challenged(error), { 'x-payment-response': settlement(false, '', claim.why === 'used' ? 'nonce_already_used' : 'settlement_pending') });
     }
     let r;
     try {
@@ -219,21 +263,22 @@ export function createPaywall(o: PaywallOptions): Server {
       store.release(c.memo, txid, claim.token);
       const f = failureStatus(e, 'paywall');
       const error = f.status === 503 ? `payment could not be checked: ${(e as Error).message}; nothing was served, retry later` : (e as Error).message;
-      return json(req, res, f.status, { error, accepts: f.status === 503 ? [c] : undefined }, f.headers);
+      return json(req, res, f.status, f.status === 503 ? challenged(error) : { error }, f.headers);
     }
     if (r.verdict === 'unverified') {
       // The lightwalletd endpoints disagreed or too few answered: no verdict, so neither serve nor refuse.
       store.release(c.memo, txid, claim.token);
-      return json(req, res, 503, { error: `payment could not be verified: ${r.reasons.join(', ')}; retry later`, reasons: r.reasons, crossCheck: r.crossCheck, accepts: [c] }, { 'retry-after': '30' });
+      return json(req, res, 503, challenged(`payment could not be verified: ${r.reasons.join(', ')}; retry later`, { reasons: r.reasons, crossCheck: r.crossCheck }), { 'retry-after': '30' });
     }
     if (!r.ok || !r.report) {
       store.release(c.memo, txid, claim.token);
       const pendingOnly = r.reasons.length === 1 && r.reasons[0] === 'NOT_CONFIRMED';
-      return json(req, res, 402, { error: pendingOnly ? `payment seen, ${r.report?.confirmations ?? 0}/${minConf} confirmations` : `payment refused: ${r.reasons.join(', ')}`, reasons: r.reasons, paidZat: r.paidZat, accepts: [c] });
+      const error = pendingOnly ? `payment seen, ${r.report?.confirmations ?? 0}/${minConf} confirmations` : `payment refused: ${r.reasons.join(', ')}`;
+      return json(req, res, 402, challenged(error, { reasons: r.reasons, paidZat: r.paidZat }), { 'x-payment-response': settlement(false, '', pendingOnly ? 'settlement_pending' : 'invalid_payment') });
     }
-    if (!store.settle(c.memo, txid, claim.token)) return json(req, res, 402, { error: 'this payment was claimed by another request while it was being checked', accepts: [c] });
+    if (!store.settle(c.memo, txid, claim.token)) return json(req, res, 402, challenged('this payment was claimed by another request while it was being checked'));
     const receipt = { txid, height: r.report.height, confirmations: r.report.confirmations, paidZat: r.paidZat, memo: c.memo, lightwalletd: r.provenance.lightwalletd };
-    return json(req, res, 200, { paid: receipt, data: o.content(url.pathname) }, { 'x-payment-response': Buffer.from(JSON.stringify(receipt)).toString('base64') });
+    return json(req, res, 200, { paid: receipt, data: o.content(url.pathname) }, { 'x-payment-response': settlement(true, txid) });
   }
 
   return createServer((req, res) => {
