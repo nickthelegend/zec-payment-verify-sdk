@@ -185,5 +185,65 @@
         "checkedAt": "2026-10-20T16:17:11.344Z"
       }
     }
+  },
+  "paywallLive": {
+    "ranAt": "2026-10-22T21:10:43.153Z",
+    "note": "One payment through the current paywall (dist/main.js), nothing pinned: stateless HMAC memo, x402 v1 X-PAYMENT, served once, replay refused.",
+    "lightwalletd": "https://testnet.zec.rocks:443",
+    "payerWallet": "demo wallet .demo/wallets/employee (not .demo/wallets/payer)",
+    "presentedWith": "zec-shielded-x402 packages/x402-zcash fetchWithPayment",
+    "priceZat": "10000",
+    "challengeMemo": "zpv-1792704207-25c57def5e1775f9-_5dMz5gO5ltlrthXMDRcRv",
+    "txid": "2867d542496452326ce241ad3ba647deb7e6e8eb1b889397ffae20dceecb664f",
+    "sentAt": "2026-10-22T21:09:40.975Z",
+    "attempts": 3,
+    "firstAttempts": [
+      {
+        "at": "2026-10-22T21:09:41.567Z",
+        "status": 402,
+        "reasons": [
+          "NOT_CONFIRMED"
+        ],
+        "error": "payment seen, 0/1 confirmations"
+      },
+      {
+        "at": "2026-10-22T21:10:12.269Z",
+        "status": 402,
+        "reasons": [
+          "NOT_CONFIRMED"
+        ],
+        "error": "payment seen, 0/1 confirmations"
+      },
+      {
+        "at": "2026-10-22T21:10:43.151Z",
+        "status": 200
+      }
+    ],
+    "http": 200,
+    "settlement": {
+      "success": true,
+      "transaction": "2867d542496452326ce241ad3ba647deb7e6e8eb1b889397ffae20dceecb664f",
+      "network": "zcash-testnet",
+      "payer": ""
+    },
+    "paid": {
+      "txid": "2867d542496452326ce241ad3ba647deb7e6e8eb1b889397ffae20dceecb664f",
+      "height": 4530239,
+      "confirmations": 1,
+      "paidZat": 10000,
+      "memo": "zpv-1792704207-25c57def5e1775f9-_5dMz5gO5ltlrthXMDRcRv",
+      "lightwalletd": "https://testnet.zec.rocks:443"
+    },
+    "replay": {
+      "http": 402,
+      "error": "this transaction already paid for a request",
+      "settlement": {
+        "success": false,
+        "errorReason": "nonce_already_used",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    }
   }
 }
