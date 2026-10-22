@@ -3,9 +3,15 @@
 A reference x402 paywall over shielded Zcash payments (Node `http`, no framework). It holds only the
 merchant's **incoming viewing key**: it can see payments, never spend.
 
-- `GET /api/quote` → `402` with `{scheme: "zcash-shielded", payTo, amountZat, memo: "zpv-<nonce>", minConf, expiresAt, zip321}`.
+- `GET /api/quote` (or `HEAD`) → `402` with `{scheme: "zcash-shielded", payTo, amountZat, memo, minConf, expiresAt, zip321}`.
+  The memo is `zpv-<expiry>-<nonce>-<HMAC>`: an HMAC-SHA256 over the payee, the path, the price, the
+  expiry and the nonce, under a key the store keeps. Nothing is stored until a payment is presented,
+  so any number of GETs cannot lock buyers out (10,000 in about a second in the tests, then a 402 as
+  usual). A challenge is payable for `challengeTtlMs` (default 15 min). `OPTIONS` is 204; other
+  methods on a paid path are 405. A custom memo (`issueMemo`) is stored instead, capped by
+  `maxOpenChallenges`.
 - The payer sends that amount with that memo, then retries with `X-PAYMENT: base64({memo, txid})`.
-- The gateway runs `@zpv/sdk` `verify({rail: "zcash", …})`. Paid → `200` with the data and an `X-PAYMENT-RESPONSE` receipt; the memo is closed and the txid can never pay again. Not yet confirmed → `402` "payment seen, n/m confirmations". Anything else → `402` with the reasons.
+- The gateway runs `@zpv/sdk` `verify({rail: "zcash", …})`. Paid → `200` with the data and an `X-PAYMENT-RESPONSE` receipt; the memo and the txid are burned and can never pay again. Not yet confirmed → `402` "payment seen, n/m confirmations". Anything else → `402` with the reasons.
 - With `lwdUrls` (or `ZPV_LWD_URLS` + `ZPV_LWD_QUORUM`) each payment is checked against several lightwalletd endpoints. If they disagree or too few answer → `503` + `Retry-After` with `UNVERIFIED_*` and each endpoint's answer; nothing is served and the payment stays claimable.
 - `POST /api/verify` → the SDK verdict for either rail (used by the dashboard; CORS for `ZPV_CORS`).
 
@@ -16,10 +22,10 @@ merchant's **incoming viewing key**: it can see payments, never spend.
 | 503 + `Retry-After` | too many checks running (`ZPV_MAX_CHECKS`) | lightwalletd unreachable or inconsistent, endpoints disagree, too many checks, or Setup required; nothing is served and the payment stays claimable |
 | 503 | Setup required (no `zpay-verify`, a bad setting) | |
 
-**State.** Open challenges and claimed memos/txids live in a `PaywallStore`. The default
+**State.** The challenge HMAC key, claimed and paid memos/txids, and custom-memo challenges live in a `PaywallStore`. The default
 `MemoryStore` forgets them on restart. `SqliteStore` (`node:sqlite`, Node ≥ 22.13; `ZPV_STORE=<file>`)
-keeps them in one SQLite file: a restarted paywall still refuses a txid it already served, and several
-paywall processes on one file serve a payment once. A check claims the memo and txid in a
+keeps them in one SQLite file: a restarted paywall still refuses a txid it already served and still
+accepts the memos it issued, and several paywall processes on one file serve a payment once. A check claims the memo and txid in a
 `BEGIN IMMEDIATE` transaction before it awaits lightwalletd, under a lease (`claimLeaseMs`, default
 5 min) so a crashed process does not lock a payment forever; a request whose lease was taken over is
 not served.

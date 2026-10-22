@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { createPaywall, type PaywallOptions } from '../src/server.js';
-import { SqliteStore } from '../src/store.js';
+import { MemoryStore, SqliteStore } from '../src/store.js';
 
 const fx = JSON.parse(readFileSync(resolve(__dirname, '../../../fixtures/testnet.json'), 'utf8'));
 const dir = mkdtempSync(join(tmpdir(), 'zpv-store-'));
@@ -107,5 +107,12 @@ describe('store claims', () => {
     expect(s.settle('m', 't', first.token)).toBe(false);
     expect(s.settle('m', 't', second.token)).toBe(true);
     expect(s.claim('another-memo', 't', 9_999, 100)).toEqual({ ok: false, why: 'used' });
+    // A paid memo is burned too: a stateless memo has no stored challenge to close, so another txid
+    // cannot answer it again.
+    expect(s.claim('m', 'another-txid', 9_999, 100)).toEqual({ ok: false, why: 'used' });
+    const mem = new MemoryStore();
+    const c = mem.claim('m', 't', 1_000, 100);
+    expect(c.ok && mem.settle('m', 't', c.token)).toBe(true);
+    expect(mem.claim('m', 'another-txid', 1_001, 100)).toEqual({ ok: false, why: 'used' });
   });
 });

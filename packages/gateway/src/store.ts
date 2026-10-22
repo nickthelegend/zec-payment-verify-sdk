@@ -9,7 +9,12 @@ import type { Challenge } from './server.js';
 export type Claim = { ok: true; token: string } | { ok: false; why: 'used' | 'busy' };
 
 export interface PaywallStore {
-  /** Drop expired challenges, then keep `c` unless `maxOpen` challenges are already open. */
+  /**
+   * The key that authenticates challenge memos (HMAC). Stable for the store's life: a SqliteStore keeps
+   * it in its file, so a restarted paywall and other processes on the file accept each other's memos.
+   */
+  secret(): Buffer;
+  /** Custom memos only (issueMemo): drop expired challenges, then keep `c` unless `maxOpen` are open. */
   issue(c: Challenge, maxOpen: number, now: number): boolean;
   challenge(memo: string): Challenge | undefined;
   /**
@@ -20,9 +25,9 @@ export interface PaywallStore {
   /** Give the reservation back (the check refused or failed). Only the holder's token releases it. */
   release(memo: string, txid: string, token: string): void;
   /**
-   * Mark the txid paid for good, close the challenge and drop the memo's reservation (a closed memo
-   * cannot be answered again). False if the reservation is no longer this token's (its lease expired
-   * and another request took it over): then do not serve.
+   * Mark the txid and the memo paid for good (neither can pay again) and close a stored challenge.
+   * False if the reservation is no longer this token's (its lease expired and another request took it
+   * over): then do not serve.
    */
   settle(memo: string, txid: string, token: string): boolean;
   close(): void;
@@ -41,6 +46,11 @@ export class MemoryStore implements PaywallStore {
   /** A Map iterates in insertion order and challenges are re-inserted on issue: oldest expiry first. */
   private open = new Map<string, Challenge>();
   private claims = new Map<string, Row>();
+  private key = randomBytes(32);
+
+  secret() {
+    return this.key;
+  }
 
   issue(c: Challenge, maxOpen: number, now: number): boolean {
     for (const [memo, o] of this.open) {
@@ -75,9 +85,7 @@ export class MemoryStore implements PaywallStore {
 
   settle(memo: string, txid: string, token: string): boolean {
     if (!keys(memo, txid).every((k) => this.claims.get(k)?.owner === token)) return false;
-    const [mk, tk] = keys(memo, txid);
-    this.claims.delete(mk);
-    this.claims.set(tk, { state: 'paid', until: 0, owner: token });
+    for (const k of keys(memo, txid)) this.claims.set(k, { state: 'paid', until: 0, owner: token });
     this.open.delete(memo);
     return true;
   }
@@ -103,12 +111,28 @@ export class SqliteStore implements PaywallStore {
         body TEXT NOT NULL
       );
       CREATE INDEX IF NOT EXISTS challenges_by_expiry ON challenges (expires_at);
+      CREATE TABLE IF NOT EXISTS meta (
+        key TEXT PRIMARY KEY,
+        value BLOB NOT NULL
+      );
       CREATE TABLE IF NOT EXISTS claims (
         key TEXT PRIMARY KEY,
         state TEXT NOT NULL CHECK (state IN ('checking', 'paid')),
         until INTEGER NOT NULL,
         owner TEXT NOT NULL
       );`);
+  }
+
+  private key?: Buffer;
+
+  secret(): Buffer {
+    if (!this.key) {
+      // INSERT OR IGNORE: the first process to get here writes the key, every other one reads it.
+      this.db.prepare("INSERT OR IGNORE INTO meta (key, value) VALUES ('challenge-hmac', ?)").run(randomBytes(32));
+      const row = this.db.prepare("SELECT value FROM meta WHERE key = 'challenge-hmac'").get() as { value: Uint8Array };
+      this.key = Buffer.from(row.value);
+    }
+    return this.key;
   }
 
   private tx<T>(f: () => T): T {
@@ -163,8 +187,7 @@ export class SqliteStore implements PaywallStore {
     return this.tx(() => {
       const { n } = this.db.prepare("SELECT count(*) AS n FROM claims WHERE key IN (?, ?) AND state = 'checking' AND owner = ?").get(mk, tk, token) as { n: number };
       if (n !== 2) return false;
-      this.db.prepare("UPDATE claims SET state = 'paid', until = 0 WHERE key = ?").run(tk);
-      this.db.prepare('DELETE FROM claims WHERE key = ?').run(mk);
+      this.db.prepare("UPDATE claims SET state = 'paid', until = 0 WHERE key IN (?, ?)").run(mk, tk);
       this.db.prepare('DELETE FROM challenges WHERE memo = ?').run(memo);
       return true;
     });

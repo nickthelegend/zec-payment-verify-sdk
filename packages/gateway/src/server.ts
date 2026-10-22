@@ -1,9 +1,10 @@
 // Reference x402 paywall over a shielded Zcash payment, plus a verify API for the dashboard.
-//   GET <paid path>                    → 402 with {payTo, amountZat, memo, minConf, zip321}
+//   GET <paid path>                    → 402 with {payTo, amountZat, memo, minConf, zip321}; the memo is
+//                                        zpv-<expiry>-<nonce>-<HMAC>, so nothing is stored until a payment
 //   same path + X-PAYMENT {memo, txid} → @zpv/sdk verify (receiver's incoming viewing key) → 200
 //   POST /api/verify {rail, …}         → the SDK verdict as JSON (both rails)
 // The gateway holds only the merchant's incoming viewing key: it can see payments, never spend.
-import { randomBytes } from 'node:crypto';
+import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { BusyError, crossCheckFromEnv, LightwalletdBadAnswerError, LightwalletdUnreachableError, SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
 import { MemoryStore, type PaywallStore } from './store.js';
@@ -19,8 +20,10 @@ export interface PaywallOptions {
   prices: Record<string, bigint>;
   content: (path: string) => unknown;
   minConf?: number;
+  /** How long a challenge stays payable (default 15 min). */
   challengeTtlMs?: number;
-  /** Most unanswered challenges kept at once (default 10,000). When full, a new one is a 503. */
+  /** Custom memos only (issueMemo): most unanswered challenges kept at once (default 10,000); when full,
+   *  a new one is a 503. The default memos carry their own expiry and HMAC and are never stored. */
   maxOpenChallenges?: number;
   lwdUrl?: string;
   /** Cross-check every payment against these lightwalletd endpoints. Without lwdUrls and lwdUrl, the SDK reads ZPV_LWD_URLS. */
@@ -29,8 +32,11 @@ export interface PaywallOptions {
   lwdQuorum?: number;
   /** Origins allowed to call /api/verify from a browser. */
   corsOrigins?: string[];
-  /** Payment memo for a new challenge (default: zpv-<24 random hex>). */
+  /** A custom payment memo for each new challenge, stored until it expires (default: a stateless
+   *  zpv-<expiry>-<nonce>-<HMAC> memo). Tests use it to pin the memo of a published payment. */
   issueMemo?: () => string;
+  /** Clock (ms), for tests. */
+  now?: () => number;
   /**
    * Challenges and claimed memos/txids (default: a MemoryStore, forgotten on restart). Use a
    * SqliteStore so a restart cannot re-unlock a paid response and several processes can share one file.
@@ -69,9 +75,13 @@ export function failureStatus(e: unknown, surface: 'api' | 'paywall'): { status:
   return { status: 502, headers: {} };
 }
 
+/** zpv-<expiry, unix s>-<16 hex nonce>-<22 base64url chars of HMAC-SHA256>: at most 64 characters. */
+const MEMO_RE = /^zpv-(\d{10})-([0-9a-f]{16})-([A-Za-z0-9_-]{22})$/;
+
 export function createPaywall(o: PaywallOptions): Server {
   const minConf = o.minConf ?? 1;
-  const ttl = o.challengeTtlMs ?? 60 * 60_000;
+  const ttl = o.challengeTtlMs ?? 15 * 60_000;
+  const now = o.now ?? Date.now;
   const maxOpen = o.maxOpenChallenges ?? 10_000;
   const leaseMs = o.claimLeaseMs ?? 5 * 60_000;
   /** Open challenges, and memos and lower-case txids that are being checked or already paid. A
@@ -89,13 +99,18 @@ export function createPaywall(o: PaywallOptions): Server {
 
   const json = (req: IncomingMessage, res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}) => {
     const origin = req.headers.origin;
-    const cors: Record<string, string> = origin && o.corsOrigins?.includes(origin) ? { 'access-control-allow-origin': origin, 'access-control-allow-headers': 'content-type', vary: 'origin' } : {};
+    const cors: Record<string, string> =
+      origin && o.corsOrigins?.includes(origin)
+        ? { 'access-control-allow-origin': origin, 'access-control-allow-headers': 'content-type, x-payment', 'access-control-expose-headers': 'x-payment-response', vary: 'origin' }
+        : {};
     res.writeHead(status, { 'content-type': 'application/json', ...cors, ...headers }).end(JSON.stringify(body, (_k, v) => (typeof v === 'bigint' ? v.toString() : v)));
   };
 
-  function challenge(path: string, price: bigint): Challenge | null {
-    const memo = o.issueMemo?.() ?? `zpv-${randomBytes(12).toString('hex')}`;
-    const c: Challenge = {
+  const tag = (path: string, price: bigint, exp: number, nonce: string) =>
+    createHmac('sha256', store.secret()).update(`zpv1|${o.payTo}|${path}|${price}|${exp}|${nonce}`).digest('base64url').slice(0, 22);
+
+  function make(memo: string, path: string, price: bigint, expiresAt: number): Challenge {
+    return {
       x402Version: 1,
       scheme: 'zcash-shielded',
       network: 'zcash-testnet',
@@ -104,10 +119,33 @@ export function createPaywall(o: PaywallOptions): Server {
       memo,
       minConf,
       resource: path,
-      expiresAt: Date.now() + ttl,
+      expiresAt,
       zip321: `zcash:${o.payTo}?amount=${(Number(price) / 1e8).toFixed(8).replace(/0+$/, '').replace(/\.$/, '')}&memo=${b64url(memo)}`,
     };
-    return store.issue(c, maxOpen, Date.now()) ? c : null;
+  }
+
+  /** A new challenge: stateless by default; a custom memo is stored (and capped). Null when the cap is hit. */
+  function challenge(path: string, price: bigint): Challenge | null {
+    const t = now();
+    if (o.issueMemo) {
+      const c = make(o.issueMemo(), path, price, t + ttl);
+      return store.issue(c, maxOpen, t) ? c : null;
+    }
+    const exp = Math.ceil((t + ttl) / 1000);
+    const nonce = randomBytes(8).toString('hex');
+    return make(`zpv-${exp}-${nonce}-${tag(path, price, exp, nonce)}`, path, price, exp * 1000);
+  }
+
+  /** The challenge `memo` answers on `path` at `price`, if this paywall issued it. */
+  function lookup(memo: string, path: string, price: bigint): Challenge | undefined {
+    const m = MEMO_RE.exec(memo);
+    if (m) {
+      const [, exp, nonce, got] = m;
+      const want = tag(path, price, Number(exp), nonce);
+      return timingSafeEqual(Buffer.from(got), Buffer.from(want)) ? make(memo, path, price, Number(exp) * 1000) : undefined;
+    }
+    const c = store.challenge(memo);
+    return c && c.resource === path ? c : undefined;
   }
 
   async function readBody(req: IncomingMessage): Promise<unknown> {
@@ -140,6 +178,8 @@ export function createPaywall(o: PaywallOptions): Server {
 
     const price = o.prices[url.pathname];
     if (price === undefined) return json(req, res, 404, { error: 'not found' });
+    if (req.method === 'OPTIONS') return json(req, res, 204, null, { allow: 'GET, HEAD, OPTIONS', 'access-control-allow-methods': 'GET, HEAD, OPTIONS' });
+    if (req.method !== 'GET' && req.method !== 'HEAD') return json(req, res, 405, { error: `${req.method} is not allowed on a paid path: GET it` }, { allow: 'GET, HEAD, OPTIONS' });
     const header = req.headers['x-payment'];
     const fresh = () => {
       const c = challenge(url.pathname, price);
@@ -160,14 +200,14 @@ export function createPaywall(o: PaywallOptions): Server {
     if (!isObject || (p.memo !== undefined && typeof p.memo !== 'string') || (p.txid !== undefined && typeof p.txid !== 'string')) {
       return json(req, res, 400, { error: 'X-PAYMENT must be base64 JSON {memo: string, txid: string}' });
     }
-    const c = p.memo ? store.challenge(p.memo) : undefined;
-    if (!c || c.resource !== url.pathname || c.expiresAt < Date.now()) {
+    const c = p.memo ? lookup(p.memo, url.pathname, price) : undefined;
+    if (!c || c.expiresAt < now()) {
       const f = fresh();
       return json(req, res, f.status, f.status === 402 ? { ...f.body, error: 'unknown or expired payment memo' } : f.body);
     }
     if (!p.txid) return json(req, res, 402, { error: 'X-PAYMENT has no txid', accepts: [c] });
     const txid = p.txid.toLowerCase();
-    const claim = store.claim(c.memo, txid, Date.now(), leaseMs);
+    const claim = store.claim(c.memo, txid, now(), leaseMs);
     if (!claim.ok) {
       const error = claim.why === 'used' ? 'this transaction already paid for a request' : 'this payment is already being checked by another request; retry';
       return json(req, res, 402, { error, accepts: [c] });

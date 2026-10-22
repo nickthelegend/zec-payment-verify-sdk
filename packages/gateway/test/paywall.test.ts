@@ -51,8 +51,13 @@ describe('paywall', () => {
   });
 
   it('someone else’s payment, an unknown memo or garbage is refused', async () => {
-    await fetch(`${base}/api/report`);
-    const low = await pay('/api/report', { memo: fx.x402.memo, txid: fx.auction.deposit.txid });
+    // Its own paywall: the x402 memo was burned by the 200 above (a paid memo never answers again).
+    const other = createPaywall({ payTo: 'utest1-demo-merchant', uivk: fx.x402.uivk, prices: { '/api/report': 100_001n }, content: (p) => ({ served: p }), issueMemo: () => 'zpv-another-invoice' });
+    await new Promise<void>((r) => other.listen(0, '127.0.0.1', r));
+    const otherBase = `http://127.0.0.1:${(other.address() as AddressInfo).port}`;
+    await fetch(`${otherBase}/api/report`);
+    const low = await fetch(`${otherBase}/api/report`, { headers: { 'x-payment': Buffer.from(JSON.stringify({ memo: 'zpv-another-invoice', txid: fx.auction.deposit.txid })).toString('base64') } });
+    other.close();
     expect(low.status).toBe(402);
     expect(((await low.json()) as { reasons: string[] }).reasons).toEqual(['NO_OUTPUT_TO_KEY']);
     const unknown = await pay('/api/quote', { memo: 'zpv-never-issued', txid: fx.x402.txid });
