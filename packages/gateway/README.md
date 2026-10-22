@@ -52,6 +52,13 @@ accepts the memos it issued, and several paywall processes on one file serve a p
 5 min) so a crashed process does not lock a payment forever; a request whose lease was taken over is
 not served.
 
+**Startup checks.** `main.ts` exits 2 with `Setup required: <name>` before listening when
+`ZPV_MIN_CONF` is not a whole number ≥ 1 (0 needs `ZPV_ALLOW_ZERO_CONF=1`), `ZPV_PRICE_ZAT` is not a
+whole number > 0, `ZPV_PORT` is out of range, `ZPV_LWD_QUORUM` is malformed, or `ZPV_PAY_TO` is not a
+testnet unified address with a shielded receiver that belongs to `ZPV_MERCHANT_UIVK` (checked offline
+with `zpay-verify owns`; SDK `ownsAddress`). Any of these would take customers' money and refuse every
+payment.
+
 ```sh
 ZPV_PAY_TO=utest1… ZPV_MERCHANT_UIVK=uivktest1… ZPV_PRICE_ZAT=10000 ZPV_STORE=paywall.sqlite pnpm --filter @zpv/gateway dev   # :8403
 ```

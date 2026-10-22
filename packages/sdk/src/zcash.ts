@@ -217,6 +217,35 @@ export async function verifyZcash(req: ZcashRequest, opts: { lwdUrl?: string; bi
   };
 }
 
+/** Whether a unified address belongs to a viewing key, per shielded receiver (null: no such receiver). */
+export interface Ownership {
+  owns: boolean;
+  orchard: boolean | null;
+  sapling: boolean | null;
+}
+
+/**
+ * Does the testnet unified address `ua` belong to `uivk`? Runs `zpay-verify owns` (offline: each
+ * shielded receiver's diversifier is decrypted with the key). A merchant checks this before advertising
+ * `ua`: payments to an address the key cannot see would all be refused after the customer paid.
+ * A malformed key or address throws VerifyError.
+ */
+export async function ownsAddress(uivk: string, ua: string, opts: { bin?: string } = {}): Promise<Ownership> {
+  if (typeof uivk !== 'string' || !uivk.startsWith('uivktest1')) throw new VerifyError('uivk must be a testnet unified incoming viewing key (uivktest1…)');
+  if (typeof ua !== 'string' || !ua.trim()) throw new VerifyError('not a testnet unified address with a shielded receiver: (empty)');
+  const { code, stdout, stderr } = await new Promise<{ code: number | null; stdout: string; stderr: string }>((res, rej) => {
+    const p = spawn(opts.bin ?? zpayBinary(), ['owns', ua.trim()], { env: { PATH: process.env.PATH ?? '', ZPV_UIVK: uivk } });
+    let stdout = '';
+    let stderr = '';
+    p.stdout.on('data', (d) => (stdout += d));
+    p.stderr.on('data', (d) => (stderr += d));
+    p.on('error', rej);
+    p.on('close', (c) => res({ code: c, stdout, stderr }));
+  });
+  if (code !== 0 && code !== 1) throw classifyCliError(stderr.replace(/^error: /, '').trim() || `zpay-verify exited with ${code}`);
+  return JSON.parse(stdout) as Ownership;
+}
+
 export interface CrossCheckOptions {
   /** Two or more lightwalletd URLs, ideally run by different operators on different software. */
   lwdUrls: string[];

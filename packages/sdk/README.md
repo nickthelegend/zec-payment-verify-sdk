@@ -25,6 +25,9 @@ const n = await verify({ rail: 'null402', proof, publicSignals, expect: { payTo,
 | `zcash` | runs `zpay-verify` (packages/core) with the key in its environment; lightwalletd `ZPV_LWD_URL` (default testnet.zec.rocks) | `TX_NOT_FOUND`, `NO_OUTPUT_TO_KEY`, `MEMO_MISMATCH`, `AMOUNT_TOO_LOW`, `NOT_CONFIRMED`, `TRANSPARENT_PART` |
 | `null402` | read-only `eth_call`s on Fuji: `verifier.verifyProof`, `pool.knownRoot(root)`, `pool.spent(nullifier)` (no key, no gas) | `BAD_PROOF`, `ROOT_UNKNOWN`, `NULLIFIER_SPENT`, `PAY_TO_MISMATCH`, `AMOUNT_MISMATCH`, `CONTEXT_MISMATCH` |
 
+`ownsAddress(uivk, ua)` says whether each shielded receiver of a testnet unified address belongs to
+the key (`zpay-verify owns`, offline). Check it before advertising an address.
+
 `proofFromSettleTx(hash)` reads a real proof back out of a null-402 `settle()` on Fuji, with the
 receipt's `status` (`success`, `reverted`, `pending`), the `recipient` and `amount` it paid, and
 `blockNumber` (null while pending).
