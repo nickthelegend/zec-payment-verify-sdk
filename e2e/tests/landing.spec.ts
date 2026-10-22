@@ -171,7 +171,7 @@ test.describe('landing', () => {
       } else if (h.startsWith('https://testnet.snowtrace.io/tx/')) {
         expect(h).toBe(`https://testnet.snowtrace.io/tx/${SETTLE}`);
       } else {
-        expect(h, 'external link is this repo').toMatch(new RegExp(`^${REPO.replace(/\./g, '\\.')}(/tree/main/packages/dashboard)?$`));
+        expect(h, 'the console beside it, or this repo').toMatch(new RegExp(`^(dashboard/|${REPO.replace(/\./g, '\\.')})$`));
       }
     }
     // The evidence table's labels are the first8…last4 of the txid they link to.
@@ -182,6 +182,31 @@ test.describe('landing', () => {
     // The paywall receipt is the real one from the run record.
     await expect(page.locator('[data-json="receipt"]')).toContainText(run.paywall.cases.paywall.txid);
     await expect(page.locator('[data-json="x402ok"]')).toContainText(fx.x402.txid);
+  });
+
+  test('the Dashboard link opens the running console (the GitHub Pages layout): null-402 answers live from Fuji, the Zcash tab says Setup required', async ({ page, watch }, info) => {
+    // On Pages there is no verify API: the console looks for one on the reader's machine. Its refused
+    // connection is the honest "Setup required" state, nothing else is excused.
+    watch.allow({ url: /^http:\/\/127\.0\.0\.1:8403\//, failure: /ERR_CONNECTION_REFUSED/ });
+    watch.allow({ console: /Failed to load resource: net::ERR_CONNECTION_REFUSED @ http:\/\/127\.0\.0\.1:8403\// });
+    await page.getByRole('link', { name: 'Dashboard', exact: true }).click();
+    await expect(page).toHaveURL(`${URLS.landing}/dashboard/`);
+    await expect(page.getByRole('heading', { level: 1, name: 'Was I paid?' })).toBeVisible();
+    await expect(page.getByRole('status')).toHaveText('verify API not reachable');
+    await expect(page.locator('.prose > .banner')).toContainText('Setup required');
+    await page.getByRole('button', { name: /null-402 proof/ }).click();
+    const send = page.getByRole('button', { name: /Send request|Checking/ });
+    await send.click();
+    await expect(send).toHaveText(/Send request/, { timeout: 60_000 });
+    const reasons = page.locator('section.verdict .reasons');
+    await expect(reasons).toContainText('NULLIFIER_SPENT');
+    await expect(reasons).toContainText('UNBOUND');
+    await page.screenshot({ path: shot('pages-dashboard-null402', info.project.name) });
+    await page.getByLabel('Claim 10× the amount the proof authorises').check();
+    await send.click();
+    await expect(send).toHaveText(/Send request/, { timeout: 60_000 });
+    await expect(reasons).toContainText('BAD_PROOF');
+    await expectNoHorizontalScroll(page);
   });
 
   test('brand, skip link and footer links', async ({ page }, info) => {

@@ -8,7 +8,9 @@
 #         real mined payment can be presented once (e2e/paywall-replay.mjs, as the gateway's live tests do)
 #   5190  dashboard (vite dev, as in its README) -> 8420
 #   5191  dashboard build -> 8421;  5192  dashboard build -> 8429 (nothing listens: "Setup required")
-#   5193  landing (packages/landing/index.html)
+#   5193  the GitHub Pages site as scripts/build-pages.sh builds it: the landing at /, the console at
+#         /dashboard/ (relative assets; its Zcash tab looks for 127.0.0.1:8403, where nothing of this
+#         stack listens, so it shows "Setup required"; its null-402 tab reads Fuji from the browser)
 # No seed or spending key is read, and no payment is made. PIDs go to e2e/.run/pids; `stack.sh stop`
 # kills them by PID.
 set -euo pipefail
@@ -37,6 +39,7 @@ LWD=https://testnet.zec.rocks:443
 VITE="node packages/dashboard/node_modules/vite/bin/vite.js"
 VITE_ZPV_API=http://127.0.0.1:8421 $VITE build packages/dashboard --outDir "$PWD/$RUN/dash-xcheck" --emptyOutDir --logLevel warn
 VITE_ZPV_API=http://127.0.0.1:8429 $VITE build packages/dashboard --outDir "$PWD/$RUN/dash-down" --emptyOutDir --logLevel warn
+scripts/build-pages.sh "$RUN/site" > /dev/null
 
 start() { # name cmd...
   local name=$1; shift
@@ -49,7 +52,7 @@ start api-xcheck env ZPV_PORT=8421 ZPV_LWD_URLS=$LWD,http://127.0.0.1:9 ZPV_LWD_
 start paywall env -u ZPV_LWD_URLS ZPV_PORT=8422 ZPV_LWD_URL=$LWD ZPV_STORE="$RUN/paywall.db" ZPV_CORS= node packages/gateway/dist/main.js
 start paywall-replay env -u ZPV_LWD_URLS ZPV_PORT=8423 ZPV_LWD_URL=$LWD ZPV_STORE="$RUN/paywall-replay.db" node e2e/paywall-replay.mjs
 start dashboard env VITE_ZPV_API=http://127.0.0.1:8420 $VITE packages/dashboard --host 127.0.0.1 --port 5190 --strictPort
-start static node e2e/serve-static.mjs 5191:"$RUN/dash-xcheck" 5192:"$RUN/dash-down" 5193:packages/landing
+start static node e2e/serve-static.mjs 5191:"$RUN/dash-xcheck" 5192:"$RUN/dash-down" 5193:"$RUN/site"
 
 wait_http() { for _ in $(seq 1 100); do curl -fs -o /dev/null "$1" && return 0; sleep 0.3; done; echo "error: $1 never came up" >&2; return 1; }
 wait_http http://127.0.0.1:8420/api/health

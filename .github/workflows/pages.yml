@@ -1,0 +1,47 @@
+name: pages
+
+# Publishes the landing and the console to GitHub Pages:
+#   https://nickthelegend.github.io/zec-payment-verify-sdk/            landing (API reference)
+#   https://nickthelegend.github.io/zec-payment-verify-sdk/dashboard/  console
+# scripts/build-pages.sh builds both as static files. The console's null-402 tab checks Fuji from the
+# browser; its Zcash tab needs a local verify API and shows "Setup required" without one. No hosted API.
+# One-time setup by the repo owner: Settings -> Pages -> Source: "GitHub Actions"
+# (or: gh api -X POST repos/nickthelegend/zec-payment-verify-sdk/pages -f build_type=workflow).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @zpv/sdk build
+      - run: scripts/build-pages.sh site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

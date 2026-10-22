@@ -10,11 +10,12 @@ export const URLS = {
   dashboard: 'http://127.0.0.1:5190',
   dashboardXcheck: 'http://127.0.0.1:5191',
   dashboardDown: 'http://127.0.0.1:5192',
+  /** The GitHub Pages site (scripts/build-pages.sh): landing at /, console at /dashboard/. */
   landing: 'http://127.0.0.1:5193',
 };
 
 export default async function globalSetup() {
-  const up = [`${URLS.api}/api/health`, `${URLS.apiXcheck}/api/health`, `${URLS.paywall}/api/health`, `${URLS.replay}/api/health`, `${URLS.dashboard}/`, `${URLS.dashboardXcheck}/`, `${URLS.dashboardDown}/`, `${URLS.landing}/`];
+  const up = [`${URLS.api}/api/health`, `${URLS.apiXcheck}/api/health`, `${URLS.paywall}/api/health`, `${URLS.replay}/api/health`, `${URLS.dashboard}/`, `${URLS.dashboardXcheck}/`, `${URLS.dashboardDown}/`, `${URLS.landing}/`, `${URLS.landing}/dashboard/`];
   for (const u of up) {
     const r = await fetch(u).catch((e) => {
       throw new Error(`Hanko stack not running (${u}: ${e.cause?.code || e.message}). Start it with: npm run stack`);
