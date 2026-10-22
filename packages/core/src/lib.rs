@@ -10,8 +10,10 @@
 //! # Ok(()) }
 //! ```
 //!
-//! The transaction is fetched from lightwalletd, its txid is re-computed, and every Sapling,
-//! Orchard and Ironwood output is trial-decrypted with the key. An incoming viewing key sees
+//! The transaction is fetched from lightwalletd, its txid is re-computed, the compact block at the
+//! height lightwalletd reports must list it, and every Sapling, Orchard and Ironwood output is
+//! trial-decrypted with the key. Proofs, signatures and the block's place in the chain are not
+//! checked: lightwalletd (or anyone who can answer for it) is trusted for those. An incoming viewing key sees
 //! received notes and their memos; it cannot spend, and cannot see spends or change.
 //! Extracted from zec-shielded-x402's facilitator `check_uivk` (same author, MIT).
 
@@ -20,11 +22,13 @@ pub mod lwd;
 use orchard::note_encryption::{DomainVersion, IronwoodVersion, NoteEncryptionDomain, OrchardVersion};
 use sapling::note_encryption::SaplingDomain;
 use serde::Serialize;
+use zcash_client_backend::proto::compact_formats::CompactBlock;
 use zcash_keys::keys::{UnifiedFullViewingKey, UnifiedIncomingViewingKey};
 use zcash_note_encryption::try_note_decryption;
 use zcash_primitives::transaction::{components::sapling::zip212_enforcement, Transaction};
 use zcash_protocol::consensus::{BlockHeight, BranchId, Network};
 use zcash_protocol::memo::{Memo, MemoBytes};
+use zcash_protocol::TxId;
 
 pub const NETWORK: Network = Network::TestNetwork;
 
@@ -36,6 +40,8 @@ pub enum VerifyError {
     Lwd(lwd::LwdError),
     Unparseable(String),
     TxidMismatch,
+    /// Lightwalletd's answers contradict each other (for example the block it names does not list the tx).
+    Inconsistent(String),
 }
 
 impl std::fmt::Display for VerifyError {
@@ -46,6 +52,7 @@ impl std::fmt::Display for VerifyError {
             VerifyError::Lwd(e) => write!(f, "{e}"),
             VerifyError::Unparseable(e) => write!(f, "transaction does not parse: {e}"),
             VerifyError::TxidMismatch => write!(f, "lightwalletd returned a transaction whose txid differs from the one requested"),
+            VerifyError::Inconsistent(e) => write!(f, "lightwalletd answered inconsistently: {e}"),
         }
     }
 }
@@ -83,6 +90,8 @@ pub struct TxReport {
     pub found: bool,
     /// None while in the mempool or when not found.
     pub height: Option<u32>,
+    /// Unix time of that block, from lightwalletd's compact block. None while in the mempool or when not found.
+    pub block_time: Option<u32>,
     pub confirmations: u32,
     pub tip: u32,
     pub outputs: Vec<Output>,
@@ -155,7 +164,7 @@ fn orchard_family<V: DomainVersion>(
 /// `found: false`, not as an error.
 pub async fn inspect(c: &mut lwd::Client, uivk: &UnifiedIncomingViewingKey, txid: &str, tip: BlockHeight) -> Result<TxReport, VerifyError> {
     let id = lwd::parse_txid(txid).ok_or_else(|| VerifyError::BadTxid(txid.to_string()))?;
-    let empty = |found| TxReport { txid: txid.to_string(), found, height: None, confirmations: 0, tip: tip.into(), outputs: vec![], pools: Pools::default() };
+    let empty = |found| TxReport { txid: txid.to_string(), found, height: None, block_time: None, confirmations: 0, tip: tip.into(), outputs: vec![], pools: Pools::default() };
     let (data, loc) = match lwd::get_transaction(c, &id).await? {
         lwd::FetchedTx::Found { data, location } => (data, location),
         lwd::FetchedTx::NotFound => return Ok(empty(false)),
@@ -170,6 +179,15 @@ pub async fn inspect(c: &mut lwd::Client, uivk: &UnifiedIncomingViewingKey, txid
     if tx.txid() != id {
         return Err(VerifyError::TxidMismatch);
     }
+    let shielded = tx.sapling_bundle().is_some() || tx.orchard_bundle().is_some() || tx.ironwood_bundle().is_some();
+    let block_time = match mined {
+        Some(h) => {
+            let block = lwd::get_block(c, h).await?;
+            // Compact blocks list only transactions with a shielded part; one without has nothing to decrypt.
+            Some(if shielded { check_inclusion(&block, h, &id).map_err(VerifyError::Inconsistent)? } else { block_at(&block, h).map_err(VerifyError::Inconsistent)? })
+        }
+        None => None,
+    };
     let mut outputs = Vec::new();
     if let (Some(b), Some(ivk)) = (tx.sapling_bundle(), uivk.sapling()) {
         let d = SaplingDomain::new(zip212_enforcement(&NETWORK, mined.unwrap_or(tip + 1)));
@@ -194,11 +212,30 @@ pub async fn inspect(c: &mut lwd::Client, uivk: &UnifiedIncomingViewingKey, txid
         txid: txid.to_string(),
         found: true,
         height: mined.map(u32::from),
+        block_time,
         confirmations: mined.map(|h| u32::from(tip).saturating_sub(u32::from(h)) + 1).unwrap_or(0),
         tip: tip.into(),
         outputs,
         pools: Pools { sapling: tx.sapling_bundle().is_some(), orchard: tx.orchard_bundle().is_some(), ironwood: tx.ironwood_bundle().is_some(), transparent },
     })
+}
+
+fn block_at(block: &CompactBlock, h: BlockHeight) -> Result<u32, String> {
+    if block.height != u64::from(u32::from(h)) {
+        return Err(format!("asked for block {h}, got block height {}", block.height));
+    }
+    Ok(block.time)
+}
+
+/// The compact block lightwalletd serves for height `h` must be that height and list `txid`; returns the
+/// block's time. Catches a server (or an interceptor) that names a height for a transaction it did not
+/// put in that block. A server willing to forge the block too is not caught: see the trust model.
+pub fn check_inclusion(block: &CompactBlock, h: BlockHeight, txid: &TxId) -> Result<u32, String> {
+    let t = block_at(block, h)?;
+    if !block.vtx.iter().any(|tx| tx.txid.as_slice() == txid.as_ref()) {
+        return Err(format!("it says {txid} was mined at height {h}, but its block at {h} does not list it"));
+    }
+    Ok(t)
 }
 
 /// The rules, separate from the network so they can be read and tested on their own.
@@ -250,6 +287,7 @@ mod tests {
             txid: "00".repeat(32),
             found: true,
             height: Some(100),
+            block_time: Some(1_792_500_000),
             confirmations: conf,
             tip: 100 + conf.saturating_sub(1),
             outputs: outputs.into_iter().map(|(value, m)| Output { pool: "Ironwood", value, memo: m.map(String::from), memo_binary: false }).collect(),

@@ -9,8 +9,12 @@ let v = zpay_verify::verify(lwd_url, uivk, txid, &Expect { amount_zat: 100_000, 
 if v.verdict.ok { /* paid */ } else { println!("{:?}", v.verdict.reasons) }
 ```
 
-It fetches the tx from lightwalletd, re-computes the txid, trial-decrypts every Sapling, Orchard and
-Ironwood output with the key, then applies the rules in `check()`:
+It fetches the tx from lightwalletd, re-computes the txid, fetches the compact block at the height
+lightwalletd reports and requires the txid in it (`check_inclusion`; the block's time is reported as
+`block_time`), trial-decrypts every Sapling, Orchard and Ironwood output with the key, then applies
+the rules in `check()`. It does not check proofs, signatures or the block's place in the chain: an
+answer that contradicts itself is an error (exit 2), but a lightwalletd willing to forge a transaction
+and its block is believed.
 
 | Reason | When |
 |---|---|
@@ -41,5 +45,7 @@ The key is read from the environment only. `ZPV_LWD_URL` overrides `https://test
   the name; `socks5` resolves it here). If the proxy is down the check fails with exit 2; it never
   falls back to a direct connection. Library: `verify_with(url, &ConnectOptions { proxy, allow_insecure }, …)`.
 
-Tests: `cargo test` — 3 rule tests + 5 live tests on real testnet txs decrypted with keys their
-owners published (`../../fixtures/testnet.json`) + the doc example compiles.
+Tests: `cargo test` — 3 rule tests; `tests/live.rs` (7) on real testnet txs decrypted with keys their
+owners published (`../../fixtures/testnet.json`, `../../deployments/testnet.json`), including the real
+compact block with the tx taken out; `tests/transport.rs` (4) and `tests/cli.rs` (5) for the proxy and
+plaintext rules; the doc example compiles.

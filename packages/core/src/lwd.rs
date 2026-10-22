@@ -14,8 +14,9 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpStream;
 use tonic::transport::{Channel, ClientTlsConfig, Endpoint, Uri};
 use zcash_client_backend::proto::service::{
-    compact_tx_streamer_client::CompactTxStreamerClient, ChainSpec, Empty, TxFilter,
+    compact_tx_streamer_client::CompactTxStreamerClient, BlockId, ChainSpec, Empty, TxFilter,
 };
+use zcash_client_backend::proto::compact_formats::CompactBlock;
 use zcash_protocol::{consensus::BlockHeight, TxId};
 
 pub const DEFAULT_LWD_URL: &str = "https://testnet.zec.rocks:443";
@@ -232,6 +233,12 @@ pub async fn chain_tip(client: &mut Client) -> Result<BlockHeight, LwdError> {
     let b = client.get_latest_block(ChainSpec {}).await.map_err(LwdError::Rpc)?.into_inner();
     let h = u32::try_from(b.height).map_err(|_| LwdError::Rpc(tonic::Status::internal("tip height overflows u32")))?;
     Ok(BlockHeight::from_u32(h))
+}
+
+/// The compact block at height `h` (`GetBlock`). Lightwalletd lists every transaction with a shielded
+/// part in it, in protocol byte order.
+pub async fn get_block(client: &mut Client, h: BlockHeight) -> Result<CompactBlock, LwdError> {
+    Ok(client.get_block(BlockId { height: u32::from(h).into(), hash: vec![] }).await.map_err(LwdError::Rpc)?.into_inner())
 }
 
 /// Where lightwalletd says a transaction is (`RawTransaction.height` semantics).

@@ -67,3 +67,42 @@ async fn unreachable_lightwalletd_is_an_error_not_a_verdict() {
     let e = verify("https://127.0.0.1:9", f["uivk"].as_str().unwrap(), f["txid"].as_str().unwrap(), &expect(1, None)).await.unwrap_err();
     assert!(e.to_string().contains("cannot connect to lightwalletd"), "{e}");
 }
+
+#[tokio::test]
+async fn the_block_lightwalletd_names_lists_the_tx_and_gives_its_time() {
+    // The paywall payment of the live run (deployments/testnet.json) and the x402 payment.
+    let run: Value = serde_json::from_str(include_str!("../../../deployments/testnet.json")).unwrap();
+    let merchant = run["wallets"]["merchant"]["uivk"].as_str().unwrap();
+    let paid = &run["paywall"]["cases"]["paywall"];
+    let v = verify(&url(), merchant, paid["txid"].as_str().unwrap(), &expect(10_000, paid["challengeMemo"].as_str())).await.unwrap();
+    assert!(v.verdict.ok, "{:?}", v.verdict);
+    assert_eq!(v.report.height, Some(4_522_621));
+    let t_paywall = v.report.block_time.expect("a mined tx has its block's time");
+    // 2026-10-20T16:15:44Z, 87 s before the run that paid it ended (ranAt 2026-10-20T16:17:11Z).
+    assert_eq!(t_paywall, 1_792_512_944);
+    let f = &fixtures()["x402"];
+    let x = verify(&url(), f["uivk"].as_str().unwrap(), f["txid"].as_str().unwrap(), &expect(100_000, f["memo"].as_str())).await.unwrap();
+    // An earlier block (4,521,112) has an earlier time.
+    assert!(x.report.block_time.unwrap() < t_paywall);
+    // Not found: no block, no time.
+    let gone = verify(&url(), f["uivk"].as_str().unwrap(), &"ab".repeat(32), &expect(1, None)).await.unwrap();
+    assert_eq!(gone.report.block_time, None);
+}
+
+#[tokio::test]
+async fn an_answer_whose_block_does_not_list_the_tx_is_inconsistent() {
+    // The real compact block at the x402 payment's height, then the same block with the tx taken out
+    // or another height: what a server that forged the transaction (or the height) would have to serve.
+    let f = &fixtures()["x402"];
+    let id = lwd::parse_txid(f["txid"].as_str().unwrap()).unwrap();
+    let h = zcash_protocol::consensus::BlockHeight::from_u32(4_521_112);
+    let mut c = lwd::connect(&url()).await.unwrap();
+    let block = lwd::get_block(&mut c, h).await.unwrap();
+    let t = zpay_verify::check_inclusion(&block, h, &id).unwrap();
+    assert_eq!(t, block.time);
+    let mut without = block.clone();
+    without.vtx.retain(|tx| tx.txid != id.as_ref().to_vec());
+    assert_eq!(without.vtx.len() + 1, block.vtx.len());
+    assert!(zpay_verify::check_inclusion(&without, h, &id).unwrap_err().contains("does not list"));
+    assert!(zpay_verify::check_inclusion(&block, h + 1, &id).unwrap_err().contains("height"));
+}
