@@ -52,9 +52,14 @@ Two different questions about null-402:
 recomputes the txid and requires it in the block the server names, but it does not check proofs,
 signatures or the block's place in the chain, so a server that forges a transaction and its block is
 believed. With `lwdUrls` (or
-`ZPV_LWD_URLS`), `zpay-verify` runs once per endpoint, in parallel. The answers must agree on the
-verdict and on everything it rests on (found, height, outputs, pools, reasons, amount); tips and
-confirmation counts may differ. An endpoint that cannot be reached or queried does not count toward
+`ZPV_LWD_URLS`), `zpay-verify` runs once per endpoint, in parallel. The endpoints that have seen the
+transaction's block must agree on everything the verdict rests on (found, height, block time,
+outputs, pools, amount, reasons other than `NOT_CONFIRMED`); confirmations are counted at the lowest
+tip. Lag is not disagreement: an endpoint whose tip is up to `CROSS_CHECK_MAX_LAG` (3) blocks below
+the block another endpoint mined the transaction in, or that has not received a mempool transaction
+yet, still answers for the quorum but is not compared (`lagging: true`), and the result is
+`NOT_CONFIRMED` until it catches up. An endpoint at or past that block that does not have the
+transaction, or one further behind, is a dissent. An endpoint that cannot be reached or queried does not count toward
 `quorum` (default: all); one whose answer contradicts itself counts as a dissent. Two spellings of one
 server (`https://testnet.zec.rocks` and `…:443`) are refused: endpoints are compared as
 scheme://host:port. Any disagreement, or fewer answers than `quorum`, is `unverified`: never

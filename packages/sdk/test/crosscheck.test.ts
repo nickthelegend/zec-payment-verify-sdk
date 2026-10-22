@@ -96,3 +96,65 @@ describe('lightwalletd cross-check', () => {
     await expect(verifyZcashCrossChecked({ ...req, txid: 'nope' }, { lwdUrls: [DEAD] })).rejects.toThrow(/not a txid/);
   });
 });
+
+describe('cross-check rule with lightwalletd lag (offline: answers shaped like the real x402 payment at chosen tips)', () => {
+  const H = 4_521_112;
+  const outputs = [{ pool: 'Ironwood' as const, value: 100_000, memo: fx.x402.memo, memo_binary: false }];
+  const pools = { sapling: false, orchard: false, ironwood: true, transparent: false };
+  /** One endpoint's answer: mined at `height` (null: mempool, undefined: not found) as seen at `tip`, for minConf `minConf`. */
+  function answer(tip: number, height: number | null | undefined, minConf = 1): PromiseSettledResult<ZcashResult> {
+    const found = height !== undefined;
+    const confirmations = found && height !== null ? tip - height + 1 : 0;
+    const reasons = !found ? ['TX_NOT_FOUND'] : confirmations < minConf ? ['NOT_CONFIRMED'] : [];
+    const value: ZcashResult = {
+      rail: 'zcash',
+      ok: reasons.length === 0,
+      verdict: reasons.length === 0 ? 'paid' : 'refused',
+      reasons,
+      paidZat: found ? 100_000 : 0,
+      report: { txid: fx.x402.txid, found, height: height ?? null, block_time: height ? 1_792_400_000 : null, confirmations, tip, outputs: found ? outputs : [], pools: found ? pools : { sapling: false, orchard: false, ironwood: false, transparent: false } },
+      provenance: { lightwalletd: 'x', tip, checkedAt: '', via: 'zpay-verify' },
+    };
+    return { status: 'fulfilled', value };
+  }
+  const urls = ['https://a.example:443', 'https://b.example:443'];
+
+  it('one endpoint a block behind, still holding the tx in its mempool: pending (NOT_CONFIRMED), not a disagreement', () => {
+    const r = crossCheckVerdict(urls, [answer(H, H), answer(H - 1, null)], 2);
+    expect(r.verdict).toBe('refused');
+    expect(r.reasons).toEqual(['NOT_CONFIRMED']);
+    expect(r.crossCheck).toMatchObject({ agreed: true, quorum: 2 });
+    expect(r.crossCheck!.endpoints.map((e) => e.lagging ?? false)).toEqual([false, true]);
+    expect(r.report).toMatchObject({ height: H, confirmations: 0, tip: H - 1 });
+  });
+
+  it('one endpoint a block behind that has not seen the tx at all: pending, not a disagreement', () => {
+    const r = crossCheckVerdict(urls, [answer(H, H), answer(H - 1, undefined)], 2);
+    expect(r.verdict).toBe('refused');
+    expect(r.reasons).toEqual(['NOT_CONFIRMED']);
+    expect(r.crossCheck!.agreed).toBe(true);
+  });
+
+  it('both mined it, tips a block apart: the confirmations are counted at the lower tip', () => {
+    const two = crossCheckVerdict(urls, [answer(H + 1, H, 2), answer(H, H, 2)], 2);
+    expect(two.reasons).toEqual(['NOT_CONFIRMED']);
+    expect(two.report).toMatchObject({ confirmations: 1, tip: H });
+    const one = crossCheckVerdict(urls, [answer(H + 1, H, 1), answer(H, H, 1)], 2);
+    expect(one).toMatchObject({ ok: true, verdict: 'paid' });
+    expect(one.report).toMatchObject({ confirmations: 1, tip: H });
+  });
+
+  it('only in mempools, one endpoint has not received it yet: pending', () => {
+    const r = crossCheckVerdict(urls, [answer(H, null), answer(H, undefined)], 2);
+    expect(r.verdict).toBe('refused');
+    expect(r.reasons).toEqual(['NOT_CONFIRMED']);
+  });
+
+  it('an endpoint at or past the block that says the tx does not exist, or one far behind, is still a disagreement', () => {
+    for (const other of [answer(H, undefined), answer(H + 3, undefined), answer(H - 100, undefined), answer(H, null)]) {
+      const r = crossCheckVerdict(urls, [answer(H, H), other], 1);
+      expect(r.verdict).toBe('unverified');
+      expect(r.reasons).toEqual(['UNVERIFIED_DISAGREEMENT']);
+    }
+  });
+});

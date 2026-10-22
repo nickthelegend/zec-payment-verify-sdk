@@ -47,6 +47,10 @@ export interface EndpointAnswer {
   answered: boolean;
   /** It answered, but the answer contradicts itself (LightwalletdBadAnswerError): counted as a dissent. */
   inconsistent?: boolean;
+  /** Its tip is a few blocks (at most CROSS_CHECK_MAX_LAG) below the block another endpoint mined the tx
+   *  in, or it has not received a mempool tx yet: normal lag, not a dissent. The combined answer is then
+   *  "not confirmed yet" as of the lowest tip. */
+  lagging?: boolean;
   ok?: boolean;
   reasons?: string[];
   paidZat?: number;
@@ -226,11 +230,16 @@ export interface CrossCheckOptions {
   limiter?: CheckLimiter;
 }
 
-/** What has to match between two endpoints' answers: the verdict and everything it rests on. The
- *  tip and the confirmation count may differ by a block or two as long as the verdict does not. */
+/** How far (in blocks) an endpoint's tip may trail the block another endpoint mined the tx in and still
+ *  count as lagging rather than dissenting. */
+export const CROSS_CHECK_MAX_LAG = 3;
+
+/** What has to match between two endpoints that have both seen the tx's block (or, for a tx that is not
+ *  mined, both have it): everything the verdict rests on except the confirmation count, which depends on
+ *  each endpoint's tip and is taken at the lowest tip. */
 function signature(r: ZcashResult) {
   const { found, height, block_time, outputs, pools } = r.report!;
-  return JSON.stringify({ ok: r.ok, reasons: r.reasons, paidZat: r.paidZat, found, height, block_time, outputs, pools });
+  return JSON.stringify({ reasons: r.reasons.filter((x) => x !== 'NOT_CONFIRMED'), paidZat: r.paidZat, found, height, block_time, outputs, pools });
 }
 
 /** scheme://host:port with the default port filled in, so two spellings of one server are one endpoint. */
@@ -272,6 +281,11 @@ export async function verifyZcashCrossChecked(req: ZcashRequest, o: CrossCheckOp
  * The cross-check rule on its own: `settled[i]` is endpoint `urls[i]`'s outcome. An endpoint that cannot
  * be reached does not count toward the quorum; one whose answer contradicts itself is a dissent. Any
  * dissent or disagreement is UNVERIFIED_DISAGREEMENT; fewer answers than `quorum` is UNVERIFIED_QUORUM.
+ * Lag is not disagreement: an endpoint whose tip is up to CROSS_CHECK_MAX_LAG blocks below the block
+ * another one mined the tx in (or, for a tx no one has mined, one that has not received it yet) answers
+ * for the quorum but is not compared; the result is then NOT_CONFIRMED, as it is at the lowest tip. The
+ * endpoints that have seen the block must agree on everything but the confirmation count, which is
+ * counted at the lowest tip.
  */
 export function crossCheckVerdict(urls: string[], settled: PromiseSettledResult<ZcashResult>[], quorum: number): ZcashResult {
   const endpoints: EndpointAnswer[] = [];
@@ -295,6 +309,19 @@ export function crossCheckVerdict(urls: string[], settled: PromiseSettledResult<
   const checkedAt = new Date().toISOString();
   const tips = answers.map((a) => a.report!.tip);
   const tip = tips.length ? Math.min(...tips) : 0;
+  // Lag: the highest block any endpoint mined the tx in; an endpoint a few blocks short of it cannot
+  // have mined it yet. With no mined answer, one that has not received a tx another holds is lagging.
+  const minedAt = answers.map((a) => a.report!.height).filter((h): h is number => h !== null);
+  const top = minedAt.length ? Math.max(...minedAt) : null;
+  const anyFound = answers.some((a) => a.report!.found);
+  const lags = answers.map((a) => {
+    const t = a.report!.tip;
+    if (top !== null) return t < top && top - t <= CROSS_CHECK_MAX_LAG;
+    return anyFound && !a.report!.found && Math.abs(Math.max(...tips) - t) <= CROSS_CHECK_MAX_LAG;
+  });
+  let k = 0;
+  for (const e of endpoints) if (e.answered && !e.inconsistent) e.lagging = lags[k++] || undefined;
+  const voters = answers.filter((_, i) => !lags[i]);
   const unverified = (reason: string, agreed: boolean): ZcashResult => ({
     rail: 'zcash',
     ok: false,
@@ -305,14 +332,23 @@ export function crossCheckVerdict(urls: string[], settled: PromiseSettledResult<
     provenance: { lightwalletd: urls.join(', '), tip, checkedAt, via: 'zpay-verify' },
     crossCheck: { quorum, agreed, endpoints },
   });
-  const agree = answers.every((a) => signature(a) === signature(answers[0]));
-  if (dissent || (answers.length > 1 && !agree)) return unverified('UNVERIFIED_DISAGREEMENT', false);
+  const agree = voters.every((a) => signature(a) === signature(voters[0]));
+  if (dissent || (voters.length > 1 && !agree)) return unverified('UNVERIFIED_DISAGREEMENT', false);
   if (answers.length < quorum) return unverified('UNVERIFIED_QUORUM', false);
 
-  const first = answers[0];
-  const confirmations = Math.min(...answers.map((a) => a.report!.confirmations));
+  // The answer as of the lowest tip: the voter with the lowest tip, its confirmations recounted there, and
+  // NOT_CONFIRMED when any endpoint (a voter or a lagging one) had not confirmed it.
+  const first = voters.reduce((a, b) => (b.report!.tip < a.report!.tip ? b : a));
+  const lagging = lags.some(Boolean);
+  const h = first.report!.height;
+  const confirmations = lagging || h === null ? 0 : Math.max(0, tip - h + 1);
+  const pending = lagging || voters.some((a) => a.reasons.includes('NOT_CONFIRMED'));
+  const reasons = [...first.reasons.filter((x) => x !== 'NOT_CONFIRMED'), ...(pending ? ['NOT_CONFIRMED'] : [])];
   return {
     ...first,
+    ok: reasons.length === 0,
+    verdict: reasons.length === 0 ? 'paid' : 'refused',
+    reasons,
     report: { ...first.report!, confirmations, tip },
     provenance: { ...first.provenance, tip, checkedAt },
     crossCheck: { quorum, agreed: true, endpoints },
