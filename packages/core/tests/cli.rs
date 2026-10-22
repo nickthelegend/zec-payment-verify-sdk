@@ -72,3 +72,35 @@ fn a_proxy_url_that_is_not_socks5_is_a_setup_error() {
     assert_eq!(o.status.code(), Some(2));
     assert!(stderr(&o).contains("ZPV_LWD_PROXY must be socks5h://host:port"), "{}", stderr(&o));
 }
+
+/// `zpay-verify owns <ua>` with ZPV_UIVK = `uivk`. Offline: decrypting a diversifier needs no server.
+fn owns(uivk: &str, ua: &str) -> Output {
+    Command::new(env!("CARGO_BIN_EXE_zpay-verify")).env_clear().env("ZPV_UIVK", uivk).args(["owns", ua]).output().unwrap()
+}
+
+#[test]
+fn owns_says_whether_an_address_belongs_to_the_viewing_key() {
+    let run: Value = serde_json::from_str(include_str!("../../../deployments/testnet.json")).unwrap();
+    let w = &run["wallets"];
+    let (merchant, employee) = (&w["merchant"], &w["employee"]);
+    let (m_ua, m_key) = (merchant["address"].as_str().unwrap(), merchant["uivk"].as_str().unwrap());
+    let yes = owns(m_key, m_ua);
+    assert_eq!(yes.status.code(), Some(0), "{}", stderr(&yes));
+    let j: Value = serde_json::from_slice(&yes.stdout).unwrap();
+    assert_eq!(j["owns"], true);
+    assert_eq!(j["orchard"], true);
+    let e = owns(employee["uivk"].as_str().unwrap(), employee["address"].as_str().unwrap());
+    assert_eq!(e.status.code(), Some(0));
+    // The merchant's address under the x402 merchant's key, and the employee's under the merchant's: not theirs.
+    for (key, ua) in [(fixtures()["x402"]["uivk"].as_str().unwrap(), m_ua), (m_key, employee["address"].as_str().unwrap())] {
+        let no = owns(key, ua);
+        assert_eq!(no.status.code(), Some(1), "{}", stderr(&no));
+        assert_eq!(serde_json::from_slice::<Value>(&no.stdout).unwrap()["owns"], false);
+    }
+    // Not an address, or a transparent-only one: could not check.
+    for bad in ["utest1notanaddress", w["payer"]["transparent"].as_str().unwrap()] {
+        let o = owns(m_key, bad);
+        assert_eq!(o.status.code(), Some(2), "{bad}");
+        assert!(stderr(&o).contains("not a testnet unified address with a shielded receiver"), "{}", stderr(&o));
+    }
+}

@@ -37,6 +37,7 @@ pub const NETWORK: Network = Network::TestNetwork;
 pub enum VerifyError {
     BadKey(String),
     BadTxid(String),
+    BadAddress(String),
     Lwd(lwd::LwdError),
     Unparseable(String),
     TxidMismatch,
@@ -49,6 +50,7 @@ impl std::fmt::Display for VerifyError {
         match self {
             VerifyError::BadKey(e) => write!(f, "not a testnet unified incoming viewing key: {e}"),
             VerifyError::BadTxid(t) => write!(f, "not a txid (64 hex characters): {t}"),
+            VerifyError::BadAddress(a) => write!(f, "not a testnet unified address with a shielded receiver: {a}"),
             VerifyError::Lwd(e) => write!(f, "{e}"),
             VerifyError::Unparseable(e) => write!(f, "transaction does not parse: {e}"),
             VerifyError::TxidMismatch => write!(f, "lightwalletd returned a transaction whose txid differs from the one requested"),
@@ -134,6 +136,33 @@ pub fn parse_uivk(s: &str) -> Result<UnifiedIncomingViewingKey, VerifyError> {
 pub fn uivk_from_ufvk(ufvk: &str) -> Result<String, VerifyError> {
     let k = UnifiedFullViewingKey::decode(&NETWORK, ufvk.trim()).map_err(|e| VerifyError::BadKey(e.to_string()))?;
     k.to_unified_incoming_viewing_key().encode(&NETWORK).map_err(|e| VerifyError::BadKey(format!("{e:?}")))
+}
+
+/// Whether a unified address belongs to a viewing key, per shielded receiver (None: the address has no
+/// receiver of that kind). Ironwood notes go to the Orchard receiver.
+#[derive(Debug, Clone, Serialize, PartialEq, Eq)]
+pub struct Ownership {
+    /// Every shielded receiver in the address belongs to the key.
+    pub owns: bool,
+    pub orchard: Option<bool>,
+    pub sapling: Option<bool>,
+}
+
+/// Does the unified address `ua` belong to `uivk`? Each shielded receiver's diversifier is decrypted with
+/// the key and the address re-derived from it. Offline. A merchant runs this before advertising `ua`:
+/// a payment to an address the key cannot see is a payment the checker can never accept.
+pub fn owns(uivk: &UnifiedIncomingViewingKey, ua: &str) -> Result<Ownership, VerifyError> {
+    let bad = || VerifyError::BadAddress(ua.trim().to_string());
+    let u = match zcash_keys::address::Address::decode(&NETWORK, ua.trim()) {
+        Some(zcash_keys::address::Address::Unified(u)) => u,
+        _ => return Err(bad()),
+    };
+    let orchard = u.orchard().map(|a| uivk.orchard().as_ref().is_some_and(|k| k.diversifier_index(a).is_some()));
+    let sapling = u.sapling().map(|a| uivk.sapling().as_ref().is_some_and(|k| k.decrypt_diversifier(a).is_some()));
+    if orchard.is_none() && sapling.is_none() {
+        return Err(bad());
+    }
+    Ok(Ownership { owns: orchard.unwrap_or(true) && sapling.unwrap_or(true), orchard, sapling })
 }
 
 fn memo_of(m: &[u8; 512]) -> (Option<String>, bool) {

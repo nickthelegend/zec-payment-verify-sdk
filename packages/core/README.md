@@ -34,6 +34,7 @@ ZPV_UIVK=uivktest1… zpay-verify verify <txid> --amount 100000 --memo inv-42 [-
 #   prints {"report":…,"verdict":…,"lightwalletd":…}; exit 0 paid, 1 not paid, 2 could not check
 ZPV_UIVK=… zpay-verify inspect <txid>...     # what the key sees, no rules
 ZPV_UFVK=… zpay-verify derive                # UFVK → UIVK (share the incoming-only key)
+ZPV_UIVK=… zpay-verify owns <utest1…>        # does this address belong to the key? exit 0 yes, 1 no, 2 not an address (offline)
 ```
 
 The key is read from the environment only. `ZPV_LWD_URL` overrides `https://testnet.zec.rocks:443`.
@@ -47,5 +48,5 @@ The key is read from the environment only. `ZPV_LWD_URL` overrides `https://test
 
 Tests: `cargo test` — 3 rule tests; `tests/live.rs` (7) on real testnet txs decrypted with keys their
 owners published (`../../fixtures/testnet.json`, `../../deployments/testnet.json`), including the real
-compact block with the tx taken out; `tests/transport.rs` (4) and `tests/cli.rs` (5) for the proxy and
-plaintext rules; the doc example compiles.
+compact block with the tx taken out; `tests/transport.rs` (4) and `tests/cli.rs` (6) for the proxy and
+plaintext rules and `owns` (offline); the doc example compiles.
