@@ -508,7 +508,7 @@ const r = await verify({
           <div class="prose">
             <p class="kicker">Surfaces · @zpv/gateway</p>
             <h2 class="t" id="h-paywall">x402 paywall</h2>
-            <p>A reference HTTP paywall over shielded payments, <b>wire-compatible with Shielded x402</b>: the same x402 v1 envelope under the same <code>zcash-shielded</code> scheme, so Shielded x402's client can pay it. It holds only the merchant's incoming viewing key.</p>
+            <p>A reference HTTP paywall over shielded payments, <b>wire-compatible with Shielded x402</b>: the same x402 v1 envelope under the same <code>zcash-shielded</code> scheme. A test imports Shielded x402's own client module (<code>packages/x402-zcash</code>): its <code>parsePaymentRequired</code> accepts Hanko's 402, and its <code>fetchWithPayment</code> presents a real mined payment and gets the 200 and a successful <code>X-PAYMENT-RESPONSE</code>. It holds only the merchant's incoming viewing key.</p>
             <ol>
               <li><code>GET</code> a paid path → <b>402</b> <code>{x402Version: 1, accepts}</code>: the price (<code>maxAmountRequired</code>), a memo nonce in <code>extra.memoNonce</code>, its expiry and a ZIP-321 URI a wallet can open.</li>
               <li>The client pays with that memo, then retries with <code>X-PAYMENT: base64({x402Version: 1, scheme, network, payload: {txid, memoNonce}})</code> (or Hanko's older <code>{memo, txid}</code>).</li>

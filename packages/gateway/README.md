@@ -16,7 +16,8 @@ merchant's **incoming viewing key**: it can see payments, never spend.
   `zcash-shielded` scheme, plus Hanko's own `amountZat`, `memo`, `minConf`, `zip321`, `expiresAt` (ms).
 - The payer sends that amount with that memo, then retries with `X-PAYMENT`: the x402 v1 envelope
   `base64({x402Version: 1, scheme: "zcash-shielded", network: "zcash-testnet", payload: {txid, memoNonce}})`
-  (what Kage's client sends) or Hanko's earlier `base64({memo, txid})`. Another scheme, network or
+  (what Kage's client sends; `kage-client.test.ts` imports Kage's own `packages/x402-zcash` and pays the
+  paywall with its `fetchWithPayment`) or Hanko's earlier `base64({memo, txid})`. Another scheme, network or
   version is a 400.
 - The gateway runs `@zpv/sdk` `verify({rail: "zcash", …})`. Paid → `200` with `{paid: receipt, data}` and `X-PAYMENT-RESPONSE: base64({success: true, transaction: txid, network: "zcash-testnet", payer: ""})` (refusals carry `success: false` and an `errorReason`); the memo and the txid are burned and can never pay again. Not yet confirmed → `402` "payment seen, n/m confirmations". Anything else → `402` with the reasons.
 - **Mined-time expiry**, as Shielded x402 does: a payment counts if its block was mined no later than

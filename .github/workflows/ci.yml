@@ -30,4 +30,9 @@ jobs:
           key: cargo-${{ runner.os }}-${{ hashFiles('packages/core/Cargo.lock', 'packages/core/rust-toolchain.toml') }}
       - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
       - run: pnpm install --frozen-lockfile
+      # kage-client.test.ts runs Shielded x402's own client (packages/x402-zcash) against the paywall.
+      - name: Shielded x402 (Kage) checkout for the client test
+        run: git clone --depth 1 https://github.com/nickthelegend/zec-shielded-x402 "$RUNNER_TEMP/zec-shielded-x402"
       - run: pnpm test
+        env:
+          KAGE_X402_DIR: ${{ runner.temp }}/zec-shielded-x402/packages/x402-zcash

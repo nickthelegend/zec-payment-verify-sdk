@@ -22,7 +22,8 @@ async function start(extra: Partial<PaywallOptions> = {}) {
   servers.push(server);
   return `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
 }
-/** Kage's xPaymentHeader(txid, memoNonce), byte for byte. */
+/** The header shape Kage's xPaymentHeader(txid, memoNonce) builds, written out here so this file runs
+ *  without Kage's checkout; kage-client.test.ts runs Kage's own module against the paywall. */
 const kageHeader = (txid: string, memoNonce: string) => Buffer.from(JSON.stringify({ x402Version: 1, scheme: 'zcash-shielded', network: 'zcash-testnet', payload: { txid: txid.trim().toLowerCase(), memoNonce } })).toString('base64');
 const decode = (h: string | null) => JSON.parse(Buffer.from(h!, 'base64').toString('utf8'));
 
