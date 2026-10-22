@@ -226,10 +226,15 @@ pub fn check(r: &TxReport, e: &Expect) -> Verdict {
     Verdict { ok: reasons.is_empty(), paid_zat, reasons }
 }
 
-/// Connect, fetch, decrypt, check.
+/// Connect, fetch, decrypt, check. Default connection options: no proxy, plaintext only to loopback.
 pub async fn verify(lwd_url: &str, uivk: &str, txid: &str, e: &Expect) -> Result<Verification, VerifyError> {
+    verify_with(lwd_url, &lwd::ConnectOptions::default(), uivk, txid, e).await
+}
+
+/// [`verify`] with explicit connection options (a SOCKS5 proxy, plaintext to a remote host).
+pub async fn verify_with(lwd_url: &str, o: &lwd::ConnectOptions, uivk: &str, txid: &str, e: &Expect) -> Result<Verification, VerifyError> {
     let key = parse_uivk(uivk)?;
-    let mut c = lwd::connect(lwd_url).await?;
+    let mut c = lwd::connect_with(lwd_url, o).await?;
     let tip = lwd::chain_tip(&mut c).await?;
     let report = inspect(&mut c, &key, txid, tip).await?;
     let verdict = check(&report, e);

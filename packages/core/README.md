@@ -34,5 +34,12 @@ ZPV_UFVK=… zpay-verify derive                # UFVK → UIVK (share the incomi
 
 The key is read from the environment only. `ZPV_LWD_URL` overrides `https://testnet.zec.rocks:443`.
 
+- Plaintext `http://` is refused unless the host is loopback (a lightwalletd on this machine) or
+  `ZPV_ALLOW_INSECURE_LWD=1`: over plaintext, anyone on the path can answer for the server.
+- `ZPV_LWD_PROXY=socks5h://127.0.0.1:9050` (Tor) sends the connection through a SOCKS5 proxy, so the
+  lightwalletd operator sees the proxy's address instead of yours (`socks5h` lets the proxy resolve
+  the name; `socks5` resolves it here). If the proxy is down the check fails with exit 2; it never
+  falls back to a direct connection. Library: `verify_with(url, &ConnectOptions { proxy, allow_insecure }, …)`.
+
 Tests: `cargo test` — 3 rule tests + 5 live tests on real testnet txs decrypted with keys their
 owners published (`../../fixtures/testnet.json`) + the doc example compiles.
