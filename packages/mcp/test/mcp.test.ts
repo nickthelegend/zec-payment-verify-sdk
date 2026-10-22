@@ -98,6 +98,25 @@ describe('zpv-mcp', () => {
     }
     const other = await json(client, 'verify_null402_settlement', { settle_tx: SETTLE, ...me, expect_recipient: '0x0000000000000000000000000000000000000001' });
     expect(other).toMatchObject({ ok: false, verdict: 'refused', reasons: ['RECIPIENT_MISMATCH'] });
+    // The pool pays whatever recipient settle() names, so payee and amount alone are not a payment to me.
+    const noRecipient = await json(client, 'verify_null402_settlement', { settle_tx: SETTLE, expect_pay_to: me.expect_pay_to, expect_amount: me.expect_amount });
+    expect(noRecipient).toMatchObject({ ok: false, verdict: 'refused', reasons: ['UNBOUND'] });
+    const tool = (await client.listTools()).tools.find((t) => t.name === 'verify_null402_settlement')!;
+    expect(tool.description).toMatch(/expect_recipient[^.]*required for ok/);
+  });
+
+  it('verify_zcash_payment is annotated read-only only when it writes nothing: with ZPV_STORE it consumes the payment', async () => {
+    const plain = (await client.listTools()).tools.find((t) => t.name === 'verify_zcash_payment')!;
+    expect(plain.annotations).toMatchObject({ readOnlyHint: true });
+    const c = await connect({ ZPV_MERCHANT_UIVK: fx.x402.uivk, ZPV_STORE: join(dir, 'annotations.sqlite') });
+    try {
+      const single = (await c.listTools()).tools.find((t) => t.name === 'verify_zcash_payment')!;
+      expect(single.annotations).toMatchObject({ readOnlyHint: false, destructiveHint: false, idempotentHint: false });
+      expect(single.title).toMatch(/single use/i);
+      expect(single.description).toMatch(/consumes the payment/);
+    } finally {
+      await c.close();
+    }
   });
 
   it('without the merchant key: Setup required, not a verdict', async () => {

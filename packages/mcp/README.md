@@ -1,11 +1,14 @@
 # @zpv/mcp
 
-`zpv-mcp`: two read-only tools an agent (or a merchant's agent) calls before it delivers.
+`zpv-mcp`: two tools an agent (or a merchant's agent) calls before it delivers. Both are read-only
+(`readOnlyHint: true`) except `verify_zcash_payment` under `ZPV_STORE`: there a paid answer consumes
+the payment, so the tool is annotated `readOnlyHint: false`, `idempotentHint: false` and titled
+"(single use)", and a client that auto-approves read-only tools will ask before running it.
 
 | Tool | Answers |
 |---|---|
 | `verify_zcash_payment` | `{txid, amount_zat, memo?, min_conf?}`: did this transaction pay the merchant, checked with the merchant's incoming viewing key, live on Zcash testnet |
-| `verify_null402_settlement` | `{settle_tx, expect_pay_to?, expect_amount?, expect_recipient?}`: was this mined null-402 `settle()` on Fuji a payment to me |
+| `verify_null402_settlement` | `{settle_tx, expect_pay_to, expect_amount, expect_recipient}` (all three needed for ok): was this mined null-402 `settle()` on Fuji a payment to me |
 
 The merchant key comes from `ZPV_MERCHANT_UIVK` and never passes through the model; without it the
 tool answers `Setup required: ZPV_MERCHANT_UIVK`.
@@ -25,8 +28,10 @@ used); `ZPV_MCP_REQUIRE_MEMO=1` requires a memo even without a store; `ZPV_LWD_U
 
 **null-402.** A reverted or pending `settle()` paid nobody: never ok (`SETTLE_REVERTED`,
 `SETTLE_PENDING`, verdict `unsettled`). A successful one is `paid` when its proof is valid, its root
-known, its nullifier spent by this settlement, and the payee signal and amount are `expect_pay_to`
-and `expect_amount` (and the pool paid `expect_recipient`, if given). `proof_check` is the other
+known, its nullifier spent by this settlement, the payee signal and amount are `expect_pay_to` and
+`expect_amount`, and the pool paid `expect_recipient`. Without any of the three the answer is
+`UNBOUND`: the pool does not bind `settle()`'s recipient to the proof (Null402Pool.sol leaves that
+off-chain), so a proof naming your payee and amount can be settled to someone else. `proof_check` is the other
 question, "could this proof still be settled to me": always `NULLIFIER_SPENT` once settled. The tool
 does not remember settlements already accepted.
 

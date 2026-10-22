@@ -54,12 +54,16 @@ const singleUse = () => {
 
 export function createServer(): McpServer {
   const server = new McpServer({ name: 'zec-payment-verify', version: '0.1.0' });
+  // With ZPV_STORE the zcash tool writes: a paid answer consumes the payment, so it is not read-only, and a
+  // client that auto-approves read-only tools must not run it on a "just checking" call.
+  const consumes = Boolean(process.env.ZPV_STORE);
 
   server.registerTool(
     'verify_zcash_payment',
     {
-      title: 'Check a shielded Zcash payment to the merchant',
+      title: consumes ? 'Accept a shielded Zcash payment to the merchant (single use)' : 'Check a shielded Zcash payment to the merchant',
       description:
+        (consumes ? 'This server runs with ZPV_STORE: a paid answer consumes the payment (its memo and txid are marked used), so call it only when you are about to deliver. ' : '') +
         'Did transaction `txid` pay the merchant at least `amount_zat` zatoshis with memo `memo`, with at least `min_conf` confirmations and no transparent part? Checked live on Zcash testnet with the merchant’s incoming viewing key. Returns ok, verdict (paid, refused, or unverified when ZPV_LWD_URLS lists several lightwalletd endpoints and they disagree or too few answer), reasons (TX_NOT_FOUND, NO_OUTPUT_TO_KEY, MEMO_MISMATCH, AMOUNT_TOO_LOW, NOT_CONFIRMED, TRANSPARENT_PART, UNVERIFIED_DISAGREEMENT, UNVERIFIED_QUORUM, ALREADY_USED) and what the key saw. ' +
         'Replay: unless the server runs with ZPV_STORE (single_use true in the answer), a check does not mark a payment as used: the same txid passes every time it is asked, and without a memo any past payment to the merchant passes, so record the txids you accepted and always pass the invoice memo. With ZPV_STORE each payment is accepted once and a second check answers ALREADY_USED. min_conf cannot go below the server’s floor (ZPV_MCP_MIN_CONF, default 1).',
       inputSchema: {
@@ -68,7 +72,7 @@ export function createServer(): McpServer {
         memo: z.string().max(512).optional(),
         min_conf: z.number().int().nonnegative().optional(),
       },
-      annotations: { readOnlyHint: true },
+      annotations: consumes ? { readOnlyHint: false, destructiveHint: false, idempotentHint: false } : { readOnlyHint: true },
     },
     (a) =>
       run('verify_zcash_payment', a, async () => {
@@ -122,12 +126,12 @@ export function createServer(): McpServer {
     {
       title: 'Was this null-402 settlement on Avalanche Fuji a payment to me?',
       description:
-        'Reads a mined null-402 settle() transaction and its receipt on Fuji. A reverted or pending settle() paid nobody and is never ok (SETTLE_REVERTED, SETTLE_PENDING; verdict unsettled). A successful one is ok (verdict paid, settled true) when its proof is valid on the deployed verifier, its Merkle root is known to the pool, its nullifier is spent (by this settlement), and the proof pays expect_pay_to the amount expect_amount (and the pool paid expect_recipient, if given); otherwise verdict refused with PAY_TO_MISMATCH, AMOUNT_MISMATCH, RECIPIENT_MISMATCH, or UNBOUND when expect_pay_to or expect_amount is missing. proof_check answers a different question, whether the proof could still be settled to you: once settled it is always NULLIFIER_SPENT. This tool does not remember settlements you already accepted: record the settle hashes yourself.',
+        'Reads a mined null-402 settle() transaction and its receipt on Fuji. A reverted or pending settle() paid nobody and is never ok (SETTLE_REVERTED, SETTLE_PENDING; verdict unsettled). A successful one is ok (verdict paid, settled true) when its proof is valid on the deployed verifier, its Merkle root is known to the pool, its nullifier is spent (by this settlement), the proof pays expect_pay_to the amount expect_amount, and the pool paid expect_recipient; otherwise verdict refused with PAY_TO_MISMATCH, AMOUNT_MISMATCH, RECIPIENT_MISMATCH, or UNBOUND when any of the three is missing. expect_recipient (your EVM address) is required for ok: the pool does not bind settle()’s recipient to the proof, so a proof naming your payee and amount can be settled to someone else. proof_check answers a different question, whether the proof could still be settled to you: once settled it is always NULLIFIER_SPENT. This tool does not remember settlements you already accepted: record the settle hashes yourself.',
       inputSchema: {
         settle_tx: z.string().regex(/^0x[0-9a-fA-F]{64}$/),
         expect_pay_to: z.string().regex(/^\d+$/).optional(),
         expect_amount: z.string().regex(/^\d+$/).optional(),
-        expect_recipient: z.string().regex(/^0x[0-9a-fA-F]{40}$/).optional(),
+        expect_recipient: z.string().regex(/^0x[0-9a-fA-F]{40}$/).optional().describe('The EVM address the pool must have paid. Required for ok (without it the answer is UNBOUND).'),
       },
       annotations: { readOnlyHint: true },
     },
