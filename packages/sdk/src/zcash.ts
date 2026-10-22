@@ -132,7 +132,7 @@ export function classifyCliError(msg: string): Error {
   if (/^(cannot connect to lightwalletd|lightwalletd RPC failed)/.test(msg)) return new LightwalletdUnreachableError(msg);
   if (/^(lightwalletd answered inconsistently|lightwalletd returned a transaction whose txid differs|transaction does not parse)/.test(msg)) return new LightwalletdBadAnswerError(msg);
   const setup = /^Setup required: (\S+?)\s+(.*)$/s.exec(msg);
-  if (setup) return new SetupRequiredError(setup[1], setup[2]);
+  if (setup) return new SetupRequiredError(setup[1], setup[2].replace(/^\((.*)\)$/s, '$1'));
   if (/^invalid lightwalletd URL/.test(msg)) return new SetupRequiredError('ZPV_LWD_URL', msg);
   return new VerifyError(msg);
 }
@@ -144,11 +144,12 @@ export async function verifyZcash(req: ZcashRequest, opts: { lwdUrl?: string; bi
   const args = ['verify', req.txid, '--amount', amount.toString(), '--min-conf', String(req.minConf ?? 1)];
   if (req.memo !== undefined) args.push('--memo', req.memo);
   if (req.allowTransparent) args.push('--allow-transparent');
-  // Only what the binary needs: the key, which lightwalletd, and how to reach it.
+  // Only what the binary needs: the key, which lightwalletd, how to reach it, and where the Sapling parameters are.
   const env: Record<string, string> = { PATH: process.env.PATH ?? '', ZPV_UIVK: req.uivk };
   const lwd = opts.lwdUrl ?? process.env.ZPV_LWD_URL;
   if (lwd) env.ZPV_LWD_URL = lwd;
-  for (const k of ['ZPV_LWD_PROXY', 'ZPV_ALLOW_INSECURE_LWD']) if (process.env[k]) env[k] = process.env[k]!;
+  // The Sapling parameters for a Sapling transaction's proofs: ZPV_SAPLING_PARAMS, else found under HOME.
+  for (const k of ['ZPV_LWD_PROXY', 'ZPV_ALLOW_INSECURE_LWD', 'ZPV_SAPLING_PARAMS', 'HOME']) if (process.env[k]) env[k] = process.env[k]!;
   const bin = opts.bin ?? zpayBinary();
   const timeoutMs = envInt('ZPV_CHECK_TIMEOUT_MS', 90_000, 1);
   const { code, stdout, stderr, timedOut } = await (opts.limiter ?? defaultZcashLimiter).run(

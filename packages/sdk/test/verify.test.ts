@@ -33,6 +33,22 @@ describe('zcash rail', () => {
     expect((await verify({ ...base, txid: 'ab'.repeat(32), amountZat: 1 })).reasons).toEqual(['TX_NOT_FOUND']);
   });
 
+  it('a Sapling transaction is checked with the Sapling parameters the binary finds from the caller’s environment', async () => {
+    // A third-party shielding transaction into Sapling: the binary verifies its Groth16 proofs before decrypting.
+    const sapling = '4a9412fa75194d31fdae2c796765e1617cdeade286ab231ab75705db827c8634';
+    const r = await verify({ rail: 'zcash', uivk: fx.x402.uivk, txid: sapling, amountZat: 1, allowTransparent: true });
+    expect(r.reasons).toEqual(['NO_OUTPUT_TO_KEY']);
+    expect(r.report.pools.sapling).toBe(true);
+    const prev = process.env.ZPV_SAPLING_PARAMS;
+    process.env.ZPV_SAPLING_PARAMS = '/nonexistent/zcash-params';
+    try {
+      await expect(verify({ rail: 'zcash', uivk: fx.x402.uivk, txid: sapling, amountZat: 1 })).rejects.toThrow(/^Setup required: ZPV_SAPLING_PARAMS/);
+    } finally {
+      if (prev === undefined) delete process.env.ZPV_SAPLING_PARAMS;
+      else process.env.ZPV_SAPLING_PARAMS = prev;
+    }
+  });
+
   it('bad input and a missing binary are errors, not verdicts', async () => {
     await expect(verify({ rail: 'zcash', uivk: fx.x402.uivk, txid: 'nope', amountZat: 1 })).rejects.toBeInstanceOf(VerifyError);
     await expect(verify({ rail: 'zcash', uivk: 'uivktest1garbage', txid: fx.x402.txid, amountZat: 1 })).rejects.toThrow(/not a testnet unified incoming viewing key/);
