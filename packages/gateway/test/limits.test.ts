@@ -1,7 +1,8 @@
 // Unauthenticated requests cannot make the gateway fork without limit, and one challenge cannot be
 // used to try txids forever. The flood case is offline (a local server that accepts and stays silent
-// stands in for a hung lightwalletd; the binary is the real zpay-verify). The attempts case is live:
-// random txids that testnet.zec.rocks does not know, then the published x402 payment.
+// stands in for a hung lightwalletd; the binary is the real zpay-verify). The attempts cases are live:
+// random txids that testnet.zec.rocks does not know, a real payment to someone else, then the published
+// x402 payment.
 import { execFileSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -66,21 +67,40 @@ describe('gateway limits', () => {
     expect(peak).toBeLessThanOrEqual(4);
   });
 
-  it('after 5 refused attempts a challenge is closed, even for a payment that would have paid it', async () => {
+  it('TX_NOT_FOUND (lightwalletd has not seen the payment yet) is not a refused attempt: 5 unknown txids, then the real payment is served', async () => {
+    // A wallet that retries X-PAYMENT right after broadcasting gets TX_NOT_FOUND until lightwalletd has the tx.
     const base = await start({ issueMemo: () => fx.x402.memo });
     await fetch(`${base}/api/quote`);
     const pay = (txid: string) => fetch(`${base}/api/quote`, { headers: { 'x-payment': Buffer.from(JSON.stringify({ memo: fx.x402.memo, txid })).toString('base64') } });
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
       const r = await pay(randomBytes(32).toString('hex'));
       expect(r.status).toBe(402);
       expect(((await r.json()) as { reasons: string[] }).reasons).toEqual(['TX_NOT_FOUND']);
     }
-    const t0 = Date.now();
+    const paid = await pay(fx.x402.txid);
+    expect(paid.status).toBe(200);
+    expect(((await paid.json()) as { paid: { txid: string } }).paid.txid).toBe(fx.x402.txid);
+  });
+
+  it('after 5 counted refusals a challenge is closed: a payment that pays it is still checked, never served, and recorded for a refund (CHALLENGE_CLOSED)', async () => {
+    const base = await start({ issueMemo: () => fx.x402.memo });
+    await fetch(`${base}/api/quote`);
+    const pay = (txid: string) => fetch(`${base}/api/quote`, { headers: { 'x-payment': Buffer.from(JSON.stringify({ memo: fx.x402.memo, txid })).toString('base64') } });
+    // The auction deposit is real and mined but pays someone else: a refusal that counts.
+    for (let i = 0; i < 5; i++) {
+      const r = await pay(fx.auction.deposit.txid);
+      expect(r.status).toBe(402);
+      expect(((await r.json()) as { reasons: string[] }).reasons).toEqual(['NO_OUTPUT_TO_KEY']);
+    }
     const closed = await pay(fx.x402.txid);
     expect(closed.status).toBe(402);
-    const body = (await closed.json()) as { error: string; reasons?: string[]; accepts: { memo: string }[] };
-    expect(body.error).toBe('too many refused payments for this challenge (5); ask for a new one');
-    expect(body.reasons).toBeUndefined(); // refused before any check
-    expect(Date.now() - t0).toBeLessThan(500);
+    const body = (await closed.json()) as { error: string; reasons: string[]; received: { zat: number; recorded: boolean }; data?: unknown };
+    expect(body.error).toMatch(/^this challenge is closed after 5 refused payments; ask for a new one/);
+    expect(body.error).toMatch(/the funds arrived and are recorded for a refund/);
+    expect(body.reasons).toEqual(['CHALLENGE_CLOSED']);
+    expect(body.received).toEqual({ zat: 100_000, recorded: true });
+    expect(body.data).toBeUndefined();
+    const list = ((await (await fetch(`${base}/api/refunds`)).json()) as { refunds: { txid: string; paidZat: number; reasons: string[] }[] }).refunds;
+    expect(list.map((r) => [r.txid, r.paidZat, r.reasons])).toEqual([[fx.x402.txid, 100_000, ['CHALLENGE_CLOSED']]]);
   });
 });

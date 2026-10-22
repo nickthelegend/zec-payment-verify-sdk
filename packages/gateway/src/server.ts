@@ -53,7 +53,10 @@ export interface PaywallOptions {
   store?: PaywallStore;
   /** How long a check may hold its claim before another request may take it over (default 5 min). */
   claimLeaseMs?: number;
-  /** Refused payments one challenge may see before it is closed (default 5). Each costs a check. */
+  /** Refused payments one challenge may see before it is closed (default 5). TX_NOT_FOUND (lightwalletd
+   *  has not seen the transaction yet), NOT_CONFIRMED and an unverified cross-check do not count. A closed
+   *  challenge serves nothing, but a payment presented to it is still checked, and one whose funds reached
+   *  the key with its memo is recorded for a refund (reason CHALLENGE_CLOSED). */
   maxFailedAttempts?: number;
 }
 
@@ -268,10 +271,7 @@ export function createPaywall(o: PaywallOptions): Server {
     // One challenge per answer: the entry the payer answered.
     const challenged = (error: string, extra: Record<string, unknown> = {}) => ({ x402Version: 1, error, ...extra, accepts: [c] });
     if (!p.txid) return json(req, res, 402, challenged('X-PAYMENT has no txid'));
-    if (store.failures(c.memo) >= maxFailed) {
-      const f = fresh();
-      return json(req, res, f.status, { ...f.body, error: `too many refused payments for this challenge (${maxFailed}); ask for a new one` }, { 'x-payment-response': settlement(false, '', 'unknown_challenge') });
-    }
+    const closed = store.failures(c.memo) >= maxFailed;
     const txid = p.txid.trim().toLowerCase();
     const claim = store.claim(c.memo, txid, now(), leaseMs);
     if (!claim.ok) {
@@ -296,11 +296,15 @@ export function createPaywall(o: PaywallOptions): Server {
     // payment is presented. A transaction still in the mempool counts as mined now.
     const minedAt = r.report?.block_time != null ? r.report.block_time * 1000 : now();
     const late = r.report?.found === true && minedAt > c.expiresAt + minedGrace;
-    const reasons = late ? [...r.reasons.filter((x) => x !== 'NOT_CONFIRMED'), 'PAYMENT_LATE'] : r.reasons;
-    if (!r.ok || !r.report || late) {
+    // A closed challenge serves nothing; a payment that would have paid it is recorded for a refund.
+    const reasons = closed ? (r.ok && !late ? ['CHALLENGE_CLOSED'] : [...r.reasons, ...(late ? ['PAYMENT_LATE'] : []), 'CHALLENGE_CLOSED'])
+      : late ? [...r.reasons.filter((x) => x !== 'NOT_CONFIRMED'), 'PAYMENT_LATE'] : r.reasons;
+    if (!r.ok || !r.report || late || closed) {
       store.release(c.memo, txid, claim.token);
       const pendingOnly = reasons.length === 1 && reasons[0] === 'NOT_CONFIRMED';
-      if (!pendingOnly) store.fail(c.memo);
+      // Not seen yet (a wallet retrying right after broadcasting) or not confirmed yet is not a refusal.
+      const notSeen = reasons.length === 1 && reasons[0] === 'TX_NOT_FOUND';
+      if (!pendingOnly && !notSeen && !closed) store.fail(c.memo);
       // Funds with this challenge's memo reached the key but buy nothing: write them down for a refund.
       let received: { zat: number; recorded: boolean } | undefined;
       if (!pendingOnly && r.paidZat > 0 && r.report) {
@@ -308,7 +312,9 @@ export function createPaywall(o: PaywallOptions): Server {
         store.recordRefund(refund);
         received = { zat: r.paidZat, recorded: true };
       }
-      let error = pendingOnly ? `payment seen, ${r.report?.confirmations ?? 0}/${minConf} confirmations` : `payment refused: ${reasons.join(', ')}`;
+      let error = closed
+        ? `this challenge is closed after ${maxFailed} refused payments; ask for a new one (this payment was checked: ${r.ok && !late ? 'it would have paid' : r.reasons.join(', ') || 'refused'})`
+        : pendingOnly ? `payment seen, ${r.report?.confirmations ?? 0}/${minConf} confirmations` : `payment refused: ${reasons.join(', ')}`;
       if (late) error += ` (mined at ${new Date(minedAt).toISOString()}, after the challenge expired at ${new Date(c.expiresAt).toISOString()})`;
       if (received) error += '; the funds arrived and are recorded for a refund';
       return json(req, res, 402, challenged(error, { reasons, paidZat: r.paidZat, ...(received ? { received } : {}) }), { 'x-payment-response': settlement(false, '', late ? 'payment_expired' : pendingOnly ? 'settlement_pending' : 'invalid_payment') });

@@ -41,8 +41,11 @@ merchant's **incoming viewing key**: it can see payments, never spend.
 **Limits.** Every check runs `zpay-verify` once per lightwalletd endpoint. At most `ZPV_MAX_CHECKS`
 (default 8) run at once in the process and `ZPV_MAX_QUEUE` (default 32) wait; past that the answer is
 503 + `Retry-After: 5`. A check with no answer is killed after `ZPV_CHECK_TIMEOUT_MS` (default 90 s).
-A challenge is closed after `maxFailedAttempts` (default 5) refused payments, so one memo cannot be
-used to try txids forever.
+A challenge is closed after `maxFailedAttempts` (default 5) refused payments. `TX_NOT_FOUND` (lightwalletd
+has not seen the transaction yet, as when a wallet retries `X-PAYMENT` right after broadcasting),
+`NOT_CONFIRMED` and an unverified cross-check do not count. A closed challenge serves nothing, but a
+payment presented to it is still checked: if its funds reached the key with the challenge's memo it is
+recorded for a refund with reason `CHALLENGE_CLOSED`, and the 402 says so. A new challenge is free.
 
 **State.** The challenge HMAC key, claimed and paid memos/txids, and custom-memo challenges live in a `PaywallStore`. The default
 `MemoryStore` forgets them on restart. `SqliteStore` (`node:sqlite`, Node ≥ 22.13; `ZPV_STORE=<file>`)
