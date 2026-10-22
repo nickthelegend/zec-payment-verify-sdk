@@ -393,10 +393,10 @@ installed @zpv/sdk: ok=true paid=100000 height=4521112</code></pre>
             <h3>Options</h3>
             <ul class="params">
               <li><div class="p-head"><span class="p-name">lwdUrls</span><span class="p-type">string[]</span><span class="p-opt">or ZPV_LWD_URLS</span></div><p>Endpoints to ask. They protect you only if different people run them.</p></li>
-              <li><div class="p-head"><span class="p-name">quorum</span><span class="p-type">number</span><span class="p-opt">default all</span></div><p>How many must answer. An endpoint that cannot be reached does not count. Every answer must agree, whatever the quorum.</p></li>
+              <li><div class="p-head"><span class="p-name">quorum</span><span class="p-type">number</span><span class="p-opt">default all</span></div><p>How many must answer. An endpoint that cannot be reached does not count; one whose answer contradicts itself counts as a disagreement. Every answer must agree, whatever the quorum.</p></li>
             </ul>
             <h3>Which endpoints exist</h3>
-            <p>On Oct 22, 2026 hosh.zec.rocks lists two online public testnet indexers: <code>testnet.zec.rocks</code> (lightwalletd) and <code>zaino.testnet.unsafe.zec.rocks</code> (Zaino, same operator), which answered 503 every time we tried that day. The tests that need two agreeing answers use testnet.zec.rocks under two URLs, and say so. For real independence, run your own lightwalletd or Zaino as one of the endpoints.</p>
+            <p>On Oct 22, 2026 hosh.zec.rocks lists two online public testnet indexers: <code>testnet.zec.rocks</code> (lightwalletd) and <code>zaino.testnet.unsafe.zec.rocks</code> (Zaino, same operator), which answered 503 every time we tried that day. Hanko refuses one server under two spellings (with and without <code>:443</code>) as one endpoint twice. The tests that need two agreeing answers fetch from testnet.zec.rocks twice and give both answers to the cross-check rule, and say so. For real independence, run your own lightwalletd or Zaino as one of the endpoints.</p>
           </div>
           <div class="code">
             <div class="code-stick">
@@ -444,6 +444,10 @@ installed @zpv/sdk: ok=true paid=100000 height=4521112</code></pre>
                   <tr><td><span class="code-tag no">UNVERIFIED_DISAGREEMENT</span></td><td>cross-check: the lightwalletd endpoints gave different answers (no verdict)</td></tr>
                   <tr><td><span class="code-tag no">UNVERIFIED_QUORUM</span></td><td>cross-check: fewer endpoints answered than the quorum (no verdict)</td></tr>
                   <tr><td><span class="code-tag no">UNBOUND</span></td><td>null-402: no expected payee and amount were given, so nothing ties the proof to you</td></tr>
+                  <tr><td><span class="code-tag no">SETTLE_REVERTED</span> <span class="code-tag no">SETTLE_PENDING</span></td><td>null-402 settlement: the <code>settle()</code> reverted or is not mined, so it paid nobody</td></tr>
+                  <tr><td><span class="code-tag no">RECIPIENT_MISMATCH</span></td><td>null-402 settlement: the pool paid another address</td></tr>
+                  <tr><td><span class="code-tag no">PAYMENT_LATE</span></td><td>paywall: mined after the challenge expired (plus a 10 min grace); recorded for a refund</td></tr>
+                  <tr><td><span class="code-tag no">ALREADY_USED</span></td><td>MCP with <code>ZPV_STORE</code>: this payment was already accepted once</td></tr>
                 </tbody>
               </table>
             </div>
@@ -504,19 +508,22 @@ const r = await verify({
           <div class="prose">
             <p class="kicker">Surfaces · @zpv/gateway</p>
             <h2 class="t" id="h-paywall">x402 paywall</h2>
-            <p>A reference HTTP paywall over shielded payments. It holds only the merchant's incoming viewing key.</p>
+            <p>A reference HTTP paywall over shielded payments, <b>wire-compatible with Shielded x402</b>: the same x402 v1 envelope under the same <code>zcash-shielded</code> scheme, so Shielded x402's client can pay it. It holds only the merchant's incoming viewing key.</p>
             <ol>
-              <li><code>GET</code> a paid path → <b>402</b> with a fresh memo, the price, <code>minConf</code> and a ZIP-321 URI a wallet can open.</li>
-              <li>The client pays that memo, then retries with <code>X-PAYMENT: base64({memo, txid})</code>.</li>
-              <li>The gateway checks the payment with <code>verify()</code> → <b>200</b> with a receipt, or 402 with the reasons.</li>
+              <li><code>GET</code> a paid path → <b>402</b> <code>{x402Version: 1, accepts}</code>: the price (<code>maxAmountRequired</code>), a memo nonce in <code>extra.memoNonce</code>, its expiry and a ZIP-321 URI a wallet can open.</li>
+              <li>The client pays with that memo, then retries with <code>X-PAYMENT: base64({x402Version: 1, scheme, network, payload: {txid, memoNonce}})</code> (or Hanko's older <code>{memo, txid}</code>).</li>
+              <li>The gateway checks the payment with <code>verify()</code> → <b>200</b> with the receipt in the body and <code>X-PAYMENT-RESPONSE: {success, transaction, network, payer: ""}</code>, or 402 with the reasons.</li>
             </ol>
             <h3>Guarantees</h3>
             <ul>
-              <li>A memo and a txid pay once. Both are claimed <b>before</b> the check is awaited, so two concurrent requests with one payment get one 200 and one 402 (live test).</li>
-              <li>Txids are compared lower-cased.</li>
-              <li>Unanswered challenges expire and are capped (<code>maxOpenChallenges</code>, default 10,000); when full the gateway answers 503 instead of growing.</li>
-              <li>State is in memory by default. With <code>ZPV_STORE</code> it lives in one SQLite file: a restarted paywall still refuses a txid it served, and two paywall processes on one file serve a payment once (live test with a real second process). Claims hold a lease, so a crashed check does not lock a payment.</li>
-              <li>With <code>ZPV_LWD_URLS</code>, endpoints that disagree give <b>503</b> with <code>Retry-After</code>; nothing is served and the payment stays claimable.</li>
+              <li>A memo and a txid pay once. Both are claimed <b>before</b> the check is awaited, so two concurrent requests with one payment get one 200 and one 402 (live test). Txids are compared lower-cased.</li>
+              <li>Challenges cost nothing until a payment arrives: the memo is <code>zpv-&lt;expiry&gt;-&lt;nonce&gt;-&lt;HMAC&gt;</code>, so GETs store nothing. 10,000 GETs in a second still leave the next buyer a 402 (test).</li>
+              <li>Mined-time expiry: a payment counts if its block came before the challenge's expiry plus 10 minutes, even when presented later. Later is <code>PAYMENT_LATE</code>.</li>
+              <li>Money that arrives but is refused (underpaid, a transparent part, late) is recorded, the 402 says so, and <code>GET /api/refunds</code> lists it to the merchant's own machine. The refund is sent by hand: the gateway holds no spend key.</li>
+              <li>Limits: at most <code>ZPV_MAX_CHECKS</code> (8) checks run at once and 32 wait, the rest get 503 + <code>Retry-After</code>; a check with no answer is killed after 90 s; a challenge closes after 5 refused payments.</li>
+              <li>A lightwalletd that is down, inconsistent or outvoted (<code>ZPV_LWD_URLS</code>) gives <b>503</b> with <code>Retry-After</code>, never a 400 the client would give up on; nothing is served and the payment stays claimable.</li>
+              <li>State is in memory by default. With <code>ZPV_STORE</code> it lives in one SQLite file: a restarted paywall still refuses a txid it served and accepts the memos it issued, and two paywall processes on one file serve a payment once (live test with a real second process).</li>
+              <li>It will not start with settings that would refuse every payment: <code>ZPV_MIN_CONF</code> 0 or not a number, a price of 0, or a <code>ZPV_PAY_TO</code> that does not belong to the viewing key.</li>
             </ul>
           </div>
           <div class="code">
@@ -524,12 +531,12 @@ const r = await verify({
               <div class="pane">
                 <div class="pane-head"><span class="pane-title"><b>GET</b> /api/quote</span><span class="status">402</span></div>
                 <pre class="wrap-pre"><code data-json="challenge"></code></pre>
-                <div class="pane-foot">Real response from the gateway with the demo merchant's address, Oct 21, 2026.</div>
+                <div class="pane-foot">Real response from the gateway with the demo merchant's address, Oct 22, 2026.</div>
               </div>
               <div class="pane">
                 <div class="pane-head"><span class="pane-title"><b>GET</b> /api/quote + X-PAYMENT</span><span class="status ok">200</span></div>
                 <pre><code data-json="receipt"></code></pre>
-                <div class="pane-foot">The receipt from the live run, Oct 20, 2026. <a href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">View the tx</a></div>
+                <div class="pane-foot">The receipt from the live run, Oct 20, 2026 (the body; <code>X-PAYMENT-RESPONSE</code> carries <code>{success, transaction, network, payer}</code>). <a href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">View the tx</a></div>
               </div>
             </div>
           </div>
@@ -546,9 +553,9 @@ const r = await verify({
                 <thead><tr><th scope="col">Status</th><th scope="col">Meaning</th></tr></thead>
                 <tbody>
                   <tr><td><span class="code-tag ok">200</span></td><td>a result: <code>verdict</code> paid, refused or unverified, with reasons</td></tr>
-                  <tr><td><span class="code-tag">400</span></td><td>bad input (key, txid, body)</td></tr>
-                  <tr><td><span class="code-tag">503</span></td><td>Setup required: the <code>zpay-verify</code> binary is missing</td></tr>
-                  <tr><td><span class="code-tag">502</span></td><td>could not check: lightwalletd or Fuji unreachable</td></tr>
+                  <tr><td><span class="code-tag">400</span></td><td>bad input: not JSON or not an object, unknown rail, <code>amountZat</code> not a whole number ≥ 0, a bad key or txid</td></tr>
+                  <tr><td><span class="code-tag">502</span></td><td>could not check: lightwalletd or Fuji unreachable, or lightwalletd answered inconsistently; with <code>Retry-After</code></td></tr>
+                  <tr><td><span class="code-tag">503</span></td><td>Setup required (no <code>zpay-verify</code>, a bad setting), or too many checks running (<code>Retry-After</code>)</td></tr>
                 </tbody>
               </table>
             </div>
@@ -574,17 +581,19 @@ curl -s 127.0.0.1:8403/api/verify \
           <div class="prose">
             <p class="kicker">Surfaces · zpv-mcp</p>
             <h2 class="t" id="h-mcp">MCP tools</h2>
-            <p>An agent checks a payment before it delivers anything. Both tools are read-only. The merchant key comes from <code>ZPV_MERCHANT_UIVK</code> in the server's environment, never from a tool argument, so it never passes through the model. Without it the tool answers <code>Setup required: ZPV_MERCHANT_UIVK</code>.</p>
+            <p>An agent asks before it delivers: did this transaction pay me, and was this null-402 settlement a payment to me. The merchant key comes from <code>ZPV_MERCHANT_UIVK</code> in the server's environment, never from a tool argument, so it never passes through the model. Without it the tool answers <code>Setup required: ZPV_MERCHANT_UIVK</code>.</p>
+            <p><b>Replay.</b> A check alone does not use a payment up: the same txid passes every time, and without a memo any past payment to the merchant passes. The tool says so and answers <code>single_use: false</code>, so the agent must record what it accepted. With <code>ZPV_STORE</code> the tool needs a memo and accepts each payment once (a second call is <code>ALREADY_USED</code>), sharing that memory with a paywall on the same file. <code>min_conf</code> cannot go below <code>ZPV_MCP_MIN_CONF</code> (default 1).</p>
+            <p>A null-402 settlement is <code>paid</code> only if its <code>settle()</code> succeeded and the proof pays your payee signal and amount (and recipient, if given); a reverted or pending one never is.</p>
             <div class="tbl-wrap">
               <table class="tbl">
                 <thead><tr><th scope="col">Tool</th><th scope="col">Arguments</th></tr></thead>
                 <tbody>
-                  <tr><td><code>verify_zcash_payment</code></td><td><code>txid</code>, <code>amount_zat</code>, <code>memo?</code>, <code>min_conf?</code></td></tr>
-                  <tr><td><code>verify_null402_settlement</code></td><td><code>settle_tx</code>, <code>expect_pay_to</code>, <code>expect_amount</code> (both needed for ok)</td></tr>
+                  <tr><td><code>verify_zcash_payment</code></td><td><code>txid</code>, <code>amount_zat</code>, <code>memo?</code> (required with <code>ZPV_STORE</code>), <code>min_conf?</code></td></tr>
+                  <tr><td><code>verify_null402_settlement</code></td><td><code>settle_tx</code>, <code>expect_pay_to</code>, <code>expect_amount</code> (both needed for ok), <code>expect_recipient?</code></td></tr>
                 </tbody>
               </table>
             </div>
-            <p>Set <code>ZPV_MCP_LOG</code> to a file to get one JSON line per call.</p>
+            <p>Set <code>ZPV_MCP_LOG</code> to a file to get one JSON line per call. It holds decrypted memos and amounts, so it is written with mode 0600.</p>
           </div>
           <div class="code">
             <div class="code-stick">
@@ -634,32 +643,35 @@ curl -s 127.0.0.1:8403/api/verify \
           <div class="prose">
             <p class="kicker">Proof</p>
             <h2 class="t" id="h-tests">Tests</h2>
-            <p>No mocked clients and no stub RPCs. A test that touches a chain talks to Zcash testnet through a real lightwalletd or to Fuji through its public RPC, using real mined transactions. Counts are from the run on Oct 22, 2026.</p>
+            <p>No mocked clients and no stub RPCs. A test that touches a chain talks to Zcash testnet through a real lightwalletd or to Fuji through its public RPC, using real mined transactions. Counts are from the run on Oct 22, 2026. The browser suite (Playwright in Google Chrome against the real stack, 1280 px and 375 px) adds 56 passing tests.</p>
             <div class="tbl-wrap">
               <table class="tbl" id="test-table">
                 <thead><tr><th scope="col">Package</th><th scope="col">Tests</th><th scope="col">Touch a chain</th></tr></thead>
                 <tbody>
                   <tr><td>core rules (Rust)</td><td>3</td><td>0</td></tr>
-                  <tr><td>core live (Rust)</td><td>5</td><td>4</td></tr>
-                  <tr><td>sdk</td><td>14</td><td>12</td></tr>
-                  <tr><td>gateway</td><td>12</td><td>7</td></tr>
-                  <tr><td>mcp</td><td>4</td><td>2</td></tr>
-                  <tr><td><b>Total</b></td><td><b>38</b> + 1 doc example</td><td><b>25</b></td></tr>
+                  <tr><td>core live (Rust)</td><td>7</td><td>6</td></tr>
+                  <tr><td>core transport + CLI (Rust)</td><td>10</td><td>2</td></tr>
+                  <tr><td>sdk</td><td>25</td><td>17</td></tr>
+                  <tr><td>gateway</td><td>29</td><td>11</td></tr>
+                  <tr><td>mcp</td><td>7</td><td>4</td></tr>
+                  <tr><td><b>Total</b></td><td><b>81</b> + 1 doc example</td><td><b>40</b></td></tr>
                 </tbody>
               </table>
             </div>
-            <p>The other 13 run offline on purpose: the rules, bad input, an unreachable server, issuing a 402 challenge, the challenge cap, a malformed header, the tool list, "Setup required", cross-check settings, a challenge read back after a restart and a lease takeover.</p>
+            <p>The other 41 run offline on purpose: the rules, bad input and status codes, plaintext and proxy refusals, <code>owns</code>, a silent server killed, the process limit, issuing challenges (and 10,000 of them), forged memos, the x402 envelope checks, startup checks, the tool list, "Setup required", cross-check settings, a restart and a lease takeover.</p>
           </div>
           <div class="code">
             <div class="code-stick">
               <div class="pane">
                 <div class="pane-head"><span class="pane-title"><b>pnpm test</b> · summary</span><span class="status ok">0 failed</span></div>
                 <pre><code data-hl="sh" id="test-out">test result: ok. 3 passed   # core rules
-test result: ok. 5 passed   # core live
+test result: ok. 6 passed   # core cli
+test result: ok. 7 passed   # core live
+test result: ok. 4 passed   # core transport
 test result: ok. 1 passed   # doc example
-Tests  14 passed (14)       # sdk
-Tests  12 passed (12)       # gateway
-Tests  4 passed (4)         # mcp</code></pre>
+Tests  25 passed (25)       # sdk
+Tests  29 passed (29)       # gateway
+Tests  7 passed (7)         # mcp</code></pre>
               </div>
             </div>
           </div>
@@ -676,7 +688,8 @@ Tests  4 passed (4)         # mcp</code></pre>
               <li><b>A <a href="#crosscheck">cross-check</a></b> turns disagreement into "no verdict", but only endpoints run by different people make it meaningful, and public testnet has one operator. Run your own lightwalletd or Zaino on a full node as one of them.</li>
               <li><b>A UIVK reveals every incoming payment</b> to its wallet: amounts, memos, which address received them. Give it only to whoever should see that. The keys in this repo belong to demo-only testnet wallets.</li>
               <li><b>Testnet only.</b> The binary decodes testnet keys only.</li>
-              <li><b>Paywall state</b> is in memory unless <code>ZPV_STORE</code> points at a SQLite file, which is shared by processes on one machine, not across machines.</li>
+              <li><b>Paywall state</b> (the challenge key, paid memos and txids, refunds owed) is in memory unless <code>ZPV_STORE</code> points at a SQLite file, which is shared by processes on one machine, not across machines.</li>
+              <li><b>The MCP tool</b> remembers accepted payments only with <code>ZPV_STORE</code>; without it, an agent must track txids itself.</li>
               <li><b>No ZIP 311 payment disclosures.</b> The ZIP is a draft without Orchard or Ironwood and without an encoding; the design note says why it waits.</li>
               <li><b>Not audited.</b> Portfolio piece; the Zecathon entry is Shielded x402.</li>
             </ul>
@@ -689,7 +702,11 @@ Tests  4 passed (4)         # mcp</code></pre>
 needs: the maintainer's npm and crates.io accounts
 
 # a null-402 proof that passes all three checks live
-needs: NULL402_OPERATOR_KEY (null-402's pool operator)</code></pre>
+needs: NULL402_OPERATOR_KEY (null-402's pool operator)
+
+# a hosted Zcash verify API (the hosted console
+# checks Zcash payments only with a local API)
+needs: a server account</code></pre>
               </div>
             </div>
           </div>
@@ -708,7 +725,7 @@ needs: NULL402_OPERATOR_KEY (null-402's pool operator)</code></pre>
         "x402memo": {"verdict":{"ok":false,"paid_zat":0,"reasons":["MEMO_MISMATCH","AMOUNT_TOO_LOW"]},"report":{"height":4521112,"confirmations":3609,"outputs":[{"pool":"Ironwood","value":100000,"memo":"x402z-f19a63da20cbc0749ea800b3","memo_binary":false}]}},
         "auction": {"verdict":{"ok":false,"paid_zat":0,"reasons":["NO_OUTPUT_TO_KEY"]},"report":{"txid":"06d121813387444ca3ecc9720e73160b5b80645d9204c6c411e51cef3a190af1","found":true,"height":4522268,"outputs":[],"pools":{"ironwood":true,"transparent":false}}},
         "null402": {"ok":false,"reasons":["NULLIFIER_SPENT"],"checks":{"proofValid":true,"rootKnown":true,"nullifierSpent":true},"signals":{"payTo":"12571058244225308636482144950735848463267199877607700220033742556724671780813","requiredAmount":"1000"},"provenance":{"chainId":43113,"verifier":"0x0b44836dDc460f589ce4EB97f276e533A2bE6060","pool":"0x39a9C4EfabEBA954545Ecb4b16Ba1d92ec46cA1C","blockNumber":"59772946"}},
-        "challenge": {"error":"payment required","accepts":[{"x402Version":1,"scheme":"zcash-shielded","network":"zcash-testnet","payTo":"utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7","amountZat":"10000","memo":"zpv-1f25bfbde252ec77ffb42002","minConf":1,"resource":"/api/quote","expiresAt":1792569291555,"zip321":"zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTFmMjViZmJkZTI1MmVjNzdmZmI0MjAwMg"}]},
+        "challenge": {"x402Version":1,"error":"payment required","accepts":[{"scheme":"zcash-shielded","network":"zcash-testnet","maxAmountRequired":"10000","resource":"/api/quote","description":"/api/quote: send 10000 zatoshi to payTo with the memo zpv-1792689979-9e9de2d3cf037b1f-pOCOLBPOhj1j5iTa5qfxZ-, then retry with X-PAYMENT","mimeType":"application/json","payTo":"utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7","maxTimeoutSeconds":900,"asset":"ZEC","extra":{"memoNonce":"zpv-1792689979-9e9de2d3cf037b1f-pOCOLBPOhj1j5iTa5qfxZ-","expiresAt":1792689979,"paymentUri":"zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTI2ODk5NzktOWU5ZGUyZDNjZjAzN2IxZi1wT0NPTEJQT2hqMWo1aVRhNXFmeFot","minConf":1},"amountZat":"10000","memo":"zpv-1792689979-9e9de2d3cf037b1f-pOCOLBPOhj1j5iTa5qfxZ-","minConf":1,"expiresAt":1792689979000,"zip321":"zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTI2ODk5NzktOWU5ZGUyZDNjZjAzN2IxZi1wT0NPTEJQT2hqMWo1aVRhNXFmeFot"}]},
         "receipt": {"paid":{"txid":"7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16","height":4522621,"confirmations":1,"paidZat":10000,"memo":"zpv-c3d1529ba80d3f1a28658921","lightwalletd":"https://testnet.zec.rocks:443"}},
         "crosscheck": {"rail":"zcash","ok":false,"verdict":"unverified","reasons":["UNVERIFIED_DISAGREEMENT"],"paidZat":0,"report":null,"provenance":{"lightwalletd":"https://testnet.zec.rocks:443, https://zec.rocks:443, https://zaino.testnet.unsafe.zec.rocks:443","tip":3525843,"checkedAt":"2026-10-21T19:08:20.693Z","via":"zpay-verify"},"crossCheck":{"quorum":2,"agreed":false,"endpoints":[{"lightwalletd":"https://testnet.zec.rocks:443","answered":true,"ok":true,"reasons":[],"paidZat":100000,"found":true,"height":4521112,"tip":4526488},{"lightwalletd":"https://zec.rocks:443","answered":true,"ok":false,"reasons":["TX_NOT_FOUND"],"paidZat":0,"found":false,"height":null,"tip":3525843},{"lightwalletd":"https://zaino.testnet.unsafe.zec.rocks:443","answered":false,"error":"lightwalletd RPC failed: Internal: protocol error: received message with invalid compression flag: 83 (valid flags are 0 and 1) while receiving response with status: 503 Service Unavailable"}]}},
         "mcpcfg": {"mcpServers":{"hanko":{"command":"node","args":["packages/mcp/dist/main.js"],"env":{"ZPV_MERCHANT_UIVK":"uivktest1…","ZPV_BIN":"packages/core/target/release/zpay-verify"}}}},

@@ -46,10 +46,10 @@ No contracts are deployed by this project.
 
 | Package | What |
 |---|---|
-| [`packages/core`](packages/core) | `zpay-verify` Rust crate + CLI: fetch, recompute the txid, trial-decrypt Sapling/Orchard/Ironwood with a UIVK, rules with reason codes, exit 0/1/2 |
-| [`packages/sdk`](packages/sdk) | `@zpv/sdk`: `verify()` with the `zcash` and `null402` rails, a lightwalletd cross-check with a quorum (`lwdUrls` / `ZPV_LWD_URLS`), `proofFromSettleTx`; `@zpv/sdk/null402` runs in the browser |
-| [`packages/gateway`](packages/gateway) | x402 paywall (memo nonce, ZIP-321 URI; memo and txid single-use, claimed before the check so concurrent requests cannot share a payment; capped open challenges; state in memory or in a SQLite file shared across restarts and processes, `ZPV_STORE`; an unverified cross-check is a 503) + `POST /api/verify` |
-| [`packages/mcp`](packages/mcp) | `zpv-mcp`: `verify_zcash_payment`, `verify_null402_settlement` (read-only; merchant key from the environment) |
+| [`packages/core`](packages/core) | `zpay-verify` Rust crate + CLI: fetch, recompute the txid, require it in the compact block at the reported height (and its `block_time`), trial-decrypt Sapling/Orchard/Ironwood with a UIVK, rules with reason codes, exit 0/1/2; `owns <ua>`; `ZPV_LWD_PROXY` (SOCKS5/Tor); plaintext `http://` only to loopback |
+| [`packages/sdk`](packages/sdk) | `@zpv/sdk`: `verify()` with the `zcash` and `null402` rails, a lightwalletd cross-check with a quorum (`lwdUrls` / `ZPV_LWD_URLS`), error classes that say what to do, a bound on running checks (`ZPV_MAX_CHECKS`), `verifyNull402Settlement`, `ownsAddress`, `proofFromSettleTx`; `@zpv/sdk/null402` runs in the browser |
+| [`packages/gateway`](packages/gateway) | x402 paywall, wire-compatible with Shielded x402 (x402 v1 402 and `X-PAYMENT`; stateless HMAC memos, so GETs store nothing; memo and txid single-use, claimed before the check; mined-time expiry; refused payments that arrived recorded and listed on `GET /api/refunds` locally; 5 refused attempts close a challenge; lightwalletd down or unverified = 503 + `Retry-After`; startup checks; state in memory or a SQLite file, `ZPV_STORE`) + `POST /api/verify` |
+| [`packages/mcp`](packages/mcp) | `zpv-mcp`: `verify_zcash_payment` (single-use with `ZPV_STORE`, a `min_conf` floor the model cannot lower) and `verify_null402_settlement` (a bound, successful `settle()` is paid; a reverted or pending one never is); merchant key from the environment |
 | [`packages/examples`](packages/examples) | `run-live` (the table above) and `demo` (the video) |
 | [`packages/dashboard`](packages/dashboard) | "Was I paid?" API console: parameters, the exact request, the real response with a seal, reasons, decrypted outputs, provenance |
 | [`packages/docs`](packages/docs) | rules, do X → see Y, trust model, API, the null-402 key mismatch finding |
@@ -61,10 +61,12 @@ Needs Node 22.13+ (`node:sqlite`), pnpm 10, Rust 1.89 (pinned in `packages/core`
 
 ```sh
 pnpm install
-pnpm test                          # builds zpay-verify + packages; 38 tests (25 touch a chain) + 1 doc example (TESTING.md)
+pnpm test                          # builds zpay-verify + packages; 81 tests (40 touch a chain) + 1 doc example (TESTING.md)
 pnpm --filter @zpv/gateway api &   # verify API for the dashboard
 pnpm --filter @zpv/dashboard dev   # http://localhost:5180
 scripts/clean-install.sh           # tarball + cargo install in an empty dir, verifies a real payment
+e2e/stack.sh && (cd e2e && npm run test:e2e); e2e/stack.sh stop   # 56 browser tests in Google Chrome
+scripts/build-pages.sh             # the static site GitHub Pages serves: landing + console
 ```
 
 CI: `.github/workflows/ci.yml` runs the same `pnpm test` (it has not run on GitHub yet: nothing is pushed).
@@ -94,10 +96,13 @@ ZIP 311 payment disclosures are not built: [`docs/ZIP-311-DESIGN.md`](docs/ZIP-3
   own lightwalletd or Zaino on a full node, which verifies proofs before it serves anything.
 - Testnet only.
 - A UIVK reveals every incoming payment to its wallet. The keys published here are demo-only.
-- The paywall keeps its state in memory by default (a restart forgets which txids paid); set
-  `ZPV_STORE` to a SQLite file to keep it across restarts and share it between processes on one
-  machine (SQLite file locking; not a network database). `ZPV_MIN_CONF=0`
-  accepts mempool transactions, which can still be replaced; keep it at 1 or more.
+- The paywall keeps its state in memory by default (a restart forgets which txids paid and which
+  refunds are owed); set `ZPV_STORE` to a SQLite file to keep it across restarts and share it between
+  processes on one machine (SQLite file locking; not a network database). It will not start with
+  `ZPV_MIN_CONF=0` unless `ZPV_ALLOW_ZERO_CONF=1`: mempool transactions can still be replaced.
+- Refunds are recorded, not sent: the gateway holds a viewing key, so the merchant refunds by hand.
+- The MCP tool remembers accepted payments only with `ZPV_STORE`. Without it the same txid passes
+  every check, so an agent must track what it accepted (the tool says so).
 - ZIP 311 payment disclosures (prove one payment without the receiver's key) are not built: the ZIP
   is a draft with no Orchard/Ironwood support, no encoding and no implementation.
 - A null-402 check is `ok` only with an expected payTo and amount (otherwise `UNBOUND`).

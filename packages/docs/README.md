@@ -81,9 +81,9 @@ constants and fails against the dashboard key, so a proof made with those files 
 - A UIVK reveals every incoming payment to that wallet: amounts, memos and which of its addresses
   received each one. Give it only to whoever should see that. The demo keys in `fixtures/` and
   `deployments/` belong to demo-only testnet wallets and are published on purpose.
-- The gateway keeps memo nonces and claimed txids in a `PaywallStore`. The default is in memory (a
-  restart forgets them); `SqliteStore` / `ZPV_STORE` keeps them in a SQLite file shared by restarts
-  and by several paywall processes.
+- The gateway keeps the challenge HMAC key, paid memos and txids, failed-attempt counts and refunds
+  owed in a `PaywallStore`. The default is in memory (a restart forgets them); `SqliteStore` /
+  `ZPV_STORE` keeps them in a SQLite file shared by restarts and by several paywall processes.
 - Testnet only. The binary decodes testnet keys only.
 
 ## API
@@ -92,8 +92,13 @@ constants and fails against the dashboard key, so a proof made with those files 
   plus `inspect`, `check`, `uivk_from_ufvk`.
 - TS: `verify(req, opts)` with `rail: 'zcash' | 'null402'`, plus `proofFromSettleTx`, `zpayBinary`
   and `NULL402_FUJI`. `@zpv/sdk/null402` is the browser-safe part.
-- HTTP (gateway): `GET <paid path>` → 402; `X-PAYMENT: base64({memo, txid})`; `POST /api/verify`.
-- MCP: `verify_zcash_payment`, `verify_null402_settlement`.
+- HTTP (gateway): `GET <paid path>` → 402, an x402 v1 `PaymentRequiredResponse` with a stateless
+  `zpv-<expiry>-<nonce>-<HMAC>` memo; `X-PAYMENT: base64({x402Version: 1, scheme: "zcash-shielded",
+  network: "zcash-testnet", payload: {txid, memoNonce}})` (Shielded x402's envelope) or the older
+  `base64({memo, txid})` → 200 with `X-PAYMENT-RESPONSE: {success, transaction, network, payer: ""}`;
+  `GET /api/refunds` (local only); `POST /api/verify`.
+- MCP: `verify_zcash_payment` (single-use with `ZPV_STORE`), `verify_null402_settlement` (was this
+  mined settle() a payment to me).
 
 ## Pre-existing work
 
