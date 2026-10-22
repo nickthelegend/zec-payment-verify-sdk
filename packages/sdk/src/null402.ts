@@ -206,6 +206,9 @@ export interface SettlementResult {
   recipient: string;
   /** The plain proof check: could this proof still be settled to you? Always NULLIFIER_SPENT once settled. */
   proofCheck: { ok: boolean; reasons: string[] };
+  /** The settle() transaction's block (null while pending) and the block the proof was checked at. */
+  settledInBlock?: string | null;
+  checkedAtBlock?: string;
 }
 
 /**
@@ -227,5 +230,5 @@ export function settlementVerdict(status: SettleStatus, check: Null402Result, re
 export async function verifyNull402Settlement(hash: Hex, e: SettlementExpect, opts: { rpc?: string } = {}): Promise<SettlementResult> {
   const s = await proofFromSettleTx(hash, opts);
   const check = await verifyNull402({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals, expect: { payTo: e.payTo, requiredAmount: e.requiredAmount, contextHash: e.contextHash } }, opts);
-  return settlementVerdict(s.status, check, s.recipient, e);
+  return { ...settlementVerdict(s.status, check, s.recipient, e), settledInBlock: s.blockNumber, checkedAtBlock: check.provenance.blockNumber };
 }
