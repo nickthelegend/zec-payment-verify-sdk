@@ -11,10 +11,27 @@ if v.verdict.ok { /* paid */ } else { println!("{:?}", v.verdict.reasons) }
 
 It fetches the tx from lightwalletd, re-computes the txid, fetches the compact block at the height
 lightwalletd reports and requires the txid in it (`check_inclusion`; the block's time is reported as
-`block_time`), trial-decrypts every Sapling, Orchard and Ironwood output with the key, then applies
-the rules in `check()`. It does not check proofs, signatures or the block's place in the chain: an
-answer that contradicts itself is an error (exit 2), but a lightwalletd willing to forge a transaction
-and its block is believed.
+`block_time`), verifies every proof and signature in the transaction (`auth`: each Orchard and
+Ironwood bundle's Halo 2 proof, spend authorization and binding signatures, and each Sapling bundle's
+Groth16 proofs and signatures, against the ZIP 244 signature hash recomputed from the transaction;
+for transparent inputs it fetches the outputs they spend from the same server), trial-decrypts every
+Sapling, Orchard and Ironwood output with the key, then applies the rules in `check()`. Proofs or
+signatures that do not verify are an inconsistent answer (exit 2, never a verdict). A Sapling
+transaction needs the Sapling parameters (`ZPV_SAPLING_PARAMS`, else the usual ZcashParams folders;
+checked against their published BLAKE2b hashes): without them it is `Setup required`. The Orchard
+verifying keys are built in-process (about 2 s per run).
+
+What still rests on the server: that the anchors the spends prove against are real note commitment
+tree roots, that transparent inputs spend real unspent outputs, that nullifiers are unspent, and the
+block's place in the chain. So a lying lightwalletd can no longer hand over a made-up or altered transaction without valid proofs and signatures, but one that runs a prover over a fake note commitment tree, or invents a transparent input, still can; a server willing to forge the block too is believed.
+
+`tests/auth.rs` (live): the published x402 payment passes; the same payment with its note made worth
+ten times as much and re-encrypted to the same address (the rules alone would call it paid) is
+refused; a changed proof byte or another transaction's binding signature (the txid stays the same,
+since ZIP 244 txids do not cover authorization data) is refused; two third-party shielding
+transactions (one into Sapling, one into Ironwood) verify with their real previous outputs and fail
+with an input amount changed by one zatoshi or with none; a Sapling transaction without the
+parameters is `Setup required`.
 
 | Reason | When |
 |---|---|

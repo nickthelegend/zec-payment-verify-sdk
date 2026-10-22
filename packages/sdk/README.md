@@ -49,9 +49,9 @@ Two different questions about null-402:
   bigint; anything else, an empty string included, is a `VerifyError` before any RPC call.
 
 **Cross-check.** One lightwalletd can withhold a transaction, lag, or forge one: the checker
-recomputes the txid and requires it in the block the server names, but it does not check proofs,
-signatures or the block's place in the chain, so a server that forges a transaction and its block is
-believed. With `lwdUrls` (or
+recomputes the txid, requires it in the block the server names and verifies its proofs and
+signatures, but not its anchors, the coins its transparent inputs spend, or the block's place in the
+chain, so a server that proves over a fake tree and forges the block is believed. With `lwdUrls` (or
 `ZPV_LWD_URLS`), `zpay-verify` runs once per endpoint, in parallel. The endpoints that have seen the
 transaction's block must agree on everything the verdict rests on (found, height, block time,
 outputs, pools, amount, reasons other than `NOT_CONFIRMED`); confirmations are counted at the lowest

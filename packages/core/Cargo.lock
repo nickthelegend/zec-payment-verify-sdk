@@ -2692,8 +2692,11 @@ checksum = "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"
 name = "zpay-verify"
 version = "0.1.0"
 dependencies = [
+ "blake2b_simd",
  "hyper-util",
+ "nonempty",
  "orchard",
+ "rand 0.10.3",
  "sapling-crypto",
  "serde",
  "serde_json",
@@ -2705,4 +2708,5 @@ dependencies = [
  "zcash_note_encryption",
  "zcash_primitives",
  "zcash_protocol",
+ "zcash_transparent",
 ]

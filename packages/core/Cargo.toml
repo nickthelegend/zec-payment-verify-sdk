@@ -23,6 +23,11 @@ zcash_protocol = "=0.11.0-pre.1"
 zcash_note_encryption = "0.5"
 orchard = "0.16"
 sapling = { package = "sapling-crypto", version = "0.9" }
+# Proof and signature checks (src/auth.rs): the transparent types ZIP 244 needs, an RNG for batch
+# verification, and BLAKE2b to check the Sapling parameter files.
+transparent = { package = "zcash_transparent", version = "=0.11.0-pre.2" }
+rand = { version = "0.10", default-features = false, features = ["std", "sys_rng"] }
+blake2b_simd = "1"
 tonic = { version = "0.14", features = ["transport", "tls-ring", "tls-webpki-roots"] }
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "sync", "time", "io-util"] }
 # For ZPV_LWD_PROXY: a SOCKS5 connector handed to tonic (both already in the tree through tonic).
@@ -30,6 +35,10 @@ tower = { version = "0.5", default-features = false, features = ["util"] }
 hyper-util = { version = "0.1", features = ["tokio"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+
+[dev-dependencies]
+# tests/auth.rs rebuilds a real Ironwood bundle with one output altered.
+nonempty = "0.11"
 
 [profile.dev.package."*"]
 opt-level = 3

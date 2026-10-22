@@ -29,6 +29,11 @@ jobs:
             packages/core/target
           key: cargo-${{ runner.os }}-${{ hashFiles('packages/core/Cargo.lock', 'packages/core/rust-toolchain.toml') }}
       - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+      # The core verifies Sapling proofs with the published parameters (zpay-verify checks their BLAKE2b hashes).
+      - name: Sapling parameters
+        run: |
+          mkdir -p ~/.zcash-params
+          for f in sapling-spend.params sapling-output.params; do curl -fsSL --retry 3 -o ~/.zcash-params/$f https://download.z.cash/downloads/$f; done
       - run: pnpm install --frozen-lockfile
       # kage-client.test.ts runs Shielded x402's own client (packages/x402-zcash) against the paywall.
       - name: Shielded x402 (Kage) checkout for the client test

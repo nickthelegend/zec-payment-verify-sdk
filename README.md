@@ -89,12 +89,15 @@ ZIP 311 payment disclosures are not built: [`docs/ZIP-311-DESIGN.md`](docs/ZIP-3
   `ZPV_LWD_PROXY=socks5h://127.0.0.1:9050` (Tor) hides your IP; the txid and the timing are still
   seen. Compact blocks alone would hide the txid, but they carry no memo, and the memo is what ties a
   payment to an invoice.
-- **What lightwalletd is trusted for.** The checker recomputes the txid from the bytes it gets and
-  requires that txid in the compact block at the height the server reports. That stops a swapped
-  transaction and an answer that contradicts itself. It does not check Orchard/Sapling proofs,
-  binding signatures or the block's place in the chain. So a lying lightwalletd, or anyone who can
-  answer for it, can serve a forged transaction as mined at any height and get a paid verdict: anyone
-  can encrypt a note of any value with your memo to your public address. That is why plaintext
+- **What lightwalletd is trusted for.** The checker recomputes the txid from the bytes it gets,
+  requires that txid in the compact block at the height the server reports, and verifies every
+  Orchard, Ironwood and Sapling proof, spend authorization signature and binding signature against
+  the signature hash it recomputes from the transaction. A swapped transaction, an answer that
+  contradicts itself, or a note re-encrypted with another value (anyone can encrypt a note to your
+  public address) is refused, live-tested. What it does not check: that the anchors the proofs use
+  are real note commitment tree roots, that transparent inputs spend real coins, and the block's
+  place in the chain. So a lying lightwalletd that runs a prover over a fake tree, or invents a
+  transparent input, and names a block for it can still get a paid verdict. That is why plaintext
   `http://` is refused unless the host is loopback (`ZPV_ALLOW_INSECURE_LWD=1` overrides).
 - **The cross-check (`ZPV_LWD_URLS`) only helps when different people run the endpoints.** On
   Oct 22, 2026 hosh.zec.rocks lists two online public testnet indexers, both run by one operator:

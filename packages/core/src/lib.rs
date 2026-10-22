@@ -11,12 +11,15 @@
 //! ```
 //!
 //! The transaction is fetched from lightwalletd, its txid is re-computed, the compact block at the
-//! height lightwalletd reports must list it, and every Sapling, Orchard and Ironwood output is
-//! trial-decrypted with the key. Proofs, signatures and the block's place in the chain are not
-//! checked: lightwalletd (or anyone who can answer for it) is trusted for those. An incoming viewing key sees
+//! height lightwalletd reports must list it, every proof and signature in it is verified against its
+//! recomputed signature hash ([`auth`]), and every Sapling, Orchard and Ironwood output is
+//! trial-decrypted with the key. The anchors, the transparent inputs' previous outputs and the block's
+//! place in the chain are not checked: lightwalletd (or anyone who can answer for it) is trusted for
+//! those (see [`auth`] for what that leaves open). An incoming viewing key sees
 //! received notes and their memos; it cannot spend, and cannot see spends or change.
 //! Extracted from zec-shielded-x402's facilitator `check_uivk` (same author, MIT).
 
+pub mod auth;
 pub mod lwd;
 
 use orchard::note_encryption::{DomainVersion, IronwoodVersion, NoteEncryptionDomain, OrchardVersion};
@@ -41,8 +44,11 @@ pub enum VerifyError {
     Lwd(lwd::LwdError),
     Unparseable(String),
     TxidMismatch,
-    /// Lightwalletd's answers contradict each other (for example the block it names does not list the tx).
+    /// Lightwalletd's answers contradict each other (for example the block it names does not list the tx,
+    /// or the transaction's proofs or signatures do not verify).
     Inconsistent(String),
+    /// Something this machine needs is missing (the Sapling parameters for a Sapling transaction).
+    Setup(String),
 }
 
 impl std::fmt::Display for VerifyError {
@@ -55,6 +61,7 @@ impl std::fmt::Display for VerifyError {
             VerifyError::Unparseable(e) => write!(f, "transaction does not parse: {e}"),
             VerifyError::TxidMismatch => write!(f, "lightwalletd returned a transaction whose txid differs from the one requested"),
             VerifyError::Inconsistent(e) => write!(f, "lightwalletd answered inconsistently: {e}"),
+            VerifyError::Setup(e) => write!(f, "Setup required: {e}"),
         }
     }
 }
@@ -189,6 +196,31 @@ fn orchard_family<V: DomainVersion>(
     }
 }
 
+/// Every Sapling, Orchard and Ironwood output of `tx` that decrypts to `uivk`, as of a block at `height`
+/// (which decides the Sapling note plaintext rules). No network.
+pub fn decrypt_outputs(tx: &Transaction, uivk: &UnifiedIncomingViewingKey, height: BlockHeight) -> Vec<Output> {
+    let mut outputs = Vec::new();
+    if let (Some(b), Some(ivk)) = (tx.sapling_bundle(), uivk.sapling()) {
+        let d = SaplingDomain::new(zip212_enforcement(&NETWORK, height));
+        let p = ivk.prepare();
+        for o in b.shielded_outputs() {
+            if let Some((note, _, memo)) = try_note_decryption(&d, &p, o) {
+                let (memo, memo_binary) = memo_of(&memo);
+                outputs.push(Output { pool: "Sapling", value: note.value().inner(), memo, memo_binary });
+            }
+        }
+    }
+    if let Some(ivk) = uivk.orchard() {
+        if let Some(b) = tx.orchard_bundle() {
+            orchard_family::<OrchardVersion>("Orchard", ivk, b, &mut outputs);
+        }
+        if let Some(b) = tx.ironwood_bundle() {
+            orchard_family::<IronwoodVersion>("Ironwood", ivk, b, &mut outputs);
+        }
+    }
+    outputs
+}
+
 /// Fetch `txid` and decrypt it with `uivk`. A txid lightwalletd does not know is reported with
 /// `found: false`, not as an error.
 pub async fn inspect(c: &mut lwd::Client, uivk: &UnifiedIncomingViewingKey, txid: &str, tip: BlockHeight) -> Result<TxReport, VerifyError> {
@@ -208,6 +240,8 @@ pub async fn inspect(c: &mut lwd::Client, uivk: &UnifiedIncomingViewingKey, txid
     if tx.txid() != id {
         return Err(VerifyError::TxidMismatch);
     }
+    let prevouts = prevouts(c, &tx, tip).await?;
+    authorized(&tx, &prevouts)?;
     let shielded = tx.sapling_bundle().is_some() || tx.orchard_bundle().is_some() || tx.ironwood_bundle().is_some();
     let block_time = match mined {
         Some(h) => {
@@ -217,25 +251,7 @@ pub async fn inspect(c: &mut lwd::Client, uivk: &UnifiedIncomingViewingKey, txid
         }
         None => None,
     };
-    let mut outputs = Vec::new();
-    if let (Some(b), Some(ivk)) = (tx.sapling_bundle(), uivk.sapling()) {
-        let d = SaplingDomain::new(zip212_enforcement(&NETWORK, mined.unwrap_or(tip + 1)));
-        let p = ivk.prepare();
-        for o in b.shielded_outputs() {
-            if let Some((note, _, memo)) = try_note_decryption(&d, &p, o) {
-                let (memo, memo_binary) = memo_of(&memo);
-                outputs.push(Output { pool: "Sapling", value: note.value().inner(), memo, memo_binary });
-            }
-        }
-    }
-    if let Some(ivk) = uivk.orchard() {
-        if let Some(b) = tx.orchard_bundle() {
-            orchard_family::<OrchardVersion>("Orchard", ivk, b, &mut outputs);
-        }
-        if let Some(b) = tx.ironwood_bundle() {
-            orchard_family::<IronwoodVersion>("Ironwood", ivk, b, &mut outputs);
-        }
-    }
+    let outputs = decrypt_outputs(&tx, uivk, mined.unwrap_or(tip + 1));
     let transparent = tx.transparent_bundle().is_some_and(|b| !b.vin.is_empty() || !b.vout.is_empty());
     Ok(TxReport {
         txid: txid.to_string(),
@@ -246,6 +262,40 @@ pub async fn inspect(c: &mut lwd::Client, uivk: &UnifiedIncomingViewingKey, txid
         tip: tip.into(),
         outputs,
         pools: Pools { sapling: tx.sapling_bundle().is_some(), orchard: tx.orchard_bundle().is_some(), ironwood: tx.ironwood_bundle().is_some(), transparent },
+    })
+}
+
+/// What each transparent input of `tx` spends, fetched from the same lightwalletd (the shielded signature
+/// hash commits to their amounts and scripts). Empty for a transaction without transparent inputs.
+pub async fn prevouts(c: &mut lwd::Client, tx: &Transaction, tip: BlockHeight) -> Result<Vec<transparent::bundle::TxOut>, VerifyError> {
+    let mut out = Vec::new();
+    for input in tx.transparent_bundle().filter(|b| !b.is_coinbase()).map_or(&[][..], |b| &b.vin[..]) {
+        let p = input.prevout();
+        let id = TxId::from_bytes(*p.hash());
+        let (data, loc) = match lwd::get_transaction(c, &id).await? {
+            lwd::FetchedTx::Found { data, location } => (data, location),
+            lwd::FetchedTx::NotFound => return Err(VerifyError::Inconsistent(format!("a transparent input spends {id}:{}, which it does not have", p.n()))),
+        };
+        let h = match loc {
+            lwd::TxLocation::Mined(h) => h,
+            _ => tip + 1,
+        };
+        let prev = Transaction::read(&data[..], BranchId::for_height(&NETWORK, h)).map_err(|e| VerifyError::Unparseable(e.to_string()))?;
+        if prev.txid() != id {
+            return Err(VerifyError::TxidMismatch);
+        }
+        let o = prev.transparent_bundle().and_then(|b| b.vout.get(p.n() as usize)).ok_or_else(|| VerifyError::Inconsistent(format!("a transparent input spends {id}:{}, which has no such output", p.n())))?;
+        out.push(o.clone());
+    }
+    Ok(out)
+}
+
+/// [`auth::check_authorization`] as a [`VerifyError`]: proofs or signatures that do not verify mean the
+/// server handed over a transaction consensus would reject.
+pub fn authorized(tx: &Transaction, prevouts: &[transparent::bundle::TxOut]) -> Result<(), VerifyError> {
+    auth::check_authorization(tx, prevouts).map_err(|e| match e {
+        auth::AuthError::Invalid(m) => VerifyError::Inconsistent(format!("the transaction's proofs or signatures do not verify: {m}")),
+        auth::AuthError::Setup(m) => VerifyError::Setup(m),
     })
 }
 

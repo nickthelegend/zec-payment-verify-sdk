@@ -66,12 +66,13 @@ constants and fails against the dashboard key, so a proof made with those files 
   dead proxy is an error, never a direct connection); the txid and timing are still seen. Fetching
   compact blocks instead would hide the txid, but compact outputs carry no memo, and the memo is what
   ties a payment to an invoice.
-- **What lightwalletd is trusted for.** Recomputing the txid stops a swap, not a forgery. The checker
-  does not verify Orchard/Sapling proofs, binding signatures or the block's place in the chain, and
-  the height and confirmations are what lightwalletd says. Anyone can encrypt a note of any value with
-  your memo to your public address, so a lying or intercepted lightwalletd can serve such a
-  never-mined transaction (and a compact block listing it) and get `paid`. Requiring the txid in the
-  named block only catches an answer that contradicts itself. Plaintext `http://` is refused unless
+- **What lightwalletd is trusted for.** Recomputing the txid stops a swap; verifying every proof and
+  signature against the recomputed signature hash stops a note re-encrypted with another value and a
+  made-up transaction without valid proofs. The anchors (note commitment tree roots), the outputs
+  transparent inputs spend, nullifiers, and the block's place in the chain are not checked, and the
+  height and confirmations are what lightwalletd says. So a lying or intercepted lightwalletd that
+  runs a prover over a fake tree, or invents a transparent input, can still serve a never-mined
+  transaction (and a compact block listing it) and get `paid`. Plaintext `http://` is refused unless
   the host is loopback or `ZPV_ALLOW_INSECURE_LWD=1`.
 - **Cross-check** several endpoints (`lwdUrls` / `ZPV_LWD_URLS`, with a `quorum`): any disagreement,
   any self-contradicting answer, or too few answers is `unverified`, never `paid`. It helps only when
