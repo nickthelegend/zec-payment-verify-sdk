@@ -7,6 +7,7 @@
     "build:core": "cd packages/core && cargo build --release",
     "test:core": "cd packages/core && cargo test --release",
     "build": "pnpm build:core && pnpm -r --if-present build",
-    "test": "pnpm build && pnpm test:core && pnpm -r --workspace-concurrency=1 --if-present test"
+    "test": "pnpm build && pnpm test:core && pnpm -r --workspace-concurrency=1 --if-present test",
+    "test:e2e": "cd e2e && npm run test:e2e"
   }
 }
