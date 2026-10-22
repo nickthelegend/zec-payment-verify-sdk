@@ -49,6 +49,7 @@ h1, h2, h3 { margin: 0; }
 .health .dot { width: 8px; height: 8px; border-radius: 50%; background: #b9b0ac; flex: none; }
 .health-up .dot { background: var(--ink); box-shadow: 0 0 0 3px rgba(22, 22, 22, 0.12); }
 .health-down { color: var(--verm-text); }
+.health-neutral { color: var(--muted); }
 .health-down .dot { background: var(--verm); }
 
 /* layout */
@@ -210,3 +211,6 @@ h1 { font-weight: 600; font-size: clamp(34px, 4vw, 52px); line-height: 1.02; let
   .pane pre { font-size: 12px; }
   .foot { padding: 20px 16px; }
 }
+
+.params-set { border: 0; margin: 0; padding: 0; min-width: 0; }
+.params-set:disabled .chip, .params-set:disabled input { opacity: 0.6; cursor: progress; }

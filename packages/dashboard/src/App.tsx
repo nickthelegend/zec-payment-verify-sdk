@@ -8,7 +8,7 @@ const ZEC_TX = 'https://testnet.zcashexplorer.app/transactions/';
 const REPO = 'https://github.com/nickthelegend/zec-payment-verify-sdk';
 const SETTLE = '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593';
 
-type EndpointAnswer = { lightwalletd: string; answered: boolean; ok?: boolean; reasons?: string[]; height?: number | null; tip?: number; error?: string };
+type EndpointAnswer = { lightwalletd: string; answered: boolean; inconsistent?: boolean; ok?: boolean; reasons?: string[]; height?: number | null; tip?: number; error?: string };
 type ZcashResult = {
   rail: 'zcash';
   ok: boolean;
@@ -22,7 +22,7 @@ type ZcashResult = {
 };
 type Outcome =
   | { kind: 'zcash'; r: ZcashResult; status: number; ms: number }
-  | { kind: 'null402'; r: Null402Result; settledIn: string; ms: number }
+  | { kind: 'null402'; r: Null402Result; settledIn: string | null; ms: number }
   | { kind: 'error'; message: string; setup?: boolean; status?: number; body?: unknown };
 type Rail = 'zcash' | 'null402';
 type Verdict = 'paid' | 'pending' | 'not-paid' | 'unverified';
@@ -223,7 +223,7 @@ function CrossCheckTable({ c }: { c: NonNullable<ZcashResult['crossCheck']> }) {
                 <td>
                   <code>{e.lightwalletd.replace(/^https?:\/\//, '')}</code>
                 </td>
-                <td className="xc-said">{e.answered ? (e.ok ? 'paid' : (e.reasons ?? []).join(', ') || 'not paid') + (e.height ? ` · block ${e.height.toLocaleString('en-US')}` : '') : <span className="muted">no answer: {e.error}</span>}</td>
+                <td className="xc-said">{e.inconsistent ? <span>inconsistent answer: {e.error}</span> : e.answered ? (e.ok ? 'paid' : (e.reasons ?? []).join(', ') || 'not paid') + (e.height ? ` · block ${e.height.toLocaleString('en-US')}` : '') : <span className="muted">no answer: {e.error}</span>}</td>
               </tr>
             ))}
           </tbody>
@@ -313,7 +313,7 @@ function ZcashVerdict({ r }: { r: ZcashResult }) {
   );
 }
 
-function Null402Verdict({ r, settledIn }: { r: Null402Result; settledIn: string }) {
+function Null402Verdict({ r, settledIn }: { r: Null402Result; settledIn: string | null }) {
   const v = r.ok ? 'paid' : 'not-paid';
   return (
     <>
@@ -341,7 +341,7 @@ function Null402Verdict({ r, settledIn }: { r: Null402Result; settledIn: string 
       <dl className="prov">
         <div>
           <dt>Proof from</dt>
-          <dd>settle() in Fuji block {Number(settledIn).toLocaleString('en-US')}</dd>
+          <dd>{settledIn === null ? 'settle() not mined yet' : `settle() in Fuji block ${Number(settledIn).toLocaleString('en-US')}`}</dd>
         </div>
         <div>
           <dt>Checked at</dt>
@@ -372,6 +372,9 @@ export function App() {
   const [lwd, setLwd] = useState<{ urls: string[]; quorum: number } | null>(null);
   const [seq, setSeq] = useState(0);
   const logId = useRef(0);
+  /** The request whose answer may still be shown. Switching rail moves it on, so a late answer is dropped. */
+  const current = useRef(0);
+  const inFlight = useRef<AbortController | null>(null);
 
   // Is the verify API there? A real request, not an assumption.
   async function ping() {
@@ -397,17 +400,24 @@ export function App() {
 
   async function send(e: React.FormEvent) {
     e.preventDefault();
+    const id = ++current.current;
+    const ctrl = new AbortController();
+    inFlight.current = ctrl;
+    const timer = setTimeout(() => ctrl.abort(), 90_000);
     setBusy(true);
     setOut(null);
     const t0 = performance.now();
     let o: Outcome;
     const ref = rail === 'zcash' ? z.txid.trim() : settleTx.trim();
+    const sentRail = rail;
     try {
       if (rail === 'zcash') {
         let res: Response;
         try {
-          res = await fetch(`${API}/api/verify`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(zcashBody()) });
+          res = await fetch(`${API}/api/verify`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(zcashBody()), signal: ctrl.signal });
         } catch {
+          if (id !== current.current) return; // abandoned: another rail or request took over
+          if (ctrl.signal.aborted) throw new Error(`the verify API at ${API} gave no answer within 90 s`);
           setHealth('down');
           throw Object.assign(new Error(`Setup required: the verify API is not reachable at ${API}. Start it with pnpm --filter @zpv/gateway api`), { setup: true });
         }
@@ -425,10 +435,15 @@ export function App() {
     } catch (err) {
       const message = (err as Error).message.split('\n')[0];
       o = { kind: 'error', message, setup: Boolean((err as { setup?: boolean }).setup) };
+    } finally {
+      clearTimeout(timer);
     }
+    // Only the latest request, on the rail it was sent from, may put its answer on screen.
+    if (id !== current.current || sentRail !== railRef.current) return;
+    inFlight.current = null;
     setOut(o);
     setSeq((n) => n + 1);
-    record(o, ref, rail);
+    record(o, ref, sentRail);
     setBusy(false);
   }
 
@@ -436,7 +451,14 @@ export function App() {
     return { rail: 'zcash', uivk: z.uivk.trim(), txid: z.txid.trim(), amountZat: Number(z.amount), memo: z.memo || undefined, minConf: Number(z.minConf || 1) };
   }
 
+  const railRef = useRef<Rail>('zcash');
   function pickRail(r: Rail) {
+    // Abandon a check in flight: its answer belongs to the other rail's request.
+    current.current += 1;
+    inFlight.current?.abort();
+    inFlight.current = null;
+    railRef.current = r;
+    setBusy(false);
     setRail(r);
     setOut(null);
   }
@@ -458,7 +480,7 @@ export function App() {
         </a>
         <span className="ver">console · testnet</span>
         <div className="top-end">
-          <span className={`health health-${health}`} role="status">
+          <span className={`health ${rail === 'null402' ? 'health-neutral' : `health-${health}`}`} role="status">
             <span className="dot" aria-hidden="true" />
             {rail === 'null402' ? 'Fuji, straight from this browser' : health === 'up' ? 'verify API reachable' : health === 'down' ? 'verify API not reachable' : 'checking the verify API…'}
           </span>
@@ -524,6 +546,8 @@ export function App() {
               )}
 
               <form id="params" onSubmit={send} aria-describedby="send-note">
+                {/* Locked while a check runs, so the request on screen is the one the answer is for. */}
+                <fieldset className="params-set" disabled={busy}>
                 {rail === 'zcash' ? (
                   <>
                     <h3>Examples</h3>
@@ -598,6 +622,7 @@ export function App() {
                     </ul>
                   </>
                 )}
+                </fieldset>
                 <div className="send-row">
                   <button className="send" disabled={busy}>
                     <SealMark size={18} />

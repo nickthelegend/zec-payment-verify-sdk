@@ -206,6 +206,26 @@ test.describe('dashboard console (verify API on :8420, one lightwalletd)', () =>
     await expectNoHorizontalScroll(page);
   });
 
+  test('a check in flight: the parameters are locked, and switching rail drops its answer (never a seal beside another request)', async ({ page }) => {
+    await send(page).click();
+    await expect(send(page)).toHaveText(/Checking…/);
+    // The preset chips and inputs cannot change the request the pane shows while its answer is pending.
+    const wrongMemo = page.getByRole('radio', { name: /Wrong invoice memo/ });
+    await expect(wrongMemo).toBeDisabled();
+    await expect(page.getByLabel('memo', { exact: true })).toBeDisabled();
+    await wrongMemo.click({ force: true });
+    await expect(page.getByLabel('memo', { exact: true })).toHaveValue(fx.x402.memo);
+    // Switching rail mid-check abandons it: the Zcash answer must not land on the null-402 tab.
+    await page.getByRole('button', { name: /null-402 proof/ }).click();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Is this proof a payment to me?');
+    await expect(send(page)).toHaveText(/Send request/);
+    await page.waitForTimeout(4_000); // longer than the live Zcash check takes
+    await expect(verdict(page)).toContainText('Nothing checked yet.');
+    await expect(response(page).getByRole('img', { name: /Verdict/ })).toHaveCount(0);
+    await expect(page.locator('.v-badge')).toHaveCount(0);
+    await expect(history(page).locator('li')).toHaveCount(0);
+  });
+
   test('reduced motion: the seal lands without the press animation', async ({ browser }, info) => {
     const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: info.project.use.viewport, recordVideo: { dir: info.outputPath('rm-video') } });
     const page = await ctx.newPage();
@@ -283,5 +303,10 @@ test.describe('dashboard with the local verify API down (:8429)', () => {
     await expect(history(page).locator('li').first()).toContainText('Setup required');
     await expectNoHorizontalScroll(page);
     await page.screenshot({ path: shot('dash-setup-required-sent', info.project.name) });
+    // The null-402 tab does not use the local API: its status is neutral, not the red "down" state.
+    await page.getByRole('button', { name: /null-402 proof/ }).click();
+    await expect(page.getByRole('status')).toHaveText('Fuji, straight from this browser');
+    await expect(page.locator('.health')).not.toHaveClass(/health-down/);
+    expect(await page.locator('.health .dot').evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe('rgb(226, 64, 31)');
   });
 });

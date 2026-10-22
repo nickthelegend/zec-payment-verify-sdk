@@ -17,6 +17,10 @@ real response on the right, where a seal (Paid / Unpaid / Wait / Hold) presses o
   tamper: claim 10× the amount.
 - Examples are real: the published x402 payment, the same payment with another invoice memo, and an
   auction deposit checked with the wrong key.
+- While a check runs its parameters and example chips are locked (a disabled fieldset), so the request
+  pane always shows the request the answer is for. Switching rail abandons the check in flight (its
+  fetch is aborted and a late answer is dropped); a check with no answer in 90 s is an error. On the
+  null-402 tab the status is neutral: that tab never uses the local API.
 - States: the top bar pings `GET /api/health` on load; API down or not allowing this origin →
   "Setup required" with the fix and a re-check button. Empty, waiting and error panes.
   375 px without horizontal scroll; reduced motion skips the stamp animation.
