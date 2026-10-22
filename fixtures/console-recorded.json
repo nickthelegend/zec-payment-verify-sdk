@@ -1,0 +1,145 @@
+{
+  "recordedAt": "2026-10-22T21:01:57.984Z",
+  "lightwalletd": "https://testnet.zec.rocks:443",
+  "by": "scripts/record-console-samples.mjs",
+  "samples": [
+    {
+      "label": "x402 payment",
+      "request": {
+        "rail": "zcash",
+        "uivk": "uivktest1ma9hg…",
+        "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+        "amountZat": 100000,
+        "memo": "x402z-f19a63da20cbc0749ea800b3",
+        "minConf": 1
+      },
+      "status": 200,
+      "response": {
+        "rail": "zcash",
+        "ok": true,
+        "verdict": "paid",
+        "reasons": [],
+        "paidZat": 100000,
+        "report": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "found": true,
+          "height": 4521112,
+          "block_time": 1792475145,
+          "confirmations": 9100,
+          "tip": 4530211,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "pools": {
+            "sapling": false,
+            "orchard": false,
+            "ironwood": true,
+            "transparent": false
+          }
+        },
+        "provenance": {
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "tip": 4530211,
+          "checkedAt": "2026-10-22T21:01:56.109Z",
+          "via": "zpay-verify"
+        }
+      }
+    },
+    {
+      "label": "Wrong invoice memo",
+      "request": {
+        "rail": "zcash",
+        "uivk": "uivktest1ma9hg…",
+        "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+        "amountZat": 100000,
+        "memo": "x402z-another-invoice",
+        "minConf": 1
+      },
+      "status": 200,
+      "response": {
+        "rail": "zcash",
+        "ok": false,
+        "verdict": "refused",
+        "reasons": [
+          "MEMO_MISMATCH",
+          "AMOUNT_TOO_LOW"
+        ],
+        "paidZat": 0,
+        "report": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "found": true,
+          "height": 4521112,
+          "block_time": 1792475145,
+          "confirmations": 9100,
+          "tip": 4530211,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "pools": {
+            "sapling": false,
+            "orchard": false,
+            "ironwood": true,
+            "transparent": false
+          }
+        },
+        "provenance": {
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "tip": 4530211,
+          "checkedAt": "2026-10-22T21:01:57.053Z",
+          "via": "zpay-verify"
+        }
+      }
+    },
+    {
+      "label": "Someone else’s payment",
+      "request": {
+        "rail": "zcash",
+        "uivk": "uivktest1ma9hg…",
+        "txid": "06d121813387444ca3ecc9720e73160b5b80645d9204c6c411e51cef3a190af1",
+        "amountZat": 1,
+        "minConf": 1
+      },
+      "status": 200,
+      "response": {
+        "rail": "zcash",
+        "ok": false,
+        "verdict": "refused",
+        "reasons": [
+          "NO_OUTPUT_TO_KEY"
+        ],
+        "paidZat": 0,
+        "report": {
+          "txid": "06d121813387444ca3ecc9720e73160b5b80645d9204c6c411e51cef3a190af1",
+          "found": true,
+          "height": 4522268,
+          "block_time": 1792503136,
+          "confirmations": 7944,
+          "tip": 4530211,
+          "outputs": [],
+          "pools": {
+            "sapling": false,
+            "orchard": false,
+            "ironwood": true,
+            "transparent": false
+          }
+        },
+        "provenance": {
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "tip": 4530211,
+          "checkedAt": "2026-10-22T21:01:57.983Z",
+          "via": "zpay-verify"
+        }
+      }
+    }
+  ]
+}

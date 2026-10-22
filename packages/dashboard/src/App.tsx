@@ -1,9 +1,13 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react';
 import { proofFromSettleTx, verifyNull402, NULL402_FUJI, type Null402Result } from '@zpv/sdk/null402';
 import fx from '@fixtures/testnet.json';
+import recorded from '@fixtures/console-recorded.json';
 
 const API = import.meta.env.VITE_ZPV_API ?? 'http://127.0.0.1:8403';
 const API_FROM_ENV = Boolean(import.meta.env.VITE_ZPV_API);
+/** The GitHub Pages build (scripts/build-pages.sh): no verify API runs beside it, so it opens on the
+ *  null-402 tab, which works entirely in the browser. */
+const PAGES = import.meta.env.VITE_ZPV_PAGES === '1';
 const ZEC_TX = 'https://testnet.zcashexplorer.app/transactions/';
 const REPO = 'https://github.com/nickthelegend/zec-payment-verify-sdk';
 const SETTLE = '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593';
@@ -21,7 +25,7 @@ type ZcashResult = {
   crossCheck?: { quorum: number; agreed: boolean; endpoints: EndpointAnswer[] };
 };
 type Outcome =
-  | { kind: 'zcash'; r: ZcashResult; status: number; ms: number }
+  | { kind: 'zcash'; r: ZcashResult; status: number; ms: number; memo?: string }
   | { kind: 'null402'; r: Null402Result; settledIn: string | null; ms: number }
   | { kind: 'error'; message: string; setup?: boolean; status?: number; body?: unknown };
 type Rail = 'zcash' | 'null402';
@@ -45,6 +49,7 @@ const WHY: Record<string, string> = {
   UNBOUND: 'No expected payee and amount were given, so nothing ties this proof to you.',
   UNVERIFIED_DISAGREEMENT: 'The lightwalletd endpoints gave different answers, so there is no verdict. Neither paid nor refused: retry, or check the endpoints.',
   UNVERIFIED_QUORUM: 'Too few lightwalletd endpoints answered to reach the quorum, so there is no verdict.',
+  NO_MEMO_BOUND: 'No memo was checked, so nothing ties this payment to one invoice: any earlier payment to this key passes the same way.',
 };
 
 const short = (s: string, a = 8, b = 6) => (s.length > a + b + 1 ? `${s.slice(0, a)}…${s.slice(-b)}` : s);
@@ -148,7 +153,7 @@ function Json({ v, ind = '' }: { v: unknown; ind?: string }): ReactNode {
       </>
     );
   }
-  const entries = Object.entries(v as Record<string, unknown>);
+  const entries = Object.entries(v as Record<string, unknown>).filter(([, x]) => x !== undefined); // as JSON.stringify sends it
   if (!entries.length) return <span className="j-p">{'{}'}</span>;
   return (
     <>
@@ -190,7 +195,7 @@ function Reasons({ reasons }: { reasons: string[] }) {
     <ul className="reasons" aria-label="Reasons">
       {reasons.map((x) => (
         <li key={x}>
-          <code className={`tag ${x === 'NOT_CONFIRMED' ? 'tag-wait' : 'tag-no'}`}>{x}</code>
+          <code className={`tag ${x === 'NOT_CONFIRMED' || x === 'NO_MEMO_BOUND' ? 'tag-wait' : 'tag-no'}`}>{x}</code>
           <span>{WHY[x] ?? ''}</span>
         </li>
       ))}
@@ -233,7 +238,10 @@ function CrossCheckTable({ c }: { c: NonNullable<ZcashResult['crossCheck']> }) {
   );
 }
 
-function ZcashVerdict({ r }: { r: ZcashResult }) {
+/** A paid answer to a request without a memo: any earlier payment to the key would have passed too. */
+const noMemo = (r: ZcashResult, memo: string | undefined) => r.ok && !memo;
+
+function ZcashVerdict({ r, memo }: { r: ZcashResult; memo: string | undefined }) {
   const v = verdictOf({ kind: 'zcash', r, status: 200, ms: 0 })!;
   if (!r.report) {
     return (
@@ -251,9 +259,9 @@ function ZcashVerdict({ r }: { r: ZcashResult }) {
     <>
       <p className="v-line">
         <span className={`v-badge v-${v}`}>{VERDICT_WORD[v]}</span>
-        {r.ok ? `${taz(r.paidZat)} reached this key with the expected memo.` : r.report.found ? `Counted toward this check: ${taz(r.paidZat)}.` : 'No such transaction.'}
+        {r.ok ? (memo ? `${taz(r.paidZat)} reached this key with the expected memo.` : `${taz(r.paidZat)} reached this key (no memo checked: any earlier payment to this key would also pass).`) : r.report.found ? `Counted toward this check: ${taz(r.paidZat)}.` : 'No such transaction.'}
       </p>
-      <Reasons reasons={r.reasons} />
+      <Reasons reasons={noMemo(r, memo) ? ['NO_MEMO_BOUND'] : r.reasons} />
       {r.crossCheck && <CrossCheckTable c={r.crossCheck} />}
       {r.report.found && (
         <>
@@ -357,7 +365,7 @@ function Null402Verdict({ r, settledIn }: { r: Null402Result; settledIn: string 
 /* ---------- app ---------- */
 
 export function App() {
-  const [rail, setRail] = useState<Rail>('zcash');
+  const [rail, setRail] = useState<Rail>(PAGES ? 'null402' : 'zcash');
   const [preset, setPreset] = useState(0);
   const [z, setZ] = useState(PRESETS[0].zcash);
   const [settleTx, setSettleTx] = useState(SETTLE);
@@ -387,9 +395,14 @@ export function App() {
       setHealth('down');
     }
   }
+  // Only once the Zcash tab is open: the null-402 tab never asks the reader's machine for anything (on a
+  // public site, Chrome would ask for local-network access just to load the page).
+  const pinged = useRef(false);
   useEffect(() => {
+    if (rail !== 'zcash' || pinged.current) return;
+    pinged.current = true;
     void ping();
-  }, []);
+  }, [rail]);
 
   function record(o: Outcome, ref: string, r: Rail) {
     const v = verdictOf(o);
@@ -423,7 +436,7 @@ export function App() {
         }
         setHealth('up');
         const body = await res.json();
-        o = res.ok ? { kind: 'zcash', r: body, status: res.status, ms: Math.round(performance.now() - t0) } : { kind: 'error', message: body.error ?? `HTTP ${res.status}`, setup: res.status === 503, status: res.status, body };
+        o = res.ok ? { kind: 'zcash', r: body, status: res.status, ms: Math.round(performance.now() - t0), memo: z.memo || undefined } : { kind: 'error', message: body.error ?? `HTTP ${res.status}`, setup: res.status === 503, status: res.status, body };
       } else {
         const s = await proofFromSettleTx(settleTx.trim() as `0x${string}`);
         const pub = [...s.publicSignals];
@@ -451,7 +464,7 @@ export function App() {
     return { rail: 'zcash', uivk: z.uivk.trim(), txid: z.txid.trim(), amountZat: Number(z.amount), memo: z.memo || undefined, minConf: Number(z.minConf || 1) };
   }
 
-  const railRef = useRef<Rail>('zcash');
+  const railRef = useRef<Rail>(PAGES ? 'null402' : 'zcash');
   function pickRail(r: Rail) {
     // Abandon a check in flight: its answer belongs to the other rail's request.
     current.current += 1;
@@ -467,6 +480,14 @@ export function App() {
   const requestBody = rail === 'zcash' ? { ...zcashBody(), uivk: z.uivk.trim() ? `${z.uivk.trim().slice(0, 14)}…` : '' } : null;
   const v = out ? verdictOf(out) : null;
   const amountOk = /^\d+$/.test(z.amount);
+  // With no verify API, the Zcash tab shows what the API really answered for these exact parameters
+  // when it was recorded (fixtures/console-recorded.json), labelled as recorded, never as a verdict.
+  const showRecorded = rail === 'zcash' && health === 'down' && !out && !busy;
+  const sample = showRecorded
+    ? recorded.samples.find((x) => x.request.txid === z.txid.trim() && x.request.uivk === `${z.uivk.trim().slice(0, 14)}…` && String(x.request.amountZat) === z.amount && (x.request.memo ?? '') === z.memo && String(x.request.minConf) === (z.minConf || '1'))
+    : undefined;
+  const recordedOn = new Date(recorded.recordedAt).toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+  const corsCmd = `ZPV_CORS=${typeof window !== 'undefined' ? window.location.origin : 'https://nickthelegend.github.io'} pnpm --filter @zpv/gateway api`;
 
   return (
     <div className="app">
@@ -536,11 +557,16 @@ export function App() {
                   <span className="tag tag-wait">Setup required</span>
                   <p>
                     The verify API is not reachable at <code>{API}</code>
-                    {API_FROM_ENV ? '' : ' (default; set VITE_ZPV_API to change it)'}, or it does not allow this page's origin (<code>ZPV_CORS</code>). Start it with <code>pnpm --filter @zpv/gateway api</code>, then{' '}
+                    {API_FROM_ENV ? '' : ' (default; set VITE_ZPV_API to change it)'}, or it does not allow this page's origin (<code>ZPV_CORS</code>). It runs on your machine, from a clone of the repo:
+                  </p>
+                  <code className="cmd">{corsCmd}</code>
+                  <p>
+                    {PAGES ? 'Chrome then asks whether this site may access devices on your local network: allow it, or the request never reaches the API. ' : 'A page served from a public site makes Chrome ask whether it may access devices on your local network: allow it. '}
+                    Then{' '}
                     <button type="button" className="link" onClick={() => void ping()}>
                       check again
                     </button>
-                    .
+                    . Until then, the null-402 tab works from this browser alone.
                   </p>
                 </div>
               )}
@@ -590,7 +616,7 @@ export function App() {
                         At least this many zatoshi, in outputs with the memo.
                       </Param>
                       <Param name="memo" type="string" req="optional" input={<input className="mono" aria-label="memo" value={z.memo} onChange={(e) => setZ({ ...z, memo: e.target.value })} placeholder="any memo" spellCheck={false} />}>
-                        Only outputs with exactly this memo count.
+                        Only outputs with exactly this memo count. Without one, any earlier payment to this key passes too: pass the invoice memo.
                       </Param>
                       <Param name="minConf" type="integer" req="default 1" input={<input className="mono narrow" aria-label="minConf" value={z.minConf} onChange={(e) => setZ({ ...z, minConf: e.target.value })} inputMode="numeric" pattern="\d+" />} />
                     </ul>
@@ -638,7 +664,18 @@ export function App() {
 
               <section className="verdict" aria-live="polite" aria-busy={busy} aria-labelledby="h-verdict">
                 <h2 id="h-verdict">Verdict</h2>
-                {!out && !busy && <p className="muted">Nothing checked yet. Pick an example or fill the parameters, then send the request.</p>}
+                {!out && !busy && !showRecorded && <p className="muted">Nothing checked yet. Pick an example or fill the parameters, then send the request.</p>}
+                {showRecorded && (
+                  <div className="recorded" data-recorded>
+                    <p className="recorded-head">
+                      <span className="tag tag-wait">Recorded output, not live</span>
+                      <span className="muted small">
+                        What the verify API answered for {sample ? 'this example' : 'the examples'} on {recordedOn}, from {new URL(recorded.lightwalletd).host} (<code>{recorded.by}</code>). Start the API to check live.
+                      </span>
+                    </p>
+                    {sample ? <ZcashVerdict r={sample.response as ZcashResult} memo={sample.request.memo} /> : <p className="muted">No recorded output for these parameters. Pick an example, or start the verify API to check these live.</p>}
+                  </div>
+                )}
                 {busy && <p className="muted">Checking live…</p>}
                 {out?.kind === 'error' && (
                   <div className={out.setup ? 'banner' : 'banner banner-bad'} role="alert">
@@ -646,7 +683,7 @@ export function App() {
                     <p>{out.message}</p>
                   </div>
                 )}
-                {out?.kind === 'zcash' && <ZcashVerdict r={out.r} />}
+                {out?.kind === 'zcash' && <ZcashVerdict r={out.r} memo={out.memo} />}
                 {out?.kind === 'null402' && <Null402Verdict r={out.r} settledIn={out.settledIn} />}
               </section>
 
@@ -758,7 +795,17 @@ export function App() {
                     {out?.kind === 'null402' && <span className={`status ${v === 'paid' ? 'ok' : ''}`}>{`block ${Number(out.r.provenance.blockNumber).toLocaleString('en-US')} · ${out.ms} ms`}</span>}
                     {out?.kind === 'error' && <span className="status">{out.status ? `HTTP ${out.status}` : out.setup ? 'setup required' : 'error'}</span>}
                   </div>
-                  {!out && !busy && <p className="pane-empty">No request sent yet.</p>}
+                  {!out && !busy && !sample && <p className="pane-empty">No request sent yet.</p>}
+                  {sample && (
+                    <>
+                      <p className="pane-recorded">Recorded output, not live · {recordedOn}</p>
+                      <pre>
+                        <code>
+                          <Json v={sample.response} />
+                        </code>
+                      </pre>
+                    </>
+                  )}
                   {busy && (
                     <p className="pane-empty">
                       <span className="pulse" aria-hidden="true" />
@@ -775,6 +822,7 @@ export function App() {
                   {v && (
                     <div className="stamp-slot" key={seq}>
                       <Stamp v={v} />
+                      {out?.kind === 'zcash' && noMemo(out.r, out.memo) && <span className="stamp-note">NO_MEMO_BOUND</span>}
                     </div>
                   )}
                 </div>

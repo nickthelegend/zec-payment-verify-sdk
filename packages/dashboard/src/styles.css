@@ -214,3 +214,10 @@ h1 { font-weight: 600; font-size: clamp(34px, 4vw, 52px); line-height: 1.02; let
 
 .params-set { border: 0; margin: 0; padding: 0; min-width: 0; }
 .params-set:disabled .chip, .params-set:disabled input { opacity: 0.6; cursor: progress; }
+
+/* Recorded output (no verify API): labelled, never a verdict, no seal. */
+.banner .cmd { display: block; max-width: 100%; box-sizing: border-box; padding: 8px 10px; border-radius: 6px; background: var(--code-bg); color: var(--code-text); font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; user-select: all; }
+.recorded { margin-top: 4px; padding-left: 14px; border-left: 2px dashed rgba(138, 90, 18, 0.45); }
+.recorded-head { display: grid; gap: 6px; justify-items: start; margin: 0 0 6px; }
+.pane-recorded { margin: 0; padding: 8px 14px; border-bottom: 1px dashed var(--code-line); font: 500 11.5px/1.5 var(--mono); color: #f3c98a; letter-spacing: 0.02em; }
+.stamp-note { position: absolute; left: 50%; bottom: -14px; transform: translateX(-50%) rotate(-9deg); font: 600 10px/1 var(--mono); letter-spacing: 0.06em; color: var(--wait); background: var(--wait-tint); border: 1px solid rgba(138, 90, 18, 0.35); border-radius: 4px; padding: 3px 6px; white-space: nowrap; }

@@ -184,17 +184,15 @@ test.describe('landing', () => {
     await expect(page.locator('[data-json="x402ok"]')).toContainText(fx.x402.txid);
   });
 
-  test('the Dashboard link opens the running console (the GitHub Pages layout): null-402 answers live from Fuji, the Zcash tab says Setup required', async ({ page, watch }, info) => {
-    // On Pages there is no verify API: the console looks for one on the reader's machine. Its refused
-    // connection is the honest "Setup required" state, nothing else is excused.
+  test('the Dashboard link opens the running console (the GitHub Pages layout): it opens on null-402, which answers live from Fuji; the Zcash tab says Setup required', async ({ page, watch }, info) => {
+    // On Pages there is no verify API: the console looks for one on the reader's machine only once the
+    // Zcash tab is opened. Its refused connection is the honest "Setup required" state, nothing else is excused.
     watch.allow({ url: /^http:\/\/127\.0\.0\.1:8403\//, failure: /ERR_CONNECTION_REFUSED/ });
     watch.allow({ console: /Failed to load resource: net::ERR_CONNECTION_REFUSED @ http:\/\/127\.0\.0\.1:8403\// });
     await page.getByRole('link', { name: 'Dashboard', exact: true }).click();
     await expect(page).toHaveURL(`${URLS.landing}/dashboard/`);
-    await expect(page.getByRole('heading', { level: 1, name: 'Was I paid?' })).toBeVisible();
-    await expect(page.getByRole('status')).toHaveText('verify API not reachable');
-    await expect(page.locator('.prose > .banner')).toContainText('Setup required');
-    await page.getByRole('button', { name: /null-402 proof/ }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Is this proof a payment to me?' })).toBeVisible();
+    await expect(page.getByRole('status')).toHaveText('Fuji, straight from this browser');
     const send = page.getByRole('button', { name: /Send request|Checking/ });
     await send.click();
     await expect(send).toHaveText(/Send request/, { timeout: 60_000 });
@@ -206,6 +204,10 @@ test.describe('landing', () => {
     await send.click();
     await expect(send).toHaveText(/Send request/, { timeout: 60_000 });
     await expect(reasons).toContainText('BAD_PROOF');
+    await page.getByRole('button', { name: /Zcash payment/ }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Was I paid?' })).toBeVisible();
+    await expect(page.getByRole('status')).toHaveText('verify API not reachable');
+    await expect(page.locator('.prose > .banner')).toContainText('Setup required');
     await expectNoHorizontalScroll(page);
   });
 

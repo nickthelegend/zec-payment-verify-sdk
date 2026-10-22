@@ -32,3 +32,16 @@ pnpm --filter @zpv/dashboard dev      # http://localhost:5180 (the API allows th
 
 `VITE_ZPV_API` points the dashboard at another verify API (default `http://127.0.0.1:8403`);
 `ZPV_CORS` on the API lists the origins it answers.
+
+**Hosted build (GitHub Pages).** `scripts/build-pages.sh` builds the console with `VITE_ZPV_PAGES=1`:
+it opens on the null-402 tab, which works entirely from the browser, and asks no local API anything
+until the Zcash tab is opened (on a public site Chrome would otherwise ask for local-network access
+on page load). With no verify API on the reader's machine the Zcash tab shows "Setup required" with
+the exact command (`ZPV_CORS=<this site's origin> pnpm --filter @zpv/gateway api`) and a note about
+Chrome's local-network prompt, beside what the API really answered for the selected example when it
+was recorded (`fixtures/console-recorded.json`, written by `scripts/record-console-samples.mjs`),
+labelled "Recorded output, not live" and never stamped. Parameters that were not recorded show no
+recorded answer.
+
+**No memo.** A paid answer to a request without a memo says "no memo checked: any earlier payment to
+this key would also pass" and carries a `NO_MEMO_BOUND` note, instead of "with the expected memo".

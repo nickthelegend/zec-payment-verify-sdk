@@ -98,6 +98,20 @@ test.describe('dashboard console (verify API on :8420, one lightwalletd)', () =>
     await page.screenshot({ path: shot('dash-wrong-amount', info.project.name) });
   });
 
+  test('no memo: Paid says that no memo was checked (any earlier payment to the key would pass), never "with the expected memo"', async ({ page }, info) => {
+    await page.getByLabel('memo', { exact: true }).fill('');
+    await expect(page.locator('.pane').first()).not.toContainText('"memo"');
+    await sendAndWait(page);
+    const v = verdict(page);
+    await expect(v.locator('.v-badge')).toHaveText('Paid');
+    await expect(v.locator('.v-line')).toContainText('0.001 TAZ reached this key (no memo checked: any earlier payment to this key would also pass).');
+    await expect(v).not.toContainText('with the expected memo');
+    await expect(v.locator('.reasons')).toContainText('NO_MEMO_BOUND');
+    await expect(v.locator('.reasons .tag')).toHaveClass(/tag-wait/);
+    await expect(response(page).locator('.stamp-note')).toHaveText('NO_MEMO_BOUND');
+    await page.screenshot({ path: shot('dash-no-memo', info.project.name) });
+  });
+
   test("someone else's payment: the key sees nothing in it", async ({ page }) => {
     await page.getByRole('radio', { name: /Someone else/ }).click();
     await sendAndWait(page);
