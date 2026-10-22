@@ -122,6 +122,9 @@ requests to the page or the stack beyond the honest ones it names, and no horizo
 
 `.github/workflows/ci.yml` runs `pnpm test` on push and pull request; `.github/workflows/pages.yml`
 publishes the landing and console. Neither has run on GitHub yet: nothing is pushed.
+CI fetches the Sapling parameters from download.z.cash and clones zec-shielded-x402 for
+`kage-client.test.ts`; that test needs Kage's `packages/x402-zcash` on its GitHub `main`, which is
+local-only on Oct 22 (until Kage is pushed, that one test fails with Setup required: KAGE_X402_DIR).
 
 ## Clean install
 
