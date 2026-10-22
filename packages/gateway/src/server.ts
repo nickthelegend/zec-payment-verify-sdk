@@ -4,11 +4,11 @@
 //   same path + X-PAYMENT              → x402 v1 {x402Version, scheme, network, payload: {txid, memoNonce}}
 //                                        (as Shielded x402 sends it) or {memo, txid} → @zpv/sdk verify
 //                                        with the receiver's incoming viewing key → 200 + X-PAYMENT-RESPONSE
-//   POST /api/verify {rail, …}         → the SDK verdict as JSON (both rails)
+//   POST /api/verify {rail, …}         → the SDK verdict as JSON (both rails); only with verifyApi (api.ts)
 // The gateway holds only the merchant's incoming viewing key: it can see payments, never spend.
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
-import { BusyError, crossCheckFromEnv, LightwalletdBadAnswerError, LightwalletdUnreachableError, SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
+import { BusyError, CheckLimiter, crossCheckFromEnv, LightwalletdBadAnswerError, LightwalletdUnreachableError, SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
 import { MemoryStore, type PaywallStore, type Refund } from './store.js';
 
 export { MemoryStore, SqliteStore, type PaywallStore, type Claim, type Refund } from './store.js';
@@ -39,6 +39,9 @@ export interface PaywallOptions {
   lwdUrls?: string[];
   /** With lwdUrls: how many must answer (default all). Disagreement is never served. */
   lwdQuorum?: number;
+  /** Serve POST /api/verify, a free check of any payment for any key (default false). The verify API
+   *  (api.ts) turns it on; a production paywall leaves it off so strangers cannot spend its checks. */
+  verifyApi?: boolean;
   /** Origins allowed to call /api/verify from a browser. */
   corsOrigins?: string[];
   /** Bearer token for GET /api/refunds (decrypted memos, amounts and txids). Without one the endpoint is
@@ -152,6 +155,9 @@ export function createPaywall(o: PaywallOptions): Server {
    *  SqliteStore) carrying the same payment cannot both be served. */
   const store = o.store ?? new MemoryStore();
   const lwdOpts = o.lwdUrls ? { lwdUrls: o.lwdUrls, quorum: o.lwdQuorum } : { lwdUrl: o.lwdUrl };
+  /** The paywall's own checks have their own slots (ZPV_MAX_CHECKS, ZPV_MAX_QUEUE each), so a flood of
+   *  /api/verify calls in the same process cannot turn paying customers away with 503s. */
+  const paywallLimiter = new CheckLimiter();
   /** Which lightwalletd endpoints a zcash check uses (for /api/health), resolved as the SDK does. */
   const lightwalletd = () => {
     if (o.lwdUrls) return { urls: o.lwdUrls, quorum: o.lwdQuorum ?? o.lwdUrls.length };
@@ -232,9 +238,13 @@ export function createPaywall(o: PaywallOptions): Server {
 
   async function handle(req: IncomingMessage, res: ServerResponse) {
     const url = new URL(req.url ?? '/', 'http://local');
-    if (url.pathname === '/api/verify') {
+    if (url.pathname === '/api/verify' && o.verifyApi) {
       if (req.method === 'OPTIONS') return json(req, res, 204, null);
       if (req.method !== 'POST') return json(req, res, 405, { error: 'POST a verify request' });
+      // Only JSON: a cross-site form or text/plain POST is a "simple" request that a browser sends
+      // without asking, so it must not run a check.
+      const type = (req.headers['content-type'] ?? '').split(';')[0].trim().toLowerCase();
+      if (type !== 'application/json') return json(req, res, 415, { error: 'POST /api/verify with content-type application/json' });
       try {
         const body = (await readBody(req)) as VerifyRequest;
         return json(req, res, 200, await verify(body, lwdOpts));
@@ -287,7 +297,7 @@ export function createPaywall(o: PaywallOptions): Server {
     }
     let r;
     try {
-      r = await verify({ rail: 'zcash', uivk: o.uivk, txid, amountZat: price, memo: c.memo, minConf }, lwdOpts);
+      r = await verify({ rail: 'zcash', uivk: o.uivk, txid, amountZat: price, memo: c.memo, minConf }, { ...lwdOpts, limiter: paywallLimiter });
     } catch (e) {
       store.release(c.memo, txid, claim.token);
       const f = failureStatus(e, 'paywall');

@@ -18,7 +18,7 @@ afterEach(() => {
 });
 
 async function start(extra: Partial<PaywallOptions> = {}) {
-  const server = createPaywall({ payTo: 'utest1-demo-merchant', uivk: fx.x402.uivk, prices: { '/api/quote': 100_000n }, content: (p) => ({ served: p }), issueMemo: () => fx.x402.memo, lwdUrl: DEAD_LWD, ...extra });
+  const server = createPaywall({ payTo: 'utest1-demo-merchant', uivk: fx.x402.uivk, prices: { '/api/quote': 100_000n }, content: (p) => ({ served: p }), issueMemo: () => fx.x402.memo, lwdUrl: DEAD_LWD, verifyApi: true, ...extra });
   await new Promise<void>((r) => server.listen(0, '127.0.0.1', r));
   servers.push(server);
   return `http://127.0.0.1:${(server.address() as AddressInfo).port}`;

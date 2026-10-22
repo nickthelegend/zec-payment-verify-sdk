@@ -5,6 +5,6 @@
 import { createPaywall } from './server.js';
 
 const port = Number(process.env.ZPV_PORT ?? 8403);
-createPaywall({ payTo: '', uivk: '', prices: {}, content: () => null, corsOrigins: (process.env.ZPV_CORS ?? 'http://localhost:5180').split(','), lwdUrl: process.env.ZPV_LWD_URL }).listen(port, '127.0.0.1', () =>
+createPaywall({ payTo: '', uivk: '', prices: {}, content: () => null, verifyApi: true, corsOrigins: (process.env.ZPV_CORS ?? 'http://localhost:5180').split(','), lwdUrl: process.env.ZPV_LWD_URL }).listen(port, '127.0.0.1', () =>
   console.log(`zpv verify API on http://127.0.0.1:${port}/api/verify`),
 );

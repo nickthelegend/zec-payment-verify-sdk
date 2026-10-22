@@ -20,6 +20,7 @@ beforeAll(async () => {
     content: (p) => ({ served: p }),
     issueMemo: () => fx.x402.memo,
     corsOrigins: ['http://localhost:5180'],
+    verifyApi: true,
   });
   await new Promise<void>((r) => server.listen(0, '127.0.0.1', r));
   base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
@@ -75,7 +76,7 @@ describe('paywall', () => {
     expect(r.status).toBe(200);
     expect(r.headers.get('access-control-allow-origin')).toBe('http://localhost:5180');
     expect(((await r.json()) as { ok: boolean }).ok).toBe(true);
-    const bad = await fetch(`${base}/api/verify`, { method: 'POST', body: JSON.stringify({ rail: 'zcash', uivk: fx.x402.uivk, txid: 'nope', amountZat: 1 }) });
+    const bad = await fetch(`${base}/api/verify`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rail: 'zcash', uivk: fx.x402.uivk, txid: 'nope', amountZat: 1 }) });
     expect(bad.status).toBe(400);
   });
 });

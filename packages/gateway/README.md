@@ -32,18 +32,25 @@ merchant's **incoming viewing key**: it can see payments, never spend.
   forwarding header every request arrives from loopback. The merchant holds a viewing key, not a spend
   key, so the refund itself is sent by hand from the wallet.
 - With `lwdUrls` (or `ZPV_LWD_URLS` + `ZPV_LWD_QUORUM`) each payment is checked against several lightwalletd endpoints. If they disagree or too few answer → `503` + `Retry-After` with `UNVERIFIED_*` and each endpoint's answer; nothing is served and the payment stays claimable.
-- `POST /api/verify` → the SDK verdict for either rail (used by the dashboard; CORS for `ZPV_CORS`).
+- `POST /api/verify` → the SDK verdict for either rail (used by the dashboard; CORS for `ZPV_CORS`). Only
+  with `verifyApi: true`, which the verify API (`api.ts`) sets and the paywall (`main.ts`) does not: a
+  production paywall gives strangers no free checks. The body must be `content-type: application/json`
+  (415 otherwise), so a cross-site form or `text/plain` POST, which a browser sends without asking,
+  cannot run a check.
 
 | Status | `/api/verify` | paywall (`X-PAYMENT`) |
 |---|---|---|
 | 400 | the body is not a verify request (not JSON, not an object, unknown rail, `amountZat` not a whole number ≥ 0, bad txid or key) | the header is malformed |
+| 415 | the body is not `application/json` | — |
 | 502 + `Retry-After` | lightwalletd unreachable or inconsistent, or Fuji unreachable | — |
 | 503 + `Retry-After` | too many checks running (`ZPV_MAX_CHECKS`) | lightwalletd unreachable or inconsistent, endpoints disagree, too many checks, or Setup required; nothing is served and the payment stays claimable |
 | 503 | Setup required (no `zpay-verify`, a bad setting) | |
 
 **Limits.** Every check runs `zpay-verify` once per lightwalletd endpoint. At most `ZPV_MAX_CHECKS`
-(default 8) run at once in the process and `ZPV_MAX_QUEUE` (default 32) wait; past that the answer is
-503 + `Retry-After: 5`. A check with no answer is killed after `ZPV_CHECK_TIMEOUT_MS` (default 90 s).
+(default 8) run at once and `ZPV_MAX_QUEUE` (default 32) wait; past that the answer is 503 +
+`Retry-After: 5`. The paywall's own checks have slots of their own, so a flood of `/api/verify` calls
+in the same process cannot turn paying customers away; null-402 checks are bounded by
+`ZPV_MAX_NULL402_CHECKS` (default 16). A check with no answer is killed after `ZPV_CHECK_TIMEOUT_MS` (default 90 s).
 A challenge is closed after `maxFailedAttempts` (default 5) refused payments. `TX_NOT_FOUND` (lightwalletd
 has not seen the transaction yet, as when a wallet retries `X-PAYMENT` right after broadcasting),
 `NOT_CONFIRMED` and an unverified cross-check do not count. A closed challenge serves nothing, but a
