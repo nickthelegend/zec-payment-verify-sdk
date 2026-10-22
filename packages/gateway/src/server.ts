@@ -5,7 +5,7 @@
 // The gateway holds only the merchant's incoming viewing key: it can see payments, never spend.
 import { randomBytes } from 'node:crypto';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
-import { crossCheckFromEnv, SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
+import { BusyError, crossCheckFromEnv, LightwalletdBadAnswerError, LightwalletdUnreachableError, SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
 import { MemoryStore, type PaywallStore } from './store.js';
 
 export { MemoryStore, SqliteStore, type PaywallStore, type Claim } from './store.js';
@@ -55,6 +55,19 @@ export interface Challenge {
 }
 
 const b64url = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
+
+/**
+ * How a failure to check is answered. 400 only for the caller's own input; a lightwalletd that is down
+ * or inconsistent is the gateway's problem (502 on the API, 503 + Retry-After on the paywall so an x402
+ * client retries instead of giving up after paying); a missing binary or setting is 503 Setup required.
+ */
+export function failureStatus(e: unknown, surface: 'api' | 'paywall'): { status: number; headers: Record<string, string> } {
+  if (e instanceof SetupRequiredError) return { status: 503, headers: surface === 'paywall' ? { 'retry-after': '60' } : {} };
+  if (e instanceof BusyError) return { status: 503, headers: { 'retry-after': '5' } };
+  if (e instanceof LightwalletdUnreachableError || e instanceof LightwalletdBadAnswerError) return { status: surface === 'api' ? 502 : 503, headers: { 'retry-after': '30' } };
+  if (e instanceof VerifyError) return { status: 400, headers: {} };
+  return { status: 502, headers: {} };
+}
 
 export function createPaywall(o: PaywallOptions): Server {
   const minConf = o.minConf ?? 1;
@@ -119,8 +132,8 @@ export function createPaywall(o: PaywallOptions): Server {
         const body = (await readBody(req)) as VerifyRequest;
         return json(req, res, 200, await verify(body, lwdOpts));
       } catch (e) {
-        const status = e instanceof SetupRequiredError ? 503 : e instanceof VerifyError ? 400 : 502;
-        return json(req, res, status, { error: (e as Error).message });
+        const f = failureStatus(e, 'api');
+        return json(req, res, f.status, { error: (e as Error).message }, f.headers);
       }
     }
     if (url.pathname === '/api/health') return json(req, res, 200, { ok: true, payTo: o.payTo, paths: Object.keys(o.prices), lightwalletd: lightwalletd() });
@@ -164,7 +177,9 @@ export function createPaywall(o: PaywallOptions): Server {
       r = await verify({ rail: 'zcash', uivk: o.uivk, txid, amountZat: price, memo: c.memo, minConf }, lwdOpts);
     } catch (e) {
       store.release(c.memo, txid, claim.token);
-      return json(req, res, e instanceof VerifyError ? 400 : 502, { error: (e as Error).message });
+      const f = failureStatus(e, 'paywall');
+      const error = f.status === 503 ? `payment could not be checked: ${(e as Error).message}; nothing was served, retry later` : (e as Error).message;
+      return json(req, res, f.status, { error, accepts: f.status === 503 ? [c] : undefined }, f.headers);
     }
     if (r.verdict === 'unverified') {
       // The lightwalletd endpoints disagreed or too few answered: no verdict, so neither serve nor refuse.

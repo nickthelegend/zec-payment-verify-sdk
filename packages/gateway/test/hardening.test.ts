@@ -58,8 +58,9 @@ describe('paywall hardening', () => {
     expect(body.reasons).toEqual(['UNVERIFIED_DISAGREEMENT']);
     expect(body.data).toBeUndefined();
     expect(await (await fetch(`${split}/api/health`)).json()).toMatchObject({ lightwalletd: { urls: ['https://testnet.zec.rocks:443', 'https://zec.rocks:443'], quorum: 2 } });
-    // the same server reached twice agrees with itself: the retry is served
-    const agree = await start({ lwdUrls: ['https://testnet.zec.rocks:443', 'https://testnet.zec.rocks'] });
+    // The payment stayed claimable: a retry that reaches a quorum is served. testnet.zec.rocks plus a
+    // closed local port with quorum 1 (one server under two spellings is refused as one endpoint twice).
+    const agree = await start({ lwdUrls: ['https://testnet.zec.rocks:443', 'http://127.0.0.1:9'], lwdQuorum: 1 });
     await fetch(`${agree}/api/quote`);
     expect((await fetch(`${agree}/api/quote`, { headers: header({ memo: fx.x402.memo, txid: fx.x402.txid }) })).status).toBe(200);
   });

@@ -9,6 +9,13 @@ merchant's **incoming viewing key**: it can see payments, never spend.
 - With `lwdUrls` (or `ZPV_LWD_URLS` + `ZPV_LWD_QUORUM`) each payment is checked against several lightwalletd endpoints. If they disagree or too few answer → `503` + `Retry-After` with `UNVERIFIED_*` and each endpoint's answer; nothing is served and the payment stays claimable.
 - `POST /api/verify` → the SDK verdict for either rail (used by the dashboard; CORS for `ZPV_CORS`).
 
+| Status | `/api/verify` | paywall (`X-PAYMENT`) |
+|---|---|---|
+| 400 | the body is not a verify request (not JSON, not an object, unknown rail, `amountZat` not a whole number ≥ 0, bad txid or key) | the header is malformed |
+| 502 + `Retry-After` | lightwalletd unreachable or inconsistent, or Fuji unreachable | — |
+| 503 + `Retry-After` | too many checks running (`ZPV_MAX_CHECKS`) | lightwalletd unreachable or inconsistent, endpoints disagree, too many checks, or Setup required; nothing is served and the payment stays claimable |
+| 503 | Setup required (no `zpay-verify`, a bad setting) | |
+
 **State.** Open challenges and claimed memos/txids live in a `PaywallStore`. The default
 `MemoryStore` forgets them on restart. `SqliteStore` (`node:sqlite`, Node ≥ 22.13; `ZPV_STORE=<file>`)
 keeps them in one SQLite file: a restarted paywall still refuses a txid it already served, and several
