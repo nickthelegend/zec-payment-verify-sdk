@@ -53,6 +53,8 @@ export interface PaywallOptions {
   store?: PaywallStore;
   /** How long a check may hold its claim before another request may take it over (default 5 min). */
   claimLeaseMs?: number;
+  /** Refused payments one challenge may see before it is closed (default 5). Each costs a check. */
+  maxFailedAttempts?: number;
 }
 
 /**
@@ -135,6 +137,7 @@ export function createPaywall(o: PaywallOptions): Server {
   const now = o.now ?? Date.now;
   const minedGrace = o.minedGraceMs ?? 10 * 60_000;
   const presentWindow = o.presentWindowMs ?? 24 * 60 * 60_000;
+  const maxFailed = o.maxFailedAttempts ?? 5;
   const maxOpen = o.maxOpenChallenges ?? 10_000;
   const leaseMs = o.claimLeaseMs ?? 5 * 60_000;
   /** Open challenges, and memos and lower-case txids that are being checked or already paid. A
@@ -265,6 +268,10 @@ export function createPaywall(o: PaywallOptions): Server {
     // One challenge per answer: the entry the payer answered.
     const challenged = (error: string, extra: Record<string, unknown> = {}) => ({ x402Version: 1, error, ...extra, accepts: [c] });
     if (!p.txid) return json(req, res, 402, challenged('X-PAYMENT has no txid'));
+    if (store.failures(c.memo) >= maxFailed) {
+      const f = fresh();
+      return json(req, res, f.status, { ...f.body, error: `too many refused payments for this challenge (${maxFailed}); ask for a new one` }, { 'x-payment-response': settlement(false, '', 'unknown_challenge') });
+    }
     const txid = p.txid.trim().toLowerCase();
     const claim = store.claim(c.memo, txid, now(), leaseMs);
     if (!claim.ok) {
@@ -293,6 +300,7 @@ export function createPaywall(o: PaywallOptions): Server {
     if (!r.ok || !r.report || late) {
       store.release(c.memo, txid, claim.token);
       const pendingOnly = reasons.length === 1 && reasons[0] === 'NOT_CONFIRMED';
+      if (!pendingOnly) store.fail(c.memo);
       // Funds with this challenge's memo reached the key but buy nothing: write them down for a refund.
       let received: { zat: number; recorded: boolean } | undefined;
       if (!pendingOnly && r.paidZat > 0 && r.report) {

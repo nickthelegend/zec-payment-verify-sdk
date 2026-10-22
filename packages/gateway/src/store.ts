@@ -46,6 +46,9 @@ export interface PaywallStore {
    * over): then do not serve.
    */
   settle(memo: string, txid: string, token: string): boolean;
+  /** Count one refused payment presented for `memo`; returns the count so far. */
+  fail(memo: string): number;
+  failures(memo: string): number;
   /** Record (or update, by txid) a refused payment that reached the key. */
   recordRefund(r: Refund): void;
   /** Newest first. */
@@ -68,6 +71,17 @@ export class MemoryStore implements PaywallStore {
   private claims = new Map<string, Row>();
   private key = randomBytes(32);
   private owed = new Map<string, Refund>();
+  private failed = new Map<string, number>();
+
+  fail(memo: string) {
+    const n = (this.failed.get(memo) ?? 0) + 1;
+    this.failed.set(memo, n);
+    return n;
+  }
+
+  failures(memo: string) {
+    return this.failed.get(memo) ?? 0;
+  }
 
   secret() {
     return this.key;
@@ -141,6 +155,10 @@ export class SqliteStore implements PaywallStore {
         body TEXT NOT NULL
       );
       CREATE INDEX IF NOT EXISTS challenges_by_expiry ON challenges (expires_at);
+      CREATE TABLE IF NOT EXISTS failures (
+        memo TEXT PRIMARY KEY,
+        n INTEGER NOT NULL
+      );
       CREATE TABLE IF NOT EXISTS refunds (
         txid TEXT PRIMARY KEY,
         at INTEGER NOT NULL,
@@ -226,6 +244,15 @@ export class SqliteStore implements PaywallStore {
       this.db.prepare('DELETE FROM challenges WHERE memo = ?').run(memo);
       return true;
     });
+  }
+
+  fail(memo: string): number {
+    const row = this.db.prepare('INSERT INTO failures (memo, n) VALUES (?, 1) ON CONFLICT (memo) DO UPDATE SET n = n + 1 RETURNING n').get(memo) as { n: number };
+    return row.n;
+  }
+
+  failures(memo: string): number {
+    return (this.db.prepare('SELECT n FROM failures WHERE memo = ?').get(memo) as { n: number } | undefined)?.n ?? 0;
   }
 
   recordRefund(r: Refund) {
