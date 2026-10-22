@@ -74,7 +74,7 @@ Setup: the `zcash` rail needs the `zpay-verify` binary (`ZPV_BIN`, or built in `
 | `VerifyError` | bad input: txid, key, `amountZat` not a whole number ≥ 0, `minConf`, memo over 512 bytes, unknown rail |
 | `LightwalletdUnreachableError` | no connection, an RPC failure, a proxy that is down, or no answer within `ZPV_CHECK_TIMEOUT_MS` (default 90 s; the process is killed) |
 | `LightwalletdBadAnswerError` | the server answered, but the answer contradicts itself (txid mismatch, unparseable bytes, a block that does not list the tx). In a cross-check it is a dissent: `UNVERIFIED_DISAGREEMENT` |
-| `BusyError` | more than `ZPV_MAX_CHECKS` (default 8) `zpay-verify` processes running and `ZPV_MAX_QUEUE` (default 32) waiting in this process |
+| `BusyError` | more than `ZPV_MAX_CHECKS` (default 8) `zpay-verify` processes running and `ZPV_MAX_QUEUE` (default 32) waiting in this process, or more than `ZPV_MAX_NULL402_CHECKS` (default 16) null-402 checks (4 Fuji RPC calls each) running and `ZPV_MAX_QUEUE` waiting. A server can give a surface its own `CheckLimiter` (`verify(req, {limiter})`), as the paywall does for its own checks |
 | `SetupRequiredError` | missing binary, a malformed setting (`ZPV_LWD_PROXY`, `ZPV_LWD_QUORUM`, …), or a plaintext `http://` lightwalletd that is not loopback |
 
 The three middle classes extend `VerifyError` (so existing `catch` blocks still see them); test for

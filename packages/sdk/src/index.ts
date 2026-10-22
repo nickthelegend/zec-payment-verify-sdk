@@ -2,11 +2,13 @@
 // eth_call) and carries its provenance; a failure to check throws, it is never a verdict.
 import { verifyNull402, type Null402Request, type Null402Result } from './null402.js';
 import { VerifyError } from './errors.js';
+import type { CheckLimiter } from './limiter.js';
 import { crossCheckFromEnv, verifyZcash, verifyZcashCrossChecked, type ZcashRequest, type ZcashResult } from './zcash.js';
 
 export * from './errors.js';
 export * from './zcash.js';
 export * from './null402.js';
+export * from './limiter.js';
 
 export type VerifyRequest = ZcashRequest | Null402Request;
 export type VerifyResult = ZcashResult | Null402Result;
@@ -23,6 +25,8 @@ export interface VerifyOptions {
   quorum?: number;
   /** null402 rail: Fuji RPC (default ZPV_FUJI_RPC, else the public Avalanche endpoint) */
   fujiRpc?: string;
+  /** zcash rail: the limiter this check takes its slots from (default: the SDK's shared one). */
+  limiter?: CheckLimiter;
 }
 
 export function verify(req: ZcashRequest, opts?: VerifyOptions): Promise<ZcashResult>;
@@ -32,15 +36,15 @@ export function verify(req: VerifyRequest, opts: VerifyOptions = {}): Promise<Ve
   if (typeof req !== 'object' || req === null || Array.isArray(req)) return Promise.reject(new VerifyError('the request must be an object with a rail (zcash or null402)'));
   switch (req.rail) {
     case 'zcash': {
-      if (opts.lwdUrls) return verifyZcashCrossChecked(req, { lwdUrls: opts.lwdUrls, quorum: opts.quorum });
-      if (opts.lwdUrl) return verifyZcash(req, { lwdUrl: opts.lwdUrl });
+      if (opts.lwdUrls) return verifyZcashCrossChecked(req, { lwdUrls: opts.lwdUrls, quorum: opts.quorum, limiter: opts.limiter });
+      if (opts.lwdUrl) return verifyZcash(req, { lwdUrl: opts.lwdUrl, limiter: opts.limiter });
       let env;
       try {
         env = crossCheckFromEnv();
       } catch (e) {
         return Promise.reject(e);
       }
-      return env ? verifyZcashCrossChecked(req, { ...env, quorum: opts.quorum ?? env.quorum }) : verifyZcash(req, {});
+      return env ? verifyZcashCrossChecked(req, { ...env, quorum: opts.quorum ?? env.quorum, limiter: opts.limiter }) : verifyZcash(req, { limiter: opts.limiter });
     }
     case 'null402':
       return verifyNull402(req, { rpc: opts.fujiRpc });

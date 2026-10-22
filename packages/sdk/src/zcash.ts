@@ -3,7 +3,8 @@ import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { BusyError, LightwalletdBadAnswerError, LightwalletdUnreachableError, SetupRequiredError, VerifyError } from './errors.js';
+import { CheckLimiter, envInt } from './limiter.js';
+import { LightwalletdBadAnswerError, LightwalletdUnreachableError, SetupRequiredError, VerifyError } from './errors.js';
 
 export interface ZcashRequest {
   rail: 'zcash';
@@ -117,41 +118,8 @@ function checkInput(req: ZcashRequest): bigint {
   return amount;
 }
 
-/** A setting from the environment as a whole number ≥ min (default when unset). */
-function envInt(name: string, dflt: number, min: number): number {
-  const v = process.env[name]?.trim();
-  if (!v) return dflt;
-  if (!/^\d+$/.test(v) || Number(v) < min) throw new SetupRequiredError(name, `a whole number ≥ ${min}, got ${v}`);
-  return Number(v);
-}
-
-/**
- * Bounds the zpay-verify processes this process runs at once (ZPV_MAX_CHECKS, default 8) and how many
- * checks may wait for a slot (ZPV_MAX_QUEUE, default 32). Past that a check is a BusyError at once, so a
- * flood of requests cannot fork without limit. A cross-check takes one slot per endpoint.
- */
-class CheckLimiter {
-  private running = 0;
-  private waiting: (() => void)[] = [];
-
-  async run<T>(f: () => Promise<T>): Promise<T> {
-    const max = envInt('ZPV_MAX_CHECKS', 8, 1);
-    const queue = envInt('ZPV_MAX_QUEUE', 32, 0);
-    if (this.running >= max) {
-      if (this.waiting.length >= queue) throw new BusyError(`${this.running} payment checks are running and ${this.waiting.length} are waiting (ZPV_MAX_CHECKS ${max}, ZPV_MAX_QUEUE ${queue}); retry later`);
-      await new Promise<void>((r) => this.waiting.push(r)); // the check that ends hands its slot over
-    } else this.running++;
-    try {
-      return await f();
-    } finally {
-      const next = this.waiting.shift();
-      if (next) next();
-      else this.running--;
-    }
-  }
-}
-
-const limiter = new CheckLimiter();
+/** The zcash rail's default limiter, shared by every caller in this process that does not bring its own. */
+export const defaultZcashLimiter = new CheckLimiter();
 
 /** The error zpay-verify printed (exit 2), as the error class a caller can act on. */
 export function classifyCliError(msg: string): Error {
@@ -165,7 +133,7 @@ export function classifyCliError(msg: string): Error {
 
 const seconds = (ms: number) => `${Number((ms / 1000).toFixed(1))} s`;
 
-export async function verifyZcash(req: ZcashRequest, opts: { lwdUrl?: string; bin?: string } = {}): Promise<ZcashResult> {
+export async function verifyZcash(req: ZcashRequest, opts: { lwdUrl?: string; bin?: string; limiter?: CheckLimiter } = {}): Promise<ZcashResult> {
   const amount = checkInput(req);
   const args = ['verify', req.txid, '--amount', amount.toString(), '--min-conf', String(req.minConf ?? 1)];
   if (req.memo !== undefined) args.push('--memo', req.memo);
@@ -177,7 +145,7 @@ export async function verifyZcash(req: ZcashRequest, opts: { lwdUrl?: string; bi
   for (const k of ['ZPV_LWD_PROXY', 'ZPV_ALLOW_INSECURE_LWD']) if (process.env[k]) env[k] = process.env[k]!;
   const bin = opts.bin ?? zpayBinary();
   const timeoutMs = envInt('ZPV_CHECK_TIMEOUT_MS', 90_000, 1);
-  const { code, stdout, stderr, timedOut } = await limiter.run(
+  const { code, stdout, stderr, timedOut } = await (opts.limiter ?? defaultZcashLimiter).run(
     () =>
       new Promise<{ code: number | null; stdout: string; stderr: string; timedOut: boolean }>((res, rej) => {
         const p = spawn(bin, args, { env });
@@ -252,6 +220,8 @@ export interface CrossCheckOptions {
   /** How many must answer (default: all of them). Every answer must agree, whatever the quorum. */
   quorum?: number;
   bin?: string;
+  /** Default: the SDK's shared zcash limiter. */
+  limiter?: CheckLimiter;
 }
 
 /** What has to match between two endpoints' answers: the verdict and everything it rests on. The
@@ -292,7 +262,7 @@ export async function verifyZcashCrossChecked(req: ZcashRequest, o: CrossCheckOp
   }
   const quorum = o.quorum ?? urls.length;
   if (!Number.isInteger(quorum) || quorum < 1 || quorum > urls.length) throw new VerifyError(`quorum must be a whole number from 1 to ${urls.length}`);
-  const settled = await Promise.allSettled(urls.map((u) => verifyZcash(req, { lwdUrl: u, bin: o.bin })));
+  const settled = await Promise.allSettled(urls.map((u) => verifyZcash(req, { lwdUrl: u, bin: o.bin, limiter: o.limiter })));
   return crossCheckVerdict(urls, settled, quorum);
 }
 

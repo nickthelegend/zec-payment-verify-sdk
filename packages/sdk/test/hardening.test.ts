@@ -9,7 +9,9 @@ import { resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   BusyError,
+  CheckLimiter,
   crossCheckVerdict,
+  proofFromSettleTx,
   LightwalletdBadAnswerError,
   LightwalletdUnreachableError,
   SetupRequiredError,
@@ -25,7 +27,7 @@ const ZEC_ROCKS = 'https://testnet.zec.rocks:443';
 
 const saved = { ...process.env };
 afterEach(() => {
-  for (const k of ['ZPV_LWD_PROXY', 'ZPV_ALLOW_INSECURE_LWD', 'ZPV_LWD_URL', 'ZPV_MAX_CHECKS', 'ZPV_MAX_QUEUE', 'ZPV_CHECK_TIMEOUT_MS']) {
+  for (const k of ['ZPV_LWD_PROXY', 'ZPV_ALLOW_INSECURE_LWD', 'ZPV_LWD_URL', 'ZPV_MAX_CHECKS', 'ZPV_MAX_QUEUE', 'ZPV_CHECK_TIMEOUT_MS', 'ZPV_MAX_NULL402_CHECKS']) {
     if (saved[k] === undefined) delete process.env[k];
     else process.env[k] = saved[k];
   }
@@ -113,6 +115,33 @@ describe('how zpay-verify reaches lightwalletd', () => {
     expect(reasons.filter((r) => r instanceof LightwalletdUnreachableError)).toHaveLength(8);
     expect(peak).toBeGreaterThan(0);
     expect(peak).toBeLessThanOrEqual(3);
+  });
+});
+
+describe('null402 rail limits', () => {
+  it('at most ZPV_MAX_NULL402_CHECKS Fuji checks run at once; past ZPV_MAX_QUEUE the rest are BusyError (live Fuji)', async () => {
+    const s = await proofFromSettleTx('0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593');
+    process.env.ZPV_MAX_NULL402_CHECKS = '1';
+    process.env.ZPV_MAX_QUEUE = '0';
+    const results = await Promise.allSettled(Array.from({ length: 3 }, () => verify({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals })));
+    const busy = results.filter((r) => r.status === 'rejected' && r.reason instanceof BusyError);
+    expect(busy).toHaveLength(2);
+    expect((busy[0] as PromiseRejectedResult).reason.message).toMatch(/null-402 checks are running .*ZPV_MAX_NULL402_CHECKS 1/);
+    const done = results.find((r) => r.status === 'fulfilled') as PromiseFulfilledResult<{ checks: { proofValid: boolean } }>;
+    expect(done.value.checks.proofValid).toBe(true);
+  });
+
+  it('a limiter of its own does not share slots with the default one (offline)', async () => {
+    process.env.ZPV_MAX_CHECKS = '1';
+    process.env.ZPV_MAX_QUEUE = '0';
+    const a = new CheckLimiter();
+    const b = new CheckLimiter();
+    let release = () => {};
+    const held = a.run(() => new Promise<void>((r) => (release = r)));
+    await expect(a.run(async () => 1)).rejects.toBeInstanceOf(BusyError);
+    await expect(b.run(async () => 2)).resolves.toBe(2);
+    release();
+    await held;
   });
 });
 

@@ -6,6 +6,11 @@
 import { createPublicClient, decodeFunctionData, http, toFunctionSelector, type Hex } from 'viem';
 import { avalancheFuji } from 'viem/chains';
 import { VerifyError } from './errors.js';
+import { CheckLimiter } from './limiter.js';
+
+/** Each null402 check is 4 Fuji RPC calls (a settlement check 6): at most ZPV_MAX_NULL402_CHECKS (default
+ *  16) run at once in this process and ZPV_MAX_QUEUE wait; past that a BusyError. */
+const null402Limiter = new CheckLimiter({ max: 'ZPV_MAX_NULL402_CHECKS', maxDefault: 16, what: 'null-402 checks' });
 
 export const NULL402_FUJI = {
   chainId: 43113,
@@ -119,7 +124,11 @@ function expectations(e: { payTo?: unknown; requiredAmount?: unknown; contextHas
   };
 }
 
-export async function verifyNull402(req: Null402Request, opts: { rpc?: string } = {}): Promise<Null402Result> {
+export function verifyNull402(req: Null402Request, opts: { rpc?: string } = {}): Promise<Null402Result> {
+  return null402Limiter.run(() => checkNull402(req, opts));
+}
+
+async function checkNull402(req: Null402Request, opts: { rpc?: string }): Promise<Null402Result> {
   if (!Array.isArray(req.publicSignals) || req.publicSignals.length !== 5) throw new VerifyError('publicSignals must be the 5 null-402 signals [nullifier, merkleRoot, payTo, requiredAmount, contextHash]');
   const pub = req.publicSignals.map((s, i) => uint256(s, `publicSignals[${i}]`)) as unknown as readonly [bigint, bigint, bigint, bigint, bigint];
   const e = expectations(req.expect);
@@ -264,7 +273,9 @@ export async function verifyNull402Settlement(hash: Hex, e: SettlementExpect, op
   if (typeof hash !== 'string' || !/^0x[0-9a-fA-F]{64}$/.test(hash)) throw new VerifyError(`settle tx must be a 0x-prefixed 32-byte hash, got ${JSON.stringify(hash)}`);
   expectations(e);
   if (e.recipient !== undefined && !(typeof e.recipient === 'string' && /^0x[0-9a-fA-F]{40}$/.test(e.recipient))) throw new VerifyError(`expect recipient must be a 0x-prefixed 20-byte address, got ${JSON.stringify(e.recipient)}`);
-  const s = await proofFromSettleTx(hash, opts);
-  const check = await verifyNull402({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals, expect: { payTo: e.payTo, requiredAmount: e.requiredAmount, contextHash: e.contextHash } }, opts);
-  return { ...settlementVerdict(s.status, check, s.recipient, e), settledInBlock: s.blockNumber, checkedAtBlock: check.provenance.blockNumber };
+  return null402Limiter.run(async () => {
+    const s = await proofFromSettleTx(hash, opts);
+    const check = await checkNull402({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals, expect: { payTo: e.payTo, requiredAmount: e.requiredAmount, contextHash: e.contextHash } }, opts);
+    return { ...settlementVerdict(s.status, check, s.recipient, e), settledInBlock: s.blockNumber, checkedAtBlock: check.provenance.blockNumber };
+  });
 }
