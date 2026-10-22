@@ -1,4 +1,4 @@
-// The x402 paywall in Chrome: 402 challenge, then the same URL with an X-PAYMENT header carrying a
+// The x402 paywall in Chrome: an x402 v1 402 challenge, then the same URL with an X-PAYMENT header carrying a
 // published, already-mined txid. Every answer comes from a live lightwalletd check with the published
 // Hanko merchant viewing key. No new payment is made, so a fresh challenge can only be refused; the
 // one accept is the published paywall payment presented to a paywall whose memo is pinned to it.
@@ -6,6 +6,9 @@ import type { Page } from '@playwright/test';
 import { test, expect, URLS, run, shot } from './fixtures';
 
 const header = (o: unknown) => Buffer.from(JSON.stringify(o)).toString('base64');
+/** X-PAYMENT exactly as Shielded x402's (Kage's) client builds it: xPaymentHeader(txid, memoNonce). */
+const kageHeader = (txid: string, memoNonce: string) => header({ x402Version: 1, scheme: 'zcash-shielded', network: 'zcash-testnet', payload: { txid: txid.toLowerCase(), memoNonce } });
+const decode = (h: string) => JSON.parse(Buffer.from(h, 'base64').toString('utf8'));
 const cases = run.paywall.cases;
 const merchant = run.wallets.merchant.address;
 
@@ -28,9 +31,13 @@ test.describe('x402 paywall (:8422, fresh challenges)', () => {
 
     const c402 = await open(page, `${URLS.paywall}/api/quote`);
     expect(c402.status).toBe(402);
+    // An x402 v1 PaymentRequiredResponse, in the shape Shielded x402 uses for the same scheme.
+    expect(c402.body.x402Version).toBe(1);
     const [c] = c402.body.accepts;
-    expect(c).toMatchObject({ x402Version: 1, scheme: 'zcash-shielded', network: 'zcash-testnet', payTo: merchant, amountZat: run.paywall.priceZat, minConf: 1, resource: '/api/quote' });
-    expect(c.memo).toMatch(/^zpv-[0-9a-f]{24}$/);
+    expect(c).toMatchObject({ scheme: 'zcash-shielded', network: 'zcash-testnet', payTo: merchant, maxAmountRequired: run.paywall.priceZat, asset: 'ZEC', amountZat: run.paywall.priceZat, minConf: 1, resource: '/api/quote' });
+    // A stateless memo: expiry, nonce and an HMAC; nothing is stored until a payment is presented.
+    expect(c.memo).toMatch(/^zpv-\d{10}-[0-9a-f]{16}-[A-Za-z0-9_-]{22}$/);
+    expect(c.extra).toEqual({ memoNonce: c.memo, expiresAt: Number(c.memo.split('-')[1]), paymentUri: c.zip321, minConf: 1 });
     const zip = new URL(c.zip321);
     expect(zip.protocol).toBe('zcash:');
     expect(zip.searchParams.get('amount')).toBe('0.0001');
@@ -75,12 +82,13 @@ test.describe('x402 paywall with the memo pinned to the published payment (:8423
     expect(wrong.body.error).toMatch(/^payment refused: /);
     expect(wrong.body.reasons).toContain('MEMO_MISMATCH');
 
-    const ok = await open(page, `${URLS.replay}/api/quote`, header({ memo: c.memo, txid: cases.paywall.txid }));
+    // Presented the way Shielded x402's client presents it: the x402 v1 envelope.
+    const ok = await open(page, `${URLS.replay}/api/quote`, kageHeader(cases.paywall.txid, c.memo));
     expect(ok.status).toBe(200);
     expect(ok.body.paid).toMatchObject({ txid: cases.paywall.txid, height: cases.paywall.paid.height, paidZat: 10000, memo: c.memo, lightwalletd: 'https://testnet.zec.rocks:443' });
     expect(ok.body.paid.confirmations).toBeGreaterThan(1000);
     expect(ok.body.data).toMatchObject({ path: '/api/quote', note: 'paid with a shielded Zcash payment, checked with a viewing key' });
-    expect(JSON.parse(Buffer.from(ok.headers['x-payment-response'], 'base64').toString())).toEqual(ok.body.paid);
+    expect(decode(ok.headers['x-payment-response'])).toEqual({ success: true, transaction: cases.paywall.txid, network: 'zcash-testnet', payer: '' });
     await page.screenshot({ path: shot('paywall-accepted', info.project.name) });
 
     // The same header again: that challenge is closed, so nothing is served and a new challenge comes back.
