@@ -837,14 +837,16 @@ needs: NULL402_OPERATOR_KEY (null-402's pool operator)</code></pre>
           if (e.key === '/' && document.activeElement !== jump && !/input|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); jump.focus(); }
         });
 
-        // the seal lands once, when its response is on screen
+        // the seal lands once, when its spot on the response is on screen. The response pane is taller
+        // than a laptop screen beside the hero, so this watches its top 200 px (where the seal sits), not
+        // a share of the whole pane.
         const seal = document.getElementById('seal');
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (reduce || !('IntersectionObserver' in window)) seal.classList.remove('armed');
         else {
           const io = new IntersectionObserver((es) => {
             if (es.some((e) => e.isIntersecting)) { seal.classList.remove('armed'); seal.classList.add('land'); io.disconnect(); }
-          }, { threshold: 0.6 });
+          }, { rootMargin: '0px 0px -200px 0px', threshold: 0 });
           io.observe(document.getElementById('seal-pane'));
         }
       })();
