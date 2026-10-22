@@ -131,19 +131,101 @@ export async function verifyNull402(req: Null402Request, opts: { rpc?: string } 
   };
 }
 
-/** Reads a real proof back out of a null-402 `settle` transaction on Fuji. */
-export async function proofFromSettleTx(hash: Hex, opts: { rpc?: string } = {}): Promise<{ proof: SnarkProof; publicSignals: string[]; recipient: string; blockNumber: string }> {
-  const tx = await client(opts.rpc ?? NULL402_FUJI.rpc).getTransaction({ hash });
+/** Where a settle() transaction stands: mined and succeeded, mined and reverted, or not mined yet. */
+export type SettleStatus = 'success' | 'reverted' | 'pending';
+
+export interface SettleTx {
+  proof: SnarkProof;
+  publicSignals: string[];
+  /** The address the pool paid (settle's `recipient` argument). */
+  recipient: string;
+  /** settle's `amount` argument. */
+  amount: string;
+  /** Null while pending. */
+  blockNumber: string | null;
+  /** From the transaction receipt: a reverted settle() paid nobody. */
+  status: SettleStatus;
+}
+
+/** Reads a real proof back out of a null-402 `settle` transaction on Fuji, with its receipt status. */
+export async function proofFromSettleTx(hash: Hex, opts: { rpc?: string } = {}): Promise<SettleTx> {
+  const c = client(opts.rpc ?? NULL402_FUJI.rpc);
+  let tx;
+  try {
+    tx = await c.getTransaction({ hash });
+  } catch (e) {
+    if ((e as Error).name === 'TransactionNotFoundError') throw new VerifyError(`${hash}: Fuji does not know this transaction`);
+    throw e;
+  }
   if (tx.to?.toLowerCase() !== NULL402_FUJI.pool.toLowerCase()) throw new VerifyError(`${hash} is not a call to the null-402 pool`);
   if (!tx.input.startsWith(SETTLE_SELECTOR)) throw new VerifyError(`${hash} is not a null-402 settle() call (selector ${tx.input.slice(0, 10)})`);
   const d = decodeFunctionData({ abi: POOL_ABI, data: tx.input });
   if (d.functionName !== 'settle') throw new VerifyError(`${hash} is not a null-402 settle() call`);
-  const [a, b, c, pub, recipient] = d.args;
+  const [a, b, cc, pub, recipient, amount] = d.args;
+  let status: SettleStatus = 'pending';
+  if (tx.blockNumber !== null) {
+    try {
+      status = (await c.getTransactionReceipt({ hash })).status;
+    } catch (e) {
+      if ((e as Error).name !== 'TransactionReceiptNotFoundError') throw e;
+    }
+  }
   const s = (x: bigint) => x.toString();
   return {
-    proof: { pi_a: [s(a[0]), s(a[1]), '1'], pi_b: [[s(b[0][1]), s(b[0][0])], [s(b[1][1]), s(b[1][0])], ['1', '0']], pi_c: [s(c[0]), s(c[1]), '1'] },
+    proof: { pi_a: [s(a[0]), s(a[1]), '1'], pi_b: [[s(b[0][1]), s(b[0][0])], [s(b[1][1]), s(b[1][0])], ['1', '0']], pi_c: [s(cc[0]), s(cc[1]), '1'] },
     publicSignals: pub.map(s),
     recipient,
-    blockNumber: String(tx.blockNumber),
+    amount: amount.toString(),
+    blockNumber: tx.blockNumber === null ? null : tx.blockNumber.toString(),
+    status,
   };
+}
+
+/** What the merchant expects a settlement to have paid it. */
+export interface SettlementExpect {
+  /** The proof's payTo signal (decimal field element). */
+  payTo?: string;
+  requiredAmount?: string | bigint;
+  /** The EVM address the pool should have paid. */
+  recipient?: string;
+  contextHash?: string;
+}
+
+export interface SettlementResult {
+  ok: boolean;
+  /** paid: a successful settle() bound to the merchant. refused: settled, but not to this merchant as
+   *  expected. unsettled: reverted or not mined, so nobody was paid. */
+  verdict: 'paid' | 'refused' | 'unsettled';
+  settled: boolean;
+  status: SettleStatus;
+  /** SETTLE_REVERTED, SETTLE_PENDING, BAD_PROOF, ROOT_UNKNOWN, NULLIFIER_NOT_SPENT, PAY_TO_MISMATCH,
+   *  AMOUNT_MISMATCH, CONTEXT_MISMATCH, RECIPIENT_MISMATCH, UNBOUND. */
+  reasons: string[];
+  checks: Null402Result['checks'];
+  signals: Null402Result['signals'];
+  recipient: string;
+  /** The plain proof check: could this proof still be settled to you? Always NULLIFIER_SPENT once settled. */
+  proofCheck: { ok: boolean; reasons: string[] };
+}
+
+/**
+ * The settlement rule. A reverted or pending settle() is never ok. A successful one is ok when the proof
+ * is valid against a known root, its nullifier is now spent (by this settle), and the payee, amount (and
+ * recipient, context when given) are the merchant's; without an expected payTo and amount it is UNBOUND.
+ */
+export function settlementVerdict(status: SettleStatus, check: Null402Result, recipient: string, e: SettlementExpect): SettlementResult {
+  const base = { status, checks: check.checks, signals: check.signals, recipient, proofCheck: { ok: check.ok, reasons: check.reasons } };
+  if (status !== 'success') return { ...base, ok: false, verdict: 'unsettled', settled: false, reasons: [status === 'reverted' ? 'SETTLE_REVERTED' : 'SETTLE_PENDING'] };
+  const reasons = check.reasons.filter((r) => r !== 'NULLIFIER_SPENT' && r !== 'UNBOUND');
+  if (!check.checks.nullifierSpent) reasons.push('NULLIFIER_NOT_SPENT');
+  if (e.recipient !== undefined && e.recipient.toLowerCase() !== recipient.toLowerCase()) reasons.push('RECIPIENT_MISMATCH');
+  if (e.payTo === undefined || e.requiredAmount === undefined) reasons.push('UNBOUND');
+  return { ...base, ok: reasons.length === 0, verdict: reasons.length === 0 ? 'paid' : 'refused', settled: true, reasons };
+}
+
+/** Was the mined null-402 settle() `hash` a payment to the merchant described by `e`? Read-only, live on Fuji. */
+export async function verifyNull402Settlement(hash: Hex, e: SettlementExpect, opts: { rpc?: string } = {}): Promise<SettlementResult> {
+  const s = await proofFromSettleTx(hash, opts);
+  const check = await verifyNull402({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals, expect: { payTo: e.payTo, requiredAmount: e.requiredAmount, contextHash: e.contextHash } }, opts);
+  return settlementVerdict(s.status, check, s.recipient, e);
 }

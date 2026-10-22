@@ -25,7 +25,21 @@ const n = await verify({ rail: 'null402', proof, publicSignals, expect: { payTo,
 | `zcash` | runs `zpay-verify` (packages/core) with the key in its environment; lightwalletd `ZPV_LWD_URL` (default testnet.zec.rocks) | `TX_NOT_FOUND`, `NO_OUTPUT_TO_KEY`, `MEMO_MISMATCH`, `AMOUNT_TOO_LOW`, `NOT_CONFIRMED`, `TRANSPARENT_PART` |
 | `null402` | read-only `eth_call`s on Fuji: `verifier.verifyProof`, `pool.knownRoot(root)`, `pool.spent(nullifier)` (no key, no gas) | `BAD_PROOF`, `ROOT_UNKNOWN`, `NULLIFIER_SPENT`, `PAY_TO_MISMATCH`, `AMOUNT_MISMATCH`, `CONTEXT_MISMATCH` |
 
-`proofFromSettleTx(hash)` reads a real proof back out of a null-402 `settle()` on Fuji.
+`proofFromSettleTx(hash)` reads a real proof back out of a null-402 `settle()` on Fuji, with the
+receipt's `status` (`success`, `reverted`, `pending`), the `recipient` and `amount` it paid, and
+`blockNumber` (null while pending).
+
+Two different questions about null-402:
+
+- **Could this proof still be settled to me?** `verify({rail: 'null402', proof, publicSignals, expect})`.
+  A proof read out of a mined settle() always answers `NULLIFIER_SPENT` here: it paid once already.
+- **Was this mined settle() a payment to me?** `verifyNull402Settlement(hash, {payTo, requiredAmount, recipient?, contextHash?})`.
+  A reverted or pending settle() is never ok (`SETTLE_REVERTED`, `SETTLE_PENDING`, verdict
+  `unsettled`). A successful one is `paid` when the proof is valid against a known root, its nullifier
+  is spent, and the payee, amount (and recipient, context when given) are yours; otherwise `refused`
+  with `PAY_TO_MISMATCH` / `AMOUNT_MISMATCH` / `RECIPIENT_MISMATCH` / `CONTEXT_MISMATCH`, or `UNBOUND`
+  without a payTo and amount. It does not stop you counting one settlement twice: remember which
+  settle hashes you accepted.
 
 **Cross-check.** One lightwalletd can withhold a transaction, lag, or forge one: the checker
 recomputes the txid and requires it in the block the server names, but it does not check proofs,
@@ -67,7 +81,7 @@ links that payment to you. A cross-check tells every endpoint. `ZPV_LWD_PROXY=so
 (Tor) hides the IP; the txid and the timing are still seen. Fetching compact blocks instead would hide
 the txid, but they carry no memo, and the memo is what ties a payment to an invoice.
 
-Tests (`pnpm test`): `verify.test.ts` (8, 7 live): the published x402 payment verifies (with the
+Tests (`pnpm test`): `verify.test.ts` (12, 11 live): the published x402 payment verifies (with the
 time of the block that lists it); wrong memo, higher amount, someone else's payment and an unknown txid
 are refused; bad input and a missing binary throw; a real settled null-402 proof is valid on the
 deployed verifier with a known root and is refused as a replay; tampered nullifier/amount fail the
@@ -79,6 +93,11 @@ public testnet indexers → paid only if both answer and agree; the env settings
 (offline). The "two agreeing answers" are two real fetches from testnet.zec.rocks given to the
 cross-check rule (`crossCheckVerdict`), labelled so in the test: they exercise the quorum logic, not
 operator independence (verify() refuses one server under two spellings).
+`verify.test.ts` also covers settlements (4 more, all live): a settle's receipt status, recipient and
+amount; both real settle() calls on the pool are `paid` to their merchant, and another recipient or
+amount, or no binding, is not; a reverted or pending status is never ok (the rule, on the real proof
+check: there is no real reverted settle() on the pool, Routescan lists 7 transactions, all status 1);
+an unknown hash is an error.
 `hardening.test.ts` (7, 2 live): bad amounts, minConf, memo, rail and a non-object are `VerifyError`;
 two spellings of one endpoint are refused; `ZPV_LWD_PROXY` reaches the binary (a dead proxy is an
 error, never a direct check); a plaintext remote URL is Setup required; a silent server is killed

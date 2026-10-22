@@ -3,11 +3,14 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { proofFromSettleTx, SetupRequiredError, verify, VerifyError, verifyZcash } from '../src/index.js';
+import { proofFromSettleTx, settlementVerdict, SetupRequiredError, verify, verifyNull402Settlement, VerifyError, verifyZcash } from '../src/index.js';
 
 const fx = JSON.parse(readFileSync(resolve(__dirname, '../../../fixtures/testnet.json'), 'utf8'));
 /** A real null-402 settle() on Fuji (pool 0x39a9…cA1C, block 57020734). */
 const SETTLE_TX = '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593';
+/** The pool's other settle() (block 57020809): same merchant, another note. Routescan lists 7 transactions
+ *  to the pool on Oct 22, 2026, all status 1, so there is no real reverted settle() to test against. */
+const SETTLE_TX_2 = '0xd91c0ab7d0d228d003277d62145442b24dcd52492becf561b9977c40fe781e5c';
 
 describe('zcash rail', () => {
   it('the published x402 payment verifies, with provenance', async () => {
@@ -84,5 +87,48 @@ describe('null402 rail (Avalanche Fuji)', () => {
   it('a non-settle tx or malformed signals are errors', async () => {
     await expect(verify({ rail: 'null402', proof: { pi_a: [], pi_b: [], pi_c: [] }, publicSignals: ['1'] })).rejects.toBeInstanceOf(VerifyError);
     await expect(proofFromSettleTx('0xbc62a275074dfb9434963ab04605c4102fcf937af4b8c8c0fb460368f007b025')).rejects.toThrow(/not a null-402 settle\(\) call/);
+  });
+});
+
+describe('null402 settlement (was this mined settle() a payment to me?)', () => {
+  it('a successful settle() is read with its receipt status, payee and amount', async () => {
+    const s = await proofFromSettleTx(SETTLE_TX);
+    expect(s.status).toBe('success');
+    expect(s.blockNumber).toBe('57020734');
+    expect(s.recipient).toBe('0x605ab54711b69C1D783fd72447d92C3dA10797CD');
+    expect(s.amount).toBe('1000');
+  });
+
+  it('a successful settle() bound to the merchant is paid; another payee, amount or recipient, or no binding, is not', async () => {
+    const s = await proofFromSettleTx(SETTLE_TX);
+    const me = { payTo: s.publicSignals[2], requiredAmount: s.publicSignals[3], recipient: s.recipient };
+    for (const tx of [SETTLE_TX, SETTLE_TX_2]) {
+      const r = await verifyNull402Settlement(tx as `0x${string}`, me);
+      expect(r.ok, `${tx}: ${r.reasons}`).toBe(true);
+      expect(r).toMatchObject({ verdict: 'paid', settled: true, status: 'success', reasons: [] });
+      expect(r.checks).toEqual({ proofValid: true, rootKnown: true, nullifierSpent: true });
+      // The plain proof check says what it says: this proof can no longer be settled to anyone.
+      expect(r.proofCheck.reasons).toEqual(['NULLIFIER_SPENT']);
+    }
+    const other = await verifyNull402Settlement(SETTLE_TX, { ...me, recipient: '0x0000000000000000000000000000000000000001', requiredAmount: '999' });
+    expect(other).toMatchObject({ ok: false, verdict: 'refused', settled: true });
+    expect(other.reasons).toEqual(['AMOUNT_MISMATCH', 'RECIPIENT_MISMATCH']);
+    const unbound = await verifyNull402Settlement(SETTLE_TX, {});
+    expect(unbound.ok).toBe(false);
+    expect(unbound.reasons).toEqual(['UNBOUND']);
+  });
+
+  it('a reverted or pending settle() is never ok, whatever the proof (the rule, on the real proof check)', async () => {
+    const s = await proofFromSettleTx(SETTLE_TX);
+    const check = await verify({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals, expect: { payTo: s.publicSignals[2], requiredAmount: s.publicSignals[3] } });
+    for (const [status, reason] of [['reverted', 'SETTLE_REVERTED'], ['pending', 'SETTLE_PENDING']] as const) {
+      const v = settlementVerdict(status, check, s.recipient, { payTo: s.publicSignals[2], requiredAmount: s.publicSignals[3], recipient: s.recipient });
+      expect(v).toMatchObject({ ok: false, verdict: 'unsettled', settled: false });
+      expect(v.reasons).toEqual([reason]);
+    }
+  });
+
+  it('a hash Fuji does not know is an error, not a verdict', async () => {
+    await expect(verifyNull402Settlement(`0x${'ab'.repeat(32)}`, {})).rejects.toThrow(/Fuji does not know/);
   });
 });
