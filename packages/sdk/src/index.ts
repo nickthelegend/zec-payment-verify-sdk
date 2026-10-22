@@ -1,6 +1,7 @@
 // One verify() for two payment rails. Every result comes from a live check (lightwalletd or a Fuji
 // eth_call) and carries its provenance; a failure to check throws, it is never a verdict.
 import { verifyNull402, type Null402Request, type Null402Result } from './null402.js';
+import { VerifyError } from './errors.js';
 import { crossCheckFromEnv, verifyZcash, verifyZcashCrossChecked, type ZcashRequest, type ZcashResult } from './zcash.js';
 
 export * from './errors.js';
@@ -28,6 +29,7 @@ export function verify(req: ZcashRequest, opts?: VerifyOptions): Promise<ZcashRe
 export function verify(req: Null402Request, opts?: VerifyOptions): Promise<Null402Result>;
 export function verify(req: VerifyRequest, opts?: VerifyOptions): Promise<VerifyResult>;
 export function verify(req: VerifyRequest, opts: VerifyOptions = {}): Promise<VerifyResult> {
+  if (typeof req !== 'object' || req === null || Array.isArray(req)) return Promise.reject(new VerifyError('the request must be an object with a rail (zcash or null402)'));
   switch (req.rail) {
     case 'zcash': {
       if (opts.lwdUrls) return verifyZcashCrossChecked(req, { lwdUrls: opts.lwdUrls, quorum: opts.quorum });
@@ -43,6 +45,6 @@ export function verify(req: VerifyRequest, opts: VerifyOptions = {}): Promise<Ve
     case 'null402':
       return verifyNull402(req, { rpc: opts.fujiRpc });
     default:
-      return Promise.reject(new Error(`unknown rail '${(req as { rail?: string }).rail}' (zcash or null402)`));
+      return Promise.reject(new VerifyError(`unknown rail '${(req as { rail?: string }).rail}' (zcash or null402)`));
   }
 }

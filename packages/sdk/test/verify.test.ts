@@ -15,6 +15,9 @@ describe('zcash rail', () => {
     expect(r.ok, r.reasons.join()).toBe(true);
     expect(r.paidZat).toBe(100_000);
     expect(r.report.height).toBe(4_521_112);
+    // the block lightwalletd names lists the tx; its time is earlier than the Oct 20 paywall payment's block (1,792,512,944)
+    expect(r.report.block_time).toBeGreaterThan(1_790_000_000);
+    expect(r.report.block_time).toBeLessThan(1_792_512_944);
     expect(r.provenance.lightwalletd).toMatch(/^https:\/\//);
     expect(r.provenance.tip).toBeGreaterThan(4_521_112);
   });

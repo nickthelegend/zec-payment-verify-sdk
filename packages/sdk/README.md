@@ -27,11 +27,16 @@ const n = await verify({ rail: 'null402', proof, publicSignals, expect: { payTo,
 
 `proofFromSettleTx(hash)` reads a real proof back out of a null-402 `settle()` on Fuji.
 
-**Cross-check.** One lightwalletd can withhold a transaction or lag. With `lwdUrls` (or
+**Cross-check.** One lightwalletd can withhold a transaction, lag, or forge one: the checker
+recomputes the txid and requires it in the block the server names, but it does not check proofs,
+signatures or the block's place in the chain, so a server that forges a transaction and its block is
+believed. With `lwdUrls` (or
 `ZPV_LWD_URLS`), `zpay-verify` runs once per endpoint, in parallel. The answers must agree on the
 verdict and on everything it rests on (found, height, outputs, pools, reasons, amount); tips and
 confirmation counts may differ. An endpoint that cannot be reached or queried does not count toward
-`quorum` (default: all). Any disagreement, or fewer answers than `quorum`, is `unverified`: never
+`quorum` (default: all); one whose answer contradicts itself counts as a dissent. Two spellings of one
+server (`https://testnet.zec.rocks` and `…:443`) are refused: endpoints are compared as
+scheme://host:port. Any disagreement, or fewer answers than `quorum`, is `unverified`: never
 `paid`, and the gateway answers it with 503 and serves nothing. Bad input and a missing binary still
 throw. Public testnet indexers found on Oct 22, 2026: `testnet.zec.rocks` (lightwalletd) and
 `zaino.testnet.unsafe.zec.rocks` (Zaino, same operator, different software; it answered 503 that day).
@@ -41,16 +46,45 @@ your own lightwalletd or Zaino.
 Setup: the `zcash` rail needs the `zpay-verify` binary (`ZPV_BIN`, or built in `packages/core`, or
 `$CARGO_TARGET_DIR/release`). Missing → `Setup required: ZPV_BIN`.
 
-Tests (`pnpm test`): `verify.test.ts` (8, 7 live): the published x402 payment verifies; wrong memo, higher amount,
-someone else's payment and an unknown txid are refused; bad input and a missing binary throw; a real
-settled null-402 proof is valid on the deployed verifier with a known root and is refused as a
-replay; tampered nullifier/amount fail the verifier; wrong merchant expectations are refused; without an expected payTo and amount → `UNBOUND`.
+**Errors.** Every failure to check throws; the class says what to do:
+
+| Error | When |
+|---|---|
+| `VerifyError` | bad input: txid, key, `amountZat` not a whole number ≥ 0, `minConf`, memo over 512 bytes, unknown rail |
+| `LightwalletdUnreachableError` | no connection, an RPC failure, a proxy that is down, or no answer within `ZPV_CHECK_TIMEOUT_MS` (default 90 s; the process is killed) |
+| `LightwalletdBadAnswerError` | the server answered, but the answer contradicts itself (txid mismatch, unparseable bytes, a block that does not list the tx). In a cross-check it is a dissent: `UNVERIFIED_DISAGREEMENT` |
+| `BusyError` | more than `ZPV_MAX_CHECKS` (default 8) `zpay-verify` processes running and `ZPV_MAX_QUEUE` (default 32) waiting in this process |
+| `SetupRequiredError` | missing binary, a malformed setting (`ZPV_LWD_PROXY`, `ZPV_LWD_QUORUM`, …), or a plaintext `http://` lightwalletd that is not loopback |
+
+The three middle classes extend `VerifyError` (so existing `catch` blocks still see them); test for
+them first.
+
+The binary gets only the key, the lightwalletd URL, `ZPV_LWD_PROXY` and `ZPV_ALLOW_INSECURE_LWD`.
+
+**What a lightwalletd learns.** Each check asks the server for one txid (`GetTransaction`) and its
+block. The operator learns that this txid matters to you, when you asked, and your IP address, which
+links that payment to you. A cross-check tells every endpoint. `ZPV_LWD_PROXY=socks5h://127.0.0.1:9050`
+(Tor) hides the IP; the txid and the timing are still seen. Fetching compact blocks instead would hide
+the txid, but they carry no memo, and the memo is what ties a payment to an invoice.
+
+Tests (`pnpm test`): `verify.test.ts` (8, 7 live): the published x402 payment verifies (with the
+time of the block that lists it); wrong memo, higher amount, someone else's payment and an unknown txid
+are refused; bad input and a missing binary throw; a real settled null-402 proof is valid on the
+deployed verifier with a known root and is refused as a replay; tampered nullifier/amount fail the
+verifier; wrong merchant expectations are refused; without an expected payTo and amount → `UNBOUND`.
 `crosscheck.test.ts` (6, 5 live): two agreeing answers meet a quorum of 2 with a third endpoint dead
 → paid; one answer for a quorum of 2 → unverified; testnet.zec.rocks vs a real mainnet lightwalletd
 that lacks the transaction → unverified at quorum 1 and 2; agreeing refusals stay refused; the two
 public testnet indexers → paid only if both answer and agree; the env settings and bad settings
-(offline). The "two agreeing answers" are the same server under two URLs, labelled so in the test:
-it exercises the quorum logic, not operator independence.
+(offline). The "two agreeing answers" are two real fetches from testnet.zec.rocks given to the
+cross-check rule (`crossCheckVerdict`), labelled so in the test: they exercise the quorum logic, not
+operator independence (verify() refuses one server under two spellings).
+`hardening.test.ts` (7, 2 live): bad amounts, minConf, memo, rail and a non-object are `VerifyError`;
+two spellings of one endpoint are refused; `ZPV_LWD_PROXY` reaches the binary (a dead proxy is an
+error, never a direct check); a plaintext remote URL is Setup required; a silent server is killed
+after `ZPV_CHECK_TIMEOUT_MS`; 40 checks at once with `ZPV_MAX_CHECKS=3`, `ZPV_MAX_QUEUE=5` → never more
+than 3 processes, 32 `BusyError`; an endpoint whose answer contradicts itself makes the cross-check
+unverified, naming it.
 
 Not covered live: a null402 proof that passes all three checks. That needs a fresh deposit whose root
 null-402's pool operator registers (`NULL402_OPERATOR_KEY`, not held here) and a prover key matching

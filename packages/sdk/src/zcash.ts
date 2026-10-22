@@ -3,15 +3,17 @@ import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SetupRequiredError, VerifyError } from './errors.js';
+import { BusyError, LightwalletdBadAnswerError, LightwalletdUnreachableError, SetupRequiredError, VerifyError } from './errors.js';
 
 export interface ZcashRequest {
   rail: 'zcash';
   /** The receiver's unified incoming viewing key (uivktest1…). */
   uivk: string;
   txid: string;
+  /** Whole zatoshi: a number, a bigint, or a decimal string. */
   amountZat: number | bigint;
-  /** Only outputs with exactly this text memo count. */
+  /** Only outputs with exactly this text memo count (at most 512 bytes). Without it every output to the
+   *  key counts, so any past payment to the receiver can pass: track which txids you accepted. */
   memo?: string;
   /** Default 1. */
   minConf?: number;
@@ -30,6 +32,8 @@ export interface ZcashReport {
   txid: string;
   found: boolean;
   height: number | null;
+  /** Unix time of the block that mined it (lightwalletd's compact block, which must list the tx). */
+  block_time: number | null;
   confirmations: number;
   tip: number;
   outputs: ZcashOutput[];
@@ -40,13 +44,15 @@ export interface ZcashReport {
 export interface EndpointAnswer {
   lightwalletd: string;
   answered: boolean;
+  /** It answered, but the answer contradicts itself (LightwalletdBadAnswerError): counted as a dissent. */
+  inconsistent?: boolean;
   ok?: boolean;
   reasons?: string[];
   paidZat?: number;
   found?: boolean;
   height?: number | null;
   tip?: number;
-  /** Why it did not answer (connection or RPC failure). */
+  /** Why it did not answer (connection or RPC failure), or why its answer was not usable. */
   error?: string;
 }
 
@@ -87,42 +93,117 @@ export function zpayBinary(env: Record<string, string | undefined> = process.env
   return found;
 }
 
+/** 21 million ZEC in zatoshi: no payment can be larger. */
+const MAX_ZAT = 2_100_000_000_000_000n;
+
+function zatoshi(v: unknown): bigint {
+  let z: bigint | undefined;
+  if (typeof v === 'bigint') z = v;
+  else if (typeof v === 'number' && Number.isSafeInteger(v)) z = BigInt(v);
+  else if (typeof v === 'string' && /^\d{1,19}$/.test(v)) z = BigInt(v);
+  if (z === undefined || z < 0n || z > MAX_ZAT) throw new VerifyError(`amountZat must be a whole number of zatoshi from 0 to ${MAX_ZAT}, got ${typeof v === 'bigint' ? v : (JSON.stringify(v) ?? String(v))}`);
+  return z;
+}
+
 function checkInput(req: ZcashRequest): bigint {
-  if (!/^[0-9a-fA-F]{64}$/.test(req.txid)) throw new VerifyError(`not a txid (64 hex characters): ${req.txid}`);
-  if (!req.uivk?.startsWith('uivktest1')) throw new VerifyError('uivk must be a testnet unified incoming viewing key (uivktest1…)');
-  const amount = BigInt(req.amountZat);
-  if (amount < 0n) throw new VerifyError('amountZat must be ≥ 0');
+  if (typeof req !== 'object' || req === null) throw new VerifyError('the request must be an object');
+  if (typeof req.txid !== 'string' || !/^[0-9a-fA-F]{64}$/.test(req.txid)) throw new VerifyError(`not a txid (64 hex characters): ${String(req.txid)}`);
+  if (typeof req.uivk !== 'string' || !req.uivk.startsWith('uivktest1')) throw new VerifyError('uivk must be a testnet unified incoming viewing key (uivktest1…)');
+  const amount = zatoshi(req.amountZat);
+  if (req.memo !== undefined && typeof req.memo !== 'string') throw new VerifyError('memo must be a string');
+  if (req.memo !== undefined && Buffer.byteLength(req.memo, 'utf8') > 512) throw new VerifyError('memo is longer than 512 bytes, the most a Zcash memo holds');
+  if (req.minConf !== undefined && !(Number.isSafeInteger(req.minConf) && req.minConf >= 0)) throw new VerifyError(`minConf must be a whole number ≥ 0, got ${JSON.stringify(req.minConf)}`);
+  if (req.allowTransparent !== undefined && typeof req.allowTransparent !== 'boolean') throw new VerifyError('allowTransparent must be true or false');
   return amount;
 }
 
-/** zpay-verify could not reach or query this lightwalletd (as opposed to bad input). */
-export class LightwalletdUnreachableError extends VerifyError {
-  constructor(message: string) {
-    super(message);
-    this.name = 'LightwalletdUnreachableError';
+/** A setting from the environment as a whole number ≥ min (default when unset). */
+function envInt(name: string, dflt: number, min: number): number {
+  const v = process.env[name]?.trim();
+  if (!v) return dflt;
+  if (!/^\d+$/.test(v) || Number(v) < min) throw new SetupRequiredError(name, `a whole number ≥ ${min}, got ${v}`);
+  return Number(v);
+}
+
+/**
+ * Bounds the zpay-verify processes this process runs at once (ZPV_MAX_CHECKS, default 8) and how many
+ * checks may wait for a slot (ZPV_MAX_QUEUE, default 32). Past that a check is a BusyError at once, so a
+ * flood of requests cannot fork without limit. A cross-check takes one slot per endpoint.
+ */
+class CheckLimiter {
+  private running = 0;
+  private waiting: (() => void)[] = [];
+
+  async run<T>(f: () => Promise<T>): Promise<T> {
+    const max = envInt('ZPV_MAX_CHECKS', 8, 1);
+    const queue = envInt('ZPV_MAX_QUEUE', 32, 0);
+    if (this.running >= max) {
+      if (this.waiting.length >= queue) throw new BusyError(`${this.running} payment checks are running and ${this.waiting.length} are waiting (ZPV_MAX_CHECKS ${max}, ZPV_MAX_QUEUE ${queue}); retry later`);
+      await new Promise<void>((r) => this.waiting.push(r)); // the check that ends hands its slot over
+    } else this.running++;
+    try {
+      return await f();
+    } finally {
+      const next = this.waiting.shift();
+      if (next) next();
+      else this.running--;
+    }
   }
 }
+
+const limiter = new CheckLimiter();
+
+/** The error zpay-verify printed (exit 2), as the error class a caller can act on. */
+export function classifyCliError(msg: string): Error {
+  if (/^(cannot connect to lightwalletd|lightwalletd RPC failed)/.test(msg)) return new LightwalletdUnreachableError(msg);
+  if (/^(lightwalletd answered inconsistently|lightwalletd returned a transaction whose txid differs|transaction does not parse)/.test(msg)) return new LightwalletdBadAnswerError(msg);
+  const setup = /^Setup required: (\S+?)\s+(.*)$/s.exec(msg);
+  if (setup) return new SetupRequiredError(setup[1], setup[2]);
+  if (/^invalid lightwalletd URL/.test(msg)) return new SetupRequiredError('ZPV_LWD_URL', msg);
+  return new VerifyError(msg);
+}
+
+const seconds = (ms: number) => `${Number((ms / 1000).toFixed(1))} s`;
 
 export async function verifyZcash(req: ZcashRequest, opts: { lwdUrl?: string; bin?: string } = {}): Promise<ZcashResult> {
   const amount = checkInput(req);
   const args = ['verify', req.txid, '--amount', amount.toString(), '--min-conf', String(req.minConf ?? 1)];
   if (req.memo !== undefined) args.push('--memo', req.memo);
   if (req.allowTransparent) args.push('--allow-transparent');
+  // Only what the binary needs: the key, which lightwalletd, and how to reach it.
   const env: Record<string, string> = { PATH: process.env.PATH ?? '', ZPV_UIVK: req.uivk };
   const lwd = opts.lwdUrl ?? process.env.ZPV_LWD_URL;
   if (lwd) env.ZPV_LWD_URL = lwd;
-  const { code, stdout, stderr } = await new Promise<{ code: number | null; stdout: string; stderr: string }>((res, rej) => {
-    const p = spawn(opts.bin ?? zpayBinary(), args, { env });
-    let stdout = '';
-    let stderr = '';
-    p.stdout.on('data', (d) => (stdout += d));
-    p.stderr.on('data', (d) => (stderr += d));
-    p.on('error', rej);
-    p.on('close', (c) => res({ code: c, stdout, stderr }));
-  });
+  for (const k of ['ZPV_LWD_PROXY', 'ZPV_ALLOW_INSECURE_LWD']) if (process.env[k]) env[k] = process.env[k]!;
+  const bin = opts.bin ?? zpayBinary();
+  const timeoutMs = envInt('ZPV_CHECK_TIMEOUT_MS', 90_000, 1);
+  const { code, stdout, stderr, timedOut } = await limiter.run(
+    () =>
+      new Promise<{ code: number | null; stdout: string; stderr: string; timedOut: boolean }>((res, rej) => {
+        const p = spawn(bin, args, { env });
+        let stdout = '';
+        let stderr = '';
+        let timedOut = false;
+        const timer = setTimeout(() => {
+          timedOut = true;
+          p.kill('SIGKILL');
+        }, timeoutMs);
+        p.stdout.on('data', (d) => (stdout += d));
+        p.stderr.on('data', (d) => (stderr += d));
+        p.on('error', (e) => {
+          clearTimeout(timer);
+          rej(e);
+        });
+        p.on('close', (c) => {
+          clearTimeout(timer);
+          res({ code: c, stdout, stderr, timedOut });
+        });
+      }),
+  );
+  if (timedOut) throw new LightwalletdUnreachableError(`zpay-verify got no answer within ${seconds(timeoutMs)} from ${lwd ?? 'the default lightwalletd'} and was stopped (ZPV_CHECK_TIMEOUT_MS)`);
   if (code === 2 || (code !== 0 && code !== 1)) {
     const msg = stderr.replace(/^error: /, '').trim() || `zpay-verify exited with ${code}`;
-    throw /^(cannot connect to lightwalletd|lightwalletd RPC failed)/.test(msg) ? new LightwalletdUnreachableError(msg) : new VerifyError(msg);
+    throw classifyCliError(msg);
   }
   const out = JSON.parse(stdout) as { report: ZcashReport; verdict: { ok: boolean; paid_zat: number; reasons: string[] }; lightwalletd: string };
   return {
@@ -147,35 +228,66 @@ export interface CrossCheckOptions {
 /** What has to match between two endpoints' answers: the verdict and everything it rests on. The
  *  tip and the confirmation count may differ by a block or two as long as the verdict does not. */
 function signature(r: ZcashResult) {
-  const { found, height, outputs, pools } = r.report!;
-  return JSON.stringify({ ok: r.ok, reasons: r.reasons, paidZat: r.paidZat, found, height, outputs, pools });
+  const { found, height, block_time, outputs, pools } = r.report!;
+  return JSON.stringify({ ok: r.ok, reasons: r.reasons, paidZat: r.paidZat, found, height, block_time, outputs, pools });
+}
+
+/** scheme://host:port with the default port filled in, so two spellings of one server are one endpoint. */
+function endpointKey(u: string): string {
+  let x: URL;
+  try {
+    x = new URL(u);
+  } catch {
+    throw new VerifyError(`lwdUrls: not a URL: ${u}`);
+  }
+  if (x.protocol !== 'https:' && x.protocol !== 'http:') throw new VerifyError(`lwdUrls: not a URL: ${u} (https://host:port)`);
+  return `${x.protocol}//${x.hostname}:${x.port || (x.protocol === 'https:' ? '443' : '80')}`;
 }
 
 /**
  * Check one payment against several lightwalletd endpoints. `paid` or `refused` only when at least
  * `quorum` endpoints answered and all answers agree; otherwise `unverified` (never `paid`). Bad input
- * and a missing binary still throw, as in verifyZcash.
+ * and a missing binary still throw, as in verifyZcash. Two spellings of one server (with and without
+ * :443) are refused: they would be one server voting twice.
  */
 export async function verifyZcashCrossChecked(req: ZcashRequest, o: CrossCheckOptions): Promise<ZcashResult> {
   checkInput(req);
   const urls = o.lwdUrls.map((u) => u.trim()).filter(Boolean);
   if (urls.length === 0) throw new VerifyError('lwdUrls is empty');
-  if (new Set(urls).size !== urls.length) throw new VerifyError('lwdUrls has the same URL twice');
+  const seen = new Map<string, string>();
+  for (const u of urls) {
+    const k = endpointKey(u);
+    const first = seen.get(k);
+    if (first !== undefined) throw new VerifyError(`lwdUrls has the same URL twice: ${first} and ${u} are the same endpoint twice (${k})`);
+    seen.set(k, u);
+  }
   const quorum = o.quorum ?? urls.length;
   if (!Number.isInteger(quorum) || quorum < 1 || quorum > urls.length) throw new VerifyError(`quorum must be a whole number from 1 to ${urls.length}`);
-
   const settled = await Promise.allSettled(urls.map((u) => verifyZcash(req, { lwdUrl: u, bin: o.bin })));
+  return crossCheckVerdict(urls, settled, quorum);
+}
+
+/**
+ * The cross-check rule on its own: `settled[i]` is endpoint `urls[i]`'s outcome. An endpoint that cannot
+ * be reached does not count toward the quorum; one whose answer contradicts itself is a dissent. Any
+ * dissent or disagreement is UNVERIFIED_DISAGREEMENT; fewer answers than `quorum` is UNVERIFIED_QUORUM.
+ */
+export function crossCheckVerdict(urls: string[], settled: PromiseSettledResult<ZcashResult>[], quorum: number): ZcashResult {
   const endpoints: EndpointAnswer[] = [];
   const answers: ZcashResult[] = [];
+  let dissent = false;
   settled.forEach((s, i) => {
     if (s.status === 'fulfilled') {
       const r = s.value;
       answers.push(r);
       endpoints.push({ lightwalletd: urls[i], answered: true, ok: r.ok, reasons: r.reasons, paidZat: r.paidZat, found: r.report!.found, height: r.report!.height, tip: r.report!.tip });
+    } else if (s.reason instanceof LightwalletdBadAnswerError) {
+      dissent = true;
+      endpoints.push({ lightwalletd: urls[i], answered: true, inconsistent: true, ok: false, error: s.reason.message });
     } else if (s.reason instanceof LightwalletdUnreachableError) {
       endpoints.push({ lightwalletd: urls[i], answered: false, error: s.reason.message });
     } else {
-      throw s.reason; // bad input or Setup required: the same for every endpoint, not a verdict
+      throw s.reason; // bad input, Setup required or busy: the same for every endpoint, not a verdict
     }
   });
 
@@ -193,7 +305,7 @@ export async function verifyZcashCrossChecked(req: ZcashRequest, o: CrossCheckOp
     crossCheck: { quorum, agreed, endpoints },
   });
   const agree = answers.every((a) => signature(a) === signature(answers[0]));
-  if (answers.length > 1 && !agree) return unverified('UNVERIFIED_DISAGREEMENT', false);
+  if (dissent || (answers.length > 1 && !agree)) return unverified('UNVERIFIED_DISAGREEMENT', false);
   if (answers.length < quorum) return unverified('UNVERIFIED_QUORUM', false);
 
   const first = answers[0];
