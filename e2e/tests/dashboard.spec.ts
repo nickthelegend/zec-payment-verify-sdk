@@ -9,9 +9,19 @@ const verdict = (page: Page) => page.locator('section.verdict');
 const response = (page: Page) => page.locator('.pane.response');
 const history = (page: Page) => page.locator('#history');
 
+/**
+ * Sends and waits for the answer. The button must show "Checking…" while the check runs: a request the
+ * browser refuses at once (API down) can finish before a poll sees that label, so an observer installed
+ * before the click records every label the button shows, and the assertion is on that record.
+ */
 async function sendAndWait(page: Page) {
+  await send(page).evaluate((btn) => {
+    const w = window as unknown as { __hankoLabels: string[] };
+    w.__hankoLabels = [];
+    new MutationObserver(() => w.__hankoLabels.push(btn.textContent ?? '')).observe(btn, { childList: true, subtree: true, characterData: true });
+  });
   await send(page).click();
-  await expect(send(page)).toHaveText(/Checking…/);
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __hankoLabels: string[] }).__hankoLabels.some((l) => /Checking…/.test(l)))).toBe(true);
   await expect(send(page)).toHaveText(/Send request/, { timeout: 60_000 });
 }
 
