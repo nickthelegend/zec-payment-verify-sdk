@@ -317,7 +317,7 @@ ZPV_UIVK=… zpay-verify verify 030c3cbf…8351 \
           <div class="prose">
             <p class="kicker">Start</p>
             <h2 class="t" id="h-quick">Quickstart</h2>
-            <p>Needs Node 22+, pnpm 10 and Rust 1.89 (pinned in <code>packages/core/rust-toolchain.toml</code>). <code>pnpm test</code> builds the Rust core and every package, then runs the suite against Zcash testnet and Fuji.</p>
+            <p>Needs Node 22.13+ (the paywall's SQLite store uses <code>node:sqlite</code>), pnpm 10 and Rust 1.89 (pinned in <code>packages/core/rust-toolchain.toml</code>). <code>pnpm test</code> builds the Rust core and every package, then runs the suite against Zcash testnet and Fuji.</p>
             <ol>
               <li>Clone and install: <code>pnpm install</code>.</li>
               <li>Build and test: <code>pnpm test</code>. Nothing is mocked; the tests read real mined transactions.</li>

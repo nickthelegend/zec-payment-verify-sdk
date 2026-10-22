@@ -1,5 +1,13 @@
 # Hanko — verify shielded Zcash payments with a viewing key
 
+**Demo:** [landing](https://nickthelegend.github.io/zec-payment-verify-sdk/) ·
+[console](https://nickthelegend.github.io/zec-payment-verify-sdk/dashboard/), published by
+`.github/workflows/pages.yml` on the first push to `main` once Pages is enabled; **not live until
+then** (`scripts/build-pages.sh` builds the same site locally). The console's null-402 tab runs in the
+browser against Fuji; its Zcash tab needs a local verify API and says Setup required without one.
+**Video:** not recorded for this version yet; the Oct 20 terminal capture (27 s) predates the console,
+landing, cross-check and SQLite store, so it is not linked. **Tests:** [TESTING.md](TESTING.md).
+
 **"Was I paid?" for shielded Zcash.** Check that a transaction paid you at least N zatoshi with
 memo M, with enough confirmations and no transparent part, using only your **incoming viewing key**
 (it sees payments coming in; it cannot spend). The same `verify()` checks a **null-402** Groth16
@@ -69,8 +77,8 @@ e2e/stack.sh && (cd e2e && npm run test:e2e); e2e/stack.sh stop   # 56 browser t
 scripts/build-pages.sh             # the static site GitHub Pages serves: landing + console
 ```
 
-CI: `.github/workflows/ci.yml` runs the same `pnpm test` (it has not run on GitHub yet: nothing is pushed).
-A demo video from Oct 20 exists but is not hosted publicly. Review of Oct 21: [`docs/JUDGE-2026-10-21.md`](docs/JUDGE-2026-10-21.md).
+CI: `.github/workflows/ci.yml` runs the same `pnpm test`, and `pages.yml` publishes the landing and
+console. Neither has run on GitHub yet: nothing is pushed.
 ZIP 311 payment disclosures are not built: [`docs/ZIP-311-DESIGN.md`](docs/ZIP-311-DESIGN.md) says why.
 
 ## Honest limits
