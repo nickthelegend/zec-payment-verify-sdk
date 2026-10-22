@@ -113,7 +113,8 @@ ZIP 311 payment disclosures are not built: [`docs/ZIP-311-DESIGN.md`](docs/ZIP-3
   every check, so an agent must track what it accepted (the tool says so).
 - ZIP 311 payment disclosures (prove one payment without the receiver's key) are not built: the ZIP
   is a draft with no Orchard/Ironwood support, no encoding and no implementation.
-- A null-402 check is `ok` only with an expected payTo and amount (otherwise `UNBOUND`).
+- A null-402 check is `ok` only with an expected payTo and amount, and a settlement only with an
+  expected recipient as well (otherwise `UNBOUND`): the pool pays whatever recipient `settle()` names.
 - A null-402 proof that passes all three checks is not shown live: it needs null-402's pool operator
   to register a new root (`NULL402_OPERATOR_KEY`, not held). **BLOCKED** on that.
 - Not published to npm or crates.io (needs the maintainer's npm and crates.io accounts); installable from the packed tarball.

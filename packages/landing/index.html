@@ -583,13 +583,13 @@ curl -s 127.0.0.1:8403/api/verify \
             <h2 class="t" id="h-mcp">MCP tools</h2>
             <p>An agent asks before it delivers: did this transaction pay me, and was this null-402 settlement a payment to me. The merchant key comes from <code>ZPV_MERCHANT_UIVK</code> in the server's environment, never from a tool argument, so it never passes through the model. Without it the tool answers <code>Setup required: ZPV_MERCHANT_UIVK</code>.</p>
             <p><b>Replay.</b> A check alone does not use a payment up: the same txid passes every time, and without a memo any past payment to the merchant passes. The tool says so and answers <code>single_use: false</code>, so the agent must record what it accepted. With <code>ZPV_STORE</code> the tool needs a memo and accepts each payment once (a second call is <code>ALREADY_USED</code>), sharing that memory with a paywall on the same file. <code>min_conf</code> cannot go below <code>ZPV_MCP_MIN_CONF</code> (default 1).</p>
-            <p>A null-402 settlement is <code>paid</code> only if its <code>settle()</code> succeeded and the proof pays your payee signal and amount (and recipient, if given); a reverted or pending one never is.</p>
+            <p>A null-402 settlement is <code>paid</code> only if its <code>settle()</code> succeeded, the proof pays your payee signal and amount, and the pool paid your address (<code>expect_recipient</code>). The recipient is required because the pool does not bind it: <code>settle()</code> pays whatever address its caller names, so a proof that names you can be settled to someone else. A reverted or pending one is never paid.</p>
             <div class="tbl-wrap">
               <table class="tbl">
                 <thead><tr><th scope="col">Tool</th><th scope="col">Arguments</th></tr></thead>
                 <tbody>
                   <tr><td><code>verify_zcash_payment</code></td><td><code>txid</code>, <code>amount_zat</code>, <code>memo?</code> (required with <code>ZPV_STORE</code>), <code>min_conf?</code></td></tr>
-                  <tr><td><code>verify_null402_settlement</code></td><td><code>settle_tx</code>, <code>expect_pay_to</code>, <code>expect_amount</code> (both needed for ok), <code>expect_recipient?</code></td></tr>
+                  <tr><td><code>verify_null402_settlement</code></td><td><code>settle_tx</code>, <code>expect_pay_to</code>, <code>expect_amount</code>, <code>expect_recipient</code> (all three needed for ok)</td></tr>
                 </tbody>
               </table>
             </div>

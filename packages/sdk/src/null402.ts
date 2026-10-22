@@ -93,15 +93,46 @@ export function solidityProof(p: SnarkProof) {
   };
 }
 
+const UINT256 = 1n << 256n;
+
+/** A decimal uint256 (a string of 1-78 digits, or a bigint) as a bigint; anything else is a VerifyError
+ *  naming `what`. An empty string is refused (BigInt('') would be 0 and match a zero signal). */
+export function uint256(v: unknown, what: string): bigint {
+  let x: bigint | undefined;
+  if (typeof v === 'bigint') x = v;
+  else if (typeof v === 'string' && /^\d{1,78}$/.test(v)) x = BigInt(v);
+  if (x === undefined || x < 0n || x >= UINT256) {
+    const shown = typeof v === 'bigint' ? v.toString() : (JSON.stringify(v) ?? String(v));
+    throw new VerifyError(`${what} must be a decimal uint256 (1-78 digits, below 2^256), got ${shown.length > 90 ? `${shown.slice(0, 90)}…` : shown}`);
+  }
+  return x;
+}
+
+/** The merchant's expectations, checked before any RPC call. */
+function expectations(e: { payTo?: unknown; requiredAmount?: unknown; contextHash?: unknown } | undefined) {
+  if (e !== undefined && (typeof e !== 'object' || e === null || Array.isArray(e))) throw new VerifyError('expect must be an object {payTo, requiredAmount, contextHash?}');
+  const o = e ?? {};
+  return {
+    payTo: o.payTo === undefined ? undefined : uint256(o.payTo, 'expect.payTo'),
+    requiredAmount: o.requiredAmount === undefined ? undefined : uint256(o.requiredAmount, 'expect.requiredAmount'),
+    contextHash: o.contextHash === undefined ? undefined : uint256(o.contextHash, 'expect.contextHash'),
+  };
+}
+
 export async function verifyNull402(req: Null402Request, opts: { rpc?: string } = {}): Promise<Null402Result> {
   if (!Array.isArray(req.publicSignals) || req.publicSignals.length !== 5) throw new VerifyError('publicSignals must be the 5 null-402 signals [nullifier, merkleRoot, payTo, requiredAmount, contextHash]');
-  let pub: readonly [bigint, bigint, bigint, bigint, bigint];
+  const pub = req.publicSignals.map((s, i) => uint256(s, `publicSignals[${i}]`)) as unknown as readonly [bigint, bigint, bigint, bigint, bigint];
+  const e = expectations(req.expect);
   let sol: ReturnType<typeof solidityProof>;
   try {
-    pub = req.publicSignals.map((s) => BigInt(s)) as unknown as typeof pub;
-    sol = solidityProof(req.proof);
-  } catch {
-    throw new VerifyError('proof or public signals are not decimal field elements');
+    const p = req.proof;
+    if (typeof p !== 'object' || p === null) throw new Error();
+    for (const [k, xs] of [['pi_a', p.pi_a], ['pi_c', p.pi_c]] as const) (xs ?? []).slice(0, 2).forEach((x, i) => uint256(x, `proof.${k}[${i}]`));
+    (p.pi_b ?? []).slice(0, 2).forEach((row, i) => (row ?? []).slice(0, 2).forEach((x, j) => uint256(x, `proof.pi_b[${i}][${j}]`)));
+    sol = solidityProof(p);
+  } catch (err) {
+    if (err instanceof VerifyError) throw err;
+    throw new VerifyError('proof must be snarkjs JSON {pi_a, pi_b, pi_c} of decimal field elements');
   }
   const rpc = opts.rpc ?? (typeof process !== 'undefined' ? process.env?.ZPV_FUJI_RPC : undefined) ?? NULL402_FUJI.rpc;
   const c = client(rpc);
@@ -116,10 +147,9 @@ export async function verifyNull402(req: Null402Request, opts: { rpc?: string } 
   if (!proofValid) reasons.push('BAD_PROOF');
   if (!rootKnown) reasons.push('ROOT_UNKNOWN');
   if (nullifierSpent) reasons.push('NULLIFIER_SPENT');
-  const e = req.expect ?? {};
-  if (e.payTo !== undefined && BigInt(e.payTo) !== pub[2]) reasons.push('PAY_TO_MISMATCH');
-  if (e.requiredAmount !== undefined && BigInt(e.requiredAmount) !== pub[3]) reasons.push('AMOUNT_MISMATCH');
-  if (e.contextHash !== undefined && BigInt(e.contextHash) !== pub[4]) reasons.push('CONTEXT_MISMATCH');
+  if (e.payTo !== undefined && e.payTo !== pub[2]) reasons.push('PAY_TO_MISMATCH');
+  if (e.requiredAmount !== undefined && e.requiredAmount !== pub[3]) reasons.push('AMOUNT_MISMATCH');
+  if (e.contextHash !== undefined && e.contextHash !== pub[4]) reasons.push('CONTEXT_MISMATCH');
   if (e.payTo === undefined || e.requiredAmount === undefined) reasons.push('UNBOUND');
   return {
     rail: 'null402',
@@ -186,7 +216,9 @@ export interface SettlementExpect {
   /** The proof's payTo signal (decimal field element). */
   payTo?: string;
   requiredAmount?: string | bigint;
-  /** The EVM address the pool should have paid. */
+  /** The EVM address the pool should have paid. Required for ok: the pool does not bind settle()'s
+   *  recipient to the proof (Null402Pool.sol leaves that binding off-chain), so a proof that names your
+   *  payTo can be settled to any address the caller chooses. */
   recipient?: string;
   contextHash?: string;
 }
@@ -199,7 +231,7 @@ export interface SettlementResult {
   settled: boolean;
   status: SettleStatus;
   /** SETTLE_REVERTED, SETTLE_PENDING, BAD_PROOF, ROOT_UNKNOWN, NULLIFIER_NOT_SPENT, PAY_TO_MISMATCH,
-   *  AMOUNT_MISMATCH, CONTEXT_MISMATCH, RECIPIENT_MISMATCH, UNBOUND. */
+   *  AMOUNT_MISMATCH, CONTEXT_MISMATCH, RECIPIENT_MISMATCH, UNBOUND (no expected payTo, amount or recipient). */
   reasons: string[];
   checks: Null402Result['checks'];
   signals: Null402Result['signals'];
@@ -213,8 +245,9 @@ export interface SettlementResult {
 
 /**
  * The settlement rule. A reverted or pending settle() is never ok. A successful one is ok when the proof
- * is valid against a known root, its nullifier is now spent (by this settle), and the payee, amount (and
- * recipient, context when given) are the merchant's; without an expected payTo and amount it is UNBOUND.
+ * is valid against a known root, its nullifier is now spent (by this settle), and the payee, amount and
+ * recipient (and context, when given) are the merchant's. Without an expected payTo, amount and recipient
+ * it is UNBOUND: the pool pays whatever recipient settle() names, so "the proof names me" is not "I was paid".
  */
 export function settlementVerdict(status: SettleStatus, check: Null402Result, recipient: string, e: SettlementExpect): SettlementResult {
   const base = { status, checks: check.checks, signals: check.signals, recipient, proofCheck: { ok: check.ok, reasons: check.reasons } };
@@ -222,12 +255,15 @@ export function settlementVerdict(status: SettleStatus, check: Null402Result, re
   const reasons = check.reasons.filter((r) => r !== 'NULLIFIER_SPENT' && r !== 'UNBOUND');
   if (!check.checks.nullifierSpent) reasons.push('NULLIFIER_NOT_SPENT');
   if (e.recipient !== undefined && e.recipient.toLowerCase() !== recipient.toLowerCase()) reasons.push('RECIPIENT_MISMATCH');
-  if (e.payTo === undefined || e.requiredAmount === undefined) reasons.push('UNBOUND');
+  if (e.payTo === undefined || e.requiredAmount === undefined || e.recipient === undefined) reasons.push('UNBOUND');
   return { ...base, ok: reasons.length === 0, verdict: reasons.length === 0 ? 'paid' : 'refused', settled: true, reasons };
 }
 
 /** Was the mined null-402 settle() `hash` a payment to the merchant described by `e`? Read-only, live on Fuji. */
 export async function verifyNull402Settlement(hash: Hex, e: SettlementExpect, opts: { rpc?: string } = {}): Promise<SettlementResult> {
+  if (typeof hash !== 'string' || !/^0x[0-9a-fA-F]{64}$/.test(hash)) throw new VerifyError(`settle tx must be a 0x-prefixed 32-byte hash, got ${JSON.stringify(hash)}`);
+  expectations(e);
+  if (e.recipient !== undefined && !(typeof e.recipient === 'string' && /^0x[0-9a-fA-F]{40}$/.test(e.recipient))) throw new VerifyError(`expect recipient must be a 0x-prefixed 20-byte address, got ${JSON.stringify(e.recipient)}`);
   const s = await proofFromSettleTx(hash, opts);
   const check = await verifyNull402({ rail: 'null402', proof: s.proof, publicSignals: s.publicSignals, expect: { payTo: e.payTo, requiredAmount: e.requiredAmount, contextHash: e.contextHash } }, opts);
   return { ...settlementVerdict(s.status, check, s.recipient, e), settledInBlock: s.blockNumber, checkedAtBlock: check.provenance.blockNumber };

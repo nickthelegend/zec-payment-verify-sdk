@@ -36,13 +36,17 @@ Two different questions about null-402:
 
 - **Could this proof still be settled to me?** `verify({rail: 'null402', proof, publicSignals, expect})`.
   A proof read out of a mined settle() always answers `NULLIFIER_SPENT` here: it paid once already.
-- **Was this mined settle() a payment to me?** `verifyNull402Settlement(hash, {payTo, requiredAmount, recipient?, contextHash?})`.
+- **Was this mined settle() a payment to me?** `verifyNull402Settlement(hash, {payTo, requiredAmount, recipient, contextHash?})`.
   A reverted or pending settle() is never ok (`SETTLE_REVERTED`, `SETTLE_PENDING`, verdict
   `unsettled`). A successful one is `paid` when the proof is valid against a known root, its nullifier
-  is spent, and the payee, amount (and recipient, context when given) are yours; otherwise `refused`
-  with `PAY_TO_MISMATCH` / `AMOUNT_MISMATCH` / `RECIPIENT_MISMATCH` / `CONTEXT_MISMATCH`, or `UNBOUND`
-  without a payTo and amount. It does not stop you counting one settlement twice: remember which
-  settle hashes you accepted.
+  is spent, and the payee, amount and recipient (and context, when given) are yours; otherwise
+  `refused` with `PAY_TO_MISMATCH` / `AMOUNT_MISMATCH` / `RECIPIENT_MISMATCH` / `CONTEXT_MISMATCH`, or
+  `UNBOUND` without a payTo, amount and recipient. The recipient is required because the pool does
+  not bind it: `settle()` pays whatever address its caller names (Null402Pool.sol leaves that binding
+  off-chain), so a proof naming your payee and amount can be settled to someone else. It does not
+  stop you counting one settlement twice: remember which settle hashes you accepted.
+- Every signal and expected value must be a decimal uint256 string (1-78 digits, below 2^256) or a
+  bigint; anything else, an empty string included, is a `VerifyError` before any RPC call.
 
 **Cross-check.** One lightwalletd can withhold a transaction, lag, or forge one: the checker
 recomputes the txid and requires it in the block the server names, but it does not check proofs,

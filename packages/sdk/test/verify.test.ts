@@ -128,6 +128,39 @@ describe('null402 settlement (was this mined settle() a payment to me?)', () => 
     }
   });
 
+  it('a settlement is never paid unless the merchant says which address the pool must have paid (offline rule)', () => {
+    // The pool binds only the proof's payTo signal and amount; settle()'s recipient is chosen by the caller
+    // (Null402Pool.sol: recipient binding is off-chain), so a proof that names you can be settled to anyone.
+    const check = {
+      rail: 'null402' as const,
+      ok: false,
+      reasons: ['NULLIFIER_SPENT', 'UNBOUND'],
+      checks: { proofValid: true, rootKnown: true, nullifierSpent: true },
+      signals: { nullifier: '1', merkleRoot: '2', payTo: '77', requiredAmount: '1000', contextHash: '0' },
+      provenance: { rpc: 'offline', chainId: 43113, verifier: '0x0', pool: '0x0', blockNumber: '1', checkedAt: '' },
+    };
+    const attacker = '0x000000000000000000000000000000000000dEaD';
+    const noRecipient = settlementVerdict('success', check, attacker, { payTo: '77', requiredAmount: '1000' });
+    expect(noRecipient).toMatchObject({ ok: false, verdict: 'refused', settled: true });
+    expect(noRecipient.reasons).toEqual(['UNBOUND']);
+    const mine = '0x605ab54711b69C1D783fd72447d92C3dA10797CD';
+    expect(settlementVerdict('success', check, attacker, { payTo: '77', requiredAmount: '1000', recipient: mine }).reasons).toEqual(['RECIPIENT_MISMATCH']);
+    expect(settlementVerdict('success', check, mine, { payTo: '77', requiredAmount: '1000', recipient: mine.toLowerCase() })).toMatchObject({ ok: true, verdict: 'paid', reasons: [] });
+  });
+
+  it('expected values and signals that are not decimal uint256 strings are VerifyErrors, never a match (offline)', async () => {
+    const proof = { pi_a: ['1', '2', '1'], pi_b: [['1', '2'], ['3', '4'], ['1', '0']], pi_c: ['1', '2', '1'] };
+    const sig = ['1', '2', '0', '1000', '0'];
+    // BigInt('') is 0n, so an empty payTo would have matched a payTo signal of 0.
+    for (const expect_ of [{ payTo: '' }, { payTo: '-1' }, { requiredAmount: '1e3' }, { contextHash: ' 0' }, { payTo: (1n << 256n).toString() }]) {
+      await expect(verify({ rail: 'null402', proof, publicSignals: sig, expect: { payTo: '0', requiredAmount: '1000', ...expect_ } }), JSON.stringify(expect_)).rejects.toBeInstanceOf(VerifyError);
+    }
+    for (const bad of [['-1', '2', '0', '1000', '0'], ['', '2', '0', '1000', '0'], [(1n << 256n).toString(), '2', '0', '1000', '0']]) {
+      await expect(verify({ rail: 'null402', proof, publicSignals: bad }), JSON.stringify(bad)).rejects.toThrow(/publicSignals\[0\]/);
+    }
+    await expect(verifyNull402Settlement(SETTLE_TX, { payTo: '1', requiredAmount: '1', recipient: 'me' })).rejects.toThrow(/recipient/);
+  });
+
   it('a hash Fuji does not know is an error, not a verdict', async () => {
     await expect(verifyNull402Settlement(`0x${'ab'.repeat(32)}`, {})).rejects.toThrow(/Fuji does not know/);
   });
