@@ -31,7 +31,8 @@ describe('paywall hardening', () => {
 
   it('open challenges are capped and expired ones are dropped', async () => {
     let n = 0;
-    const base = await start({ issueMemo: () => `zpv-test-${n++}`, maxOpenChallenges: 3, challengeTtlMs: 150 });
+    // presentWindowMs 0: an expired custom-memo challenge is dropped as soon as it expires.
+    const base = await start({ issueMemo: () => `zpv-test-${n++}`, maxOpenChallenges: 3, challengeTtlMs: 150, presentWindowMs: 0 });
     const statuses = [];
     for (let i = 0; i < 4; i++) statuses.push((await fetch(`${base}/api/quote`)).status);
     expect(statuses).toEqual([402, 402, 402, 503]);

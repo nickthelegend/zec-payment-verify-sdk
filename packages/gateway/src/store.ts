@@ -8,14 +8,30 @@ import type { Challenge } from './server.js';
 
 export type Claim = { ok: true; token: string } | { ok: false; why: 'used' | 'busy' };
 
+/** A payment that reached the merchant's key with the challenge memo but was refused: owed back by hand. */
+export interface Refund {
+  txid: string;
+  memo: string;
+  resource: string;
+  /** Zatoshi in outputs with the challenge memo. */
+  paidZat: number;
+  reasons: string[];
+  height: number | null;
+  /** Unix seconds of the block that mined it. */
+  blockTime: number | null;
+  /** When the paywall refused it (ISO). */
+  at: string;
+}
+
 export interface PaywallStore {
   /**
    * The key that authenticates challenge memos (HMAC). Stable for the store's life: a SqliteStore keeps
    * it in its file, so a restarted paywall and other processes on the file accept each other's memos.
    */
   secret(): Buffer;
-  /** Custom memos only (issueMemo): drop expired challenges, then keep `c` unless `maxOpen` are open. */
-  issue(c: Challenge, maxOpen: number, now: number): boolean;
+  /** Custom memos only (issueMemo): drop challenges that expired before `cutoff`, then keep `c` unless
+   *  `maxOpen` are open. */
+  issue(c: Challenge, maxOpen: number, cutoff: number): boolean;
   challenge(memo: string): Challenge | undefined;
   /**
    * Reserve the memo and the (lower-case) txid for one check, atomically. `used`: either already
@@ -30,6 +46,10 @@ export interface PaywallStore {
    * over): then do not serve.
    */
   settle(memo: string, txid: string, token: string): boolean;
+  /** Record (or update, by txid) a refused payment that reached the key. */
+  recordRefund(r: Refund): void;
+  /** Newest first. */
+  refunds(): Refund[];
   close(): void;
 }
 
@@ -47,14 +67,24 @@ export class MemoryStore implements PaywallStore {
   private open = new Map<string, Challenge>();
   private claims = new Map<string, Row>();
   private key = randomBytes(32);
+  private owed = new Map<string, Refund>();
 
   secret() {
     return this.key;
   }
 
-  issue(c: Challenge, maxOpen: number, now: number): boolean {
+  recordRefund(r: Refund) {
+    this.owed.delete(r.txid);
+    this.owed.set(r.txid, r);
+  }
+
+  refunds() {
+    return [...this.owed.values()].reverse();
+  }
+
+  issue(c: Challenge, maxOpen: number, cutoff: number): boolean {
     for (const [memo, o] of this.open) {
-      if (o.expiresAt >= now) break;
+      if (o.expiresAt >= cutoff) break;
       this.open.delete(memo);
     }
     if (this.open.size >= maxOpen) return false;
@@ -111,6 +141,11 @@ export class SqliteStore implements PaywallStore {
         body TEXT NOT NULL
       );
       CREATE INDEX IF NOT EXISTS challenges_by_expiry ON challenges (expires_at);
+      CREATE TABLE IF NOT EXISTS refunds (
+        txid TEXT PRIMARY KEY,
+        at INTEGER NOT NULL,
+        body TEXT NOT NULL
+      );
       CREATE TABLE IF NOT EXISTS meta (
         key TEXT PRIMARY KEY,
         value BLOB NOT NULL
@@ -147,9 +182,9 @@ export class SqliteStore implements PaywallStore {
     }
   }
 
-  issue(c: Challenge, maxOpen: number, now: number): boolean {
+  issue(c: Challenge, maxOpen: number, cutoff: number): boolean {
     return this.tx(() => {
-      this.db.prepare('DELETE FROM challenges WHERE expires_at < ?').run(now);
+      this.db.prepare('DELETE FROM challenges WHERE expires_at < ?').run(cutoff);
       const { n } = this.db.prepare('SELECT count(*) AS n FROM challenges WHERE memo <> ?').get(c.memo) as { n: number };
       if (n >= maxOpen) return false;
       this.db.prepare('INSERT OR REPLACE INTO challenges (memo, expires_at, body) VALUES (?, ?, ?)').run(c.memo, c.expiresAt, JSON.stringify(c));
@@ -191,6 +226,14 @@ export class SqliteStore implements PaywallStore {
       this.db.prepare('DELETE FROM challenges WHERE memo = ?').run(memo);
       return true;
     });
+  }
+
+  recordRefund(r: Refund) {
+    this.db.prepare('INSERT OR REPLACE INTO refunds (txid, at, body) VALUES (?, ?, ?)').run(r.txid, Date.parse(r.at), JSON.stringify(r));
+  }
+
+  refunds(): Refund[] {
+    return (this.db.prepare('SELECT body FROM refunds ORDER BY at DESC, rowid DESC').all() as { body: string }[]).map((x) => JSON.parse(x.body) as Refund);
   }
 
   close() {

@@ -9,9 +9,9 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { BusyError, crossCheckFromEnv, LightwalletdBadAnswerError, LightwalletdUnreachableError, SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
-import { MemoryStore, type PaywallStore } from './store.js';
+import { MemoryStore, type PaywallStore, type Refund } from './store.js';
 
-export { MemoryStore, SqliteStore, type PaywallStore, type Claim } from './store.js';
+export { MemoryStore, SqliteStore, type PaywallStore, type Claim, type Refund } from './store.js';
 
 export interface PaywallOptions {
   /** The merchant's unified address (utest1…). */
@@ -22,8 +22,15 @@ export interface PaywallOptions {
   prices: Record<string, bigint>;
   content: (path: string) => unknown;
   minConf?: number;
-  /** How long a challenge stays payable (default 15 min). */
+  /** How long a challenge stays payable (default 15 min): the payment's block must be no later than
+   *  this plus `minedGraceMs`. */
   challengeTtlMs?: number;
+  /** A payment mined up to this long after the challenge expired still counts (default 10 min, for
+   *  block-time skew). Later is PAYMENT_LATE, recorded for a refund. */
+  minedGraceMs?: number;
+  /** How long after expiry a challenge can still be answered, for a payment mined in time that needed
+   *  confirmations (default 24 h). */
+  presentWindowMs?: number;
   /** Custom memos only (issueMemo): most unanswered challenges kept at once (default 10,000); when full,
    *  a new one is a 503. The default memos carry their own expiry and HMAC and are never stored. */
   maxOpenChallenges?: number;
@@ -126,6 +133,8 @@ export function createPaywall(o: PaywallOptions): Server {
   const minConf = o.minConf ?? 1;
   const ttl = o.challengeTtlMs ?? 15 * 60_000;
   const now = o.now ?? Date.now;
+  const minedGrace = o.minedGraceMs ?? 10 * 60_000;
+  const presentWindow = o.presentWindowMs ?? 24 * 60 * 60_000;
   const maxOpen = o.maxOpenChallenges ?? 10_000;
   const leaseMs = o.claimLeaseMs ?? 5 * 60_000;
   /** Open challenges, and memos and lower-case txids that are being checked or already paid. A
@@ -179,7 +188,7 @@ export function createPaywall(o: PaywallOptions): Server {
     const t = now();
     if (o.issueMemo) {
       const c = make(o.issueMemo(), path, price, t + ttl);
-      return store.issue(c, maxOpen, t) ? c : null;
+      return store.issue(c, maxOpen, t - presentWindow) ? c : null;
     }
     const exp = Math.ceil((t + ttl) / 1000);
     const nonce = randomBytes(8).toString('hex');
@@ -224,6 +233,12 @@ export function createPaywall(o: PaywallOptions): Server {
         return json(req, res, f.status, { error: (e as Error).message }, f.headers);
       }
     }
+    if (url.pathname === '/api/refunds') {
+      // Decrypted memos and amounts: only to a request made on this machine, never through a proxy.
+      const local = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress ?? '') && !req.headers['x-forwarded-for'] && !req.headers.forwarded && !req.headers['x-real-ip'];
+      if (!local) return json(req, res, 403, { error: 'refunds are listed only to a request from the merchant’s own machine' });
+      return json(req, res, 200, { refunds: store.refunds() });
+    }
     if (url.pathname === '/api/health') return json(req, res, 200, { ok: true, payTo: o.payTo, paths: Object.keys(o.prices), lightwalletd: lightwalletd() });
 
     const price = o.prices[url.pathname];
@@ -243,7 +258,7 @@ export function createPaywall(o: PaywallOptions): Server {
     const p = parsePayment(header);
     if ('bad' in p) return json(req, res, 400, { error: p.bad }, { 'x-payment-response': settlement(false, '', 'invalid_payload') });
     const c = p.memo ? lookup(p.memo, url.pathname, price) : undefined;
-    if (!c || c.expiresAt < now()) {
+    if (!c || now() > c.expiresAt + presentWindow) {
       const f = fresh();
       return json(req, res, f.status, f.status === 402 ? { ...f.body, error: 'unknown or expired payment memo' } : f.body, { 'x-payment-response': settlement(false, '', 'unknown_challenge') });
     }
@@ -270,11 +285,25 @@ export function createPaywall(o: PaywallOptions): Server {
       store.release(c.memo, txid, claim.token);
       return json(req, res, 503, challenged(`payment could not be verified: ${r.reasons.join(', ')}; retry later`, { reasons: r.reasons, crossCheck: r.crossCheck }), { 'retry-after': '30' });
     }
-    if (!r.ok || !r.report) {
+    // Mined-time expiry (as Shielded x402 does): what counts is when the block was mined, not when the
+    // payment is presented. A transaction still in the mempool counts as mined now.
+    const minedAt = r.report?.block_time != null ? r.report.block_time * 1000 : now();
+    const late = r.report?.found === true && minedAt > c.expiresAt + minedGrace;
+    const reasons = late ? [...r.reasons.filter((x) => x !== 'NOT_CONFIRMED'), 'PAYMENT_LATE'] : r.reasons;
+    if (!r.ok || !r.report || late) {
       store.release(c.memo, txid, claim.token);
-      const pendingOnly = r.reasons.length === 1 && r.reasons[0] === 'NOT_CONFIRMED';
-      const error = pendingOnly ? `payment seen, ${r.report?.confirmations ?? 0}/${minConf} confirmations` : `payment refused: ${r.reasons.join(', ')}`;
-      return json(req, res, 402, challenged(error, { reasons: r.reasons, paidZat: r.paidZat }), { 'x-payment-response': settlement(false, '', pendingOnly ? 'settlement_pending' : 'invalid_payment') });
+      const pendingOnly = reasons.length === 1 && reasons[0] === 'NOT_CONFIRMED';
+      // Funds with this challenge's memo reached the key but buy nothing: write them down for a refund.
+      let received: { zat: number; recorded: boolean } | undefined;
+      if (!pendingOnly && r.paidZat > 0 && r.report) {
+        const refund: Refund = { txid, memo: c.memo, resource: c.resource, paidZat: r.paidZat, reasons, height: r.report.height, blockTime: r.report.block_time, at: new Date().toISOString() };
+        store.recordRefund(refund);
+        received = { zat: r.paidZat, recorded: true };
+      }
+      let error = pendingOnly ? `payment seen, ${r.report?.confirmations ?? 0}/${minConf} confirmations` : `payment refused: ${reasons.join(', ')}`;
+      if (late) error += ` (mined at ${new Date(minedAt).toISOString()}, after the challenge expired at ${new Date(c.expiresAt).toISOString()})`;
+      if (received) error += '; the funds arrived and are recorded for a refund';
+      return json(req, res, 402, challenged(error, { reasons, paidZat: r.paidZat, ...(received ? { received } : {}) }), { 'x-payment-response': settlement(false, '', late ? 'payment_expired' : pendingOnly ? 'settlement_pending' : 'invalid_payment') });
     }
     if (!store.settle(c.memo, txid, claim.token)) return json(req, res, 402, challenged('this payment was claimed by another request while it was being checked'));
     const receipt = { txid, height: r.report.height, confirmations: r.report.confirmations, paidZat: r.paidZat, memo: c.memo, lightwalletd: r.provenance.lightwalletd };

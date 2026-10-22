@@ -19,6 +19,15 @@ merchant's **incoming viewing key**: it can see payments, never spend.
   (what Kage's client sends) or Hanko's earlier `base64({memo, txid})`. Another scheme, network or
   version is a 400.
 - The gateway runs `@zpv/sdk` `verify({rail: "zcash", …})`. Paid → `200` with `{paid: receipt, data}` and `X-PAYMENT-RESPONSE: base64({success: true, transaction: txid, network: "zcash-testnet", payer: ""})` (refusals carry `success: false` and an `errorReason`); the memo and the txid are burned and can never pay again. Not yet confirmed → `402` "payment seen, n/m confirmations". Anything else → `402` with the reasons.
+- **Mined-time expiry**, as Shielded x402 does: a payment counts if its block was mined no later than
+  the challenge's expiry plus `minedGraceMs` (default 10 min), even when it is presented later (up to
+  `presentWindowMs`, default 24 h, e.g. while it gathers confirmations). Mined later → `402
+  PAYMENT_LATE`.
+- **Refunds.** A refused payment whose outputs with the challenge memo reached the key (underpaid,
+  `TRANSPARENT_PART`, `PAYMENT_LATE`) is recorded in the store, and the 402 says the funds arrived
+  and are recorded. `GET /api/refunds` lists them (txid, memo, amount, reasons, block) to a request from
+  the merchant's own machine only (loopback, no proxy headers; 403 otherwise). The merchant holds a
+  viewing key, not a spend key, so the refund itself is sent by hand from the wallet.
 - With `lwdUrls` (or `ZPV_LWD_URLS` + `ZPV_LWD_QUORUM`) each payment is checked against several lightwalletd endpoints. If they disagree or too few answer → `503` + `Retry-After` with `UNVERIFIED_*` and each endpoint's answer; nothing is served and the payment stays claimable.
 - `POST /api/verify` → the SDK verdict for either rail (used by the dashboard; CORS for `ZPV_CORS`).
 
