@@ -110,8 +110,10 @@ function checkInput(req: ZcashRequest): bigint {
   if (typeof req !== 'object' || req === null) throw new VerifyError('the request must be an object');
   if (typeof req.txid !== 'string' || !/^[0-9a-fA-F]{64}$/.test(req.txid)) throw new VerifyError(`not a txid (64 hex characters): ${String(req.txid)}`);
   if (typeof req.uivk !== 'string' || !req.uivk.startsWith('uivktest1')) throw new VerifyError('uivk must be a testnet unified incoming viewing key (uivktest1…)');
+  if (/[\u0000-\u001f\u007f]/.test(req.uivk)) throw new VerifyError('uivk must not contain control characters');
   const amount = zatoshi(req.amountZat);
   if (req.memo !== undefined && typeof req.memo !== 'string') throw new VerifyError('memo must be a string');
+  if (req.memo !== undefined && req.memo.includes('\u0000')) throw new VerifyError('memo must not contain a NUL character');
   if (req.memo !== undefined && Buffer.byteLength(req.memo, 'utf8') > 512) throw new VerifyError('memo is longer than 512 bytes, the most a Zcash memo holds');
   if (req.minConf !== undefined && !(Number.isSafeInteger(req.minConf) && req.minConf >= 0)) throw new VerifyError(`minConf must be a whole number ≥ 0, got ${JSON.stringify(req.minConf)}`);
   if (req.allowTransparent !== undefined && typeof req.allowTransparent !== 'boolean') throw new VerifyError('allowTransparent must be true or false');

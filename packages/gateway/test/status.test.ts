@@ -68,11 +68,35 @@ describe('gateway status codes', () => {
       ['memo 7', JSON.stringify({ ...zcash, memo: 7 })],
       ['null402 without publicSignals', JSON.stringify({ rail: 'null402', proof: {} })],
       ['not JSON', '{'],
+      // Each of these reached spawn or viem unchecked and came back 502 with the library's own text.
+      ['memo with a NUL', JSON.stringify({ ...zcash, memo: 'inv\u0000-1' })],
+      ['uivk with a NUL', JSON.stringify({ ...zcash, uivk: `${fx.x402.uivk}\u0000` })],
+      ['negative public signal', JSON.stringify({ rail: 'null402', proof: { pi_a: ['1', '2', '1'], pi_b: [['1', '2'], ['3', '4'], ['1', '0']], pi_c: ['1', '2', '1'] }, publicSignals: ['-1', '2', '3', '4', '5'] })],
+      ['public signal of 2^256', JSON.stringify({ rail: 'null402', proof: { pi_a: ['1', '2', '1'], pi_b: [['1', '2'], ['3', '4'], ['1', '0']], pi_c: ['1', '2', '1'] }, publicSignals: [(1n << 256n).toString(), '2', '3', '4', '5'] })],
+      ['empty expect.payTo', JSON.stringify({ rail: 'null402', proof: { pi_a: ['1', '2', '1'], pi_b: [['1', '2'], ['3', '4'], ['1', '0']], pi_c: ['1', '2', '1'] }, publicSignals: ['1', '2', '0', '4', '5'], expect: { payTo: '', requiredAmount: '4' } })],
     ];
     for (const [what, body] of bad) {
       const r = await post(base, body);
       expect(r.status, what).toBe(400);
-      expect(((await r.json()) as { error: string }).error, what).toBeTruthy();
+      const error = ((await r.json()) as { error: string }).error;
+      expect(error, what).toBeTruthy();
+      expect(error, what).not.toMatch(/\n|Version: viem|args\[\d+\]/);
+    }
+  });
+
+  it('an upstream failure is 502 with a one-line message, without the library’s request dump or version footer', async () => {
+    const prev = process.env.ZPV_FUJI_RPC;
+    process.env.ZPV_FUJI_RPC = 'http://127.0.0.1:9';
+    try {
+      const base = await start();
+      const r = await post(base, JSON.stringify({ rail: 'null402', proof: { pi_a: ['1', '2', '1'], pi_b: [['1', '2'], ['3', '4'], ['1', '0']], pi_c: ['1', '2', '1'] }, publicSignals: ['1', '2', '3', '4', '5'] }));
+      expect(r.status).toBe(502);
+      const error = ((await r.json()) as { error: string }).error;
+      expect(error).toMatch(/HTTP request failed/);
+      expect(error).not.toMatch(/\n|Version: viem|Request body/);
+    } finally {
+      if (prev === undefined) delete process.env.ZPV_FUJI_RPC;
+      else process.env.ZPV_FUJI_RPC = prev;
     }
   });
 });

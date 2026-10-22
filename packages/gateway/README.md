@@ -40,9 +40,9 @@ merchant's **incoming viewing key**: it can see payments, never spend.
 
 | Status | `/api/verify` | paywall (`X-PAYMENT`) |
 |---|---|---|
-| 400 | the body is not a verify request (not JSON, not an object, unknown rail, `amountZat` not a whole number ≥ 0, bad txid or key) | the header is malformed |
+| 400 | the body is not a verify request (not JSON, not an object, unknown rail, `amountZat` not a whole number ≥ 0, bad txid or key, a memo or key with a NUL or control character, a null-402 signal or expected value that is not a decimal uint256) | the header is malformed |
 | 415 | the body is not `application/json` | — |
-| 502 + `Retry-After` | lightwalletd unreachable or inconsistent, or Fuji unreachable | — |
+| 502 + `Retry-After` | lightwalletd unreachable or inconsistent, or Fuji unreachable (the message is one line: no request dump or library version) | — |
 | 503 + `Retry-After` | too many checks running (`ZPV_MAX_CHECKS`) | lightwalletd unreachable or inconsistent, endpoints disagree, too many checks, or Setup required; nothing is served and the payment stays claimable |
 | 503 | Setup required (no `zpay-verify`, a bad setting) | |
 

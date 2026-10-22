@@ -125,6 +125,15 @@ function parsePayment(header: string): Presented {
 
 const b64url = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
 
+/** An error as one line for a response body: viem's short message when there is one, never its request
+ *  dump or version footer, and never more than 300 characters. */
+export function errorText(e: unknown): string {
+  const m = (e as { shortMessage?: unknown }).shortMessage;
+  const text = typeof m === 'string' && m ? m : e instanceof Error ? e.message : String(e);
+  const line = text.split('\n')[0].trim() || 'unexpected error';
+  return line.length > 300 ? `${line.slice(0, 300)}…` : line;
+}
+
 /**
  * How a failure to check is answered. 400 only for the caller's own input; a lightwalletd that is down
  * or inconsistent is the gateway's problem (502 on the API, 503 + Retry-After on the paywall so an x402
@@ -250,7 +259,7 @@ export function createPaywall(o: PaywallOptions): Server {
         return json(req, res, 200, await verify(body, lwdOpts));
       } catch (e) {
         const f = failureStatus(e, 'api');
-        return json(req, res, f.status, { error: (e as Error).message }, f.headers);
+        return json(req, res, f.status, { error: errorText(e) }, f.headers);
       }
     }
     if (url.pathname === '/api/refunds') {
@@ -301,7 +310,7 @@ export function createPaywall(o: PaywallOptions): Server {
     } catch (e) {
       store.release(c.memo, txid, claim.token);
       const f = failureStatus(e, 'paywall');
-      const error = f.status === 503 ? `payment could not be checked: ${(e as Error).message}; nothing was served, retry later` : (e as Error).message;
+      const error = f.status === 503 ? `payment could not be checked: ${errorText(e)}; nothing was served, retry later` : errorText(e);
       return json(req, res, f.status, f.status === 503 ? challenged(error) : { error }, f.headers);
     }
     if (r.verdict === 'unverified') {
@@ -342,6 +351,6 @@ export function createPaywall(o: PaywallOptions): Server {
   }
 
   return createServer((req, res) => {
-    handle(req, res).catch((e: Error) => json(req, res, 502, { error: e.message }));
+    handle(req, res).catch((e: Error) => json(req, res, 502, { error: errorText(e) }));
   });
 }
