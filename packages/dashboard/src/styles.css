@@ -27,7 +27,7 @@
 }
 
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--top) + 16px); }
 body { margin: 0; background: var(--paper); color: var(--text); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
 a { color: var(--verm-text); text-underline-offset: 3px; }
 :focus-visible { outline: 2px solid var(--verm); outline-offset: 2px; border-radius: 4px; }
@@ -188,6 +188,8 @@ h1 { font-weight: 600; font-size: clamp(34px, 4vw, 52px); line-height: 1.02; let
   .pane { background: var(--code-bg); }
 }
 @media (max-width: 900px) {
+  /* The nav becomes a sticky strip under the top bar: anchor jumps (History, Real payments) land below both. */
+  html { scroll-padding-top: calc(var(--top) + 64px); }
   .layout { grid-template-columns: minmax(0, 1fr); }
   .side { position: sticky; top: var(--top); z-index: 30; height: auto; padding: 0; border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
   .side nav { display: flex; gap: 2px; padding: 8px 12px; width: max-content; }
