@@ -73,13 +73,26 @@ ZIP 311 payment disclosures are not built: [`docs/ZIP-311-DESIGN.md`](docs/ZIP-3
 
 ## Honest limits
 
-- Testnet only. With one lightwalletd, the checker trusts it not to withhold or lag transactions; it
-  recomputes every txid, so it cannot be handed a different transaction. A cross-check
-  (`ZPV_LWD_URLS`) removes the single point of trust only if the endpoints are independent. On
-  Oct 22, 2026 hosh.zec.rocks lists only two online public testnet indexers:
-  `testnet.zec.rocks` (lightwalletd) and `zaino.testnet.unsafe.zec.rocks` (Zaino, same operator,
-  answering 503 that day). The tests that need two agreeing answers use testnet.zec.rocks twice,
-  under two URLs, and say so; real independence means running your own lightwalletd or Zaino.
+- **What lightwalletd learns.** Each check asks a lightwalletd for one txid (`GetTransaction`) and
+  the compact block it names. The operator learns that this txid matters to you, when you asked, and
+  your IP address, which links that payment to you. A cross-check tells every endpoint.
+  `ZPV_LWD_PROXY=socks5h://127.0.0.1:9050` (Tor) hides your IP; the txid and the timing are still
+  seen. Compact blocks alone would hide the txid, but they carry no memo, and the memo is what ties a
+  payment to an invoice.
+- **What lightwalletd is trusted for.** The checker recomputes the txid from the bytes it gets and
+  requires that txid in the compact block at the height the server reports. That stops a swapped
+  transaction and an answer that contradicts itself. It does not check Orchard/Sapling proofs,
+  binding signatures or the block's place in the chain. So a lying lightwalletd, or anyone who can
+  answer for it, can serve a forged transaction as mined at any height and get a paid verdict: anyone
+  can encrypt a note of any value with your memo to your public address. That is why plaintext
+  `http://` is refused unless the host is loopback (`ZPV_ALLOW_INSECURE_LWD=1` overrides).
+- **The cross-check (`ZPV_LWD_URLS`) only helps when different people run the endpoints.** On
+  Oct 22, 2026 hosh.zec.rocks lists two online public testnet indexers, both run by one operator:
+  `testnet.zec.rocks` (lightwalletd) and `zaino.testnet.unsafe.zec.rocks` (Zaino, answering 503 that
+  day). One server under two spellings is refused as one endpoint twice; the tests that need two
+  agreeing answers fetch from testnet.zec.rocks twice and say so. Real independence means running your
+  own lightwalletd or Zaino on a full node, which verifies proofs before it serves anything.
+- Testnet only.
 - A UIVK reveals every incoming payment to its wallet. The keys published here are demo-only.
 - The paywall keeps its state in memory by default (a restart forgets which txids paid); set
   `ZPV_STORE` to a SQLite file to keep it across restarts and share it between processes on one

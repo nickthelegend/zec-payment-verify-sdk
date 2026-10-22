@@ -2,10 +2,11 @@
 
 ## The question it answers
 
-"Did transaction X pay me at least N, with memo M, deep enough, without exposing anything?" A
+"Did transaction X pay me at least N, with memo M, deep enough, and with no transparent part?" A
 merchant, a payroll auditor or an agent asks it before delivering. The answer needs only the
 receiver's **incoming viewing key** (UIVK). That key sees payments coming in; it cannot spend, and it
-cannot see spends or change.
+cannot see spends or change. Asking is not private: the lightwalletd that answers learns which
+transaction you asked about (see the trust model).
 
 ## Do X → see Y
 
@@ -21,9 +22,11 @@ cannot see spends or change.
 ## Zcash rail: how a payment is checked
 
 1. `GetTransaction(txid)` on lightwalletd; recompute the txid from the returned bytes and compare.
-2. Parse with the consensus branch for its height (NU7 on testnet).
-3. Trial-decrypt every Sapling output, Orchard action and Ironwood action with the UIVK.
-4. Apply the rules:
+2. If lightwalletd says it is mined at height h, `GetBlock(h)`: the compact block must be height h and
+   list the txid (else the answer contradicts itself: an error, exit 2). Its time is `block_time`.
+3. Parse with the consensus branch for its height (NU7 on testnet).
+4. Trial-decrypt every Sapling output, Orchard action and Ironwood action with the UIVK.
+5. Apply the rules:
 
 | Rule | Reason |
 |---|---|
@@ -57,12 +60,24 @@ constants and fails against the dashboard key, so a proof made with those files 
 
 ## Trust model
 
-- The checker trusts lightwalletd to serve the chain honestly. The txid is recomputed, so it
-  cannot swap transactions, but it could withhold one (`TX_NOT_FOUND`) or lag (fewer
-  confirmations). Cross-check against several endpoints (`lwdUrls` / `ZPV_LWD_URLS`, with a
-  `quorum`): any disagreement, or too few answers, is `unverified`, never `paid`. Only two public
-  testnet indexers exist (testnet.zec.rocks and zaino.testnet.unsafe.zec.rocks, one operator), so
-  for real independence run your own lightwalletd/Zaino as one of the endpoints.
+- **What lightwalletd learns.** `GetTransaction` names the txid. The operator learns that this
+  payment matters to you, when you asked, and your IP address, which links the payment to you; a
+  cross-check tells every endpoint. `ZPV_LWD_PROXY=socks5h://127.0.0.1:9050` (Tor) hides the IP (a
+  dead proxy is an error, never a direct connection); the txid and timing are still seen. Fetching
+  compact blocks instead would hide the txid, but compact outputs carry no memo, and the memo is what
+  ties a payment to an invoice.
+- **What lightwalletd is trusted for.** Recomputing the txid stops a swap, not a forgery. The checker
+  does not verify Orchard/Sapling proofs, binding signatures or the block's place in the chain, and
+  the height and confirmations are what lightwalletd says. Anyone can encrypt a note of any value with
+  your memo to your public address, so a lying or intercepted lightwalletd can serve such a
+  never-mined transaction (and a compact block listing it) and get `paid`. Requiring the txid in the
+  named block only catches an answer that contradicts itself. Plaintext `http://` is refused unless
+  the host is loopback or `ZPV_ALLOW_INSECURE_LWD=1`.
+- **Cross-check** several endpoints (`lwdUrls` / `ZPV_LWD_URLS`, with a `quorum`): any disagreement,
+  any self-contradicting answer, or too few answers is `unverified`, never `paid`. It helps only when
+  different people run the endpoints. Only two public testnet indexers exist (testnet.zec.rocks and
+  zaino.testnet.unsafe.zec.rocks, one operator), so for real independence run your own
+  lightwalletd/Zaino on a full node, which verifies proofs, as one of the endpoints.
 - A UIVK reveals every incoming payment to that wallet: amounts, memos and which of its addresses
   received each one. Give it only to whoever should see that. The demo keys in `fixtures/` and
   `deployments/` belong to demo-only testnet wallets and are published on purpose.

@@ -258,6 +258,8 @@
               <div><dt>lightwalletd</dt><dd><code>testnet.zec.rocks:443</code>, or several with a quorum</dd></div>
               <div><dt>pools decrypted</dt><dd>Sapling, Orchard, Ironwood</dd></div>
               <div><dt>key needed</dt><dd>UIVK only (no spend key)</dd></div>
+              <div><dt>lightwalletd learns</dt><dd>the txid you check, when, and your IP (Tor via <code>ZPV_LWD_PROXY</code> hides the IP)</dd></div>
+              <div><dt>lightwalletd is trusted</dt><dd>not to forge a transaction: proofs are not checked</dd></div>
               <div><dt>packages</dt><dd>not on npm or crates.io yet (tarball install)</dd></div>
               <div><dt>license</dt><dd>MIT</dd></div>
             </dl>
@@ -348,7 +350,7 @@ installed @zpv/sdk: ok=true paid=100000 height=4521112</code></pre>
           <div class="prose">
             <p class="kicker">verify()</p>
             <h2 class="t" id="h-zcash"><code>verify({ rail: 'zcash' })</code></h2>
-            <p>Fetches the transaction from lightwalletd, <b>recomputes its txid</b> from the returned bytes, parses it with the consensus branch for its height, trial-decrypts every Sapling output and Orchard and Ironwood action with the key, then applies the rules. A bad key, a malformed txid or an unreachable server throws; it is never a verdict.</p>
+            <p>Fetches the transaction from lightwalletd, <b>recomputes its txid</b> from the returned bytes, requires that txid in the compact block at the height lightwalletd reports (its time is <code>block_time</code>), parses it with the consensus branch for its height, trial-decrypts every Sapling output and Orchard and Ironwood action with the key, then applies the rules. A bad key, a malformed txid, an unreachable server or an answer that contradicts itself throws; it is never a verdict. Proofs and signatures are not checked: see <a href="#trust">Trust and limits</a>.</p>
             <h3>Parameters</h3>
             <ul class="params">
               <li><div class="p-head"><span class="p-name">uivk</span><span class="p-type">string</span><span class="p-req">required</span></div><p>The receiver's unified incoming viewing key, <code>uivktest1…</code>. The SDK passes it to the binary in its environment, never on the command line.</p></li>
@@ -386,7 +388,7 @@ installed @zpv/sdk: ok=true paid=100000 height=4521112</code></pre>
           <div class="prose">
             <p class="kicker">verify()</p>
             <h2 class="t" id="h-crosscheck">Cross-check lightwalletd</h2>
-            <p>One lightwalletd can withhold a transaction or lag behind. Pass several and Hanko runs the check against each, in parallel. The answers must agree on the verdict and on what it rests on: found, height, outputs, pools, reasons, amount. Tips and confirmation counts may differ by a block.</p>
+            <p>One lightwalletd can withhold a transaction, lag behind, or forge one, since proofs are not checked. Pass several and Hanko runs the check against each, in parallel. The answers must agree on the verdict and on what it rests on: found, height, outputs, pools, reasons, amount. Tips and confirmation counts may differ by a block.</p>
             <p>Any disagreement, or fewer answers than the quorum, is <b><code>unverified</code></b>: <code>ok</code> is false, <code>report</code> is null, and it is never <code>paid</code>. The paywall answers it with 503 and serves nothing.</p>
             <h3>Options</h3>
             <ul class="params">
@@ -669,7 +671,9 @@ Tests  4 passed (4)         # mcp</code></pre>
             <p class="kicker">Proof</p>
             <h2 class="t" id="h-trust">Trust and limits</h2>
             <ul>
-              <li><b>One lightwalletd</b> is trusted to serve the chain. The txid is recomputed, so it cannot swap a transaction, but it could withhold one (<code>TX_NOT_FOUND</code>) or lag. A <a href="#crosscheck">cross-check</a> turns that into "no verdict", but only independent endpoints make it meaningful, and public testnet has one operator.</li>
+              <li><b>What lightwalletd learns.</b> Each check asks for one txid and the block it names. The operator learns that this payment matters to you, when you asked, and your IP address, which links the payment to you; a cross-check tells every endpoint. <code>ZPV_LWD_PROXY=socks5h://127.0.0.1:9050</code> (Tor) hides the IP and never falls back to a direct connection; the txid and timing are still seen. Compact blocks alone would hide the txid, but they carry no memo.</li>
+              <li><b>What lightwalletd is trusted for.</b> Recomputing the txid stops a swap, not a forgery. Proofs, binding signatures and the block's place in the chain are not checked, and the height is what the server says. Anyone can encrypt a note of any value with your memo to your public address, so a lying or intercepted lightwalletd can serve one as mined and get <code>paid</code>. Requiring the txid in the named block catches only an answer that contradicts itself. Plaintext <code>http://</code> is refused unless the host is loopback.</li>
+              <li><b>A <a href="#crosscheck">cross-check</a></b> turns disagreement into "no verdict", but only endpoints run by different people make it meaningful, and public testnet has one operator. Run your own lightwalletd or Zaino on a full node as one of them.</li>
               <li><b>A UIVK reveals every incoming payment</b> to its wallet: amounts, memos, which address received them. Give it only to whoever should see that. The keys in this repo belong to demo-only testnet wallets.</li>
               <li><b>Testnet only.</b> The binary decodes testnet keys only.</li>
               <li><b>Paywall state</b> is in memory unless <code>ZPV_STORE</code> points at a SQLite file, which is shared by processes on one machine, not across machines.</li>
