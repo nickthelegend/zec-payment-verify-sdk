@@ -25,9 +25,12 @@ merchant's **incoming viewing key**: it can see payments, never spend.
   PAYMENT_LATE`.
 - **Refunds.** A refused payment whose outputs with the challenge memo reached the key (underpaid,
   `TRANSPARENT_PART`, `PAYMENT_LATE`) is recorded in the store, and the 402 says the funds arrived
-  and are recorded. `GET /api/refunds` lists them (txid, memo, amount, reasons, block) to a request from
-  the merchant's own machine only (loopback, no proxy headers; 403 otherwise). The merchant holds a
-  viewing key, not a spend key, so the refund itself is sent by hand from the wallet.
+  and are recorded. `GET /api/refunds` lists them (txid, memo, amount, reasons, block) only with
+  `Authorization: Bearer <ZPV_ADMIN_TOKEN>` (401 otherwise, compared in constant time). Without
+  `ZPV_ADMIN_TOKEN` (at least 16 characters) the endpoint is off: 503 `Setup required:
+  ZPV_ADMIN_TOKEN`. Where the request comes from is not trusted: behind a reverse proxy that adds no
+  forwarding header every request arrives from loopback. The merchant holds a viewing key, not a spend
+  key, so the refund itself is sent by hand from the wallet.
 - With `lwdUrls` (or `ZPV_LWD_URLS` + `ZPV_LWD_QUORUM`) each payment is checked against several lightwalletd endpoints. If they disagree or too few answer → `503` + `Retry-After` with `UNVERIFIED_*` and each endpoint's answer; nothing is served and the payment stays claimable.
 - `POST /api/verify` → the SDK verdict for either rail (used by the dashboard; CORS for `ZPV_CORS`).
 

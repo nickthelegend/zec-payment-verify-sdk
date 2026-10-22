@@ -52,6 +52,7 @@ describe('paywall startup checks', () => {
       [{ ZPV_PRICE_ZAT: '0' }, /^Setup required: ZPV_PRICE_ZAT/],
       [{ ZPV_PRICE_ZAT: '1.5' }, /^Setup required: ZPV_PRICE_ZAT/],
       [{ ZPV_PORT: '70000' }, /^Setup required: ZPV_PORT/],
+      [{ ZPV_ADMIN_TOKEN: 'short' }, /^Setup required: ZPV_ADMIN_TOKEN \(at least 16 characters/],
     ];
     for (const [env, msg] of bad) {
       const r = await startMain({ ...GOOD, ...env });

@@ -6,7 +6,7 @@
 //                                        with the receiver's incoming viewing key → 200 + X-PAYMENT-RESPONSE
 //   POST /api/verify {rail, …}         → the SDK verdict as JSON (both rails)
 // The gateway holds only the merchant's incoming viewing key: it can see payments, never spend.
-import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { BusyError, crossCheckFromEnv, LightwalletdBadAnswerError, LightwalletdUnreachableError, SetupRequiredError, verify, VerifyError, type VerifyRequest } from '@zpv/sdk';
 import { MemoryStore, type PaywallStore, type Refund } from './store.js';
@@ -41,6 +41,10 @@ export interface PaywallOptions {
   lwdQuorum?: number;
   /** Origins allowed to call /api/verify from a browser. */
   corsOrigins?: string[];
+  /** Bearer token for GET /api/refunds (decrypted memos, amounts and txids). Without one the endpoint is
+   *  off (503 Setup required: ZPV_ADMIN_TOKEN). Where a request comes from is not trusted: behind a
+   *  reverse proxy every request looks local. */
+  adminToken?: string;
   /** A custom payment memo for each new challenge, stored until it expires (default: a stateless
    *  zpv-<expiry>-<nonce>-<HMAC> memo). Tests use it to pin the memo of a published payment. */
   issueMemo?: () => string;
@@ -240,9 +244,12 @@ export function createPaywall(o: PaywallOptions): Server {
       }
     }
     if (url.pathname === '/api/refunds') {
-      // Decrypted memos and amounts: only to a request made on this machine, never through a proxy.
-      const local = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress ?? '') && !req.headers['x-forwarded-for'] && !req.headers.forwarded && !req.headers['x-real-ip'];
-      if (!local) return json(req, res, 403, { error: 'refunds are listed only to a request from the merchant’s own machine' });
+      // Decrypted memos, amounts and txids: only with the admin token, wherever the request comes from.
+      if (!o.adminToken) return json(req, res, 503, { error: 'Setup required: ZPV_ADMIN_TOKEN (set it to list refunds, then send Authorization: Bearer <token>)' });
+      const auth = req.headers.authorization ?? '';
+      const given = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+      const digest = (t: string) => createHash('sha256').update(t, 'utf8').digest();
+      if (!given || !timingSafeEqual(digest(given), digest(o.adminToken))) return json(req, res, 401, { error: 'refunds need Authorization: Bearer <ZPV_ADMIN_TOKEN>' }, { 'www-authenticate': 'Bearer' });
       return json(req, res, 200, { refunds: store.refunds() });
     }
     if (url.pathname === '/api/health') return json(req, res, 200, { ok: true, payTo: o.payTo, paths: Object.keys(o.prices), lightwalletd: lightwalletd() });

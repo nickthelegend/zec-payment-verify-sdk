@@ -25,12 +25,14 @@ async function start(extra: Partial<PaywallOptions>) {
 }
 const pay = (base: string, memo: string, txid: string) => fetch(`${base}/api/quote`, { headers: { 'x-payment': Buffer.from(JSON.stringify({ memo, txid })).toString('base64') } });
 type Refund = { txid: string; memo: string; paidZat: number; reasons: string[]; height: number; at: string };
-const refunds = async (base: string) => ((await (await fetch(`${base}/api/refunds`)).json()) as { refunds: Refund[] }).refunds;
+/** A throwaway admin token for these test paywalls (not a secret of any deployment). */
+const ADMIN = 'test-admin-token-0123456789abcdef';
+const refunds = async (base: string) => ((await (await fetch(`${base}/api/refunds`, { headers: { authorization: `Bearer ${ADMIN}` } })).json()) as { refunds: Refund[] }).refunds;
 
 describe('refunds', () => {
-  it('a refused payment whose funds reached the key is recorded and listed locally; one that paid someone else is not', async () => {
+  it('a refused payment whose funds reached the key is recorded and listed with the admin token; one that paid someone else is not', async () => {
     let memo = cases['transparent-part'].challengeMemo;
-    const base = await start({ issueMemo: () => memo });
+    const base = await start({ issueMemo: () => memo, adminToken: ADMIN });
     await fetch(`${base}/api/quote`);
     const t = await pay(base, memo, cases['transparent-part'].txid);
     expect(t.status).toBe(402);
@@ -61,9 +63,21 @@ describe('refunds', () => {
     memo = cases.underpaid.challengeMemo;
     await pay(base, memo, cases.underpaid.txid);
     expect(await refunds(base)).toHaveLength(2);
-    // Only to the merchant's own machine: a request relayed by a proxy is refused.
-    const relayed = await fetch(`${base}/api/refunds`, { headers: { 'x-forwarded-for': '203.0.113.9' } });
-    expect(relayed.status).toBe(403);
+    // Only with the admin token. A loopback request without it is refused too: a reverse proxy that adds no
+    // forwarding header (default nginx proxy_pass, ssh -R) sends exactly this request for a remote client.
+    for (const headers of [{}, { authorization: 'Bearer wrong-token' }, { authorization: ADMIN }, { 'x-forwarded-for': '203.0.113.9' }] as Record<string, string>[]) {
+      const r = await fetch(`${base}/api/refunds`, { headers });
+      expect(r.status, JSON.stringify(headers)).toBe(401);
+      expect(r.headers.get('www-authenticate')).toBe('Bearer');
+      expect(JSON.stringify(await r.json())).not.toContain(cases.underpaid.txid);
+    }
+  });
+
+  it('without an admin token /api/refunds is off: Setup required, even from loopback with no proxy headers', async () => {
+    const base = await start({});
+    const r = await fetch(`${base}/api/refunds`);
+    expect(r.status).toBe(503);
+    expect(((await r.json()) as { error: string }).error).toMatch(/^Setup required: ZPV_ADMIN_TOKEN/);
   });
 });
 
@@ -74,7 +88,7 @@ describe('mined-time expiry', () => {
     const opts = { issueMemo: () => memo, now: () => clock, challengeTtlMs: 5 * 60_000 };
 
     // Grace 10 min: the block came 5 min after expiry, inside the grace. Presented 30 min after the block.
-    const ok = await start({ ...opts, minedGraceMs: 10 * 60_000 });
+    const ok = await start({ ...opts, minedGraceMs: 10 * 60_000, adminToken: ADMIN });
     await fetch(`${ok}/api/quote`);
     clock = BLOCK_TIME_MS + 30 * 60_000;
     const served = await pay(ok, memo, cases.paywall.txid);
@@ -83,7 +97,7 @@ describe('mined-time expiry', () => {
 
     // Grace 2 min: the block came after expiry plus the grace.
     clock = BLOCK_TIME_MS - 10 * 60_000;
-    const late = await start({ ...opts, minedGraceMs: 2 * 60_000 });
+    const late = await start({ ...opts, minedGraceMs: 2 * 60_000, adminToken: ADMIN });
     await fetch(`${late}/api/quote`);
     clock = BLOCK_TIME_MS + 30 * 60_000;
     const r = await pay(late, memo, cases.paywall.txid);

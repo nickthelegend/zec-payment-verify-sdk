@@ -83,7 +83,8 @@ describe('gateway limits', () => {
   });
 
   it('after 5 counted refusals a challenge is closed: a payment that pays it is still checked, never served, and recorded for a refund (CHALLENGE_CLOSED)', async () => {
-    const base = await start({ issueMemo: () => fx.x402.memo });
+    const admin = 'test-admin-token-0123456789abcdef';
+    const base = await start({ issueMemo: () => fx.x402.memo, adminToken: admin });
     await fetch(`${base}/api/quote`);
     const pay = (txid: string) => fetch(`${base}/api/quote`, { headers: { 'x-payment': Buffer.from(JSON.stringify({ memo: fx.x402.memo, txid })).toString('base64') } });
     // The auction deposit is real and mined but pays someone else: a refusal that counts.
@@ -100,7 +101,7 @@ describe('gateway limits', () => {
     expect(body.reasons).toEqual(['CHALLENGE_CLOSED']);
     expect(body.received).toEqual({ zat: 100_000, recorded: true });
     expect(body.data).toBeUndefined();
-    const list = ((await (await fetch(`${base}/api/refunds`)).json()) as { refunds: { txid: string; paidZat: number; reasons: string[] }[] }).refunds;
+    const list = ((await (await fetch(`${base}/api/refunds`, { headers: { authorization: `Bearer ${admin}` } })).json()) as { refunds: { txid: string; paidZat: number; reasons: string[] }[] }).refunds;
     expect(list.map((r) => [r.txid, r.paidZat, r.reasons])).toEqual([[fx.x402.txid, 100_000, ['CHALLENGE_CLOSED']]]);
   });
 });
