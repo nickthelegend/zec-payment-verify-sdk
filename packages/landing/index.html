@@ -130,6 +130,10 @@
       .tabs button { font: 500 12px/1 var(--mono); color: var(--code-muted); background: none; border: 0; padding: 7px 8px; border-radius: 5px; cursor: pointer; }
       .tabs button:hover { color: var(--code-text); }
       .tabs button[aria-selected='true'] { color: var(--code-text); background: rgba(255, 255, 255, 0.08); }
+      .copy { margin-left: auto; flex: none; font: 500 12px/1 var(--mono); color: var(--code-muted); background: none; border: 1px solid var(--code-line); padding: 6px 8px; border-radius: 5px; cursor: pointer; }
+      .copy:hover { color: var(--code-text); border-color: rgba(255, 255, 255, 0.22); }
+      .copy.done { color: var(--peach); }
+      .tabs + .copy { margin-left: 4px; }
       pre { margin: 0; padding: 14px 16px 16px; font-size: 12.8px; line-height: 1.62; overflow-x: auto; tab-size: 2; }
       pre code { font-size: inherit; }
       .pane-foot { padding: 9px 14px; border-top: 1px solid var(--code-line); font: 400 11.5px/1.5 var(--mono); color: var(--code-muted); }
@@ -187,6 +191,7 @@
         .facts { grid-template-columns: minmax(0, 1fr); }
         .facts div:nth-child(odd) { padding-right: 0; }
         .seal { width: 96px; height: 96px; right: 10px; top: 50px; }
+        .pane-title { white-space: normal; line-height: 1.35; padding: 8px 0; min-width: 0; }
         pre { font-size: 12px; }
         .tbl { font-size: 14px; }
         .foot { padding: 22px 16px; }
@@ -766,6 +771,36 @@ needs: NULL402_OPERATOR_KEY (null-402's pool operator)</code></pre>
           });
         });
         setLang(LANGS.some(([k]) => k === lang) ? lang : 'ts');
+
+        // copy buttons: each pane copies the code it shows (the selected language, where there are tabs)
+        const copyText = async (text, pre) => {
+          try { await navigator.clipboard.writeText(text); return true; } catch {}
+          const r = document.createRange();
+          r.selectNodeContents(pre);
+          const sel = getSelection();
+          sel.removeAllRanges();
+          sel.addRange(r);
+          try { return document.execCommand('copy'); } catch { return false; }
+        };
+        document.querySelectorAll('.pane').forEach((pane) => {
+          const head = pane.querySelector('.pane-head');
+          if (!head || !pane.querySelector('pre')) return;
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'copy';
+          b.textContent = 'Copy';
+          b.setAttribute('aria-label', `Copy ${head.querySelector('.pane-title').textContent.trim()}`);
+          let t;
+          b.addEventListener('click', async () => {
+            const pre = [...pane.querySelectorAll('pre')].find((p) => !p.hidden);
+            const ok = await copyText(pre.innerText.trim(), pre);
+            b.textContent = ok ? 'Copied' : 'Selected, press Ctrl+C';
+            b.classList.toggle('done', ok);
+            clearTimeout(t);
+            t = setTimeout(() => { b.textContent = 'Copy'; b.classList.remove('done'); }, 1600);
+          });
+          head.append(b);
+        });
 
         // scroll-spy for the left nav
         const links = [...document.querySelectorAll('#toc a')];
