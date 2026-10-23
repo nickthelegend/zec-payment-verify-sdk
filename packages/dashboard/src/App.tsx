@@ -548,7 +548,7 @@ export function App() {
               <h1>{rail === 'zcash' ? 'Was I paid?' : 'Is this proof a payment to me?'}</h1>
               <p className="lede">
                 {rail === 'zcash'
-                  ? 'Paste a transaction and your incoming viewing key. The local verify API fetches it from lightwalletd (from several, when it cross-checks), decrypts what is yours and applies the rules. Endpoints that disagree give no verdict, never a Paid.'
+                  ? 'Paste a transaction and your incoming viewing key. The verify API fetches it from lightwalletd (from several, when it cross-checks), decrypts what is yours and applies the rules. Endpoints that disagree give no verdict, never a Paid.'
                   : 'Read a proof back out of a null-402 settle() on Fuji and check it against the deployed verifier and pool, from this browser.'}
               </p>
 

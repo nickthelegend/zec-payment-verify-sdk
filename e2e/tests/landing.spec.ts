@@ -1,6 +1,6 @@
 // The landing (packages/landing/index.html), the way a reader uses it: left nav, centre docs, dark
 // request/response panes, the seal, language tabs, copy buttons, the jump filter and every link.
-import { test, expect, URLS, fx, run, REPO, ZEC_TX, SETTLE, PUBLISHED_TXIDS, expectNoHorizontalScroll, expectLandedBelowBars, logButtons, isMobile, shot } from './fixtures';
+import { test, expect, URLS, fx, run, REPO, ZEC_TX, HOSTED_API, SETTLE, PUBLISHED_TXIDS, expectNoHorizontalScroll, expectLandedBelowBars, logButtons, isMobile, shot } from './fixtures';
 
 const SECTIONS = ['overview', 'quickstart', 'zcash', 'crosscheck', 'reasons', 'null402', 'paywall', 'api', 'mcp', 'evidence', 'tests', 'trust'];
 
@@ -17,6 +17,9 @@ test.describe('landing', () => {
     await expectNoHorizontalScroll(page);
     // Nick: "Can't use the log button". The landing has no button whose label contains "log".
     await expect(logButtons(page)).toHaveCount(0);
+    // The verify API is hosted now: the API section links it and nothing lists it as blocked.
+    await expect(page.locator('#api').getByRole('link', { name: /hanko-api/ })).toHaveAttribute('href', `${HOSTED_API}/api/health`);
+    await expect(page.locator('body')).not.toContainText('a hosted Zcash verify API');
     await page.screenshot({ path: shot('landing-hero', info.project.name) });
   });
 
@@ -170,6 +173,8 @@ test.describe('landing', () => {
         expect(PUBLISHED_TXIDS.has(h.slice(ZEC_TX.length)), `${h} is a published txid`).toBe(true);
       } else if (h.startsWith('https://testnet.snowtrace.io/tx/')) {
         expect(h).toBe(`https://testnet.snowtrace.io/tx/${SETTLE}`);
+      } else if (h.startsWith(HOSTED_API)) {
+        expect(h).toBe(`${HOSTED_API}/api/health`);
       } else {
         expect(h, 'the console beside it, or this repo').toMatch(new RegExp(`^(dashboard/|${REPO.replace(/\./g, '\\.')})$`));
       }

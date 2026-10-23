@@ -547,7 +547,7 @@ const r = await verify({
           <div class="prose">
             <p class="kicker">Surfaces · @zpv/gateway</p>
             <h2 class="t" id="h-api"><code>POST /api/verify</code></h2>
-            <p>The verify API the dashboard calls: the request body is a <code>verify()</code> request for either rail, the response is its result. It listens on <code>127.0.0.1:8403</code> and answers CORS only for the origins in <code>ZPV_CORS</code>.</p>
+            <p>The verify API the dashboard calls: the request body is a <code>verify()</code> request for either rail, the response is its result. It listens on <code>127.0.0.1:8403</code> and answers CORS only for the origins in <code>ZPV_CORS</code>. A hosted instance (Zcash testnet, one lightwalletd) answers at <a href="https://hanko-api.201-18-198-162.sslip.io/api/health"><code>hanko-api…/api/health</code></a>; the hosted console calls it.</p>
             <div class="tbl-wrap">
               <table class="tbl">
                 <thead><tr><th scope="col">Status</th><th scope="col">Meaning</th></tr></thead>
@@ -704,11 +704,7 @@ Tests  7 passed (7)         # mcp</code></pre>
 needs: the maintainer's npm and crates.io accounts
 
 # a null-402 proof that passes all three checks live
-needs: NULL402_OPERATOR_KEY (null-402's pool operator)
-
-# a hosted Zcash verify API (the hosted console
-# checks Zcash payments only with a local API)
-needs: a server account</code></pre>
+needs: NULL402_OPERATOR_KEY (null-402's pool operator)</code></pre>
               </div>
             </div>
           </div>

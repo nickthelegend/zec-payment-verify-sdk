@@ -10,6 +10,8 @@ export const fx = JSON.parse(readFileSync(resolve(REPO_ROOT, 'fixtures/testnet.j
 export const run = JSON.parse(readFileSync(resolve(REPO_ROOT, 'deployments/testnet.json'), 'utf8'));
 export const REPO = 'https://github.com/nickthelegend/zec-payment-verify-sdk';
 export const ZEC_TX = 'https://testnet.zecblock.com/tx/';
+/** The hosted verify API on the VPS (Zcash testnet, one lightwalletd). */
+export const HOSTED_API = 'https://hanko-api.201-18-198-162.sslip.io';
 export const SETTLE = '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593';
 /** Every mined txid this project publishes. A link to an explorer must name one of these. */
 export const PUBLISHED_TXIDS = new Set<string>([

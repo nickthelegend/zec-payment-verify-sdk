@@ -34,6 +34,8 @@ test.describe('dashboard console (verify API on :8420, one lightwalletd)', () =>
   test('loads with honest empty states and the live endpoint in the send row', async ({ page }, info) => {
     await expect(page.getByRole('heading', { level: 1, name: 'Was I paid?' })).toBeVisible();
     await expect(page.locator('#send-note')).toHaveText('to http://127.0.0.1:8420 · one lightwalletd, testnet.zec.rocks:443');
+    // The same console runs against the hosted API, so the lede doesn't call the API local.
+    await expect(page.locator('.lede')).not.toContainText('local verify API');
     await expect(verdict(page)).toContainText('Nothing checked yet.');
     await expect(response(page)).toContainText('No request sent yet.');
     await expect(history(page)).toContainText('No checks yet.');
