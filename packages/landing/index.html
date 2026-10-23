@@ -293,7 +293,7 @@ ZPV_UIVK=… zpay-verify verify 030c3cbf…8351 \
               <div class="pane stamped" id="seal-pane">
                 <div class="pane-head"><span class="pane-title"><b>Response</b></span><span class="status ok">exit 0 · paid</span></div>
                 <pre><code data-json="x402ok"></code></pre>
-                <div class="pane-foot">Real output of <code>zpay-verify</code>, Oct 21, 2026, tip 4,524,720. <a href="https://testnet.zcashexplorer.app/transactions/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351">View the tx</a></div>
+                <div class="pane-foot">Real output of <code>zpay-verify</code>, Oct 21, 2026, tip 4,524,720. <a href="https://testnet.zecblock.com/tx/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351">View the tx</a></div>
                 <svg class="seal armed" id="seal" viewBox="0 0 132 132" aria-hidden="true">
                   <defs>
                     <filter id="ink" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" result="d" /><feComponentTransfer in="n" result="holes"><feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 0 0 1" /></feComponentTransfer><feComposite in="d" in2="holes" operator="out" /></filter>
@@ -536,7 +536,7 @@ const r = await verify({
               <div class="pane">
                 <div class="pane-head"><span class="pane-title"><b>GET</b> /api/quote + X-PAYMENT</span><span class="status ok">200</span></div>
                 <pre><code data-json="receipt"></code></pre>
-                <div class="pane-foot">The receipt from the live run, Oct 20, 2026 (the body; <code>X-PAYMENT-RESPONSE</code> carries <code>{success, transaction, network, payer}</code>). <a href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">View the tx</a></div>
+                <div class="pane-foot">The receipt from the live run, Oct 20, 2026 (the body; <code>X-PAYMENT-RESPONSE</code> carries <code>{success, transaction, network, payer}</code>). <a href="https://testnet.zecblock.com/tx/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">View the tx</a></div>
               </div>
             </div>
           </div>
@@ -615,18 +615,18 @@ curl -s 127.0.0.1:8403/api/verify \
               <table class="tbl">
                 <thead><tr><th scope="col">Case</th><th scope="col">Transaction</th><th scope="col">Answer</th></tr></thead>
                 <tbody>
-                  <tr><td>Current paywall, Oct 22: 10,000 zat with a stateless HMAC memo, presented with Shielded x402's <code>fetchWithPayment</code>; then the same payment again</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/2867d542496452326ce241ad3ba647deb7e6e8eb1b889397ffae20dceecb664f">2867d542…664f</a></td><td><span class="code-tag ok">200</span> then <span class="code-tag no">402</span></td></tr>
-                  <tr><td>Paywall, Oct 20: 10,000 zat with the challenge memo</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">7c1f6cc0…4c16</a></td><td><span class="code-tag ok">200</span></td></tr>
-                  <tr><td>10,000 zat with another memo</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0">1620eccc…49c0</a></td><td><span class="code-tag no">MEMO_MISMATCH</span></td></tr>
-                  <tr><td>5,000 zat with the right memo</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2">f9db1841…dce2</a></td><td><span class="code-tag no">AMOUNT_TOO_LOW</span></td></tr>
-                  <tr><td>Right memo and amount, plus a transparent output</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec">bb8d8842…82ec</a></td><td><span class="code-tag no">TRANSPARENT_PART</span></td></tr>
-                  <tr><td>Payslip, 50,000 zat, checked by a lender with the employee's key</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869">38958ceb…5869</a></td><td><span class="code-tag ok">ok</span></td></tr>
+                  <tr><td>Current paywall, Oct 22: 10,000 zat with a stateless HMAC memo, presented with Shielded x402's <code>fetchWithPayment</code>; then the same payment again</td><td><a class="tx" href="https://testnet.zecblock.com/tx/2867d542496452326ce241ad3ba647deb7e6e8eb1b889397ffae20dceecb664f">2867d542…664f</a></td><td><span class="code-tag ok">200</span> then <span class="code-tag no">402</span></td></tr>
+                  <tr><td>Paywall, Oct 20: 10,000 zat with the challenge memo</td><td><a class="tx" href="https://testnet.zecblock.com/tx/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">7c1f6cc0…4c16</a></td><td><span class="code-tag ok">200</span></td></tr>
+                  <tr><td>10,000 zat with another memo</td><td><a class="tx" href="https://testnet.zecblock.com/tx/1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0">1620eccc…49c0</a></td><td><span class="code-tag no">MEMO_MISMATCH</span></td></tr>
+                  <tr><td>5,000 zat with the right memo</td><td><a class="tx" href="https://testnet.zecblock.com/tx/f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2">f9db1841…dce2</a></td><td><span class="code-tag no">AMOUNT_TOO_LOW</span></td></tr>
+                  <tr><td>Right memo and amount, plus a transparent output</td><td><a class="tx" href="https://testnet.zecblock.com/tx/bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec">bb8d8842…82ec</a></td><td><span class="code-tag no">TRANSPARENT_PART</span></td></tr>
+                  <tr><td>Payslip, 50,000 zat, checked by a lender with the employee's key</td><td><a class="tx" href="https://testnet.zecblock.com/tx/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869">38958ceb…5869</a></td><td><span class="code-tag ok">ok</span></td></tr>
                   <tr><td>Same payslip, claimed as twice the pay</td><td><span class="tx">38958ceb…5869</span></td><td><span class="code-tag no">AMOUNT_TOO_LOW</span></td></tr>
-                  <tr><td>Shielded x402's demo payment, its merchant's published key</td><td><a class="tx" href="https://testnet.zcashexplorer.app/transactions/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351">030c3cbf…8351</a></td><td><span class="code-tag ok">ok</span></td></tr>
+                  <tr><td>Shielded x402's demo payment, its merchant's published key</td><td><a class="tx" href="https://testnet.zecblock.com/tx/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351">030c3cbf…8351</a></td><td><span class="code-tag ok">ok</span></td></tr>
                 </tbody>
               </table>
             </div>
-            <p style="margin-top: 16px">Funding of the demo payer: <a class="tx" href="https://testnet.zcashexplorer.app/transactions/a2c0578b58c7c76d989f60292dd445f364fc40e40d1c21f89fc48ece7dfb57d3">a2c0578b…57d3</a>. No contracts are deployed by this project.</p>
+            <p style="margin-top: 16px">Funding of the demo payer: <a class="tx" href="https://testnet.zecblock.com/tx/a2c0578b58c7c76d989f60292dd445f364fc40e40d1c21f89fc48ece7dfb57d3">a2c0578b…57d3</a>. No contracts are deployed by this project.</p>
           </div>
           <div class="code">
             <div class="code-stick">

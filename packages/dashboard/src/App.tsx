@@ -8,7 +8,7 @@ const API_FROM_ENV = Boolean(import.meta.env.VITE_ZPV_API);
 /** The GitHub Pages build (scripts/build-pages.sh): no verify API runs beside it, so it opens on the
  *  null-402 tab, which works entirely in the browser. */
 const PAGES = import.meta.env.VITE_ZPV_PAGES === '1';
-const ZEC_TX = 'https://testnet.zcashexplorer.app/transactions/';
+const ZEC_TX = 'https://testnet.zecblock.com/tx/';
 const REPO = 'https://github.com/nickthelegend/zec-payment-verify-sdk';
 const SETTLE = '0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593';
 
