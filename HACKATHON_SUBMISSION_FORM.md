@@ -6,7 +6,7 @@ would fit Core & Tooling). Every fact below is verified in this repo.
 **Name:** Hanko (zpay-verify)
 **One line:** "Was I paid?" for shielded Zcash: check amount, memo, confirmations and no transparent part with only an incoming viewing key; the same call checks null-402 settlements on Fuji.
 **Repo:** github.com/nickthelegend/zec-payment-verify-sdk (not pushed yet; public before submission)
-**Demo URL:** https://nickthelegend.github.io/zec-payment-verify-sdk/ (landing) and https://nickthelegend.github.io/zec-payment-verify-sdk/dashboard/ (console). `.github/workflows/pages.yml` publishes both on the first push to `main`, once Pages is enabled (Settings → Pages → GitHub Actions). Not live before that. The console opens on its null-402 tab, which runs in the browser against Fuji; its Zcash tab needs a verify API on the reader's machine and, without one, shows Setup required with the exact command beside real answers recorded on Oct 22, labelled "Recorded output, not live" (no hosted API).
+**Demo URL:** https://hanko-landing-six.vercel.app (landing; console at `/dashboard/`) and https://hanko-dashboard-six.vercel.app (console). The hosted console checks Zcash payments live against the hosted verify API https://hanko-api.201-18-198-162.sslip.io (testnet, one lightwalletd); its null-402 tab runs in the browser against Fuji. A GitHub Pages build (`.github/workflows/pages.yml`, after the push) has no API: its Zcash tab shows Setup required beside real answers recorded on Oct 22, labelled "Recorded output, not live".
 **Video URL:** not recorded for this version. Planned: about 2 minutes against `e2e/stack.sh` with captions saying what replays the Oct 20 run and what is live (the Oct 22 unpinned paywall payment is the live paywall case); Nick records and uploads it. The Oct 20 27-second terminal capture predates the console, landing, cross-check and SQLite store, so it is not submitted.
 
 ## Description (for the form, 1,512 characters)
@@ -18,7 +18,7 @@ Real: a Rust crate and CLI, a TypeScript SDK, an x402 paywall in Shielded x402's
 
 Mock: none. A misbehaving server is a real local socket. Most paywall tests replay the Oct 20 payment via a pinned memo.
 
-Not built: ZIP 311 disclosures (draft ZIP); a hosted Zcash verify API; anchor and chain checks, so a lying lightwalletd that proves over a fake tree can still forge a paid answer (use your own node). Each check tells the lightwalletd the txid and your IP; ZPV_LWD_PROXY (Tor) hides the IP.
+Not built: ZIP 311 disclosures (draft ZIP); anchor and chain checks, so a lying lightwalletd that proves over a fake tree can still forge a paid answer (use your own node). Each check tells the lightwalletd the txid and your IP; ZPV_LWD_PROXY (Tor) hides the IP.
 
 BLOCKED: a null-402 proof that passes every check live (needs null-402's operator key); publishing to npm and crates.io (needs the maintainer's accounts).
 <!-- description:end -->

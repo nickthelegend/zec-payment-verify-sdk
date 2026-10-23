@@ -1,11 +1,12 @@
 # Hanko — verify shielded Zcash payments with a viewing key
 
-**Demo:** [landing](https://nickthelegend.github.io/zec-payment-verify-sdk/) ·
-[console](https://nickthelegend.github.io/zec-payment-verify-sdk/dashboard/), published by
-`.github/workflows/pages.yml` on the first push to `main` once Pages is enabled; **not live until
-then** (`scripts/build-pages.sh` builds the same site locally). The console opens on its null-402
-tab, which runs in the browser against Fuji. Its Zcash tab needs a verify API on your machine; without
-one it shows Setup required with the exact command, beside real answers recorded on Oct 22, labelled
+**Live:** [landing](https://hanko-landing-six.vercel.app) (console at `/dashboard/`) ·
+[console](https://hanko-dashboard-six.vercel.app) · verify API
+[`hanko-api…/api/health`](https://hanko-api.201-18-198-162.sslip.io/api/health) (Zcash testnet, one
+lightwalletd; also the x402 paywall at `/api/quote`). The hosted console opens on its Zcash tab and
+checks payments live against that API; its null-402 tab runs in the browser against Fuji. A GitHub
+Pages build (`.github/workflows/pages.yml`, once the repo is public) has no API beside it: its Zcash
+tab shows Setup required with the exact command, beside real answers recorded on Oct 22, labelled
 "Recorded output, not live". **Video:** not recorded for this version; the Oct 20 terminal capture
 (27 s) predates the console, landing, cross-check and SQLite store, so it is not linked.
 **Tests:** [TESTING.md](TESTING.md).
