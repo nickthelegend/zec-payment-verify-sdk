@@ -1,0 +1,47 @@
+# Lightweight hackathon-demo deployment on the VPS behind Coolify's Traefik (network "coolify").
+# Redeploy: cd /opt/hk/hanko && docker compose up -d --build
+# Secrets live only on the server in ./.env (chmod 600, gitignored): ZPV_ADMIN_TOKEN, generated there.
+# ZPV_PAY_TO / ZPV_MERCHANT_UIVK are the demo testnet merchant's, published in deployments/testnet.json.
+services:
+  gateway:
+    build: .
+    image: hk-hanko:latest
+    restart: unless-stopped
+    mem_limit: 384m
+    env_file: .env
+    environment:
+      ZPV_PAY_TO: utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7
+      ZPV_MERCHANT_UIVK: uivktest1kllf3w6sxt9fdt6fuxtlw8mt337mphs5hu2ulml8hh5lcpvrv57dyc0c3akelrahs3urxgp2sf9mmhcu7hqzexw6g9xztksucvntt5t34t7z0lsqasljrwclnsxgwm3kvsjzwr7hp6m5wsfrcexsge5seddrvt6gvl00qnwyeaaf63ptp54088nl6fnrktagu023fxwfra07ksgmvec94rmywjpwft8l8qxhnf9gjq66vvt6e6p
+      ZPV_LWD_URL: https://testnet.zec.rocks:443
+      ZPV_VERIFY_API: "1"
+      ZPV_STORE: /data/zpv.sqlite
+      # Exact-match origins; Vercel origins (*.vercel.app) are allowed by the Traefik CORS middleware below.
+      ZPV_CORS: http://localhost:5180
+    volumes:
+      - hanko-data:/data
+    networks: [coolify]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8403/api/health').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.hk-hanko-api.rule=Host(`hanko-api.201-18-198-162.sslip.io`)
+      - traefik.http.routers.hk-hanko-api.entrypoints=https
+      - traefik.http.routers.hk-hanko-api.tls=true
+      - traefik.http.routers.hk-hanko-api.tls.certresolver=letsencrypt
+      - traefik.http.routers.hk-hanko-api.middlewares=hk-hanko-cors
+      - traefik.http.services.hk-hanko-api.loadbalancer.server.port=8403
+      - traefik.http.middlewares.hk-hanko-cors.headers.accesscontrolalloworiginlistregex=^https://[a-z0-9-]+\.vercel\.app$$
+      - traefik.http.middlewares.hk-hanko-cors.headers.accesscontrolallowmethods=GET,POST,OPTIONS
+      - traefik.http.middlewares.hk-hanko-cors.headers.accesscontrolallowheaders=Content-Type,Authorization,X-PAYMENT
+      - traefik.http.middlewares.hk-hanko-cors.headers.accesscontrolexposeheaders=X-PAYMENT-RESPONSE
+      - traefik.http.middlewares.hk-hanko-cors.headers.accesscontrolmaxage=600
+      - traefik.http.middlewares.hk-hanko-cors.headers.addvaryheader=true
+volumes:
+  hanko-data:
+networks:
+  coolify:
+    external: true

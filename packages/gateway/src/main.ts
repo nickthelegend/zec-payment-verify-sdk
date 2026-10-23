@@ -5,7 +5,9 @@
 // ZPV_LWD_URLS + ZPV_LWD_QUORUM: every payment cross-checked, disagreement answered with 503 and never
 // served), ZPV_STORE (SQLite file for the challenge key, claimed payments and refunds; without it the
 // state is in memory and a restart forgets which payments were already served), ZPV_ADMIN_TOKEN (at least
-// 16 characters; GET /api/refunds needs it as a bearer token, and is off without it).
+// 16 characters; GET /api/refunds needs it as a bearer token, and is off without it), ZPV_HOST (listen address,
+// default 127.0.0.1; a container behind a reverse proxy sets 0.0.0.0), ZPV_VERIFY_API=1 (also serve the free
+// POST /api/verify that api.ts serves, so one process is both the paywall and the dashboard's verify API).
 //
 // Settings are checked before listening, and a bad one exits 2 with "Setup required: <name>": a
 // paywall that starts with them would take customers' money and refuse every payment.
@@ -58,11 +60,13 @@ async function main() {
     lwdUrl: process.env.ZPV_LWD_URL,
     store: process.env.ZPV_STORE ? new SqliteStore(process.env.ZPV_STORE) : new MemoryStore(),
     adminToken,
+    verifyApi: process.env.ZPV_VERIFY_API === '1',
     content: (path) => ({ path, servedAt: new Date().toISOString(), note: 'paid with a shielded Zcash payment, checked with a viewing key' }),
   });
-  server.listen(port, '127.0.0.1', () => {
+  const host = process.env.ZPV_HOST?.trim() || '127.0.0.1';
+  server.listen(port, host, () => {
     const at = (server.address() as AddressInfo).port;
-    console.log(`zpv paywall on http://127.0.0.1:${at} (payTo ${payTo.slice(0, 16)}…, min ${minConf} confirmation(s), state ${process.env.ZPV_STORE ? `in ${process.env.ZPV_STORE}` : 'in memory: a restart forgets served payments'})`);
+    console.log(`zpv paywall on http://${host}:${at}${process.env.ZPV_VERIFY_API === '1' ? ' with POST /api/verify' : ''} (payTo ${payTo.slice(0, 16)}…, min ${minConf} confirmation(s), state ${process.env.ZPV_STORE ? `in ${process.env.ZPV_STORE}` : 'in memory: a restart forgets served payments'})`);
   });
   for (const sig of ['SIGTERM', 'SIGINT'] as const) process.on(sig, () => server.close(() => process.exit(0)));
 }
