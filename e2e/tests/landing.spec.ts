@@ -1,12 +1,14 @@
-// The landing (packages/landing/index.html), the way a reader uses it: left nav, centre docs, dark
+// The API reference (packages/landing/reference.html, the landing until Oct 25), the way a reader uses it: left nav, centre docs, dark
 // request/response panes, the seal, language tabs, copy buttons, the jump filter and every link.
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { test, expect, URLS, fx, run, REPO, ZEC_TX, HOSTED_API, SETTLE, PUBLISHED_TXIDS, expectNoHorizontalScroll, expectLandedBelowBars, logButtons, isMobile, shot } from './fixtures';
 
 const SECTIONS = ['overview', 'quickstart', 'zcash', 'crosscheck', 'reasons', 'null402', 'paywall', 'api', 'mcp', 'evidence', 'tests', 'trust'];
 
-test.describe('landing', () => {
+test.describe('API reference page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(URLS.landing + '/');
+    await page.goto(URLS.landing + '/reference.html');
     await expect(page.getByRole('heading', { level: 1, name: 'Was I paid?' })).toBeVisible();
   });
 
@@ -111,7 +113,7 @@ test.describe('landing', () => {
   test('reduced motion: the seal is already down, no animation', async ({ browser }, info) => {
     const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: info.project.use.viewport, recordVideo: { dir: info.outputPath('rm-video') } });
     const page = await ctx.newPage();
-    await page.goto(URLS.landing + '/');
+    await page.goto(URLS.landing + '/reference.html');
     const seal = page.locator('#seal');
     await expect(seal).not.toHaveClass(/\barmed\b/);
     expect(await seal.evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
@@ -176,7 +178,7 @@ test.describe('landing', () => {
       } else if (h.startsWith(HOSTED_API)) {
         expect(h).toBe(`${HOSTED_API}/api/health`);
       } else {
-        expect(h, 'the console beside it, or this repo').toMatch(new RegExp(`^(dashboard/|${REPO.replace(/\./g, '\\.')})$`));
+        expect(h, 'the console beside it, the overview, or this repo').toMatch(new RegExp(`^(dashboard/|\\./|${REPO.replace(/\./g, '\\.')})$`));
       }
     }
     // The evidence table's labels are the first8…last4 of the txid they link to.
@@ -233,6 +235,54 @@ test.describe('landing', () => {
     const foot = page.locator('.foot');
     await expect(foot).toContainText('Copyright (c) 2026 Nivesh Gajengi');
     await expect(foot.getByRole('link', { name: 'source' })).toHaveAttribute('href', REPO);
+    await expect(foot.getByRole('link', { name: 'overview' })).toHaveAttribute('href', './');
     await expectNoHorizontalScroll(page);
+  });
+});
+
+test.describe('landing (one-screen overview)', () => {
+  test('first screen: headline, subline, two buttons, the stamped response; no txids; no horizontal scroll', async ({ page }, info) => {
+    await page.goto(URLS.landing + '/');
+    await expect(page).toHaveTitle('Hanko · was I paid?');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Was I paid? Ask with a viewing key.');
+    await expect(page.locator('.sub')).toHaveText("Hanko checks a shielded Zcash payment's amount, memo and depth with a key that can never spend.");
+    const ctas = page.locator('.hero .ctas a');
+    await expect(ctas).toHaveText(['Open the console', 'Read the API reference']);
+    await expect(ctas.nth(0)).toHaveAttribute('href', 'dashboard/');
+    await expect(ctas.nth(1)).toHaveAttribute('href', 'reference.html');
+    // The response excerpt is the recorded x402 check: ok, 100,000 zat, no reasons.
+    await expect(page.locator('#seal-pane pre')).toContainText(`"paid_zat": ${fx.x402.amountZat}`);
+    await expect(page.locator('#seal-pane pre')).toContainText('"ok": true');
+    await expect(page.locator('#seal')).toHaveClass('seal land');
+    expect(await page.locator('main').innerText()).not.toMatch(/[0-9a-f]{8}…[0-9a-f]{4}/);
+    await expectNoHorizontalScroll(page);
+    await expect(logButtons(page)).toHaveCount(0);
+    await page.screenshot({ path: shot('landing-overview', info.project.name) });
+  });
+
+  test('reduced motion: the seal is already down, no animation', async ({ browser }, info) => {
+    const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: info.project.use.viewport });
+    const page = await ctx.newPage();
+    await page.goto(URLS.landing + '/');
+    const seal = page.locator('#seal');
+    await expect(seal).not.toHaveClass(/\barmed\b/);
+    expect(await seal.evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
+    expect(await seal.evaluate((el) => getComputedStyle(el).opacity)).toBe('0.94');
+    await ctx.close();
+  });
+
+  test('numbers are the TESTING.md totals; the strip links the hosted API; links resolve', async ({ page }) => {
+    await page.goto(URLS.landing + '/');
+    const testing = readFileSync(resolve(import.meta.dirname, '../../TESTING.md'), 'utf8');
+    const [, total, chain] = testing.match(/\| \*\*Total\*\* \| \| \*\*(\d+) \+ 1 doc example\*\* \| \*\*(\d+)\*\* \|/)!;
+    await expect(page.locator('.facts b')).toHaveText([total, chain, '0']);
+    await expect(page.locator('.strip h3')).toHaveText(['Live', 'Setup required']);
+    await expect(page.locator('.strip').getByRole('link', { name: 'hosted verify API' })).toHaveAttribute('href', `${HOSTED_API}/api/health`);
+    for (const h of await page.locator('a[href]').evaluateAll((as) => as.map((a) => a.getAttribute('href')!))) {
+      expect(h).toMatch(new RegExp(`^(\\./|dashboard/|reference\\.html(#evidence)?|${HOSTED_API.replace(/\./g, '\\.')}/api/health|${REPO.replace(/\./g, '\\.')}(/blob/main/TESTING\\.md)?)$`));
+    }
+    await page.getByRole('link', { name: 'See the evidence' }).click();
+    await expect(page).toHaveURL(`${URLS.landing}/reference.html#evidence`);
+    await expect(page.locator('#evidence h2')).toHaveText('Live testnet run');
   });
 });

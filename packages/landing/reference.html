@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hanko API reference</title>
+    <meta name="description" content="Hanko answers “was I paid?” for shielded Zcash: check amount, memo, confirmations and no transparent part with only an incoming viewing key. API reference for the Rust crate, CLI, TypeScript SDK, x402 paywall and MCP server, with real testnet output." />
+    <meta name="theme-color" content="#fffbf9" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='5' fill='%23e2401f'/%3E%3Crect x='5.5' y='5.5' width='21' height='21' rx='3' fill='none' stroke='%23fdebe5' stroke-width='1.6'/%3E%3Cpath d='M11.5 10v12M20.5 10v12M11.5 16h9' stroke='%23fdebe5' stroke-width='2.6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --sans: 'Hanken Grotesk', system-ui, sans-serif;
+        --mono: 'JetBrains Mono', ui-monospace, monospace;
+        --ink: #161616;
+        --verm: #e2401f;
+        --verm-text: #b9321a;
+        --verm-light: #ff8a6e;
+        --peach: #fdebe5;
+        --paper: #fffbf9;
+        --rail: #fbf1ec;
+        --text: #161616;
+        --muted: #675c58;
+        --line: rgba(22, 22, 22, 0.1);
+        --line-strong: rgba(22, 22, 22, 0.2);
+        --code-bg: #161616;
+        --code-surface: #1f1d1c;
+        --code-line: rgba(255, 255, 255, 0.09);
+        --code-text: #ece6e3;
+        --code-muted: #9b918d;
+        --code-key: #f7bba9;
+        --top: 60px;
+        --nav-w: 248px;
+        color-scheme: light;
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--top) + 16px); }
+      body { margin: 0; background: var(--paper); color: var(--text); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+      a { color: var(--verm-text); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+      a:hover { text-decoration-thickness: 2px; }
+      :focus-visible { outline: 2px solid var(--verm); outline-offset: 2px; border-radius: 4px; }
+      code, pre, .mono { font-family: var(--mono); }
+      p code, li code, td code, dd code { font-size: 0.86em; background: var(--peach); color: #4a1608; padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+      .skip { position: absolute; left: -999px; top: 8px; background: var(--ink); color: #fff; padding: 8px 12px; border-radius: 6px; z-index: 100; }
+      .skip:focus { left: 8px; }
+      .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+      /* top bar */
+      .top { position: sticky; top: 0; z-index: 40; height: var(--top); display: flex; align-items: center; gap: 16px; padding: 0 20px; background: var(--paper); border-bottom: 1px solid var(--line); }
+      .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 19px; letter-spacing: -0.02em; }
+      .brand svg { width: 28px; height: 28px; flex: none; }
+      .ver { font: 500 12px/1 var(--mono); color: var(--muted); border: 1px solid var(--line-strong); border-radius: 999px; padding: 5px 9px; white-space: nowrap; }
+      .crumb { color: var(--muted); font-size: 14px; white-space: nowrap; }
+      .top-end { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+      .top-end a { color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 500; }
+      .top-end a:hover { color: var(--verm-text); }
+      .jump { position: relative; }
+      .jump input { width: 220px; height: 34px; border: 1px solid var(--line-strong); border-radius: 8px; background: #fff; font: 400 14px var(--sans); padding: 0 34px 0 12px; color: var(--ink); }
+      .jump input::placeholder { color: var(--muted); }
+      .jump kbd { position: absolute; right: 8px; top: 7px; font: 500 11px/1 var(--mono); color: var(--muted); border: 1px solid var(--line-strong); border-radius: 4px; padding: 3px 5px; }
+
+      /* layout */
+      .layout { display: grid; grid-template-columns: var(--nav-w) minmax(0, 1fr); }
+      .side { position: sticky; top: var(--top); align-self: start; height: calc(100vh - var(--top)); overflow-y: auto; padding: 22px 14px 40px 20px; background: var(--rail); border-right: 1px solid var(--line); }
+      .side h2 { font: 600 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 22px 0 8px 10px; }
+      .side h2:first-child { margin-top: 0; }
+      .side ul { list-style: none; margin: 0; padding: 0; }
+      .side a { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; font-size: 15px; position: relative; }
+      .side a:hover { background: rgba(226, 64, 31, 0.07); }
+      .side a[aria-current='true'] { background: #fff; box-shadow: inset 0 0 0 1px var(--line); font-weight: 500; }
+      .side a[aria-current='true']::before { content: ''; position: absolute; left: -6px; top: 8px; bottom: 8px; width: 3px; border-radius: 2px; background: var(--verm); }
+      .verb { font: 500 10.5px/1 var(--mono); color: var(--verm-text); border: 1px solid rgba(185, 50, 26, 0.35); border-radius: 4px; padding: 3px 4px; }
+      .side .empty-filter { padding: 6px 10px; color: var(--muted); font-size: 14px; }
+
+      /* doc rows: prose | code */
+      .doc { min-width: 0; }
+      .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); }
+      .prose { padding: 56px clamp(24px, 4vw, 56px) 64px; border-bottom: 1px solid var(--line); min-width: 0; }
+      .code { background: var(--code-bg); padding: 56px clamp(18px, 2.4vw, 32px) 64px; border-bottom: 1px solid var(--code-line); min-width: 0; }
+      .code-stick { position: sticky; top: calc(var(--top) + 24px); display: grid; gap: 16px; }
+      .prose > :first-child { margin-top: 0; }
+      .kicker { font: 500 12px/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--verm-text); margin: 0 0 14px; }
+      h1 { font-weight: 600; font-size: clamp(40px, 5vw, 64px); line-height: 1; letter-spacing: -0.04em; margin: 0 0 18px; }
+      h2.t { font-weight: 600; font-size: clamp(26px, 2.6vw, 34px); line-height: 1.1; letter-spacing: -0.03em; margin: 0 0 14px; }
+      h2.t code { background: none; padding: 0; color: inherit; font-size: 0.82em; letter-spacing: -0.02em; }
+      h3 { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin: 32px 0 10px; }
+      .lede { font-size: 19px; line-height: 1.5; color: #2d2826; max-width: 60ch; margin: 0 0 22px; }
+      .prose p, .prose li { max-width: 66ch; }
+      .prose ul { padding-left: 20px; }
+      .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin: 28px 0 0; border-top: 1px solid var(--line); }
+      .facts div { padding: 12px 0; border-bottom: 1px solid var(--line); }
+      .facts div:nth-child(odd) { padding-right: 16px; }
+      .facts dt { font: 500 12px/1.4 var(--mono); color: var(--muted); }
+      .facts dd { margin: 2px 0 0; font-size: 15px; }
+
+      /* parameter list */
+      .params { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+      .params li { padding: 14px 0; border-bottom: 1px solid var(--line); max-width: none; }
+      .p-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+      .p-name { font: 500 14px var(--mono); color: var(--ink); }
+      .p-type { font: 400 12.5px var(--mono); color: var(--muted); }
+      .p-req { font: 500 11px/1 var(--mono); color: var(--verm-text); text-transform: uppercase; letter-spacing: 0.05em; }
+      .p-opt { font: 500 11px/1 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+      .params p { margin: 4px 0 0; color: #3b3533; font-size: 15px; }
+
+      /* tables */
+      .tbl { width: 100%; border-collapse: collapse; font-size: 14.5px; margin: 6px 0 0; }
+      .tbl th { text-align: left; font: 500 11.5px/1.3 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 10px 10px 0; border-bottom: 1px solid var(--line-strong); }
+      .tbl td { padding: 11px 10px 11px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+      .tbl td:last-child, .tbl th:last-child { padding-right: 0; }
+      .tbl-wrap { overflow-x: auto; }
+      .code-tag { font: 500 12px/1.3 var(--mono); color: var(--ink); background: #fff; border: 1px solid var(--line-strong); border-radius: 5px; padding: 2px 6px; white-space: nowrap; }
+      .code-tag.no { color: #8f2412; border-color: rgba(185, 50, 26, 0.4); background: #fff4f0; }
+      .code-tag.ok { color: #fff; background: var(--ink); border-color: var(--ink); }
+      .tx { font: 400 13px var(--mono); white-space: nowrap; }
+      .callout { margin: 24px 0 0; padding: 14px 16px; border-left: 3px solid var(--verm); background: #fff; border-radius: 0 8px 8px 0; box-shadow: inset 0 0 0 1px var(--line); font-size: 15px; }
+      .callout b { font-weight: 600; }
+      .blocked { display: inline-block; font: 600 11px/1 var(--mono); letter-spacing: 0.06em; background: var(--ink); color: var(--peach); padding: 4px 6px; border-radius: 4px; margin-right: 6px; vertical-align: 1px; }
+
+      /* code panes (dark column) */
+      .pane { background: var(--code-surface); border: 1px solid var(--code-line); border-radius: 10px; overflow: hidden; color: var(--code-text); min-width: 0; }
+      .pane-head { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 12px 0 14px; border-bottom: 1px solid var(--code-line); }
+      .pane-title { font: 500 11.5px/1 var(--mono); letter-spacing: 0.07em; text-transform: uppercase; color: var(--code-muted); white-space: nowrap; }
+      .pane-title b { color: var(--code-text); font-weight: 500; }
+      .status { font: 500 11.5px/1 var(--mono); padding: 4px 6px; border-radius: 4px; background: rgba(255, 138, 110, 0.14); color: var(--verm-light); white-space: nowrap; }
+      .status.ok { background: rgba(253, 235, 229, 0.12); color: var(--peach); }
+      .tabs { margin-left: auto; display: flex; gap: 2px; }
+      .tabs button { font: 500 12px/1 var(--mono); color: var(--code-muted); background: none; border: 0; padding: 7px 8px; border-radius: 5px; cursor: pointer; }
+      .tabs button:hover { color: var(--code-text); }
+      .tabs button[aria-selected='true'] { color: var(--code-text); background: rgba(255, 255, 255, 0.08); }
+      .copy { margin-left: auto; flex: none; font: 500 12px/1 var(--mono); color: var(--code-muted); background: none; border: 1px solid var(--code-line); padding: 6px 8px; border-radius: 5px; cursor: pointer; }
+      .copy:hover { color: var(--code-text); border-color: rgba(255, 255, 255, 0.22); }
+      .copy.done { color: var(--peach); }
+      .tabs + .copy { margin-left: 4px; }
+      pre { margin: 0; padding: 14px 16px 16px; font-size: 12.8px; line-height: 1.62; overflow-x: auto; tab-size: 2; }
+      pre code { font-size: inherit; }
+      .pane-foot { padding: 9px 14px; border-top: 1px solid var(--code-line); font: 400 11.5px/1.5 var(--mono); color: var(--code-muted); }
+      .pane-foot a { color: var(--code-key); }
+      .k { color: var(--verm-light); }
+      .s { color: var(--peach); }
+      .c { color: var(--code-muted); font-style: italic; }
+      .n { color: var(--verm-light); }
+      .y { color: var(--code-key); }
+      .pu { color: var(--code-muted); }
+      .wrap-pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+      [hidden] { display: none !important; }
+
+      /* the seal: the one moment */
+      .stamped { position: relative; }
+      .seal { position: absolute; right: 18px; top: 54px; width: 132px; height: 132px; pointer-events: none; transform: rotate(-9deg); opacity: 0.94; }
+      .seal.armed { opacity: 0; transform: rotate(-16deg) scale(1.9); }
+      .seal.land { animation: press 0.42s cubic-bezier(0.2, 0.9, 0.3, 1.25) forwards; }
+      .seal.land .bleed { animation: bleed 0.9s 0.3s ease-out forwards; }
+      @keyframes press { 0% { opacity: 0; transform: rotate(-16deg) scale(1.9); } 60% { opacity: 1; } 100% { opacity: 0.94; transform: rotate(-9deg) scale(1); } }
+      @keyframes bleed { from { opacity: 0.5; transform: scale(1); } to { opacity: 0; transform: scale(1.18); } }
+      .bleed { transform-origin: 66px 66px; opacity: 0; }
+
+      .foot { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; padding: 26px clamp(24px, 4vw, 56px); font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
+
+      @media (prefers-reduced-motion: reduce) {
+        .seal.armed, .seal.land { animation: none; opacity: 0.94; transform: rotate(-9deg); }
+        .seal .bleed { display: none; }
+      }
+
+      @media (max-width: 1180px) {
+        .row { grid-template-columns: minmax(0, 1fr); }
+        .code { padding: 0 clamp(18px, 4vw, 56px) 40px; background: var(--paper); border-bottom: 1px solid var(--line); }
+        .prose { border-bottom: 0; padding-bottom: 24px; }
+        .code-stick { position: static; }
+        .pane { background: var(--code-bg); }
+      }
+      @media (max-width: 900px) {
+        .layout { grid-template-columns: minmax(0, 1fr); }
+        .side { position: sticky; top: var(--top); z-index: 30; height: auto; padding: 0; border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; overflow-y: hidden; }
+        .side nav { display: flex; gap: 2px; padding: 8px 12px; width: max-content; }
+        .side h2 { display: none; }
+        .side ul { display: flex; gap: 2px; }
+        .side a { white-space: nowrap; font-size: 14px; padding: 6px 10px; }
+        .side a[aria-current='true']::before { left: 10px; right: 10px; top: auto; bottom: -1px; width: auto; height: 2px; }
+        .jump, .crumb { display: none; }
+        html { scroll-padding-top: calc(var(--top) + 64px); }
+      }
+      @media (max-width: 560px) {
+        .top { padding: 0 16px; gap: 10px; }
+        .ver { display: none; }
+        .top-end { gap: 14px; }
+        .prose { padding: 36px 16px 20px; }
+        .code { padding: 0 16px 32px; }
+        .facts { grid-template-columns: minmax(0, 1fr); }
+        .facts div:nth-child(odd) { padding-right: 0; }
+        .seal { width: 96px; height: 96px; right: 10px; top: 50px; }
+        .pane-title { white-space: normal; line-height: 1.35; padding: 8px 0; min-width: 0; }
+        pre { font-size: 12px; }
+        .tbl { font-size: 14px; }
+        .foot { padding: 22px 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#overview">Skip to the reference</a>
+    <header class="top">
+      <a class="brand" href="#overview" aria-label="Hanko, back to the overview">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="5" fill="#e2401f" /><rect x="5.5" y="5.5" width="21" height="21" rx="3" fill="none" stroke="#fdebe5" stroke-width="1.6" /><path d="M11.5 10v12M20.5 10v12M11.5 16h9" stroke="#fdebe5" stroke-width="2.6" stroke-linecap="round" fill="none" /></svg>
+        Hanko
+      </a>
+      <span class="ver">zpay-verify 0.1.0 · testnet</span>
+      <span class="crumb">API reference</span>
+      <div class="top-end">
+        <label class="jump"><span class="sr">Filter the sections</span><input id="jump" type="search" placeholder="Jump to…" autocomplete="off" aria-controls="toc" /><kbd aria-hidden="true">/</kbd></label>
+        <a href="dashboard/">Dashboard</a>
+        <a href="https://github.com/nickthelegend/zec-payment-verify-sdk">GitHub</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="side" aria-label="Reference sections">
+        <nav id="toc">
+          <h2>Start</h2>
+          <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
+          </ul>
+          <h2>verify()</h2>
+          <ul>
+            <li><a href="#zcash"><span class="verb">FN</span> Zcash rail</a></li>
+            <li><a href="#crosscheck"><span class="verb">FN</span> Cross-check</a></li>
+            <li><a href="#reasons">Reason codes</a></li>
+            <li><a href="#null402"><span class="verb">FN</span> null-402 rail</a></li>
+          </ul>
+          <h2>Surfaces</h2>
+          <ul>
+            <li><a href="#paywall"><span class="verb">GET</span> x402 paywall</a></li>
+            <li><a href="#api"><span class="verb">POST</span> /api/verify</a></li>
+            <li><a href="#mcp">MCP tools</a></li>
+          </ul>
+          <h2>Proof</h2>
+          <ul>
+            <li><a href="#evidence">Live testnet run</a></li>
+            <li><a href="#tests">Tests</a></li>
+            <li><a href="#trust">Trust and limits</a></li>
+          </ul>
+          <p class="empty-filter" id="toc-empty" hidden>No section matches.</p>
+        </nav>
+      </aside>
+
+      <main class="doc" id="main">
+        <!-- Overview -->
+        <section class="row" id="overview" aria-labelledby="h-overview">
+          <div class="prose">
+            <p class="kicker">判子 · hanko, a seal stamp</p>
+            <h1 id="h-overview">Was I paid?</h1>
+            <p class="lede">Hanko checks that a shielded Zcash transaction paid you at least the price, with your memo, deep enough and with no transparent part. It needs only your <b>incoming viewing key</b>, which can see payments arrive and can never spend.</p>
+            <p>One <code>verify()</code> call, five ways in: a Rust crate and CLI, a TypeScript SDK, an x402 paywall, an MCP server for agents, and a dashboard. The same call checks a null-402 Groth16 payment proof against the contracts null-402 deployed on Avalanche Fuji. The core comes from Shielded x402's <code>check_uivk</code>.</p>
+            <dl class="facts">
+              <div><dt>network</dt><dd>Zcash testnet (NU7, Ironwood pool)</dd></div>
+              <div><dt>lightwalletd</dt><dd><code>testnet.zec.rocks:443</code>, or several with a quorum</dd></div>
+              <div><dt>pools decrypted</dt><dd>Sapling, Orchard, Ironwood</dd></div>
+              <div><dt>key needed</dt><dd>UIVK only (no spend key)</dd></div>
+              <div><dt>lightwalletd learns</dt><dd>the txid you check, when, and your IP (Tor via <code>ZPV_LWD_PROXY</code> hides the IP)</dd></div>
+              <div><dt>lightwalletd is trusted</dt><dd>for anchors, transparent inputs and the block: proofs and signatures are checked</dd></div>
+              <div><dt>packages</dt><dd>not on npm or crates.io yet (tarball install)</dd></div>
+              <div><dt>license</dt><dd>MIT</dd></div>
+            </dl>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Request</b></span><div class="tabs" role="tablist" aria-label="Language" data-tabs></div></div>
+                <pre data-lang="ts"><code data-hl="ts">import { verify } from '@zpv/sdk';
+
+const r = await verify({
+  rail: 'zcash',
+  uivk: process.env.ZPV_UIVK,  // viewing key
+  txid: '030c3cbf…8351',
+  amountZat: 100_000,
+  memo: 'x402z-f19a63da20cbc0749ea800b3',
+});
+r.ok;       // true
+r.reasons;  // []</code></pre>
+                <pre data-lang="rust" hidden><code data-hl="rust">use zpay_verify::{verify, Expect};
+
+let v = verify("https://testnet.zec.rocks:443", &amp;uivk, txid,
+    &amp;Expect { amount_zat: 100_000, memo: Some(memo), min_conf: 1, shielded_only: true },
+).await?;
+assert!(v.verdict.ok);</code></pre>
+                <pre data-lang="cli" hidden><code data-hl="sh"># the key comes from the environment, never an argument
+ZPV_UIVK=… zpay-verify verify 030c3cbf…8351 \
+  --amount 100000 --memo x402z-f19a63da20cbc0749ea800b3
+# exit 0 = paid, 1 = not paid, 2 = could not check</code></pre>
+              </div>
+              <div class="pane stamped" id="seal-pane">
+                <div class="pane-head"><span class="pane-title"><b>Response</b></span><span class="status ok">exit 0 · paid</span></div>
+                <pre><code data-json="x402ok"></code></pre>
+                <div class="pane-foot">Real output of <code>zpay-verify</code>, Oct 21, 2026, tip 4,524,720. <a href="https://testnet.zecblock.com/tx/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351">View the tx</a></div>
+                <svg class="seal armed" id="seal" viewBox="0 0 132 132" aria-hidden="true">
+                  <defs>
+                    <filter id="ink" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n" /><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" result="d" /><feComponentTransfer in="n" result="holes"><feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 0 0 1" /></feComponentTransfer><feComposite in="d" in2="holes" operator="out" /></filter>
+                  </defs>
+                  <rect class="bleed" x="8" y="8" width="116" height="116" rx="14" fill="none" stroke="#e2401f" stroke-width="3" />
+                  <g filter="url(#ink)" fill="none" stroke="#e2401f">
+                    <rect x="8" y="8" width="116" height="116" rx="14" stroke-width="5" />
+                    <rect x="17" y="17" width="98" height="98" rx="8" stroke-width="1.6" />
+                    <text x="66" y="71" text-anchor="middle" fill="#e2401f" stroke="none" font-family="Hanken Grotesk, sans-serif" font-weight="600" font-size="31" letter-spacing="1">PAID</text>
+                    <text x="66" y="92" text-anchor="middle" fill="#e2401f" stroke="none" font-family="JetBrains Mono, monospace" font-weight="500" font-size="9" letter-spacing="1.4">VIEWING KEY</text>
+                    <path d="M40 46h52" stroke-width="1.6" />
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quickstart -->
+        <section class="row" id="quickstart" aria-labelledby="h-quick">
+          <div class="prose">
+            <p class="kicker">Start</p>
+            <h2 class="t" id="h-quick">Quickstart</h2>
+            <p>Needs Node 22.13+ (the paywall's SQLite store uses <code>node:sqlite</code>), pnpm 10 and Rust 1.89 (pinned in <code>packages/core/rust-toolchain.toml</code>). <code>pnpm test</code> builds the Rust core and every package, then runs the suite against Zcash testnet and Fuji.</p>
+            <ol>
+              <li>Clone and install: <code>pnpm install</code>.</li>
+              <li>Build and test: <code>pnpm test</code>. Nothing is mocked; the tests read real mined transactions.</li>
+              <li>Install like a user would: <code>scripts/clean-install.sh</code> packs <code>@zpv/sdk</code>, <code>cargo install</code>s the CLI into an empty directory and verifies a real payment from there.</li>
+            </ol>
+            <div class="callout"><span class="blocked">BLOCKED</span>Publishing to npm and crates.io needs the maintainer's accounts. Until then the SDK installs from the packed tarball.</div>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Shell</b></span></div>
+                <pre><code data-hl="sh">git clone https://github.com/nickthelegend/zec-payment-verify-sdk
+cd zec-payment-verify-sdk
+pnpm install
+pnpm test                 # Rust core + packages, live testnet
+scripts/clean-install.sh  # tarball + cargo install in an empty dir</code></pre>
+              </div>
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Output</b></span><span class="status ok">clean install</span></div>
+                <pre><code data-hl="sh">packed zpv-sdk-0.1.0.tgz
+installed @zpv/sdk: ok=true paid=100000 height=4521112</code></pre>
+                <div class="pane-foot">Last line recorded Oct 20, 2026 (TESTING.md).</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Zcash rail -->
+        <section class="row" id="zcash" aria-labelledby="h-zcash">
+          <div class="prose">
+            <p class="kicker">verify()</p>
+            <h2 class="t" id="h-zcash"><code>verify({ rail: 'zcash' })</code></h2>
+            <p>Fetches the transaction from lightwalletd, <b>recomputes its txid</b> from the returned bytes, requires that txid in the compact block at the height lightwalletd reports (its time is <code>block_time</code>), parses it with the consensus branch for its height, <b>verifies every proof and signature</b> against the recomputed signature hash, trial-decrypts every Sapling output and Orchard and Ironwood action with the key, then applies the rules. A bad key, a malformed txid, an unreachable server or an answer that contradicts itself (proofs that do not verify included) throws; it is never a verdict. What still rests on the server: see <a href="#trust">Trust and limits</a>.</p>
+            <h3>Parameters</h3>
+            <ul class="params">
+              <li><div class="p-head"><span class="p-name">uivk</span><span class="p-type">string</span><span class="p-req">required</span></div><p>The receiver's unified incoming viewing key, <code>uivktest1…</code>. The SDK passes it to the binary in its environment, never on the command line.</p></li>
+              <li><div class="p-head"><span class="p-name">txid</span><span class="p-type">string, 64 hex</span><span class="p-req">required</span></div><p>Display-order txid, as block explorers show it.</p></li>
+              <li><div class="p-head"><span class="p-name">amountZat</span><span class="p-type">number | bigint</span><span class="p-req">required</span></div><p>At least this many zatoshi must reach the key in outputs that carry the memo.</p></li>
+              <li><div class="p-head"><span class="p-name">memo</span><span class="p-type">string</span><span class="p-opt">optional</span></div><p>Only outputs with exactly this text memo count. Leave it out and every output to the key counts.</p></li>
+              <li><div class="p-head"><span class="p-name">minConf</span><span class="p-type">number</span><span class="p-opt">default 1</span></div><p>0 accepts a mempool transaction, which can still be replaced. Keep it at 1 or more for anything you deliver.</p></li>
+              <li><div class="p-head"><span class="p-name">allowTransparent</span><span class="p-type">boolean</span><span class="p-opt">default false</span></div><p>By default a transaction with any transparent input or output is refused.</p></li>
+            </ul>
+            <h3>Returns</h3>
+            <p><code>ok</code>, <code>verdict</code> (<code>paid</code>, <code>refused</code>, or <code>unverified</code> under a cross-check), <code>reasons</code>, <code>paidZat</code>, <code>report</code> (height, confirmations, tip, every decrypted output with its pool and memo, which pools the tx uses) and <code>provenance</code> (lightwalletd, tip, time).</p>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Request</b> · wrong invoice memo</span></div>
+                <pre><code data-hl="ts">await verify({
+  rail: 'zcash',
+  uivk, txid: '030c3cbf…8351',
+  amountZat: 100_000,
+  memo: 'x402z-another-invoice',
+});</code></pre>
+              </div>
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Response</b></span><span class="status">exit 1 · not paid</span></div>
+                <pre><code data-json="x402memo"></code></pre>
+                <div class="pane-foot">Real output, Oct 21, 2026. The key sees the output; its memo is another invoice's.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Cross-check -->
+        <section class="row" id="crosscheck" aria-labelledby="h-crosscheck">
+          <div class="prose">
+            <p class="kicker">verify()</p>
+            <h2 class="t" id="h-crosscheck">Cross-check lightwalletd</h2>
+            <p>One lightwalletd can withhold a transaction, lag behind, or forge one over a fake tree (proofs are checked, anchors are not). Pass several and Hanko runs the check against each, in parallel. The endpoints that have seen the block must agree on what the verdict rests on: found, height, outputs, pools, amount, reasons. Lag is not disagreement: an endpoint up to 3 blocks behind, or one that has not received a mempool transaction yet, makes the answer <code>NOT_CONFIRMED</code>, and confirmations are counted at the lowest tip.</p>
+            <p>Any disagreement, or fewer answers than the quorum, is <b><code>unverified</code></b>: <code>ok</code> is false, <code>report</code> is null, and it is never <code>paid</code>. The paywall answers it with 503 and serves nothing.</p>
+            <h3>Options</h3>
+            <ul class="params">
+              <li><div class="p-head"><span class="p-name">lwdUrls</span><span class="p-type">string[]</span><span class="p-opt">or ZPV_LWD_URLS</span></div><p>Endpoints to ask. They protect you only if different people run them.</p></li>
+              <li><div class="p-head"><span class="p-name">quorum</span><span class="p-type">number</span><span class="p-opt">default all</span></div><p>How many must answer. An endpoint that cannot be reached does not count; one whose answer contradicts itself counts as a disagreement. Every answer must agree, whatever the quorum.</p></li>
+            </ul>
+            <h3>Which endpoints exist</h3>
+            <p>On Oct 22, 2026 hosh.zec.rocks lists two online public testnet indexers: <code>testnet.zec.rocks</code> (lightwalletd) and <code>zaino.testnet.unsafe.zec.rocks</code> (Zaino, same operator), which answered 503 every time we tried that day. Hanko refuses one server under two spellings (with and without <code>:443</code>) as one endpoint twice. The tests that need two agreeing answers fetch from testnet.zec.rocks twice and give both answers to the cross-check rule, and say so. For real independence, run your own lightwalletd or Zaino as one of the endpoints.</p>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Request</b> · three endpoints, quorum 2</span></div>
+                <pre><code data-hl="ts">await verify(
+  { rail: 'zcash', uivk, txid: '030c3cbf…8351',
+    amountZat: 100_000, memo },
+  { quorum: 2, lwdUrls: [
+    'https://testnet.zec.rocks:443',
+    'https://zec.rocks:443', // mainnet
+    'https://zaino.testnet.unsafe.zec.rocks:443',
+  ] },
+);</code></pre>
+              </div>
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Response</b></span><span class="status">unverified</span></div>
+                <pre class="wrap-pre"><code data-json="crosscheck"></code></pre>
+                <div class="pane-foot">Real output, Oct 22, 2026 IST (the timestamp is UTC). testnet.zec.rocks says paid; zec.rocks, a mainnet server, does not have the transaction, just like a server withholding it; the Zaino endpoint answered 503. No verdict.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reasons -->
+        <section class="row" id="reasons" aria-labelledby="h-reasons">
+          <div class="prose">
+            <p class="kicker">verify()</p>
+            <h2 class="t" id="h-reasons">Reason codes</h2>
+            <p>One reason per rule that failed, so a "no" can be explained. <code>ok</code> is true only when the list is empty.</p>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th scope="col">Code</th><th scope="col">Rule</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="code-tag no">TX_NOT_FOUND</span></td><td>lightwalletd does not know the tx, or only on an orphaned fork</td></tr>
+                  <tr><td><span class="code-tag no">NO_OUTPUT_TO_KEY</span></td><td>nothing in the tx decrypts to the key</td></tr>
+                  <tr><td><span class="code-tag no">MEMO_MISMATCH</span></td><td>outputs to the key exist, none with the memo</td></tr>
+                  <tr><td><span class="code-tag no">AMOUNT_TOO_LOW</span></td><td>outputs with the memo add up to less than the amount</td></tr>
+                  <tr><td><span class="code-tag no">NOT_CONFIRMED</span></td><td>fewer confirmations than <code>minConf</code> (0 in the mempool)</td></tr>
+                  <tr><td><span class="code-tag no">TRANSPARENT_PART</span></td><td>any transparent input or output, unless allowed</td></tr>
+                  <tr><td><span class="code-tag no">BAD_PROOF</span></td><td>null-402: the deployed verifier rejects the proof</td></tr>
+                  <tr><td><span class="code-tag no">ROOT_UNKNOWN</span></td><td>null-402: the pool never registered that Merkle root</td></tr>
+                  <tr><td><span class="code-tag no">NULLIFIER_SPENT</span></td><td>null-402: the note already paid (replay)</td></tr>
+                  <tr><td><span class="code-tag no">PAY_TO_MISMATCH</span> <span class="code-tag no">AMOUNT_MISMATCH</span> <span class="code-tag no">CONTEXT_MISMATCH</span></td><td>null-402: the proof pays someone else, another amount, or another request</td></tr>
+                  <tr><td><span class="code-tag no">UNVERIFIED_DISAGREEMENT</span></td><td>cross-check: the lightwalletd endpoints gave different answers (no verdict)</td></tr>
+                  <tr><td><span class="code-tag no">UNVERIFIED_QUORUM</span></td><td>cross-check: fewer endpoints answered than the quorum (no verdict)</td></tr>
+                  <tr><td><span class="code-tag no">UNBOUND</span></td><td>null-402: no expected payee and amount were given, so nothing ties the proof to you</td></tr>
+                  <tr><td><span class="code-tag no">SETTLE_REVERTED</span> <span class="code-tag no">SETTLE_PENDING</span></td><td>null-402 settlement: the <code>settle()</code> reverted or is not mined, so it paid nobody</td></tr>
+                  <tr><td><span class="code-tag no">RECIPIENT_MISMATCH</span></td><td>null-402 settlement: the pool paid another address</td></tr>
+                  <tr><td><span class="code-tag no">PAYMENT_LATE</span></td><td>paywall: mined after the challenge expired (plus a 10 min grace); recorded for a refund</td></tr>
+                  <tr><td><span class="code-tag no">ALREADY_USED</span></td><td>MCP with <code>ZPV_STORE</code>: this payment was already accepted once</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>CLI</b> · someone else's payment</span><span class="status">exit 1</span></div>
+                <pre><code data-json="auction"></code></pre>
+                <div class="pane-foot">A real sealed-bid auction deposit, checked with the x402 merchant's key. Real output, Oct 21, 2026.</div>
+              </div>
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>CLI</b> · bad input</span><span class="status">exit 2</span></div>
+                <pre><code data-hl="sh">$ zpay-verify verify nope --amount 1
+error: not a txid (64 hex characters): nope</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- null-402 -->
+        <section class="row" id="null402" aria-labelledby="h-null402">
+          <div class="prose">
+            <p class="kicker">verify()</p>
+            <h2 class="t" id="h-null402"><code>verify({ rail: 'null402' })</code></h2>
+            <p>null-402 pays per API call with a Groth16 proof of an unspent note on Avalanche. This rail makes three read-only <code>eth_call</code>s pinned to one Fuji block: <code>verifier.verifyProof</code>, <code>pool.knownRoot(root)</code> and <code>pool.spent(nullifier)</code>. No key, no gas. <code>@zpv/sdk/null402</code> runs in a browser.</p>
+            <h3>Parameters</h3>
+            <ul class="params">
+              <li><div class="p-head"><span class="p-name">proof</span><span class="p-type">snarkjs proof JSON</span><span class="p-req">required</span></div><p><code>proofFromSettleTx(hash)</code> reads one back out of a real <code>settle()</code> call.</p></li>
+              <li><div class="p-head"><span class="p-name">publicSignals</span><span class="p-type">string[5]</span><span class="p-req">required</span></div><p><code>[nullifier, merkleRoot, payTo, requiredAmount, contextHash]</code> as decimal strings.</p></li>
+              <li><div class="p-head"><span class="p-name">expect.payTo</span><span class="p-type">string</span><span class="p-req">required for ok</span></div><p>Who you are. Without it and <code>expect.requiredAmount</code> the result is never ok (<code>UNBOUND</code>): a valid, unspent proof that pays someone else is not a payment to you.</p></li>
+              <li><div class="p-head"><span class="p-name">expect.requiredAmount</span><span class="p-type">string | bigint</span><span class="p-req">required for ok</span></div><p>What you charge.</p></li>
+              <li><div class="p-head"><span class="p-name">expect.contextHash</span><span class="p-type">string</span><span class="p-opt">optional</span></div><p>Binds the proof to one request.</p></li>
+            </ul>
+            <div class="callout"><span class="blocked">BLOCKED</span>A proof that passes all three checks is not shown live. It needs a new deposit whose root null-402's operator registers (<code>NULL402_OPERATOR_KEY</code>, not held).</div>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Request</b></span></div>
+                <pre><code data-hl="ts">const s = await proofFromSettleTx('0x8596f52d…a593');
+const r = await verify({
+  rail: 'null402', proof: s.proof, publicSignals: s.publicSignals,
+  expect: { payTo: '1257…0813', requiredAmount: '1000' },
+});</code></pre>
+              </div>
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Response</b></span><span class="status">replay refused</span></div>
+                <pre><code data-json="null402"></code></pre>
+                <div class="pane-foot">Real, Fuji block 59,772,946. Without <code>expect</code>: <code>["NULLIFIER_SPENT", "UNBOUND"]</code>. <a href="https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593">The settle tx</a></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Paywall -->
+        <section class="row" id="paywall" aria-labelledby="h-paywall">
+          <div class="prose">
+            <p class="kicker">Surfaces · @zpv/gateway</p>
+            <h2 class="t" id="h-paywall">x402 paywall</h2>
+            <p>A reference HTTP paywall over shielded payments, <b>wire-compatible with Shielded x402</b>: the same x402 v1 envelope under the same <code>zcash-shielded</code> scheme. A test imports Shielded x402's own client module (<code>packages/x402-zcash</code>): its <code>parsePaymentRequired</code> accepts Hanko's 402, and its <code>fetchWithPayment</code> presents a real mined payment and gets the 200 and a successful <code>X-PAYMENT-RESPONSE</code>. It holds only the merchant's incoming viewing key.</p>
+            <ol>
+              <li><code>GET</code> a paid path → <b>402</b> <code>{x402Version: 1, accepts}</code>: the price (<code>maxAmountRequired</code>), a memo nonce in <code>extra.memoNonce</code>, its expiry and a ZIP-321 URI a wallet can open.</li>
+              <li>The client pays with that memo, then retries with <code>X-PAYMENT: base64({x402Version: 1, scheme, network, payload: {txid, memoNonce}})</code> (or Hanko's older <code>{memo, txid}</code>).</li>
+              <li>The gateway checks the payment with <code>verify()</code> → <b>200</b> with the receipt in the body and <code>X-PAYMENT-RESPONSE: {success, transaction, network, payer: ""}</code>, or 402 with the reasons.</li>
+            </ol>
+            <h3>Guarantees</h3>
+            <ul>
+              <li>A memo and a txid pay once. Both are claimed <b>before</b> the check is awaited, so two concurrent requests with one payment get one 200 and one 402 (live test). Txids are compared lower-cased.</li>
+              <li>Challenges cost nothing until a payment arrives: the memo is <code>zpv-&lt;expiry&gt;-&lt;nonce&gt;-&lt;HMAC&gt;</code>, so GETs store nothing. 10,000 GETs in a second still leave the next buyer a 402 (test).</li>
+              <li>Mined-time expiry: a payment counts if its block came before the challenge's expiry plus 10 minutes, even when presented later. Later is <code>PAYMENT_LATE</code>.</li>
+              <li>Money that arrives but is refused (underpaid, a transparent part, late) is recorded, the 402 says so, and <code>GET /api/refunds</code> lists it to a request carrying the merchant's <code>ZPV_ADMIN_TOKEN</code> (off without one; where a request comes from is not trusted, since behind a reverse proxy everything looks local). The refund is sent by hand: the gateway holds no spend key.</li>
+              <li>Limits: at most <code>ZPV_MAX_CHECKS</code> (8) checks run at once and 32 wait, the rest get 503 + <code>Retry-After</code>; the paywall's own checks have their own slots, and the production paywall does not serve <code>/api/verify</code> at all (only the verify API does, and only to <code>application/json</code> bodies); a check with no answer is killed after 90 s; a challenge closes after 5 refused payments (not counting <code>TX_NOT_FOUND</code> while lightwalletd has not seen a fresh payment), and a payment that reaches a closed challenge is recorded for a refund (<code>CHALLENGE_CLOSED</code>), never lost.</li>
+              <li>A lightwalletd that is down, inconsistent or outvoted (<code>ZPV_LWD_URLS</code>) gives <b>503</b> with <code>Retry-After</code>, never a 400 the client would give up on; nothing is served and the payment stays claimable.</li>
+              <li>State is in memory by default. With <code>ZPV_STORE</code> it lives in one SQLite file: a restarted paywall still refuses a txid it served and accepts the memos it issued, and two paywall processes on one file serve a payment once (live test with a real second process).</li>
+              <li>It will not start with settings that would refuse every payment: <code>ZPV_MIN_CONF</code> 0 or not a number, a price of 0, or a <code>ZPV_PAY_TO</code> that does not belong to the viewing key.</li>
+            </ul>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>GET</b> /api/quote</span><span class="status">402</span></div>
+                <pre class="wrap-pre"><code data-json="challenge"></code></pre>
+                <div class="pane-foot">Real response from the gateway with the demo merchant's address, Oct 22, 2026.</div>
+              </div>
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>GET</b> /api/quote + X-PAYMENT</span><span class="status ok">200</span></div>
+                <pre><code data-json="receipt"></code></pre>
+                <div class="pane-foot">The receipt from the live run, Oct 20, 2026 (the body; <code>X-PAYMENT-RESPONSE</code> carries <code>{success, transaction, network, payer}</code>). <a href="https://testnet.zecblock.com/tx/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">View the tx</a></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- API -->
+        <section class="row" id="api" aria-labelledby="h-api">
+          <div class="prose">
+            <p class="kicker">Surfaces · @zpv/gateway</p>
+            <h2 class="t" id="h-api"><code>POST /api/verify</code></h2>
+            <p>The verify API the dashboard calls: the request body is a <code>verify()</code> request for either rail, the response is its result. It listens on <code>127.0.0.1:8403</code> and answers CORS only for the origins in <code>ZPV_CORS</code>. A hosted instance (Zcash testnet, one lightwalletd) answers at <a href="https://hanko-api.201-18-198-162.sslip.io/api/health"><code>hanko-api…/api/health</code></a>; the hosted console calls it.</p>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th scope="col">Status</th><th scope="col">Meaning</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="code-tag ok">200</span></td><td>a result: <code>verdict</code> paid, refused or unverified, with reasons</td></tr>
+                  <tr><td><span class="code-tag">400</span></td><td>bad input: not JSON or not an object, unknown rail, <code>amountZat</code> not a whole number ≥ 0, a bad key or txid</td></tr>
+                  <tr><td><span class="code-tag">502</span></td><td>could not check: lightwalletd or Fuji unreachable, or lightwalletd answered inconsistently; with <code>Retry-After</code></td></tr>
+                  <tr><td><span class="code-tag">503</span></td><td>Setup required (no <code>zpay-verify</code>, a bad setting), or too many checks running (<code>Retry-After</code>)</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Request</b></span></div>
+                <pre><code data-hl="sh">pnpm --filter @zpv/gateway api   # :8403
+
+curl -s 127.0.0.1:8403/api/verify \
+  -H 'content-type: application/json' \
+  -d '{"rail":"zcash","uivk":"uivktest1…",
+       "txid":"030c3cbf…8351","amountZat":100000,
+       "memo":"x402z-f19a63da20cbc0749ea800b3"}'</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MCP -->
+        <section class="row" id="mcp" aria-labelledby="h-mcp">
+          <div class="prose">
+            <p class="kicker">Surfaces · zpv-mcp</p>
+            <h2 class="t" id="h-mcp">MCP tools</h2>
+            <p>An agent asks before it delivers: did this transaction pay me, and was this null-402 settlement a payment to me. The merchant key comes from <code>ZPV_MERCHANT_UIVK</code> in the server's environment, never from a tool argument, so it never passes through the model. Without it the tool answers <code>Setup required: ZPV_MERCHANT_UIVK</code>.</p>
+            <p><b>Replay.</b> A check alone does not use a payment up: the same txid passes every time, and without a memo any past payment to the merchant passes. The tool says so and answers <code>single_use: false</code>, so the agent must record what it accepted. With <code>ZPV_STORE</code> the tool needs a memo and accepts each payment once (a second call is <code>ALREADY_USED</code>), sharing that memory with a paywall on the same file. <code>min_conf</code> cannot go below <code>ZPV_MCP_MIN_CONF</code> (default 1).</p>
+            <p>A null-402 settlement is <code>paid</code> only if its <code>settle()</code> succeeded, the proof pays your payee signal and amount, and the pool paid your address (<code>expect_recipient</code>). The recipient is required because the pool does not bind it: <code>settle()</code> pays whatever address its caller names, so a proof that names you can be settled to someone else. A reverted or pending one is never paid.</p>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th scope="col">Tool</th><th scope="col">Arguments</th></tr></thead>
+                <tbody>
+                  <tr><td><code>verify_zcash_payment</code></td><td><code>txid</code>, <code>amount_zat</code>, <code>memo?</code> (required with <code>ZPV_STORE</code>), <code>min_conf?</code></td></tr>
+                  <tr><td><code>verify_null402_settlement</code></td><td><code>settle_tx</code>, <code>expect_pay_to</code>, <code>expect_amount</code>, <code>expect_recipient</code> (all three needed for ok)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Set <code>ZPV_MCP_LOG</code> to a file to get one JSON line per call. It holds decrypted memos and amounts, so it is written with mode 0600.</p>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Client config</b></span></div>
+                <pre><code data-json="mcpcfg"></code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Evidence -->
+        <section class="row" id="evidence" aria-labelledby="h-evidence">
+          <div class="prose">
+            <p class="kicker">Proof</p>
+            <h2 class="t" id="h-evidence">Live testnet run</h2>
+            <p>Oct 20, 2026, <code>pnpm --filter @zpv/examples run-live</code>, and on Oct 22 one payment through the current paywall with nothing pinned (<code>paywall-live</code>). Demo-only wallets; their incoming viewing keys are published in <code>deployments/testnet.json</code> on purpose, so anyone can re-check these.</p>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th scope="col">Case</th><th scope="col">Transaction</th><th scope="col">Answer</th></tr></thead>
+                <tbody>
+                  <tr><td>Current paywall, Oct 22: 10,000 zat with a stateless HMAC memo, presented with Shielded x402's <code>fetchWithPayment</code>; then the same payment again</td><td><a class="tx" href="https://testnet.zecblock.com/tx/2867d542496452326ce241ad3ba647deb7e6e8eb1b889397ffae20dceecb664f">2867d542…664f</a></td><td><span class="code-tag ok">200</span> then <span class="code-tag no">402</span></td></tr>
+                  <tr><td>Paywall, Oct 20: 10,000 zat with the challenge memo</td><td><a class="tx" href="https://testnet.zecblock.com/tx/7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16">7c1f6cc0…4c16</a></td><td><span class="code-tag ok">200</span></td></tr>
+                  <tr><td>10,000 zat with another memo</td><td><a class="tx" href="https://testnet.zecblock.com/tx/1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0">1620eccc…49c0</a></td><td><span class="code-tag no">MEMO_MISMATCH</span></td></tr>
+                  <tr><td>5,000 zat with the right memo</td><td><a class="tx" href="https://testnet.zecblock.com/tx/f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2">f9db1841…dce2</a></td><td><span class="code-tag no">AMOUNT_TOO_LOW</span></td></tr>
+                  <tr><td>Right memo and amount, plus a transparent output</td><td><a class="tx" href="https://testnet.zecblock.com/tx/bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec">bb8d8842…82ec</a></td><td><span class="code-tag no">TRANSPARENT_PART</span></td></tr>
+                  <tr><td>Payslip, 50,000 zat, checked by a lender with the employee's key</td><td><a class="tx" href="https://testnet.zecblock.com/tx/38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869">38958ceb…5869</a></td><td><span class="code-tag ok">ok</span></td></tr>
+                  <tr><td>Same payslip, claimed as twice the pay</td><td><span class="tx">38958ceb…5869</span></td><td><span class="code-tag no">AMOUNT_TOO_LOW</span></td></tr>
+                  <tr><td>Shielded x402's demo payment, its merchant's published key</td><td><a class="tx" href="https://testnet.zecblock.com/tx/030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351">030c3cbf…8351</a></td><td><span class="code-tag ok">ok</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top: 16px">Funding of the demo payer: <a class="tx" href="https://testnet.zecblock.com/tx/a2c0578b58c7c76d989f60292dd445f364fc40e40d1c21f89fc48ece7dfb57d3">a2c0578b…57d3</a>. No contracts are deployed by this project.</p>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>deployments/testnet.json</b> · excerpt</span></div>
+                <pre><code data-json="runcase"></code></pre>
+                <div class="pane-foot">Written by the run; the merchant's key re-checked each case.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tests -->
+        <section class="row" id="tests" aria-labelledby="h-tests">
+          <div class="prose">
+            <p class="kicker">Proof</p>
+            <h2 class="t" id="h-tests">Tests</h2>
+            <p>No mocked clients and no stub RPCs. A test that touches a chain talks to Zcash testnet through a real lightwalletd or to Fuji through its public RPC, using real mined transactions. Counts are from the run on Oct 23, 2026 (IST). The browser suite (Playwright in Google Chrome against the real stack, 1280 px and 375 px) adds 62 passing tests.</p>
+            <div class="tbl-wrap">
+              <table class="tbl" id="test-table">
+                <thead><tr><th scope="col">Package</th><th scope="col">Tests</th><th scope="col">Touch a chain</th></tr></thead>
+                <tbody>
+                  <tr><td>core rules (Rust)</td><td>3</td><td>0</td></tr>
+                  <tr><td>core live (Rust)</td><td>7</td><td>6</td></tr>
+                  <tr><td>core proofs and signatures (Rust)</td><td>4</td><td>4</td></tr>
+                  <tr><td>core transport + CLI (Rust)</td><td>10</td><td>2</td></tr>
+                  <tr><td>sdk</td><td>35</td><td>19</td></tr>
+                  <tr><td>gateway</td><td>37</td><td>14</td></tr>
+                  <tr><td>mcp</td><td>8</td><td>4</td></tr>
+                  <tr><td><b>Total</b></td><td><b>104</b> + 1 doc example</td><td><b>49</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>The other 55 run offline on purpose: the rules, bad input and status codes, plaintext and proxy refusals, <code>owns</code>, a silent server killed, the process limit, issuing challenges (and 10,000 of them), forged memos, the x402 envelope checks, startup checks, the tool list, "Setup required", cross-check settings, a restart and a lease takeover.</p>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>pnpm test</b> · summary</span><span class="status ok">0 failed</span></div>
+                <pre><code data-hl="sh" id="test-out">test result: ok. 3 passed   # core rules
+test result: ok. 6 passed   # core cli
+test result: ok. 7 passed   # core live
+test result: ok. 4 passed   # core transport
+test result: ok. 1 passed   # doc example
+Tests  25 passed (25)       # sdk
+Tests  29 passed (29)       # gateway
+Tests  7 passed (7)         # mcp</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Trust -->
+        <section class="row" id="trust" aria-labelledby="h-trust">
+          <div class="prose">
+            <p class="kicker">Proof</p>
+            <h2 class="t" id="h-trust">Trust and limits</h2>
+            <ul>
+              <li><b>What lightwalletd learns.</b> Each check asks for one txid and the block it names. The operator learns that this payment matters to you, when you asked, and your IP address, which links the payment to you; a cross-check tells every endpoint. <code>ZPV_LWD_PROXY=socks5h://127.0.0.1:9050</code> (Tor) hides the IP and never falls back to a direct connection; the txid and timing are still seen. Compact blocks alone would hide the txid, but they carry no memo.</li>
+              <li><b>What lightwalletd is trusted for.</b> Recomputing the txid stops a swap. Every Orchard, Ironwood and Sapling proof and signature is verified against the signature hash recomputed from the transaction, so a note re-encrypted with another value, or a made-up transaction without valid proofs, is refused (live test). Not checked: that the anchors are real note commitment tree roots, that transparent inputs spend real coins, and the block's place in the chain; the height is what the server says. A lying server that runs a prover over a fake tree, or invents a transparent input, can still get <code>paid</code>. Plaintext <code>http://</code> is refused unless the host is loopback.</li>
+              <li><b>A <a href="#crosscheck">cross-check</a></b> turns disagreement into "no verdict", but only endpoints run by different people make it meaningful, and public testnet has one operator. Run your own lightwalletd or Zaino on a full node as one of them.</li>
+              <li><b>A UIVK reveals every incoming payment</b> to its wallet: amounts, memos, which address received them. Give it only to whoever should see that. The keys in this repo belong to demo-only testnet wallets.</li>
+              <li><b>Testnet only.</b> The binary decodes testnet keys only.</li>
+              <li><b>Paywall state</b> (the challenge key, paid memos and txids, refunds owed) is in memory unless <code>ZPV_STORE</code> points at a SQLite file, which is shared by processes on one machine, not across machines.</li>
+              <li><b>The MCP tool</b> remembers accepted payments only with <code>ZPV_STORE</code>; without it, an agent must track txids itself.</li>
+              <li><b>No ZIP 311 payment disclosures.</b> The ZIP is a draft without Orchard or Ironwood and without an encoding; the design note says why it waits.</li>
+              <li><b>Not audited.</b> Portfolio piece; the Zecathon entry is Shielded x402.</li>
+            </ul>
+          </div>
+          <div class="code">
+            <div class="code-stick">
+              <div class="pane">
+                <div class="pane-head"><span class="pane-title"><b>Blocked</b> · needs a credential</span></div>
+                <pre class="wrap-pre"><code data-hl="sh"># publish @zpv/sdk and zpay-verify
+needs: the maintainer's npm and crates.io accounts
+
+# a null-402 proof that passes all three checks live
+needs: NULL402_OPERATOR_KEY (null-402's pool operator)</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="foot">
+          <span>Hanko · MIT · Copyright (c) 2026 Nivesh Gajengi</span>
+          <span>Zcash testnet · not audited · <a href="./">overview</a> · <a href="https://github.com/nickthelegend/zec-payment-verify-sdk">source</a></span>
+        </footer>
+      </main>
+    </div>
+
+    <script type="application/json" id="data">
+      {
+        "x402ok": {"report":{"txid":"030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351","found":true,"height":4521112,"confirmations":3609,"tip":4524720,"outputs":[{"pool":"Ironwood","value":100000,"memo":"x402z-f19a63da20cbc0749ea800b3","memo_binary":false}],"pools":{"sapling":false,"orchard":false,"ironwood":true,"transparent":false}},"verdict":{"ok":true,"paid_zat":100000,"reasons":[]},"lightwalletd":"https://testnet.zec.rocks:443"},
+        "x402memo": {"verdict":{"ok":false,"paid_zat":0,"reasons":["MEMO_MISMATCH","AMOUNT_TOO_LOW"]},"report":{"height":4521112,"confirmations":3609,"outputs":[{"pool":"Ironwood","value":100000,"memo":"x402z-f19a63da20cbc0749ea800b3","memo_binary":false}]}},
+        "auction": {"verdict":{"ok":false,"paid_zat":0,"reasons":["NO_OUTPUT_TO_KEY"]},"report":{"txid":"06d121813387444ca3ecc9720e73160b5b80645d9204c6c411e51cef3a190af1","found":true,"height":4522268,"outputs":[],"pools":{"ironwood":true,"transparent":false}}},
+        "null402": {"ok":false,"reasons":["NULLIFIER_SPENT"],"checks":{"proofValid":true,"rootKnown":true,"nullifierSpent":true},"signals":{"payTo":"12571058244225308636482144950735848463267199877607700220033742556724671780813","requiredAmount":"1000"},"provenance":{"chainId":43113,"verifier":"0x0b44836dDc460f589ce4EB97f276e533A2bE6060","pool":"0x39a9C4EfabEBA954545Ecb4b16Ba1d92ec46cA1C","blockNumber":"59772946"}},
+        "challenge": {"x402Version":1,"error":"payment required","accepts":[{"scheme":"zcash-shielded","network":"zcash-testnet","maxAmountRequired":"10000","resource":"/api/quote","description":"/api/quote: send 10000 zatoshi to payTo with the memo zpv-1792689979-9e9de2d3cf037b1f-pOCOLBPOhj1j5iTa5qfxZ-, then retry with X-PAYMENT","mimeType":"application/json","payTo":"utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7","maxTimeoutSeconds":900,"asset":"ZEC","extra":{"memoNonce":"zpv-1792689979-9e9de2d3cf037b1f-pOCOLBPOhj1j5iTa5qfxZ-","expiresAt":1792689979,"paymentUri":"zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTI2ODk5NzktOWU5ZGUyZDNjZjAzN2IxZi1wT0NPTEJQT2hqMWo1aVRhNXFmeFot","minConf":1},"amountZat":"10000","memo":"zpv-1792689979-9e9de2d3cf037b1f-pOCOLBPOhj1j5iTa5qfxZ-","minConf":1,"expiresAt":1792689979000,"zip321":"zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTI2ODk5NzktOWU5ZGUyZDNjZjAzN2IxZi1wT0NPTEJQT2hqMWo1aVRhNXFmeFot"}]},
+        "receipt": {"paid":{"txid":"7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16","height":4522621,"confirmations":1,"paidZat":10000,"memo":"zpv-c3d1529ba80d3f1a28658921","lightwalletd":"https://testnet.zec.rocks:443"}},
+        "crosscheck": {"rail":"zcash","ok":false,"verdict":"unverified","reasons":["UNVERIFIED_DISAGREEMENT"],"paidZat":0,"report":null,"provenance":{"lightwalletd":"https://testnet.zec.rocks:443, https://zec.rocks:443, https://zaino.testnet.unsafe.zec.rocks:443","tip":3525843,"checkedAt":"2026-10-21T19:08:20.693Z","via":"zpay-verify"},"crossCheck":{"quorum":2,"agreed":false,"endpoints":[{"lightwalletd":"https://testnet.zec.rocks:443","answered":true,"ok":true,"reasons":[],"paidZat":100000,"found":true,"height":4521112,"tip":4526488},{"lightwalletd":"https://zec.rocks:443","answered":true,"ok":false,"reasons":["TX_NOT_FOUND"],"paidZat":0,"found":false,"height":null,"tip":3525843},{"lightwalletd":"https://zaino.testnet.unsafe.zec.rocks:443","answered":false,"error":"lightwalletd RPC failed: Internal: protocol error: received message with invalid compression flag: 83 (valid flags are 0 and 1) while receiving response with status: 503 Service Unavailable"}]}},
+        "mcpcfg": {"mcpServers":{"hanko":{"command":"node","args":["packages/mcp/dist/main.js"],"env":{"ZPV_MERCHANT_UIVK":"uivktest1…","ZPV_BIN":"packages/core/target/release/zpay-verify"}}}},
+        "runcase": {"underpaid":{"txid":"f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2","challengeMemo":"zpv-826fce7c54e46328748cefc7","sentMemo":"zpv-826fce7c54e46328748cefc7","amountZat":"5000","http":402,"reasons":["AMOUNT_TOO_LOW"],"error":"payment refused: AMOUNT_TOO_LOW"}}
+      }
+    </script>
+    <script>
+      (() => {
+        const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        // JSON → highlighted, pretty-printed HTML
+        const data = JSON.parse(document.getElementById('data').textContent);
+        const jsonHtml = (v, ind = '') => {
+          const pad = ind + '  ';
+          if (v === null) return '<span class="n">null</span>';
+          if (typeof v === 'boolean' || typeof v === 'number') return `<span class="n">${v}</span>`;
+          if (typeof v === 'string') return `<span class="s">"${esc(v)}"</span>`;
+          if (Array.isArray(v)) {
+            if (!v.length) return '<span class="pu">[]</span>';
+            if (v.every((x) => typeof x !== 'object')) return `<span class="pu">[</span>${v.map((x) => jsonHtml(x)).join('<span class="pu">, </span>')}<span class="pu">]</span>`;
+            return `<span class="pu">[</span>\n${v.map((x) => pad + jsonHtml(x, pad)).join('<span class="pu">,</span>\n')}\n${ind}<span class="pu">]</span>`;
+          }
+          const keys = Object.keys(v);
+          if (!keys.length) return '<span class="pu">{}</span>';
+          return `<span class="pu">{</span>\n${keys.map((k) => `${pad}<span class="y">"${esc(k)}"</span><span class="pu">: </span>${jsonHtml(v[k], pad)}`).join('<span class="pu">,</span>\n')}\n${ind}<span class="pu">}</span>`;
+        };
+        document.querySelectorAll('[data-json]').forEach((el) => (el.innerHTML = jsonHtml(data[el.dataset.json])));
+
+        // tiny source highlighter: comments, strings, keywords, numbers
+        const KW = { ts: 'import|from|const|await|let|true|false', rust: 'use|let|await|Some|true|false', sh: 'cd|git|pnpm|curl|zpay-verify|scripts/clean-install.sh' };
+        document.querySelectorAll('[data-hl]').forEach((el) => {
+          const lang = el.dataset.hl;
+          const src = el.textContent;
+          const re = new RegExp(`(${lang === 'sh' ? '#[^\\n]*' : '//[^\\n]*'})|('[^'\\n]*'|"[^"\\n]*")|\\b(${KW[lang]})\\b|\\b(\\d[\\d_]*)\\b`, 'g');
+          let out = '';
+          let last = 0;
+          for (const m of src.matchAll(re)) {
+            out += esc(src.slice(last, m.index));
+            const cls = m[1] ? 'c' : m[2] ? 's' : m[3] ? 'k' : 'n';
+            out += `<span class="${cls}">${esc(m[0])}</span>`;
+            last = m.index + m[0].length;
+          }
+          el.innerHTML = out + esc(src.slice(last));
+        });
+
+        // language tabs, shared across panes
+        const LANGS = [['ts', 'TypeScript'], ['rust', 'Rust'], ['cli', 'CLI']];
+        let lang = 'ts';
+        try { lang = localStorage.getItem('hanko-lang') || 'ts'; } catch {}
+        const setLang = (l) => {
+          lang = l;
+          try { localStorage.setItem('hanko-lang', l); } catch {}
+          document.querySelectorAll('[data-tabs]').forEach((t) => t.querySelectorAll('button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.l === l))));
+          document.querySelectorAll('pre[data-lang]').forEach((p) => (p.hidden = p.dataset.lang !== l));
+        };
+        document.querySelectorAll('[data-tabs]').forEach((t) => {
+          t.innerHTML = LANGS.map(([k, label]) => `<button type="button" role="tab" data-l="${k}">${label}</button>`).join('');
+          t.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setLang(b.dataset.l); });
+          t.addEventListener('keydown', (e) => {
+            if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+            const i = LANGS.findIndex(([k]) => k === lang);
+            const n = LANGS[(i + (e.key === 'ArrowRight' ? 1 : LANGS.length - 1)) % LANGS.length][0];
+            setLang(n);
+            t.querySelector(`[data-l="${n}"]`).focus();
+          });
+        });
+        setLang(LANGS.some(([k]) => k === lang) ? lang : 'ts');
+
+        // copy buttons: each pane copies the code it shows (the selected language, where there are tabs)
+        const copyText = async (text, pre) => {
+          try { await navigator.clipboard.writeText(text); return true; } catch {}
+          const r = document.createRange();
+          r.selectNodeContents(pre);
+          const sel = getSelection();
+          sel.removeAllRanges();
+          sel.addRange(r);
+          try { return document.execCommand('copy'); } catch { return false; }
+        };
+        document.querySelectorAll('.pane').forEach((pane) => {
+          const head = pane.querySelector('.pane-head');
+          if (!head || !pane.querySelector('pre')) return;
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'copy';
+          b.textContent = 'Copy';
+          b.setAttribute('aria-label', `Copy ${head.querySelector('.pane-title').textContent.trim()}`);
+          let t;
+          b.addEventListener('click', async () => {
+            const pre = [...pane.querySelectorAll('pre')].find((p) => !p.hidden);
+            const ok = await copyText(pre.innerText.trim(), pre);
+            b.textContent = ok ? 'Copied' : 'Selected, press Ctrl+C';
+            b.classList.toggle('done', ok);
+            clearTimeout(t);
+            t = setTimeout(() => { b.textContent = 'Copy'; b.classList.remove('done'); }, 1600);
+          });
+          head.append(b);
+        });
+
+        // scroll-spy for the left nav
+        const links = [...document.querySelectorAll('#toc a')];
+        const byId = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+        const mark = (id) => links.forEach((a) => a.setAttribute('aria-current', String(a === byId.get(id))));
+        if ('IntersectionObserver' in window) {
+          const spy = new IntersectionObserver((es) => {
+            const vis = es.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+            if (vis) {
+              mark(vis.target.id);
+              const a = byId.get(vis.target.id);
+              if (a && window.matchMedia('(max-width: 900px)').matches) a.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            }
+          }, { rootMargin: '-25% 0px -65% 0px' });
+          document.querySelectorAll('main > section').forEach((s) => spy.observe(s));
+        }
+        mark('overview');
+
+        // jump-to filter
+        const jump = document.getElementById('jump');
+        const filter = () => {
+          const q = jump.value.trim().toLowerCase();
+          let shown = 0;
+          links.forEach((a) => { const hit = !q || a.textContent.toLowerCase().includes(q); a.parentElement.hidden = !hit; shown += hit; });
+          document.querySelectorAll('#toc h2').forEach((h) => (h.hidden = !!q));
+          document.getElementById('toc-empty').hidden = shown > 0;
+        };
+        jump.addEventListener('input', filter);
+        jump.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { const first = links.find((a) => !a.parentElement.hidden); if (first) { location.hash = first.getAttribute('href'); jump.blur(); } }
+          if (e.key === 'Escape') { jump.value = ''; filter(); jump.blur(); }
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === '/' && document.activeElement !== jump && !/input|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); jump.focus(); }
+        });
+
+        // the seal lands once, when its spot on the response is on screen. The response pane is taller
+        // than a laptop screen beside the hero, so this watches its top 200 px (where the seal sits), not
+        // a share of the whole pane.
+        const seal = document.getElementById('seal');
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduce || !('IntersectionObserver' in window)) seal.classList.remove('armed');
+        else {
+          const io = new IntersectionObserver((es) => {
+            if (es.some((e) => e.isIntersecting)) { seal.classList.remove('armed'); seal.classList.add('land'); io.disconnect(); }
+          }, { rootMargin: '0px 0px -200px 0px', threshold: 0 });
+          io.observe(document.getElementById('seal-pane'));
+        }
+      })();
+    </script>
+  </body>
+</html>

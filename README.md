@@ -75,7 +75,7 @@ No contracts are deployed by this project.
 | [`packages/examples`](packages/examples) | `run-live` (the Oct 20 table above), `paywall-live` (the current-code payment above) and `demo` (re-checks the recorded run live, no new transactions) |
 | [`packages/dashboard`](packages/dashboard) | "Was I paid?" API console: parameters, the exact request, the real response with a seal, reasons, decrypted outputs, provenance; a paid answer without a memo is flagged `NO_MEMO_BOUND`; the hosted build opens on null-402 and shows recorded real output, labelled, when no verify API runs |
 | [`packages/docs`](packages/docs) | rules, do X → see Y, trust model, API, the null-402 key mismatch finding |
-| [`packages/landing`](packages/landing) | the API reference page: section nav, prose, dark request/response panes of real output |
+| [`packages/landing`](packages/landing) | `index.html`: the one-screen landing (the stamped response, three steps, three numbers, what is live); `reference.html`: the API reference (section nav, prose, dark request/response panes of real output, evidence, tests, limits) |
 
 ## Run it
 
@@ -89,8 +89,8 @@ pnpm test                          # builds zpay-verify + packages; 104 tests (4
 pnpm --filter @zpv/gateway api &   # verify API for the dashboard
 pnpm --filter @zpv/dashboard dev   # http://localhost:5180
 scripts/clean-install.sh           # tarball + cargo install in an empty dir, verifies a real payment
-e2e/stack.sh && (cd e2e && npm run test:e2e); e2e/stack.sh stop   # 62 browser tests in Google Chrome
-scripts/build-pages.sh             # the static site GitHub Pages serves: landing + console
+e2e/stack.sh && (cd e2e && npm run test:e2e); e2e/stack.sh stop   # 68 browser tests in Google Chrome
+scripts/build-pages.sh             # the static site GitHub Pages serves: landing, reference + console
 ```
 
 CI: `.github/workflows/ci.yml` runs the same `pnpm test`, and `pages.yml` publishes the landing and

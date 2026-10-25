@@ -1,7 +1,7 @@
 name: pages
 
 # Publishes the landing and the console to GitHub Pages:
-#   https://nickthelegend.github.io/zec-payment-verify-sdk/            landing (API reference)
+#   https://nickthelegend.github.io/zec-payment-verify-sdk/            landing (+ reference.html, the API reference)
 #   https://nickthelegend.github.io/zec-payment-verify-sdk/dashboard/  console
 # scripts/build-pages.sh builds both as static files. The console's null-402 tab checks Fuji from the
 # browser; its Zcash tab needs a local verify API and shows "Setup required" without one. No hosted API.

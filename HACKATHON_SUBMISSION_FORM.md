@@ -14,7 +14,7 @@ would fit Core & Tooling). Every fact below is verified in this repo.
 <!-- description:start -->
 Hanko answers "was I paid?" for shielded Zcash with only the receiver's incoming viewing key, which sees payments arrive and can never spend. Give it a txid, an amount and an invoice memo. It fetches the transaction from lightwalletd, recomputes the txid, requires it in the block the server names, verifies its proofs and signatures, trial-decrypts the Sapling, Orchard and Ironwood outputs, and answers paid or refused with reason codes.
 
-Real: a Rust crate and CLI, a TypeScript SDK, an x402 paywall in Shielded x402's v1 wire format, tested with Shielded x402's own client (stateless HMAC memos, single-use payments, mined-time expiry, refunds recorded), an MCP server for agents, a console and a landing. 49 of 104 tests hit Zcash testnet or Avalanche Fuji with real mined transactions; the rest are offline on purpose. 62 browser tests in Chrome. On Oct 22 a fresh payment to the unpinned paywall was served once, then refused on replay.
+Real: a Rust crate and CLI, a TypeScript SDK, an x402 paywall in Shielded x402's v1 wire format, tested with Shielded x402's own client (stateless HMAC memos, single-use payments, mined-time expiry, refunds recorded), an MCP server for agents, a console and a landing. 49 of 104 tests hit Zcash testnet or Avalanche Fuji with real mined transactions; the rest are offline on purpose. 68 browser tests in Chrome. On Oct 22 a fresh payment to the unpinned paywall was served once, then refused on replay.
 
 Mock: none. A misbehaving server is a real local socket. Most paywall tests replay the Oct 20 payment via a pinned memo.
 
@@ -37,7 +37,7 @@ receiver's UIVK and applies explicit rules with reason codes.
 - Third-party payments checked: the published x402 payment `030c3cbf…8351`; both real null-402 `settle()` calls on Fuji (`0x8596f52d…a593`, `0xd91c0ab7…1e5c`), each `paid` to its merchant when bound.
 - 104 tests + 1 doc example, 0 skipped, on Oct 23, 2026 (TESTING.md). 49 touch a chain (Zcash testnet
   through lightwalletd, or Fuji); 55 are offline on purpose (rules, bad input, status codes, limits, …).
-- 62 browser tests in Google Chrome against the real stack (desktop and 375 px), 2 skipped by design.
+- 68 browser tests in Google Chrome against the real stack (desktop and 375 px), 2 skipped by design.
 - Attack tests: one payment served once under concurrency and across processes; 10,000 GETs do not
   lock buyers out; forged memos refused before any check; 150 concurrent checks start at most
   `ZPV_MAX_CHECKS` processes; a dead Tor proxy never falls back to a direct connection; a replayed

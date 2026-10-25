@@ -104,13 +104,13 @@ the specs; `e2e/stack.sh stop` kills the stack's processes by PID.
 
 | Spec | Desktop (1280×800) | Mobile (375×812) |
 |---|---|---|
-| `landing.spec.ts` | 12 passed | 11 passed, 1 skipped (the jump box is hidden below 900 px) |
+| `landing.spec.ts` | 15 passed | 14 passed, 1 skipped (the jump box is hidden below 900 px) |
 | `dashboard.spec.ts` | 17 passed | 16 passed, 1 skipped (keyboard skip link) |
 | `pages.spec.ts` | 2 passed | 2 passed |
 | `paywall.spec.ts` | 2 passed | — (one published payment, one store) |
-| **Total** | **33** | **29 + 2 skipped** |
+| **Total** | **36** | **32 + 2 skipped** |
 
-62 passed, 0 failed, 2 skipped on Oct 23, 2026 (IST). New this round: the Pages console opens on the
+62 passed, 0 failed, 2 skipped on Oct 23, 2026 (IST). Oct 25, 2026: the landing became a one-screen overview and the API reference moved to `reference.html`; the 12 reference tests now open `reference.html` and 3 new ones cover the overview (headline, buttons, the stamped response, reduced motion, the numbers equal this file's totals, links). `landing.spec.ts` alone: 29 passed, 1 skipped, so the suite is now 68 passed, 2 skipped. New this round: the Pages console opens on the
 null-402 tab with no error and no request to a local API, and answers live from Fuji; its Zcash tab
 gives the exact `ZPV_CORS=<origin> pnpm --filter @zpv/gateway api` command and the local-network note,
 beside the recorded real answer for the selected example, labelled "Recorded output, not live" and
