@@ -144,3 +144,27 @@ presented with Shielded x402's `fetchWithPayment` until confirmed → 200, repla
 `2867d542…664f`, block 4,530,239 (`deployments/testnet.json` `paywallLive`). The paywall tests in
 `pnpm test` still present the Oct 20 payment to a paywall whose memo is pinned to it, because a test
 cannot pay anew on every run; this run is the one fresh payment through the unpinned path.
+
+## Zero-tolerance audit rerun (2026-10-26)
+
+These counts are copied from the audit logs and status files. A combined `pnpm test` total for this rerun was not recorded. Handback labels for individual checklist rows are in `audit/HANDOFF.md`.
+
+`audit/reverify-backend/README.md` prints 130 PASS, 0 FAIL, 6 UNTESTED across 136 backend rows. It also prints core 25 tests + 1 doc example, SDK 75/75, gateway 38/38, MCP 25/25, and the HTTP supplement 64/64 rows passing. `audit/reverify-backend/summary.json` prints the same row split: PASS 130, UNTESTED 6 (API 64 PASS; CHAIN 16 PASS and 2 UNTESTED; CLI 20 PASS and 1 UNTESTED; MCP 17 PASS; EDGE 13 PASS and 3 UNTESTED). That split is the backend mapping before the handback relabels EDGE-039 and EDGE-040.
+
+`audit/reverify-backend/core.txt` prints separate Cargo results: `src/lib.rs` 4 passed, 0 failed; `src/main.rs` 0 passed, 0 failed; `tests/auth.rs` 4 passed, 0 failed; `tests/cli.rs` 6 passed, 0 failed; `tests/live.rs` 7 passed, 0 failed; `tests/transport.rs` 4 passed, 0 failed; doc-tests 1 passed, 0 failed. Exit 0. A single Cargo summary line was not printed; the 25 + 1 figure above is the README's total.
+
+`audit/reverify-backend/sdk.txt`: Test Files 4 passed (4); Tests 75 passed (75). Exit 0.
+
+`audit/reverify-backend/suite.txt` (gateway): Test Files 11 passed (11); Tests 38 passed (38). Exit 0. The same README says the first gateway run had 36 passing tests and two missing `KAGE_X402_DIR` setup failures (`suite-initial-missing-kage.txt`); the rerun above is after the public client checkout.
+
+`audit/reverify-backend/mcp.txt`: Test Files 2 passed (2); Tests 25 passed (25).
+
+`audit/reverify-backend/http.txt`: HTTP audit complete: 0 failed rows.
+
+`audit/reverify-backend/sdk-build.txt`, `gateway-build.txt`, and `mcp-build.txt` each print EXIT 0. A test count for those builds was not recorded.
+
+`audit/reverify-console/validation.json` prints 39 rows, PASS 38, FAIL 0, UNTESTED 1, 743 assertions, 39 screenshots. `audit/reverify-console/README.md` prints the same 38 PASS, 0 FAIL, 1 UNTESTED. `console-run.txt` prints PAGE-021 through PAGE-035 each PASS with network=0, console=0, pageErrors=0, requestFailures=0. `pages-run.txt` prints PAGE-036 through PAGE-040 and EDGE-021 PASS with empty unexpected http, console, pageErrors, and requests. `edges-run.txt` prints EDGE-001 through EDGE-023 with unexpected http, console, requests, and pageErrors all 0, and EDGE-024 UNTESTED with unexpected http 2, console 7, requests 1, pageErrors 0.
+
+`audit/reverify-landing/README.md` prints 34 PASS, 1 FAIL, 0 UNTESTED across 35 rows, 747 assertions, and 55 JPEG screenshots. The FAIL it names is HERO-009. The handback marks that row UNTESTED; see `audit/HANDOFF.md`.
+
+`audit/reverify-backend/validation.json` records auditBytes 8311997 against a budget of 15000000. `audit/reverify-console/validation.json` records auditBytes 7187861. `audit/reverify-landing/README.md` records 14,148,462 bytes at its own validation. A single byte count taken after every reverify directory was present was not printed in those files. At handback, `du -sh audit` printed 9.4M, which is under 15 MB, so no superseded images were deleted.
