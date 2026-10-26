@@ -1,0 +1,337 @@
+[
+  {
+    "id": "PAGE-001",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-001.json",
+      "audit/reverify-landing/PAGE-001-live-live.jpg",
+      "audit/reverify-landing/PAGE-001-local-local.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-002",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-002.json",
+      "audit/reverify-landing/PAGE-002-live-live.jpg",
+      "audit/reverify-landing/PAGE-002-local-local.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-003",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-003.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-004",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-004.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-005",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-005.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-006",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-006.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-007",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-007.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-008",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-008.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-009",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-009.json",
+      "audit/reverify-landing/PAGE-009-live-overview.jpg",
+      "audit/reverify-landing/PAGE-009-local-overview.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-010",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-010.json",
+      "audit/reverify-landing/PAGE-010-live-trust.jpg",
+      "audit/reverify-landing/PAGE-010-local-trust.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-011",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-011.json",
+      "audit/reverify-landing/PAGE-011-live-spy.jpg",
+      "audit/reverify-landing/PAGE-011-local-spy.jpg",
+      "audit/reverify-landing/PAGE-011-live-mobile-spy.jpg",
+      "audit/reverify-landing/PAGE-011-local-mobile-spy.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-012",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-012.json",
+      "audit/reverify-landing/PAGE-012-live-cross.jpg",
+      "audit/reverify-landing/PAGE-012-local-cross.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-013",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-013.json",
+      "audit/reverify-landing/PAGE-013-live-empty.jpg",
+      "audit/reverify-landing/PAGE-013-local-empty.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-014",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-014.json",
+      "audit/reverify-landing/PAGE-014-live-cli.jpg",
+      "audit/reverify-landing/PAGE-014-local-cli.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-015",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-015.json",
+      "audit/reverify-landing/PAGE-015-live-copied.jpg",
+      "audit/reverify-landing/PAGE-015-local-copied.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-016",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-016.json",
+      "audit/reverify-landing/PAGE-016-live-fallback.jpg",
+      "audit/reverify-landing/PAGE-016-local-fallback.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-017",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-017.json",
+      "audit/reverify-landing/PAGE-017-live-seal.jpg",
+      "audit/reverify-landing/PAGE-017-local-seal.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-018",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-018.json",
+      "audit/reverify-landing/PAGE-018-live-recorded-crosscheck.jpg",
+      "audit/reverify-landing/PAGE-018-local-recorded-crosscheck.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-019",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-019.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-020",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/PAGE-020.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-001",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/HERO-001.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-002",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/HERO-002.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-003",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/HERO-003.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-004",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/HERO-004.json",
+      "audit/reverify-landing/HERO-004-local-local.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-005",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/HERO-005.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-006",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/HERO-006.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-007",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/HERO-007.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-008",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/HERO-008.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-009",
+    "status": "FAIL",
+    "evidence": [
+      "audit/reverify-landing/HERO-009.json"
+    ],
+    "fix": "Live asset remains 1600x901. Source asset was already corrected by 96d03e7; local HERO-003 and fresh Pages HERO-008 decode 1600x900. needs Claude to redeploy hanko-landing-six after this run; local HERO-003 is the tested surface. No deploy performed."
+  },
+  {
+    "id": "HERO-010",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/HERO-010.json",
+      "audit/reverify-landing/HERO-010-local-local.jpg",
+      "audit/reverify-landing/HERO-010-live-live.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-013",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/EDGE-013.json",
+      "audit/reverify-landing/EDGE-013-local-local.jpg",
+      "audit/reverify-landing/EDGE-013-live-live.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-014",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/EDGE-014.json",
+      "audit/reverify-landing/EDGE-014-live-reduce.jpg",
+      "audit/reverify-landing/EDGE-014-local-reduce.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-016",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/EDGE-016.json",
+      "audit/reverify-landing/EDGE-016-live-skip.jpg",
+      "audit/reverify-landing/EDGE-016-local-skip.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-018",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/EDGE-018.json",
+      "audit/reverify-landing/EDGE-018-local-local-ctas.jpg",
+      "audit/reverify-landing/EDGE-018-local-local-panenthchild1.jpg",
+      "audit/reverify-landing/EDGE-018-local-local-panenthchild2.jpg",
+      "audit/reverify-landing/EDGE-018-local-local-seal.jpg",
+      "audit/reverify-landing/EDGE-018-local-local-facts.jpg",
+      "audit/reverify-landing/EDGE-018-local-local-strip.jpg",
+      "audit/reverify-landing/EDGE-018-local-local-footer.jpg",
+      "audit/reverify-landing/EDGE-018-local-local.jpg",
+      "audit/reverify-landing/EDGE-018-live-live-ctas.jpg",
+      "audit/reverify-landing/EDGE-018-live-live-panenthchild1.jpg",
+      "audit/reverify-landing/EDGE-018-live-live-panenthchild2.jpg",
+      "audit/reverify-landing/EDGE-018-live-live-seal.jpg",
+      "audit/reverify-landing/EDGE-018-live-live-facts.jpg",
+      "audit/reverify-landing/EDGE-018-live-live-strip.jpg",
+      "audit/reverify-landing/EDGE-018-live-live-footer.jpg",
+      "audit/reverify-landing/EDGE-018-live-live.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-019",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-landing/EDGE-019.json",
+      "audit/reverify-landing/EDGE-019-live-mobile-trust.jpg",
+      "audit/reverify-landing/EDGE-019-live-mobile-overview.jpg",
+      "audit/reverify-landing/EDGE-019-local-mobile-trust.jpg",
+      "audit/reverify-landing/EDGE-019-local-mobile-overview.jpg"
+    ],
+    "fix": ""
+  }
+]

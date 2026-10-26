@@ -1,0 +1,207 @@
+{
+  "id": "HERO-010",
+  "at": "2026-10-26T09:07:45.917Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "local",
+      "check": "document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "375px no horizontal page scroll",
+      "pass": true,
+      "actual": {
+        "scroll": 375,
+        "client": 375
+      }
+    },
+    {
+      "surface": "local",
+      "check": "stage image rendered and decoded",
+      "pass": true,
+      "actual": {
+        "height": 300.5539245605469,
+        "naturalWidth": 1600
+      }
+    },
+    {
+      "surface": "local",
+      "check": "h1 fully inside viewport",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 147,
+        "width": 343,
+        "height": 135.234375
+      }
+    },
+    {
+      "surface": "local",
+      "check": "sweep has no horizontal overflow",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 17737
+    },
+    {
+      "surface": "live",
+      "check": "document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "375px no horizontal page scroll",
+      "pass": true,
+      "actual": {
+        "scroll": 375,
+        "client": 375
+      }
+    },
+    {
+      "surface": "live",
+      "check": "stage image rendered and decoded",
+      "pass": true,
+      "actual": {
+        "height": 300.5354919433594,
+        "naturalWidth": 1600
+      }
+    },
+    {
+      "surface": "live",
+      "check": "h1 fully inside viewport",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 147,
+        "width": 343,
+        "height": 135.234375
+      }
+    },
+    {
+      "surface": "live",
+      "check": "sweep has no horizontal overflow",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 17740
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/reverify-landing/HERO-010-local-local.jpg",
+    "audit/reverify-landing/HERO-010-live-live.jpg"
+  ],
+  "failures": {
+    "console": [],
+    "network": [],
+    "pageErrors": [],
+    "requests": []
+  },
+  "status": "PASS",
+  "durationMs": 11189
+}

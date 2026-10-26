@@ -1,0 +1,307 @@
+{
+  "id": "EDGE-013",
+  "at": "2026-10-26T09:07:03.552Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "local",
+      "check": "document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "seal unarmed",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "seal opacity .94 and animation none",
+      "pass": true,
+      "actual": {
+        "position": "absolute",
+        "top": "46px",
+        "right": "22px",
+        "bottom": "14.6094px",
+        "left": "378px",
+        "objectFit": "fill",
+        "content": "normal",
+        "animationName": "none",
+        "animationDuration": "0s",
+        "animationDelay": "0s",
+        "animationIterationCount": "1",
+        "animationDirection": "normal",
+        "animationPlayState": "running",
+        "opacity": "0.94",
+        "display": "block",
+        "backgroundImage": "none",
+        "backdropFilter": "none"
+      }
+    },
+    {
+      "surface": "local",
+      "check": "bleed hidden",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "seal visible",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "stage and sweep animation none",
+      "pass": true,
+      "actual": {
+        "stage": {
+          "position": "absolute",
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px",
+          "objectFit": "fill",
+          "content": "normal",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationDelay": "0s",
+          "animationIterationCount": "1",
+          "animationDirection": "normal",
+          "animationPlayState": "running",
+          "opacity": "1",
+          "display": "block",
+          "backgroundImage": "none",
+          "backdropFilter": "none"
+        },
+        "before": {
+          "position": "absolute",
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px",
+          "objectFit": "fill",
+          "content": "\"\"",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationDelay": "0s",
+          "animationIterationCount": "1",
+          "animationDirection": "normal",
+          "animationPlayState": "running",
+          "opacity": "1",
+          "display": "block",
+          "backgroundImage": "linear-gradient(105deg, rgba(0, 0, 0, 0) 38%, rgba(255, 255, 255, 0.5) 50%, rgba(0, 0, 0, 0) 62%)",
+          "backdropFilter": "none"
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 38404
+    },
+    {
+      "surface": "live",
+      "check": "document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "seal unarmed",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "seal opacity .94 and animation none",
+      "pass": true,
+      "actual": {
+        "position": "absolute",
+        "top": "46px",
+        "right": "22px",
+        "bottom": "14.6094px",
+        "left": "378px",
+        "objectFit": "fill",
+        "content": "normal",
+        "animationName": "none",
+        "animationDuration": "0s",
+        "animationDelay": "0s",
+        "animationIterationCount": "1",
+        "animationDirection": "normal",
+        "animationPlayState": "running",
+        "opacity": "0.94",
+        "display": "block",
+        "backgroundImage": "none",
+        "backdropFilter": "none"
+      }
+    },
+    {
+      "surface": "live",
+      "check": "bleed hidden",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "seal visible",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "stage and sweep animation none",
+      "pass": true,
+      "actual": {
+        "stage": {
+          "position": "absolute",
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px",
+          "objectFit": "fill",
+          "content": "normal",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationDelay": "0s",
+          "animationIterationCount": "1",
+          "animationDirection": "normal",
+          "animationPlayState": "running",
+          "opacity": "1",
+          "display": "block",
+          "backgroundImage": "none",
+          "backdropFilter": "none"
+        },
+        "before": {
+          "position": "absolute",
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px",
+          "objectFit": "fill",
+          "content": "\"\"",
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationDelay": "0s",
+          "animationIterationCount": "1",
+          "animationDirection": "normal",
+          "animationPlayState": "running",
+          "opacity": "1",
+          "display": "block",
+          "backgroundImage": "linear-gradient(105deg, rgba(0, 0, 0, 0) 38%, rgba(255, 255, 255, 0.5) 50%, rgba(0, 0, 0, 0) 62%)",
+          "backdropFilter": "none"
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 38495
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "reduce"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "reduce"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/reverify-landing/EDGE-013-local-local.jpg",
+    "audit/reverify-landing/EDGE-013-live-live.jpg"
+  ],
+  "failures": {
+    "console": [],
+    "network": [],
+    "pageErrors": [],
+    "requests": []
+  },
+  "status": "PASS",
+  "durationMs": 2712
+}
