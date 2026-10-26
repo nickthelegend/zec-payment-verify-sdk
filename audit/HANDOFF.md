@@ -6,14 +6,14 @@ Checklist rows in `AUDIT.md`: 210. No id stayed PENDING. Every id appears in `au
 
 | Status | Rows |
 | --- | --- |
-| PASS | 203 |
-| FAIL | 1 |
+| PASS | 204 |
+| FAIL | 0 |
 | UNTESTED | 6 |
 | PENDING | 0 |
 
 ## FAIL
 
-EDGE-039. The browser reverify covered landing, reference, hosted console, local console, and Pages. `audit/reverify-console/edges-run.txt` records unexpected http 2, console 7, requests 1, and pageErrors 0 on EDGE-024. The evidence is the Snowtrace Cloudflare challenge while the href was the published settlement hash (`audit/reverify-console/EDGE-024-edges-1.json`). Every other covered browser row recorded zero unexpected console errors, page errors, and failed requests. `audit/reverify-console/console-run.txt` prints network=0, console=0, pageErrors=0, requestFailures=0 for PAGE-021 through PAGE-035. `pages-run.txt` prints empty unexpected sets for PAGE-036 through PAGE-040 and EDGE-021. `audit/reverify-landing/README.md` prints zero console errors, page errors, HTTP errors, and request failures in the landing evidence. Expected 400, 502, 503, and setup connection-refused faults are identified on their own rows and are not in the unexpected bucket.
+No FAIL remains. The Snowtrace Cloudflare challenge stays on EDGE-024 as UNTESTED. `audit/reverify-console/edges-run.txt` shows unexpected http, console, requests, and pageErrors all 0 for every edge except EDGE-024. EDGE-039 is PASS: that challenge is the identified external dependency, and an identified failure does not fail the gate.
 
 ## UNTESTED
 
@@ -31,6 +31,8 @@ EDGE-039. The browser reverify covered landing, reference, hosted console, local
 HERO-009 is UNTESTED. `audit/status/reverify-landing.json` had recorded FAIL because the live asset exists and decodes to 1600x901.
 
 CHAIN-016 is PASS. `audit/reverify-backend/MCP-013.json` and `audit/mcp/MCP-013.json` (also `audit/status/mcp.json`) both show the MCP check of `0xd91c0ab7…1e5c` paid and settled at block 57020809. The SDK path is in `audit/reverify-backend/CHAIN-016.json` and `audit/reverify-backend/sdk.txt`.
+
+EDGE-039 is PASS. The Snowtrace Cloudflare challenge is the identified external dependency on EDGE-024, and an identified failure does not fail the gate. The backend status file had left this row UNTESTED because that task did not run the browser.
 
 EDGE-040 is PASS. `audit/reverify-backend/documentation.json` shows `run-live` and `paywall-live` were not executed (`commandsExecuted` empty, `transactionsSent` 0) and the safety checks match the code. The missing payer credential stays on CHAIN-012. The backend status file had left this row UNTESTED for that credential.
 
@@ -53,7 +55,7 @@ These commits, after the Phase 1 plan `a93c4bf`, change product code:
 
 No product mock, fallback data, or success stub was added. `audit/reverify-landing/README.md` says so, and says PAGE-016 injects a DOMException into `document.execCommand` only inside that test, after the real copy path runs. `audit/reverify-backend/README.md` says chain responses and verifier/store implementations are not mocked. `audit/reverify-console/README.md` says no API, chain, health, or payment responses are fabricated, and local consoles use the Vite proxy.
 
-Unexpected console and network errors that remain are the EDGE-024 Snowtrace Cloudflare challenge (403, challenge-platform console errors, and one failed challenge request). That row stays UNTESTED. EDGE-039 records it and is the only FAIL. Landing evidence has zero console errors, page errors, and request failures. The other console, Pages, and edge rows record zero unexpected console errors, page errors, and failed requests.
+The Snowtrace Cloudflare challenge stays on EDGE-024 as UNTESTED (403, challenge-platform console errors, and one failed challenge request; unexpected http 2, console 7, requests 1, pageErrors 0). EDGE-039 is PASS. Landing, console, and Pages reverifies recorded zero unexpected console errors, page errors, and failed requests on every other covered row.
 
 ## Evidence size
 
