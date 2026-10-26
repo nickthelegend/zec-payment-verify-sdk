@@ -1,0 +1,44 @@
+{
+  "id": "API-011",
+  "at": "2026-10-26T10:33:02.129Z",
+  "status": "PASS",
+  "note": "empty and malformed JSON rejected",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 8119,
+      "port": 51420,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/12.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "body is not JSON"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "body is not JSON"
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "API-033",
+  "at": "2026-10-26T10:33:13.783Z",
+  "status": "PASS",
+  "note": "/api/report OPTIONS empty; no challenge or claim stored",
+  "records": [
+    {
+      "server": "main",
+      "pid": 11554,
+      "port": 51490,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/34.sqlite"
+    },
+    {
+      "path": "/api/report",
+      "method": "OPTIONS",
+      "status": 204,
+      "headers": {
+        "access-control-allow-methods": "GET, HEAD, OPTIONS",
+        "allow": "GET, HEAD, OPTIONS",
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:13 GMT",
+        "keep-alive": "timeout=5"
+      },
+      "body": ""
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "id": "API-046",
+  "at": "2026-10-26T10:33:26.167Z",
+  "status": "PASS",
+  "note": "recorded payslip accepted for report with its receiver and one paid memo/txid pair",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 14887,
+      "port": 51544,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/47.sqlite"
+    },
+    {
+      "path": "/api/report",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:24 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "payment required",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "50000",
+            "resource": "/api/report",
+            "description": "/api/report: send 50000 zatoshi to payTo with the memo payslip 2026-10 #7: net 0.0005 TAZ, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest190s53lu5ddn34grm9x7cwxy0vtwuqusfa6s6740uw7aqdkc6jlp0fqmhn9yv96d8px33dferke3jn76th6u5g8zsgknmgksnmg4wtr09",
+            "maxTimeoutSeconds": 900,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "payslip 2026-10 #7: net 0.0005 TAZ",
+              "expiresAt": 1793011704,
+              "paymentUri": "zcash:utest190s53lu5ddn34grm9x7cwxy0vtwuqusfa6s6740uw7aqdkc6jlp0fqmhn9yv96d8px33dferke3jn76th6u5g8zsgknmgksnmg4wtr09?amount=0.0005&memo=cGF5c2xpcCAyMDI2LTEwICM3OiBuZXQgMC4wMDA1IFRBWg",
+              "minConf": 1
+            },
+            "amountZat": "50000",
+            "memo": "payslip 2026-10 #7: net 0.0005 TAZ",
+            "minConf": 1,
+            "expiresAt": 1793011704324,
+            "zip321": "zcash:utest190s53lu5ddn34grm9x7cwxy0vtwuqusfa6s6740uw7aqdkc6jlp0fqmhn9yv96d8px33dferke3jn76th6u5g8zsgknmgksnmg4wtr09?amount=0.0005&memo=cGF5c2xpcCAyMDI2LTEwICM3OiBuZXQgMC4wMDA1IFRBWg"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/report",
+      "method": "GET",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjp0cnVlLCJ0cmFuc2FjdGlvbiI6IjM4OTU4Y2ViMGNlOTUyY2NmNmMxMTAwMzI1ODA3MmRjOGVhOTdmNGY2NDA4ZGMxMWMyNTE1YWViMTI2YjU4NjkiLCJuZXR3b3JrIjoiemNhc2gtdGVzdG5ldCIsInBheWVyIjoiIn0="
+      },
+      "body": {
+        "paid": {
+          "txid": "38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869",
+          "height": 4522626,
+          "confirmations": 21090,
+          "paidZat": 50000,
+          "memo": "payslip 2026-10 #7: net 0.0005 TAZ",
+          "lightwalletd": "https://testnet.zec.rocks:443"
+        },
+        "data": {
+          "path": "/api/report",
+          "note": "paid with a shielded Zcash payment, checked with a viewing key"
+        }
+      },
+      "settlement": {
+        "success": true,
+        "transaction": "38958ceb0ce952ccf6c11003258072dc8ea97f4f6408dc11c2515aeb126b5869",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    }
+  ]
+}

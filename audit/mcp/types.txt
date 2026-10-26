@@ -1,0 +1,5 @@
+COMMAND: ["pnpm", "--filter", "@zpv/mcp", "exec", "tsc", "--noEmit", "--strict", "--target", "ES2022", "--module", "NodeNext", "--moduleResolution", "NodeNext", "--skipLibCheck", "--esModuleInterop", "test/audit.test.ts"]
+START: 2026-10-26T10:22:10Z
+
+EXIT: 0
+ELAPSED_SECONDS: 1.29

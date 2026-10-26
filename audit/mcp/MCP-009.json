@@ -1,0 +1,52 @@
+{
+  "id": "MCP-009",
+  "at": "2026-10-26T10:22:27.709Z",
+  "status": "PASS",
+  "assertion": "Store and REQUIRE_MEMO settings return exact setting-specific error text",
+  "evidence": [
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 1
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "memo is required: with ZPV_STORE each payment is accepted once, by its invoice memo and txid"
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_MCP_REQUIRE_MEMO": "1"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 1
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "memo is required: ZPV_MCP_REQUIRE_MEMO is set"
+      }
+    }
+  ]
+}

@@ -221,6 +221,15 @@ pub fn decrypt_outputs(tx: &Transaction, uivk: &UnifiedIncomingViewingKey, heigh
     outputs
 }
 
+// Shared by inspect and transparent-prevout reads, so both reject swapped transaction bytes.
+fn parse_transaction(data: &[u8], branch: BranchId, requested: &TxId) -> Result<Transaction, VerifyError> {
+    let tx = Transaction::read(data, branch).map_err(|e| VerifyError::Unparseable(e.to_string()))?;
+    if tx.txid() != *requested {
+        return Err(VerifyError::TxidMismatch);
+    }
+    Ok(tx)
+}
+
 /// Fetch `txid` and decrypt it with `uivk`. A txid lightwalletd does not know is reported with
 /// `found: false`, not as an error.
 pub async fn inspect(c: &mut lwd::Client, uivk: &UnifiedIncomingViewingKey, txid: &str, tip: BlockHeight) -> Result<TxReport, VerifyError> {
@@ -236,10 +245,7 @@ pub async fn inspect(c: &mut lwd::Client, uivk: &UnifiedIncomingViewingKey, txid
         // Only on a fork that is not the main chain: as good as not found.
         lwd::TxLocation::Orphaned => return Ok(empty(false)),
     };
-    let tx = Transaction::read(&data[..], BranchId::for_height(&NETWORK, mined.unwrap_or(tip + 1))).map_err(|e| VerifyError::Unparseable(e.to_string()))?;
-    if tx.txid() != id {
-        return Err(VerifyError::TxidMismatch);
-    }
+    let tx = parse_transaction(&data, BranchId::for_height(&NETWORK, mined.unwrap_or(tip + 1)), &id)?;
     let prevouts = prevouts(c, &tx, tip).await?;
     authorized(&tx, &prevouts)?;
     let shielded = tx.sapling_bundle().is_some() || tx.orchard_bundle().is_some() || tx.ironwood_bundle().is_some();
@@ -280,10 +286,7 @@ pub async fn prevouts(c: &mut lwd::Client, tx: &Transaction, tip: BlockHeight) -
             lwd::TxLocation::Mined(h) => h,
             _ => tip + 1,
         };
-        let prev = Transaction::read(&data[..], BranchId::for_height(&NETWORK, h)).map_err(|e| VerifyError::Unparseable(e.to_string()))?;
-        if prev.txid() != id {
-            return Err(VerifyError::TxidMismatch);
-        }
+        let prev = parse_transaction(&data, BranchId::for_height(&NETWORK, h), &id)?;
         let o = prev.transparent_bundle().and_then(|b| b.vout.get(p.n() as usize)).ok_or_else(|| VerifyError::Inconsistent(format!("a transparent input spends {id}:{}, which has no such output", p.n())))?;
         out.push(o.clone());
     }
@@ -374,6 +377,23 @@ mod tests {
         }
     }
     const E: fn(u64, Option<&str>) -> Expect = |amount_zat, memo| Expect { amount_zat, memo: memo.map(String::from), min_conf: 1, shielded_only: true };
+
+    #[tokio::test]
+    async fn recorded_transaction_bytes_cannot_be_swapped_for_another_requested_txid() {
+        let fixture: serde_json::Value = serde_json::from_str(include_str!("../../../fixtures/testnet.json")).unwrap();
+        let wanted = lwd::parse_txid(fixture["x402"]["txid"].as_str().unwrap()).unwrap();
+        let other = lwd::parse_txid(fixture["auction"]["deposit"]["txid"].as_str().unwrap()).unwrap();
+        let mut client = lwd::connect(lwd::DEFAULT_LWD_URL).await.unwrap();
+        for id in [wanted, other] {
+            let lwd::FetchedTx::Found { data, location: lwd::TxLocation::Mined(h) } = lwd::get_transaction(&mut client, &id).await.unwrap() else { panic!("recorded transaction must be mined") };
+            let branch = BranchId::for_height(&NETWORK, h);
+            assert_eq!(parse_transaction(&data, branch, &id).unwrap().txid(), id);
+            let swapped = if id == wanted { other } else { wanted };
+            let err = parse_transaction(&data, branch, &swapped).unwrap_err();
+            assert!(matches!(err, VerifyError::TxidMismatch));
+            assert_eq!(err.to_string(), "lightwalletd returned a transaction whose txid differs from the one requested");
+        }
+    }
 
     #[test]
     fn exact_payment_passes_and_counts_only_matching_memos() {

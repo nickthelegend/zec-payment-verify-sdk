@@ -1,0 +1,15 @@
+{
+  "id": "API-063",
+  "at": "2026-10-26T10:11:05.548Z",
+  "status": "PASS",
+  "note": "saturating free verify slots still allows real recorded paywall payment; separate CheckLimiter",
+  "records": [
+    {
+      "command": "pnpm --filter @zpv/gateway test --reporter=verbose",
+      "log": "audit/gateway/suite.txt",
+      "tests": [
+        " ✓ test/api.test.ts > who can run a check > a flood of /api/verify calls cannot take the paywall’s own check slots: with ZPV_MAX_CHECKS=1 and ZPV_MAX_QUEUE=0 the payment is still served 8011ms"
+      ]
+    }
+  ]
+}

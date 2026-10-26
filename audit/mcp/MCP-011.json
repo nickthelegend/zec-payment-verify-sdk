@@ -1,0 +1,135 @@
+{
+  "id": "MCP-011",
+  "at": "2026-10-26T10:22:38.146Z",
+  "status": "PASS",
+  "assertion": "Quorum/disagreement return unverified, null report fields and cross_check details; disposable claims released",
+  "evidence": [
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_LWD_URLS": "https://testnet.zec.rocks:443,http://127.0.0.1:1",
+          "ZPV_LWD_QUORUM": "2"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "unverified",
+          "reasons": [
+            "UNVERIFIED_QUORUM"
+          ],
+          "paid_zat": 0,
+          "height": null,
+          "confirmations": null,
+          "outputs": [],
+          "transparent": null,
+          "lightwalletd": "https://testnet.zec.rocks:443, http://127.0.0.1:1",
+          "min_conf": 1,
+          "single_use": true,
+          "cross_check": {
+            "quorum": 2,
+            "agreed": false,
+            "endpoints": [
+              {
+                "lightwalletd": "https://testnet.zec.rocks:443",
+                "answered": true,
+                "ok": true,
+                "reasons": [],
+                "paidZat": 100000,
+                "found": true,
+                "height": 4521112,
+                "tip": 4543700
+              },
+              {
+                "lightwalletd": "http://127.0.0.1:1",
+                "answered": false,
+                "error": "cannot connect to lightwalletd: http://127.0.0.1:1: transport error"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_LWD_URLS": "https://testnet.zec.rocks:443,https://zec.rocks:443",
+          "ZPV_LWD_QUORUM": "1"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "unverified",
+          "reasons": [
+            "UNVERIFIED_DISAGREEMENT"
+          ],
+          "paid_zat": 0,
+          "height": null,
+          "confirmations": null,
+          "outputs": [],
+          "transparent": null,
+          "lightwalletd": "https://testnet.zec.rocks:443, https://zec.rocks:443",
+          "min_conf": 1,
+          "single_use": true,
+          "cross_check": {
+            "quorum": 1,
+            "agreed": false,
+            "endpoints": [
+              {
+                "lightwalletd": "https://testnet.zec.rocks:443",
+                "answered": true,
+                "ok": true,
+                "reasons": [],
+                "paidZat": 100000,
+                "found": true,
+                "height": 4521112,
+                "tip": 4543700
+              },
+              {
+                "lightwalletd": "https://zec.rocks:443",
+                "answered": true,
+                "ok": false,
+                "reasons": [
+                  "TX_NOT_FOUND"
+                ],
+                "paidZat": 0,
+                "found": false,
+                "height": null,
+                "tip": 3531168
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "API-008",
+  "at": "2026-10-26T10:03:52.160Z",
+  "status": "FAIL",
+  "note": "verify GET HEAD PUT DELETE rejected before checking",
+  "error": "AssertionError: local api listened",
+  "records": []
+}

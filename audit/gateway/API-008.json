@@ -1,0 +1,70 @@
+{
+  "id": "API-008",
+  "at": "2026-10-26T10:10:14.310Z",
+  "status": "PASS",
+  "note": "verify GET HEAD PUT DELETE rejected before checking",
+  "records": [
+    {
+      "server": "api",
+      "pid": 38682,
+      "port": 59431,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/9.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "GET",
+      "status": 405,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:14 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "POST a verify request"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "HEAD",
+      "status": 405,
+      "headers": {
+        "connection": "close",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:14 GMT"
+      },
+      "body": ""
+    },
+    {
+      "path": "/api/verify",
+      "method": "PUT",
+      "status": 405,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:14 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "POST a verify request"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "DELETE",
+      "status": 405,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:14 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "POST a verify request"
+      }
+    }
+  ]
+}

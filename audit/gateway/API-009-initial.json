@@ -1,0 +1,8 @@
+{
+  "id": "API-009",
+  "at": "2026-10-26T10:04:02.896Z",
+  "status": "FAIL",
+  "note": "verify OPTIONS returns allowed origin headers with empty body",
+  "error": "AssertionError: local api listened",
+  "records": []
+}

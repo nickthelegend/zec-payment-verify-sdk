@@ -1,0 +1,39 @@
+{
+  "id": "EDGE-030",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Remote http:// lightwalletd is refused before connecting with Setup required and CLI exit 2; loopback is allowed; explicit ZPV_ALLOW_INSECURE_LWD=1 override permits remote plaintext only when deliberately configured.",
+  "detail": "CLI exit 2/Setup required blocks remote plaintext before connecting, loopback is allowed, and the explicit insecure override permits the configured remote connection attempt.",
+  "checks": [
+    {
+      "suite": "core",
+      "test": "plaintext_http_to_a_remote_host_is_refused_before_any_connection",
+      "passed": true
+    },
+    {
+      "suite": "core",
+      "test": "plaintext_http_to_loopback_is_allowed",
+      "passed": true
+    },
+    {
+      "suite": "core",
+      "test": "zpv_allow_insecure_lwd_lets_a_remote_plaintext_url_through",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "a plaintext URL to a remote host is a setup problem",
+      "passed": true
+    }
+  ],
+  "evidence": [
+    "audit/reverify-backend/core.txt",
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    " \u2713 test/hardening.test.ts > how zpay-verify reaches lightwalletd > a plaintext URL to a remote host is a setup problem, not bad input (offline) 3ms",
+    "test plaintext_http_to_a_remote_host_is_refused_before_any_connection ... ok",
+    "test plaintext_http_to_loopback_is_allowed ... ok",
+    "test zpv_allow_insecure_lwd_lets_a_remote_plaintext_url_through ... ok"
+  ]
+}

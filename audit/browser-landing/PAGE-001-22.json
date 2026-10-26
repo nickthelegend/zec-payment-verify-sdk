@@ -1,0 +1,178 @@
+{
+  "id": "PAGE-001",
+  "attempt": 22,
+  "at": "2026-10-26T08:29:08.052Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "live",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "exact title",
+      "pass": true,
+      "actual": "Hanko · was I paid?"
+    },
+    {
+      "surface": "live",
+      "check": "exact h1",
+      "pass": true,
+      "actual": "Was I paid? Ask with a viewing key."
+    },
+    {
+      "surface": "live",
+      "check": "exact subline",
+      "pass": true,
+      "actual": "Hanko checks a shielded Zcash payment's amount, memo and depth with a key that can never spend."
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 48927
+    },
+    {
+      "surface": "local",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "exact title",
+      "pass": true,
+      "actual": "Hanko · was I paid?"
+    },
+    {
+      "surface": "local",
+      "check": "exact h1",
+      "pass": true,
+      "actual": "Was I paid? Ask with a viewing key."
+    },
+    {
+      "surface": "local",
+      "check": "exact subline",
+      "pass": true,
+      "actual": "Hanko checks a shielded Zcash payment's amount, memo and depth with a key that can never spend."
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 48971
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/",
+      "status": 200,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/browser-landing/PAGE-001-live-22.jpg",
+    "audit/browser-landing/PAGE-001-local-22.jpg"
+  ],
+  "status": "PASS",
+  "failureCounts": {
+    "assertions": 0,
+    "console": 0,
+    "pageErrors": 0,
+    "http": 0,
+    "requests": 0
+  }
+}

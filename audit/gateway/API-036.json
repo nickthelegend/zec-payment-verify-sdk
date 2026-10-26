@@ -1,0 +1,29 @@
+{
+  "id": "API-036",
+  "at": "2026-10-26T10:10:26.324Z",
+  "status": "PASS",
+  "note": "unknown route returns exact 404 with no challenge or claim",
+  "records": [
+    {
+      "server": "main",
+      "pid": 41923,
+      "port": 59523,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/37.sqlite"
+    },
+    {
+      "path": "/not-a-route",
+      "method": "GET",
+      "status": 404,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "not found"
+      }
+    }
+  ]
+}

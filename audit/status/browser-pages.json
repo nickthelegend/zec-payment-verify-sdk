@@ -1,0 +1,50 @@
+[
+  {
+    "id": "PAGE-036",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-pages/PAGE-036-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-037",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-pages/PAGE-037-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-038",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-pages/PAGE-038-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-039",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-pages/PAGE-039-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-040",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-pages/PAGE-040-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-021",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-pages/EDGE-021-1.json"
+    ],
+    "fix": ""
+  }
+]

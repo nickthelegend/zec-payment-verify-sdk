@@ -1,0 +1,1 @@
+Fresh Phase 4 evidence is in [../reverify-console/README.md](../reverify-console/README.md) and [../status/reverify-console.json](../status/reverify-console.json). Earlier JSON and README files are retained; legacy image files were pruned to meet the audit size cap.

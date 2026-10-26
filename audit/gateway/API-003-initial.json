@@ -1,0 +1,35 @@
+{
+  "id": "API-003",
+  "at": "2026-10-26T10:03:25.288Z",
+  "status": "FAIL",
+  "note": "hosted health 200 JSON; hosted console destination and health-derived endpoint note match",
+  "error": "AssertionError: expected value\n+ actual - expected\n\n+ 'utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7'\n- ''\n",
+  "records": [
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "status": 200,
+      "headers": {
+        "access-control-expose-headers": "X-PAYMENT-RESPONSE",
+        "alt-svc": "h3=\":443\"; ma=2592000",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:03:25 GMT",
+        "vary": "Origin"
+      },
+      "body": {
+        "ok": true,
+        "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+        "paths": [
+          "/api/quote",
+          "/api/report"
+        ],
+        "lightwalletd": {
+          "urls": [
+            "https://testnet.zec.rocks:443"
+          ],
+          "quorum": 1
+        }
+      }
+    }
+  ]
+}

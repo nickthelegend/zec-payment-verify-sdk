@@ -1,0 +1,92 @@
+{
+  "id": "MCP-001",
+  "at": "2026-10-26T10:22:01.709Z",
+  "status": "PASS",
+  "assertion": "Server identity/version, exact two tools, replay/binding/confirmation-floor descriptions",
+  "evidence": [
+    {
+      "serverInfo": {
+        "name": "zec-payment-verify",
+        "version": "0.1.0"
+      },
+      "tools": [
+        {
+          "name": "verify_zcash_payment",
+          "title": "Check a shielded Zcash payment to the merchant",
+          "description": "Did transaction `txid` pay the merchant at least `amount_zat` zatoshis with memo `memo`, with at least `min_conf` confirmations and no transparent part? Checked live on Zcash testnet with the merchant’s incoming viewing key. Returns ok, verdict (paid, refused, or unverified when ZPV_LWD_URLS lists several lightwalletd endpoints and they disagree or too few answer), reasons (TX_NOT_FOUND, NO_OUTPUT_TO_KEY, MEMO_MISMATCH, AMOUNT_TOO_LOW, NOT_CONFIRMED, TRANSPARENT_PART, UNVERIFIED_DISAGREEMENT, UNVERIFIED_QUORUM, ALREADY_USED) and what the key saw. Replay: unless the server runs with ZPV_STORE (single_use true in the answer), a check does not mark a payment as used: the same txid passes every time it is asked, and without a memo any past payment to the merchant passes, so record the txids you accepted and always pass the invoice memo. With ZPV_STORE each payment is accepted once and a second check answers ALREADY_USED. min_conf cannot go below the server’s floor (ZPV_MCP_MIN_CONF, default 1).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "txid": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{64}$"
+              },
+              "amount_zat": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "memo": {
+                "type": "string",
+                "maxLength": 512
+              },
+              "min_conf": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "txid",
+              "amount_zat"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "annotations": {
+            "readOnlyHint": true
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        {
+          "name": "verify_null402_settlement",
+          "title": "Was this null-402 settlement on Avalanche Fuji a payment to me?",
+          "description": "Reads a mined null-402 settle() transaction and its receipt on Fuji. A reverted or pending settle() paid nobody and is never ok (SETTLE_REVERTED, SETTLE_PENDING; verdict unsettled). A successful one is ok (verdict paid, settled true) when its proof is valid on the deployed verifier, its Merkle root is known to the pool, its nullifier is spent (by this settlement), the proof pays expect_pay_to the amount expect_amount, and the pool paid expect_recipient; otherwise verdict refused with PAY_TO_MISMATCH, AMOUNT_MISMATCH, RECIPIENT_MISMATCH, or UNBOUND when any of the three is missing. expect_recipient (your EVM address) is required for ok: the pool does not bind settle()’s recipient to the proof, so a proof naming your payee and amount can be settled to someone else. proof_check answers a different question, whether the proof could still be settled to you: once settled it is always NULLIFIER_SPENT. This tool does not remember settlements you already accepted: record the settle hashes yourself.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "settle_tx": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{64}$"
+              },
+              "expect_pay_to": {
+                "type": "string",
+                "pattern": "^\\d+$"
+              },
+              "expect_amount": {
+                "type": "string",
+                "pattern": "^\\d+$"
+              },
+              "expect_recipient": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$",
+                "description": "The EVM address the pool must have paid. Required for ok (without it the answer is UNBOUND)."
+              }
+            },
+            "required": [
+              "settle_tx"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "annotations": {
+            "readOnlyHint": true
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        }
+      ]
+    }
+  ]
+}

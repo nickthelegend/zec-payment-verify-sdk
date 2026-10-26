@@ -1,0 +1,29 @@
+{
+  "id": "API-012",
+  "at": "2026-10-26T10:33:02.381Z",
+  "status": "PASS",
+  "note": "over 1,000,000 character JSON rejected without a verification",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 8390,
+      "port": 51423,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/13.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "request body too large"
+      }
+    }
+  ]
+}

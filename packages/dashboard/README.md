@@ -33,6 +33,16 @@ pnpm --filter @zpv/dashboard dev      # http://localhost:5180 (the API allows th
 `VITE_ZPV_API` points the dashboard at another verify API (default `http://127.0.0.1:8403`);
 `ZPV_CORS` on the API lists the origins it answers.
 
+For a local development console against the hosted API, use Vite's optional same-origin proxy:
+
+```sh
+VITE_ZPV_PROXY_API=https://hanko-api.201-18-198-162.sslip.io pnpm --filter @zpv/dashboard dev
+```
+
+The browser sends `/api` requests to Vite, which forwards them to that target over HTTPS. This avoids
+the hosted API's localhost CORS restriction without changing its allowed origins. The proxy is only
+available in development; production builds still use `VITE_ZPV_API` or the local default.
+
 **Hosted build (GitHub Pages).** `scripts/build-pages.sh` builds the console with `VITE_ZPV_PAGES=1`:
 it opens on the null-402 tab, which works entirely from the browser, and asks no local API anything
 until the Zcash tab is opened (on a public site Chrome would otherwise ask for local-network access

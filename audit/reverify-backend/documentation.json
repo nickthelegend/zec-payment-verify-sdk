@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-26T10:28:48.099781+00:00",
+  "checks": {
+    "runLiveIsSendingEntry": true,
+    "paywallLiveIsSendingEntry": true,
+    "walletAdapterInvokesSend": true,
+    "testingSeparatesLiveSends": true,
+    "docsIdentifyBothSendingExamples": true,
+    "hankoDeploysNoContracts": true,
+    "deriveSourceContract": true
+  },
+  "commandsExecuted": [],
+  "transactionsSent": 0,
+  "fundingClaim": "Five-note claim still requires the absent published payer incoming credential; CHAIN-012 reruns the available read-only transaction checks.",
+  "counts": "104 tests/49 chain checks in README and TESTING are the recorded Oct23 baseline. New audit tests increase the present suite; do not represent historical counts as this rerun.",
+  "restrictions": "No successful derive, operator operation, sending example, browser, deploy, wallet or dotenv access."
+}

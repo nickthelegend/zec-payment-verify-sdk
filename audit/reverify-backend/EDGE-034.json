@@ -1,0 +1,44 @@
+{
+  "id": "EDGE-034",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Non-object/unsupported rail and invalid Zcash/null402 fields reject with VerifyError before a paid verdict; missing binary rejects SetupRequiredError; network errors retain their actionable error classes.",
+  "detail": "Fresh invalid rail/value tests reject with VerifyError; missing binary yields SetupRequiredError; real transport failure keeps LightwalletdUnreachableError. No invalid input is paid.",
+  "checks": [
+    {
+      "suite": "sdk",
+      "test": "a non-integer or negative amount, a bad minConf or memo",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "bad input and a missing binary are errors",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "a non-settle tx or malformed signals are errors",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "expected values and signals that are not decimal uint256",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "ZPV_LWD_PROXY reaches the binary",
+      "passed": true
+    }
+  ],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    " \u2713 test/verify.test.ts > zcash rail > bad input and a missing binary are errors, not verdicts 3ms",
+    " \u2713 test/verify.test.ts > null402 rail (Avalanche Fuji) > a non-settle tx or malformed signals are errors 16ms",
+    " \u2713 test/verify.test.ts > null402 settlement (was this mined settle() a payment to me?) > expected values and signals that are not decimal uint256 strings are VerifyErrors, never a match (offline) 1ms",
+    " \u2713 test/hardening.test.ts > zcash rail input > a non-integer or negative amount, a bad minConf or memo, an unknown rail and a non-object are VerifyErrors (offline) 2ms",
+    " \u2713 test/hardening.test.ts > how zpay-verify reaches lightwalletd > ZPV_LWD_PROXY reaches the binary: a dead proxy is a connection error, never a direct check 4ms"
+  ]
+}

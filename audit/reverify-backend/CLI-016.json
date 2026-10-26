@@ -1,0 +1,32 @@
+{
+  "id": "CLI-016",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "At least quorum real endpoint answers agreeing on transaction/rules yield paid or refused with crossCheck.agreed true; failed endpoints are listed but do not vote; repeated reads of one operator are never described as independent operators.",
+  "detail": "Fresh real endpoint answers test paid/refused quorum arithmetic and exclusion of dead endpoints. Port aliases are two reads from the SAME operator, not independent operators. Separate public-indexer test returns paid only if both agree, otherwise unverified.",
+  "checks": [
+    {
+      "suite": "sdk",
+      "test": "two agreeing answers meet a quorum of 2",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "agreeing refusals stay refusals",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "the two public testnet indexers:",
+      "passed": true
+    }
+  ],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    " \u2713 test/crosscheck.test.ts > lightwalletd cross-check > two agreeing answers meet a quorum of 2 even with a third endpoint dead \u2192 paid, with every endpoint listed 2208ms",
+    " \u2713 test/crosscheck.test.ts > lightwalletd cross-check > agreeing refusals stay refusals: the wrong memo is refused by both 2160ms",
+    " \u2713 test/crosscheck.test.ts > lightwalletd cross-check > the two public testnet indexers: paid only if both answer and agree, else unverified 1782ms"
+  ]
+}

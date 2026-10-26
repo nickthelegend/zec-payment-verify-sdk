@@ -1,0 +1,102 @@
+{
+  "id": "HERO-008",
+  "attempt": 17,
+  "at": "2026-10-26T08:27:04.502Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "pages",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "pages",
+      "check": "Pages asset exists",
+      "pass": true
+    },
+    {
+      "surface": "pages",
+      "check": "built index references copied asset",
+      "pass": true
+    },
+    {
+      "surface": "pages",
+      "check": "image HTTP 200 image/webp",
+      "pass": false,
+      "actual": {
+        "surface": "pages",
+        "url": "http://127.0.0.1:5192/assets/hero.webp",
+        "status": 200,
+        "resourceType": "image",
+        "contentType": "application/octet-stream"
+      }
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "pages",
+      "url": "http://127.0.0.1:5192/",
+      "status": 200,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "pages",
+      "url": "http://127.0.0.1:5192/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "pages",
+      "url": "http://127.0.0.1:5192/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "application/octet-stream"
+    },
+    {
+      "surface": "pages",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "pages",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "pages",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [
+    {
+      "surface": "pages",
+      "message": "image HTTP 200 image/webp"
+    }
+  ],
+  "status": "FAIL",
+  "failureCounts": {
+    "assertions": 1,
+    "console": 0,
+    "pageErrors": 0,
+    "http": 0,
+    "requests": 0
+  }
+}

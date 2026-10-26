@@ -1,0 +1,15 @@
+{
+  "id": "CHAIN-009",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Read-only check confirms block 4521112, 100000 zat and `x402z-f19a63da20cbc0749ea800b3`; matching expectation yields paid and no transparent part.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: x402 block 4521112/100000/matching memo; paid; transparent false. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-009 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: x402 block 4521112/100000/matching memo; paid; transparent false. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-009 recorded third-party payment 2122ms"
+  ]
+}

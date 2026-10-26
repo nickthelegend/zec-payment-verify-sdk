@@ -1,0 +1,82 @@
+{
+  "started": "2026-10-26T09:05:41.196Z",
+  "runnerPid": 68968,
+  "channel": "chrome",
+  "video": false,
+  "trace": false,
+  "rowTimeoutMs": 90000,
+  "processes": [
+    {
+      "name": "sdk-build",
+      "pid": 69003,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "name": "pages-build",
+      "pid": 69103,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "name": "static server",
+      "pid": 69708,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "name": "Google Chrome",
+      "pid": 69709,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "browser": "155.0.8059.85",
+  "origins": {
+    "live": "https://hanko-landing-six.vercel.app/",
+    "local": "http://127.0.0.1:5197/",
+    "pages": "http://127.0.0.1:5198/"
+  },
+  "finished": "2026-10-26T09:07:20.551Z",
+  "rows": [
+    "PAGE-001",
+    "PAGE-002",
+    "PAGE-003",
+    "PAGE-004",
+    "PAGE-005",
+    "PAGE-006",
+    "PAGE-007",
+    "PAGE-008",
+    "PAGE-009",
+    "PAGE-010",
+    "PAGE-011",
+    "PAGE-012",
+    "PAGE-013",
+    "PAGE-014",
+    "PAGE-015",
+    "PAGE-016",
+    "PAGE-017",
+    "PAGE-018",
+    "PAGE-019",
+    "PAGE-020",
+    "HERO-001",
+    "HERO-002",
+    "HERO-003",
+    "HERO-004",
+    "HERO-005",
+    "HERO-006",
+    "HERO-007",
+    "HERO-008",
+    "HERO-009",
+    "HERO-010",
+    "EDGE-013",
+    "EDGE-014",
+    "EDGE-016",
+    "EDGE-018",
+    "EDGE-019"
+  ]
+}

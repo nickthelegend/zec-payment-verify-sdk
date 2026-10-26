@@ -1,0 +1,29 @@
+{
+  "id": "API-026",
+  "at": "2026-10-26T10:10:19.154Z",
+  "status": "PASS",
+  "note": "authorized fresh SQLite refund list empty",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 39254,
+      "port": 59489,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/26.sqlite"
+    },
+    {
+      "path": "/api/refunds",
+      "method": "GET",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:19 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "refunds": []
+      }
+    }
+  ]
+}

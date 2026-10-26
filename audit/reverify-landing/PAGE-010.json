@@ -1,0 +1,495 @@
+{
+  "id": "PAGE-010",
+  "at": "2026-10-26T09:06:09.096Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "live",
+      "check": "document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "all 12 section links",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#overview exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 60,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#quickstart exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.25,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#zcash exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.984375,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#crosscheck exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.6875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#reasons exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.5,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#null402 exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.296875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#paywall exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.265625,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#api exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.296875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#mcp exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.90625,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#evidence exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.046875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#tests exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.46875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#trust exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.953125,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 50663
+    },
+    {
+      "surface": "local",
+      "check": "document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "all 12 section links",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#overview exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 60,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#quickstart exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.25,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#zcash exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.984375,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#crosscheck exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.6875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#reasons exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.5,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#null402 exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.296875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#paywall exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.265625,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#api exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.296875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#mcp exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.90625,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#evidence exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.046875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#tests exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 76.46875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#trust exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.953125,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 50663
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/reverify-landing/PAGE-010-live-trust.jpg",
+    "audit/reverify-landing/PAGE-010-local-trust.jpg"
+  ],
+  "failures": {
+    "console": [],
+    "network": [],
+    "pageErrors": [],
+    "requests": []
+  },
+  "status": "PASS",
+  "durationMs": 2924
+}

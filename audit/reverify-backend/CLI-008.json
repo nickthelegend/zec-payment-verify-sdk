@@ -1,0 +1,15 @@
+{
+  "id": "CLI-008",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Absent well-formed txid reports found false; malformed input or failed transport exits 2; interruption never emits a completed paid verdict for an unchecked txid.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: absent tx found=false; malformed/dead exit 2; SIGKILL at silent real socket emits no completed report/verdict. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-008 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: absent tx found=false; malformed/dead exit 2; SIGKILL at silent real socket emits no completed report/verdict. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-008 inspect absent, malformed, transport and interrupted inputs 1408ms"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "CLI-002",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Recorded wrong memo/underpayment/wrong receiver/transparent cases emit their exact reason codes and report; exit 1.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: exit 1 and exact wrong-memo, underpayment, transparent, wrong-receiver reasons; real reports retained. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-002 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: exit 1 and exact wrong-memo, underpayment, transparent, wrong-receiver reasons; real reports retained. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-002 all recorded CLI refusals 6964ms"
+  ]
+}

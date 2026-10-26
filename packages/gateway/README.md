@@ -67,8 +67,10 @@ accepts the memos it issued, and several paywall processes on one file serve a p
 not served.
 
 **Startup checks.** `main.ts` exits 2 with `Setup required: <name>` before listening when
-`ZPV_MIN_CONF` is not a whole number ≥ 1 (0 needs `ZPV_ALLOW_ZERO_CONF=1`), `ZPV_PRICE_ZAT` is not a
-whole number > 0, `ZPV_PORT` is out of range, `ZPV_LWD_QUORUM` is malformed, or `ZPV_PAY_TO` is not a
+`ZPV_MIN_CONF` is not a whole number from 1 to 4,294,967,295 (0 needs `ZPV_ALLOW_ZERO_CONF=1`), `ZPV_PRICE_ZAT` is not a
+whole number from 1 to 420,000,000,000,000 zatoshi (so the 5× report also fits Zcash's amount range),
+`ZPV_PORT` is out of range, `ZPV_LWD_QUORUM` is outside 1 through the configured URL count or lacks
+`ZPV_LWD_URLS`, or `ZPV_PAY_TO` is not a
 testnet unified address with a shielded receiver that belongs to `ZPV_MERCHANT_UIVK` (checked offline
 with `zpay-verify owns`; SDK `ownsAddress`). Any of these would take customers' money and refuse every
 payment.
@@ -80,8 +82,8 @@ ZPV_PAY_TO=utest1… ZPV_MERCHANT_UIVK=uivktest1… ZPV_PRICE_ZAT=10000 ZPV_STOR
 Tests (`pnpm test`, live lightwalletd): `paywall.test.ts` (4): 402 + ZIP-321; a real mined payment
 answers its challenge → 200, and the same txid is refused next time; someone else's payment, an
 unknown memo and garbage are refused; `/api/verify` with CORS. `hardening.test.ts` (4): concurrent
-double-pay, challenge cap, malformed header, and a payment that testnet.zec.rocks has and a real mainnet lightwalletd does not →
-503 unverified, then 200 from two agreeing endpoints. `store.test.ts` (4): a restarted paywall on the same
+double-pay, challenge cap, malformed header, and a quorum shortfall using testnet.zec.rocks and a
+closed loopback port → 503 unverified, then 200 when quorum is met. `store.test.ts` (4): a restarted paywall on the same
 SQLite file refuses the payment it served; a challenge survives a restart; a real second paywall
 process on the same file and this one, sent the same payment at once → one 200, one 402; lease
 takeover.

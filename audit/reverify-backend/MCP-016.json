@@ -1,0 +1,70 @@
+{
+  "id": "MCP-016",
+  "at": "2026-10-26T10:29:55.654Z",
+  "status": "PASS",
+  "assertion": "Real closed loopback dependency returns isError text, no paid log and no retained SQLite paid claim",
+  "evidence": [
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": true,
+        "settings": {
+          "ZPV_LWD_URL": "http://127.0.0.1:1",
+          "ZPV_FUJI_RPC": "http://127.0.0.1:1"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "cannot connect to lightwalletd: http://127.0.0.1:1: transport error"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "HTTP request failed.\n\nURL: http://127.0.0.1:1\nRequest body: {\"method\":\"eth_blockNumber\"}\n\nDetails: fetch failed\nVersion: 2.21.0"
+      }
+    },
+    {
+      "claims": [],
+      "auditLog": [
+        {
+          "at": "2026-10-26T10:29:55.130Z",
+          "tool": "verify_zcash_payment",
+          "args": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "amount_zat": 100000,
+            "memo": "x402z-f19a63da20cbc0749ea800b3"
+          },
+          "isError": true,
+          "result": "cannot connect to lightwalletd: http://127.0.0.1:1: transport error"
+        },
+        {
+          "at": "2026-10-26T10:29:55.648Z",
+          "tool": "verify_null402_settlement",
+          "args": {
+            "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"
+          },
+          "isError": true,
+          "result": "HTTP request failed.\n\nURL: http://127.0.0.1:1\nRequest body: {\"method\":\"eth_blockNumber\"}\n\nDetails: fetch failed\nVersion: 2.21.0"
+        }
+      ]
+    }
+  ]
+}

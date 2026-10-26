@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-26T10:35:06.102165+00:00",
+  "rows": {
+    "PASS": 130,
+    "UNTESTED": 6
+  },
+  "byComponent": {
+    "API": {
+      "PASS": 64
+    },
+    "CHAIN": {
+      "PASS": 16,
+      "UNTESTED": 2
+    },
+    "CLI": {
+      "PASS": 20,
+      "UNTESTED": 1
+    },
+    "MCP": {
+      "PASS": 17
+    },
+    "EDGE": {
+      "PASS": 13,
+      "UNTESTED": 3
+    }
+  },
+  "untested": {
+    "CHAIN-012": "Dependency: published payer incoming viewing credential for fundTx a2c0578b\u202657d3; deployments/testnet.json omits it. Read-only authorization/inclusion confirms the funding transaction, but five notes/amounts cannot be decrypted under the published merchant/x402 credentials. No wallet or private credential accessed; command: python3 audit/reverify-backend/run.py sdk; log: audit/reverify-backend/sdk.txt",
+    "CHAIN-018": "Explicit user restriction: a valid unspent new-root proof requires operator authorization and root registration. No operator credential sought and no root registered or transaction submitted.",
+    "CLI-013": "Successful derive requires prohibited UFVK access and incoming-key output. Source contract reviewed; only absent/malformed synthetic paths run under CLI-012. No successful derive executed.",
+    "EDGE-037": "Both published recorded settlements have successful receipts. A real pending/reverted settle receipt is unavailable; the freshly passing rule-only SDK test does not satisfy this row. No receipt fabricated or transaction submitted.",
+    "EDGE-039": "This is a browser console/pageerror/network gate. Browser execution is prohibited in this backend task; no page flow exercised. Fresh backend logs cannot prove browser cleanliness and earlier page evidence is not substituted.",
+    "EDGE-040": "Fresh documentation safety checks identify both transaction-sending examples and verify they are outside tests; neither executed. Full documentation/evidence match still depends on the absent published funding receiver credential (CHAIN-012). Historical 104/49 baseline is not this expanded rerun total."
+  },
+  "failures": {},
+  "transactionsSent": 0,
+  "commitPolicy": "Authoritative Loom session forbids commits; changes left for Loom to commit and merge.",
+  "pushed": false
+}

@@ -1,0 +1,15 @@
+{
+  "id": "CLI-021",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "ownsAddress returns matching CLI owns/receiver JSON, rejects empty address and bad key with VerifyError, and missing binary with SetupRequiredError; no chain transaction is submitted.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: ownership equals real CLI receiver JSON; empty/bad-key VerifyError; missing binary SetupRequiredError. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-021 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: ownership equals real CLI receiver JSON; empty/bad-key VerifyError; missing binary SetupRequiredError. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-021 SDK ownership matches CLI and error classes 7ms"
+  ]
+}

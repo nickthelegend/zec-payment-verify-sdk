@@ -1,0 +1,15 @@
+{
+  "id": "CLI-004",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Recorded transparent-part case with matching memo/amount and `--allow-transparent` clears `TRANSPARENT_PART` and yields exit 0 when all other rules pass.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: recorded transparent case exits 0 with --allow-transparent and no refusal reasons. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-004 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: recorded transparent case exits 0 with --allow-transparent and no refusal reasons. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-004 explicit transparent opt-in 1747ms"
+  ]
+}

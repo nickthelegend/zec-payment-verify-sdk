@@ -1,0 +1,15 @@
+{
+  "id": "CLI-006",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Missing key environment exits 2 `error: Setup required: ZPV_UIVK`; malformed txid/key exits 2 with `not a txid (64 hex characters)` or `not a testnet unified incoming viewing key`, without a paid verdict.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: isolated missing-key env and malformed tx/key exit 2; expected Setup required or field diagnostic; no paid JSON. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-006 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: isolated missing-key env and malformed tx/key exit 2; expected Setup required or field diagnostic; no paid JSON. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-006 missing setup and invalid tx/key 386ms"
+  ]
+}

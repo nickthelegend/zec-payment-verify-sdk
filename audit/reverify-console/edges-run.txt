@@ -1,0 +1,20 @@
+Chrome 155.0.8059.85; runner 85341
+EDGE-001 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-002 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-003 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-004 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-005 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-006 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-007 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-008 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-009 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-010 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-011 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-012 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-015 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-017 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-020 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-021 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-022 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-023 PASS  unexpected={"http":0,"console":0,"requests":0,"pageErrors":0}
+EDGE-024 UNTESTED reference: explorer loads exact requested transaction; liveReference: linked explorer destination satisfies contract; hosted: linked explorer destination satisfies contract; local: linked explorer destination satisfies contract unexpected={"http":2,"console":7,"requests":1,"pageErrors":0}

@@ -1,0 +1,412 @@
+{
+  "id": "EDGE-018",
+  "attempt": 20,
+  "at": "2026-10-26T08:27:14.886Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "local",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "375px no horizontal page scroll",
+      "pass": true,
+      "actual": {
+        "scroll": 375,
+        "client": 375
+      }
+    },
+    {
+      "surface": "local",
+      "check": ".ctas readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 427.234375,
+        "width": 343,
+        "height": 112
+      }
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 26376
+    },
+    {
+      "surface": "local",
+      "check": ".pane:nth-child(1) readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 587.234375,
+        "width": 343,
+        "height": 161.984375
+      }
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 26662
+    },
+    {
+      "surface": "local",
+      "check": ".pane:nth-child(2) readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 650.21875,
+        "width": 343,
+        "height": 161.984375
+      }
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 25816
+    },
+    {
+      "surface": "local",
+      "check": "#seal readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 142.89501953125,
+        "y": 632.11376953125,
+        "width": 216.2099609375,
+        "height": 216.2099609375
+      }
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 25346
+    },
+    {
+      "surface": "local",
+      "check": ".facts readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 368.84375,
+        "width": 343,
+        "height": 74.296875
+      }
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 18743
+    },
+    {
+      "surface": "local",
+      "check": ".strip readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 576.921875,
+        "width": 343,
+        "height": 234.9375
+      }
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 21674
+    },
+    {
+      "surface": "local",
+      "check": "footer readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 0,
+        "y": 672.421875,
+        "width": 375,
+        "height": 139.171875
+      }
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 20209
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 26969
+    },
+    {
+      "surface": "live",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "375px no horizontal page scroll",
+      "pass": true,
+      "actual": {
+        "scroll": 375,
+        "client": 375
+      }
+    },
+    {
+      "surface": "live",
+      "check": ".ctas readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 427.234375,
+        "width": 343,
+        "height": 112
+      }
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 26210
+    },
+    {
+      "surface": "live",
+      "check": ".pane:nth-child(1) readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 587.234375,
+        "width": 343,
+        "height": 161.984375
+      }
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 26573
+    },
+    {
+      "surface": "live",
+      "check": ".pane:nth-child(2) readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 650.21875,
+        "width": 343,
+        "height": 161.984375
+      }
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 25782
+    },
+    {
+      "surface": "live",
+      "check": "#seal readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 142.89501953125,
+        "y": 632.11376953125,
+        "width": 216.2099609375,
+        "height": 216.2099609375
+      }
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 25341
+    },
+    {
+      "surface": "live",
+      "check": ".facts readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 368.84375,
+        "width": 343,
+        "height": 74.296875
+      }
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 18743
+    },
+    {
+      "surface": "live",
+      "check": ".strip readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 16,
+        "y": 576.921875,
+        "width": 343,
+        "height": 234.9375
+      }
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 21674
+    },
+    {
+      "surface": "live",
+      "check": "footer readable and reachable",
+      "pass": true,
+      "actual": {
+        "x": 0,
+        "y": 672.421875,
+        "width": 375,
+        "height": 139.171875
+      }
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 20209
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 26976
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/",
+      "status": 200,
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "application/octet-stream"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/browser-landing/EDGE-018-local-ctas-20.jpg",
+    "audit/browser-landing/EDGE-018-local-panenthchild1-20.jpg",
+    "audit/browser-landing/EDGE-018-local-panenthchild2-20.jpg",
+    "audit/browser-landing/EDGE-018-local-seal-20.jpg",
+    "audit/browser-landing/EDGE-018-local-facts-20.jpg",
+    "audit/browser-landing/EDGE-018-local-strip-20.jpg",
+    "audit/browser-landing/EDGE-018-local-footer-20.jpg",
+    "audit/browser-landing/EDGE-018-local-20.jpg",
+    "audit/browser-landing/EDGE-018-live-ctas-20.jpg",
+    "audit/browser-landing/EDGE-018-live-panenthchild1-20.jpg",
+    "audit/browser-landing/EDGE-018-live-panenthchild2-20.jpg",
+    "audit/browser-landing/EDGE-018-live-seal-20.jpg",
+    "audit/browser-landing/EDGE-018-live-facts-20.jpg",
+    "audit/browser-landing/EDGE-018-live-strip-20.jpg",
+    "audit/browser-landing/EDGE-018-live-footer-20.jpg",
+    "audit/browser-landing/EDGE-018-live-20.jpg"
+  ],
+  "status": "PASS",
+  "failureCounts": {
+    "assertions": 0,
+    "console": 0,
+    "pageErrors": 0,
+    "http": 0,
+    "requests": 0
+  }
+}

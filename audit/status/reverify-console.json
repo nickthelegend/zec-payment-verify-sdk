@@ -1,0 +1,838 @@
+[
+  {
+    "id": "PAGE-021",
+    "expected": "HTTP 200; Zcash tab selected; h1 `Was I paid?`; health `verify API reachable`; send row names `https://hanko-api.201-18-198-162.sslip.io` and the endpoints reported by health.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-021-both-1.json",
+      "audit/reverify-console/PAGE-021.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:09:33.123Z",
+        "durationMs": 1471
+      }
+    ]
+  },
+  {
+    "id": "PAGE-022",
+    "expected": "Before sending, Verdict says `Nothing checked yet.`, Response says `No request sent yet.`, History says `No checks yet.` and navigation count is 0; no seal is shown.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-022-both-1.json",
+      "audit/reverify-console/PAGE-022.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:09:34.596Z",
+        "durationMs": 1135
+      }
+    ]
+  },
+  {
+    "id": "PAGE-023",
+    "expected": "Editing amount/memo/minConf updates the exact JSON request and TAZ unit; empty memo is omitted; viewing-key value is shortened in the preview and never copied into audit evidence.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-023-both-1.json",
+      "audit/reverify-console/PAGE-023.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:09:35.733Z",
+        "durationMs": 1113
+      }
+    ]
+  },
+  {
+    "id": "PAGE-024",
+    "expected": "Sending recorded `030c3cbf…8351` yields HTTP 200, badge `Paid`, PAID / VIEWING KEY seal labelled `Verdict: paid`, `0.001 TAZ reached this key with the expected memo.`, outputs and block/tip/endpoint provenance.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-024-both-1.json",
+      "audit/reverify-console/PAGE-024.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:09:36.847Z",
+        "durationMs": 11844
+      }
+    ]
+  },
+  {
+    "id": "PAGE-025",
+    "expected": "`Wrong invoice memo` selects `x402z-another-invoice`; result badge `Not paid`, `MEMO_MISMATCH`, text `none with the expected memo`, response `verdict: refused` and UNPAID / SEE REASONS seal.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-025-both-1.json",
+      "audit/reverify-console/PAGE-025.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:09:48.692Z",
+        "durationMs": 11872
+      }
+    ]
+  },
+  {
+    "id": "PAGE-026",
+    "expected": "Requesting 100,001 zat shows `= 0.00100001 TAZ`; result `Not paid`, `AMOUNT_TOO_LOW`, `Counted toward this check: 0.001 TAZ.` and UNPAID seal.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-026-both-1.json",
+      "audit/reverify-console/PAGE-026.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:10:00.565Z",
+        "durationMs": 12071
+      }
+    ]
+  },
+  {
+    "id": "PAGE-027",
+    "expected": "Auction deposit with the x402 merchant key yields `Not paid`, `NO_OUTPUT_TO_KEY`, and `No output in this transaction decrypts to this key.`",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-027-both-1.json",
+      "audit/reverify-console/PAGE-027.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:10:12.639Z",
+        "durationMs": 12061
+      }
+    ]
+  },
+  {
+    "id": "PAGE-028",
+    "expected": "`minConf: 100000000` yields `Pending`, `NOT_CONFIRMED`, `Not mined deep enough yet.`, WAIT / UNCONFIRMED seal labelled `Verdict: pending`, and Pending history entry.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-028-both-1.json",
+      "audit/reverify-console/PAGE-028.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:10:24.702Z",
+        "durationMs": 11886
+      }
+    ]
+  },
+  {
+    "id": "PAGE-029",
+    "expected": "A well-formed absent txid yields `Not paid`, `TX_NOT_FOUND` and `No such transaction.`; absence is a refusal, not a setup error.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-029-both-1.json",
+      "audit/reverify-console/PAGE-029.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:10:36.590Z",
+        "durationMs": 2639
+      }
+    ]
+  },
+  {
+    "id": "PAGE-030",
+    "expected": "Completed checks appear newest first with rail, time, verdict, reasons and matching explorer link; History count matches rows; `#history` and `#evidence` headings land below sticky bars.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-030-both-1.json",
+      "audit/reverify-console/PAGE-030.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:10:39.231Z",
+        "durationMs": 35629
+      }
+    ]
+  },
+  {
+    "id": "PAGE-031",
+    "expected": "After 11 completed checks only the latest 10 remain and count is 10; reload resets session history to `No checks yet.` and count 0.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-031-both-1.json",
+      "audit/reverify-console/PAGE-031.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:11:14.861Z",
+        "durationMs": 18165
+      }
+    ]
+  },
+  {
+    "id": "PAGE-032",
+    "expected": "Tab says `Is this proof a payment to me?` and `Fuji, straight from this browser`; recorded `0x8596f52d…a593` gives `Not paid`, `NULLIFIER_SPENT`, `UNBOUND`, UNPAID seal and true/true/true verifier/root/spent checks.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-032-both-1.json",
+      "audit/reverify-console/PAGE-032.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:11:33.028Z",
+        "durationMs": 2960
+      }
+    ]
+  },
+  {
+    "id": "PAGE-033",
+    "expected": "Supplying its actual payTo and requiredAmount removes `UNBOUND`; `NULLIFIER_SPENT` remains; badge and seal remain Not paid / UNPAID.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-033-both-1.json",
+      "audit/reverify-console/PAGE-033.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:11:35.990Z",
+        "durationMs": 3680
+      }
+    ]
+  },
+  {
+    "id": "PAGE-034",
+    "expected": "`Claim 10× the amount the proof authorises` changes request preview to `with amount × 10`; result includes `BAD_PROOF`, `verifier.verifyProof false`, Not paid / UNPAID and a null-402 history entry.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-034-both-1.json",
+      "audit/reverify-console/PAGE-034.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:11:39.671Z",
+        "durationMs": 3228
+      }
+    ]
+  },
+  {
+    "id": "PAGE-035",
+    "expected": "Changing rail clears the previous verdict and seal, restores `Send request`, preserves session history and shows the selected rail's request parameters.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-035-both-1.json",
+      "audit/reverify-console/PAGE-035.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "console",
+        "at": "2026-10-26T10:11:42.900Z",
+        "durationMs": 3316
+      }
+    ]
+  },
+  {
+    "id": "PAGE-036",
+    "expected": "scripts/build-pages.sh emits root `index.html`, root `reference.html`, `dashboard/index.html`, relative dashboard assets and `.nojekyll`; landing loads at `/`, console at `/dashboard/`, including under a repository subpath. The pages output also contains assets/hero.webp copied from packages/landing/assets (scripts/build-pages.sh `cp -R packages/landing/assets`), and the built index.html stage img requests it.",
+    "status": "PASS",
+    "surfaces": {
+      "pages": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-036-1.json",
+      "audit/reverify-console/PAGE-036.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "pages",
+        "at": "2026-10-26T10:11:49.161Z",
+        "durationMs": 1899
+      }
+    ]
+  },
+  {
+    "id": "PAGE-037",
+    "expected": "With `VITE_ZPV_PAGES=1` and no hosted API override, null-402 opens first, with no Setup required alert and no request to `127.0.0.1:8403`; recorded proof is checked directly through Fuji.",
+    "status": "PASS",
+    "surfaces": {
+      "pages": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-037-1.json",
+      "audit/reverify-console/PAGE-037.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "pages",
+        "at": "2026-10-26T10:11:51.062Z",
+        "durationMs": 1862
+      }
+    ]
+  },
+  {
+    "id": "PAGE-038",
+    "expected": "With no local API, Zcash shows `verify API not reachable`, `Setup required`, exact `ZPV_CORS=<page origin> pnpm --filter @zpv/gateway api` command and local-network permission explanation.",
+    "status": "PASS",
+    "surfaces": {
+      "pages": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-038-1.json",
+      "audit/reverify-console/PAGE-038.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "pages",
+        "at": "2026-10-26T10:11:52.927Z",
+        "durationMs": 1104
+      }
+    ]
+  },
+  {
+    "id": "PAGE-039",
+    "expected": "Matching preset displays `Recorded output, not live`, recorded timestamp and source, corresponding JSON/verdict and no seal; wrong memo preset displays recorded `MEMO_MISMATCH`.",
+    "status": "PASS",
+    "surfaces": {
+      "pages": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-039-1.json",
+      "audit/reverify-console/PAGE-039.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "pages",
+        "at": "2026-10-26T10:11:54.033Z",
+        "durationMs": 1212
+      }
+    ]
+  },
+  {
+    "id": "PAGE-040",
+    "expected": "Changing amount to 123 displays `No recorded output for these parameters`; response JSON is absent and no seal is shown.",
+    "status": "PASS",
+    "surfaces": {
+      "pages": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/PAGE-040-1.json",
+      "audit/reverify-console/PAGE-040.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "pages",
+        "at": "2026-10-26T10:11:55.248Z",
+        "durationMs": 1192
+      }
+    ]
+  },
+  {
+    "id": "EDGE-001",
+    "expected": "`not-a-txid` sets patternMismatch, sends zero POST /api/verify requests, retains `Nothing checked yet.` and shows no seal.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-001-edges-1.json",
+      "audit/reverify-console/EDGE-001.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:04.468Z",
+        "durationMs": 1927
+      }
+    ]
+  },
+  {
+    "id": "EDGE-002",
+    "expected": "Empty required key/txid/amount and negative/fractional/non-decimal amount/minConf prevent submit through native validation; invalid amount unit reads `whole zatoshi`; no paid seal is produced.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-002-edges-1.json",
+      "audit/reverify-console/EDGE-002.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:06.419Z",
+        "durationMs": 4306
+      }
+    ]
+  },
+  {
+    "id": "EDGE-003",
+    "expected": "Empty/malformed settle_tx and non-decimal expectation inputs prevent submit through required/pattern validation; no Fuji request or verdict seal is produced.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-003-edges-1.json",
+      "audit/reverify-console/EDGE-003.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:10.731Z",
+        "durationMs": 2368
+      }
+    ]
+  },
+  {
+    "id": "EDGE-004",
+    "expected": "Bad viewing-key encoding produces `Could not check`, response status `HTTP 400`, error JSON and Error history row; no Setup required label or verdict seal.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-004-edges-1.json",
+      "audit/reverify-console/EDGE-004.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:13.100Z",
+        "durationMs": 1601
+      }
+    ]
+  },
+  {
+    "id": "EDGE-005",
+    "expected": "Health becomes `verify API not reachable`; banner `Setup required`; `check again` makes one new health request; sending records Setup required, response `setup required`, no seal; null-402 status stays neutral.",
+    "status": "PASS",
+    "surfaces": {
+      "down": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-005-edges-1.json",
+      "audit/reverify-console/EDGE-005.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:14.702Z",
+        "durationMs": 627
+      }
+    ]
+  },
+  {
+    "id": "EDGE-006",
+    "expected": "Zcash fetch exceeding 90 seconds aborts and displays `Could not check` with `the verify API at <API> gave no answer within 90 s`; busy state ends, error enters History and no seal appears.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-006-edges-1.json",
+      "audit/reverify-console/EDGE-006.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:15.330Z",
+        "durationMs": 1401
+      }
+    ]
+  },
+  {
+    "id": "EDGE-007",
+    "expected": "HTTP 502 displays `Could not check`; HTTP 503 displays `Setup required`; response retains actual HTTP status/error JSON, History shows Error/Setup required and no payment seal.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-007-edges-1.json",
+      "audit/reverify-console/EDGE-007.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:16.732Z",
+        "durationMs": 1616
+      }
+    ]
+  },
+  {
+    "id": "EDGE-008",
+    "expected": "Unknown well-formed settle hash says `Fuji does not know this transaction`; failed RPC shows one-line `Could not check`, Error history row, `error` response status and no seal.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-008-edges-1.json",
+      "audit/reverify-console/EDGE-008.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:18.350Z",
+        "durationMs": 3591
+      }
+    ]
+  },
+  {
+    "id": "EDGE-009",
+    "expected": "During either rail's check button says `Checking…`, form fieldset/presets/send are disabled, verdict says `Checking live…`, response says `Waiting for <host>…`; request preview cannot change.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-009-edges-1.json",
+      "audit/reverify-console/EDGE-009.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:21.944Z",
+        "durationMs": 1847
+      }
+    ]
+  },
+  {
+    "id": "EDGE-010",
+    "expected": "Rail switch abandons current request, resets `Send request`, clears verdict/seal; late response cannot populate other rail or add a history row; switching back also cannot revive it.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-010-edges-1.json",
+      "audit/reverify-console/EDGE-010.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:23.793Z",
+        "durationMs": 2691
+      }
+    ]
+  },
+  {
+    "id": "EDGE-011",
+    "expected": "Result badge `Unverified`, HOLD / NO CONSENSUS seal labelled `Verdict: unverified`, `UNVERIFIED_QUORUM`, `No verdict: this payment is neither paid nor refused.`, endpoint table and report null; no Paid badge.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-011-edges-1.json",
+      "audit/reverify-console/EDGE-011.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:26.485Z",
+        "durationMs": 5001
+      }
+    ]
+  },
+  {
+    "id": "EDGE-012",
+    "expected": "Badge remains Paid but text says `no memo checked: any earlier payment to this key would also pass`; reason and stamp note are `NO_MEMO_BOUND`; phrase `with the expected memo` is absent.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-012-edges-1.json",
+      "audit/reverify-console/EDGE-012.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:31.488Z",
+        "durationMs": 12648
+      }
+    ]
+  },
+  {
+    "id": "EDGE-015",
+    "expected": "Result stamp animationName is none and correct PAID/UNPAID/WAIT/HOLD label remains visible; waiting pulse is static.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-015-edges-1.json",
+      "audit/reverify-console/EDGE-015.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:12:44.138Z",
+        "durationMs": 38385
+      }
+    ]
+  },
+  {
+    "id": "EDGE-017",
+    "expected": "First Tab focuses visible `Skip to the parameters`; Enter changes hash to `#params` and exposes the form.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-017-edges-1.json",
+      "audit/reverify-console/EDGE-017.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:13:22.526Z",
+        "durationMs": 1389
+      }
+    ]
+  },
+  {
+    "id": "EDGE-020",
+    "expected": "No horizontal page scroll in empty, paid, refused, pending, unverified, setup and error states; form/send and verdict badge stay reachable; output/provenance/cross-check tables do not widen the page.",
+    "status": "PASS",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-020-edges-1.json",
+      "audit/reverify-console/EDGE-020.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:13:23.917Z",
+        "durationMs": 39675
+      }
+    ]
+  },
+  {
+    "id": "EDGE-021",
+    "expected": "No horizontal page scroll through proof inputs/checks/history and recorded/setup states; send button and badges remain reachable, hashes and code panes fit the page.",
+    "status": "PASS",
+    "surfaces": {
+      "pages": "PASS",
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-021-1.json",
+      "audit/reverify-console/EDGE-021.jpg",
+      "audit/reverify-console/EDGE-021-edges-1.json"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "pages",
+        "at": "2026-10-26T10:11:56.442Z",
+        "durationMs": 4195
+      },
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:14:03.594Z",
+        "durationMs": 4926
+      }
+    ]
+  },
+  {
+    "id": "EDGE-022",
+    "expected": "Each page's actual fonts.googleapis.com stylesheet and fonts.gstatic.com font requests succeed; Hanken Grotesk and JetBrains Mono render; dependency errors fail the affected page row rather than being ignored.",
+    "status": "PASS",
+    "surfaces": {
+      "landing": "PASS",
+      "reference": "PASS",
+      "liveLanding": "PASS",
+      "liveReference": "PASS",
+      "pagesLanding": "PASS",
+      "pagesReference": "PASS",
+      "pagesConsole": "PASS",
+      "hosted": "PASS",
+      "local": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-022-edges-1.json",
+      "audit/reverify-console/EDGE-022.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:14:08.522Z",
+        "durationMs": 6718
+      }
+    ]
+  },
+  {
+    "id": "EDGE-023",
+    "expected": "Reference and console transaction links target published txids at `https://testnet.zecblock.com/tx/<txid>`, labels match linked hashes and destinations load the requested transaction; landing overview does not invent explorer links.",
+    "status": "PASS",
+    "surfaces": {
+      "reference": "PASS",
+      "liveReference": "PASS",
+      "hosted": "PASS",
+      "local": "PASS",
+      "landing": "PASS",
+      "liveLanding": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-023-edges-1.json",
+      "audit/reverify-console/EDGE-023.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:14:15.241Z",
+        "durationMs": 9228
+      }
+    ]
+  },
+  {
+    "id": "EDGE-024",
+    "expected": "Reference/console settle links open `https://testnet.snowtrace.io/tx/<recorded hash>` and show that settlement; no unrelated hash or broken destination is accepted.",
+    "status": "UNTESTED",
+    "surfaces": {
+      "reference": "UNTESTED",
+      "liveReference": "UNTESTED",
+      "hosted": "UNTESTED",
+      "local": "UNTESTED",
+      "landing": "PASS",
+      "liveLanding": "PASS"
+    },
+    "evidence": [
+      "audit/reverify-console/EDGE-024-edges-1.json",
+      "audit/reverify-console/EDGE-024.jpg"
+    ],
+    "fix": "",
+    "executions": [
+      {
+        "surface": "edges",
+        "at": "2026-10-26T10:14:24.472Z",
+        "durationMs": 11702
+      }
+    ],
+    "dependency": "needs testnet.snowtrace.io to serve the recorded settlement to headless Chrome without a Cloudflare challenge; the rendered href is the published hash."
+  }
+]

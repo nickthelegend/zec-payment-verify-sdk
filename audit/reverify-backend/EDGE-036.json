@@ -1,0 +1,15 @@
+{
+  "id": "EDGE-036",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Missing any expected payTo, amount or recipient returns ok false, verdict refused, `UNBOUND`; wrong recipient returns `RECIPIENT_MISMATCH` even if proof names expected payee/amount.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real recorded settlement missing payTo/amount/recipient separately is refused UNBOUND; wrong recipient refused RECIPIENT_MISMATCH. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT EDGE-036 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real recorded settlement missing payTo/amount/recipient separately is refused UNBOUND; wrong recipient refused RECIPIENT_MISMATCH. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > EDGE-036 each missing settlement binding plus wrong recipient 1580ms"
+  ]
+}

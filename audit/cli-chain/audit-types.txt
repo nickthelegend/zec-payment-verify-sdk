@@ -1,0 +1,6 @@
+COMMAND: ["pnpm", "exec", "tsc", "--noEmit", "--strict", "--target", "ES2022", "--module", "NodeNext", "--moduleResolution", "NodeNext", "--skipLibCheck", "--esModuleInterop", "test/audit.test.ts"]
+CWD: packages/sdk
+START: 2026-10-26T08:38:45Z
+
+EXIT: 0
+ELAPSED_SECONDS: 0.94

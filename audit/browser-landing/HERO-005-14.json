@@ -1,0 +1,214 @@
+{
+  "id": "HERO-005",
+  "attempt": 14,
+  "at": "2026-10-26T08:27:00.711Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "local",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "exact camera animation",
+      "pass": true,
+      "actual": {
+        "position": "absolute",
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px",
+        "objectFit": "fill",
+        "content": "normal",
+        "animationName": "hk-drift",
+        "animationDuration": "24s",
+        "animationDelay": "0s",
+        "animationIterationCount": "infinite",
+        "animationDirection": "alternate",
+        "animationPlayState": "running",
+        "opacity": "1",
+        "display": "block",
+        "backgroundImage": "none",
+        "backdropFilter": "none"
+      }
+    },
+    {
+      "surface": "live",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "exact camera animation",
+      "pass": true,
+      "actual": {
+        "position": "absolute",
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px",
+        "objectFit": "fill",
+        "content": "normal",
+        "animationName": "hk-drift",
+        "animationDuration": "24s",
+        "animationDelay": "0s",
+        "animationIterationCount": "infinite",
+        "animationDirection": "alternate",
+        "animationPlayState": "running",
+        "opacity": "1",
+        "display": "block",
+        "backgroundImage": "none",
+        "backdropFilter": "none"
+      }
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/",
+      "status": 200,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "application/octet-stream"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "computed": {
+    "stage": {
+      "position": "absolute",
+      "top": "0px",
+      "right": "0px",
+      "bottom": "0px",
+      "left": "0px",
+      "objectFit": "fill",
+      "content": "normal",
+      "animationName": "hk-drift",
+      "animationDuration": "24s",
+      "animationDelay": "0s",
+      "animationIterationCount": "infinite",
+      "animationDirection": "alternate",
+      "animationPlayState": "running",
+      "opacity": "1",
+      "display": "block",
+      "backgroundImage": "none",
+      "backdropFilter": "none"
+    },
+    "before": {
+      "position": "absolute",
+      "top": "0px",
+      "right": "0px",
+      "bottom": "0px",
+      "left": "0px",
+      "objectFit": "fill",
+      "content": "\"\"",
+      "animationName": "hk-sweep",
+      "animationDuration": "9s",
+      "animationDelay": "2.6s",
+      "animationIterationCount": "infinite",
+      "animationDirection": "normal",
+      "animationPlayState": "running",
+      "opacity": "1",
+      "display": "block",
+      "backgroundImage": "linear-gradient(105deg, rgba(0, 0, 0, 0) 38%, rgba(255, 255, 255, 0.5) 50%, rgba(0, 0, 0, 0) 62%)",
+      "backdropFilter": "none"
+    }
+  },
+  "status": "PASS",
+  "failureCounts": {
+    "assertions": 0,
+    "console": 0,
+    "pageErrors": 0,
+    "http": 0,
+    "requests": 0
+  }
+}

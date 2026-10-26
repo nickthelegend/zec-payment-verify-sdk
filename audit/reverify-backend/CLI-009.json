@@ -1,0 +1,15 @@
+{
+  "id": "CLI-009",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Published matching unified address yields JSON owns true, per-receiver orchard/sapling booleans or null and exit 0, offline.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: owns matching address exits 0; owns=true with orchard/sapling boolean or null; offline. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-009 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: owns matching address exits 0; owns=true with orchard/sapling boolean or null; offline. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-009 owns matching receiver offline 4ms"
+  ]
+}

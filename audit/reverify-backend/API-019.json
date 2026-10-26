@@ -1,0 +1,60 @@
+{
+  "id": "API-019",
+  "at": "2026-10-26T10:33:04.190Z",
+  "status": "PASS",
+  "note": "unlisted and absent origins receive JSON without CORS permission",
+  "records": [
+    {
+      "server": "api",
+      "pid": 8499,
+      "port": 51446,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/20.sqlite"
+    },
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:04 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "ok": true,
+        "payTo": "",
+        "paths": [],
+        "lightwalletd": {
+          "urls": [
+            "https://testnet.zec.rocks:443"
+          ],
+          "quorum": 1
+        }
+      }
+    },
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:04 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "ok": true,
+        "payTo": "",
+        "paths": [],
+        "lightwalletd": {
+          "urls": [
+            "https://testnet.zec.rocks:443"
+          ],
+          "quorum": 1
+        }
+      }
+    }
+  ]
+}

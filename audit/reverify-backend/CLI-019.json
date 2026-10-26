@@ -1,0 +1,15 @@
+{
+  "id": "CLI-019",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Endpoint up to three blocks behind the transaction block yields `NOT_CONFIRMED` and confirmations 0 rather than disagreement; agreeing mined tips use lowest tip for confirmations; at/past-block absence or 100-block lag yields disagreement.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: live authenticated record then explicit local rule inputs: 1/2/3-block lag NOT_CONFIRMED/0 confirmations; lowest tip used; at/past/100-behind absence disagrees; no RPC mock. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-019 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: live authenticated record then explicit local rule inputs: 1/2/3-block lag NOT_CONFIRMED/0 confirmations; lowest tip used; at/past/100-behind absence disagrees; no RPC mock. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-019 lag rule on local copies of a live authenticated report 2466ms"
+  ]
+}

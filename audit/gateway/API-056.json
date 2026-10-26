@@ -1,0 +1,15 @@
+{
+  "id": "API-056",
+  "at": "2026-10-26T10:10:50.241Z",
+  "status": "PASS",
+  "note": "concurrent lower/uppercase recorded payment yields exactly one 200 and one 402",
+  "records": [
+    {
+      "command": "pnpm --filter @zpv/gateway test --reporter=verbose",
+      "log": "audit/gateway/suite.txt",
+      "tests": [
+        " ✓ test/hardening.test.ts > paywall hardening > two concurrent requests with the same payment are served once, whatever the txid case 1805ms"
+      ]
+    }
+  ]
+}

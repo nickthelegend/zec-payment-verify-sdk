@@ -1,0 +1,80 @@
+{
+  "id": "API-002",
+  "at": "2026-10-26T10:10:07.767Z",
+  "status": "PASS",
+  "note": "main.ts health, default paths, price and confirmation floor",
+  "records": [
+    {
+      "server": "main",
+      "pid": 38133,
+      "port": 59392,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/2.sqlite"
+    },
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:07 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "ok": true,
+        "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+        "paths": [
+          "/api/quote",
+          "/api/report"
+        ],
+        "lightwalletd": {
+          "urls": [
+            "https://testnet.zec.rocks:443"
+          ],
+          "quorum": 1
+        }
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:07 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "payment required",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "10000",
+            "resource": "/api/quote",
+            "description": "/api/quote: send 10000 zatoshi to payTo with the memo zpv-1793010308-c079e273d523c6fc-zS44XnucT6wr1yDcdXH-BW, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+            "maxTimeoutSeconds": 900,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "zpv-1793010308-c079e273d523c6fc-zS44XnucT6wr1yDcdXH-BW",
+              "expiresAt": 1793010308,
+              "paymentUri": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTMwMTAzMDgtYzA3OWUyNzNkNTIzYzZmYy16UzQ0WG51Y1Q2d3IxeURjZFhILUJX",
+              "minConf": 1
+            },
+            "amountZat": "10000",
+            "memo": "zpv-1793010308-c079e273d523c6fc-zS44XnucT6wr1yDcdXH-BW",
+            "minConf": 1,
+            "expiresAt": 1793010308000,
+            "zip321": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTMwMTAzMDgtYzA3OWUyNzNkNTIzYzZmYy16UzQ0WG51Y1Q2d3IxeURjZFhILUJX"
+          }
+        ]
+      }
+    }
+  ]
+}

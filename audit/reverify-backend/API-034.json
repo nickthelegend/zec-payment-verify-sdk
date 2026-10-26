@@ -1,0 +1,30 @@
+{
+  "id": "API-034",
+  "at": "2026-10-26T10:33:14.028Z",
+  "status": "PASS",
+  "note": "/api/quote unsupported methods rejected before claims",
+  "records": [
+    {
+      "server": "main",
+      "pid": 11646,
+      "port": 51492,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/35.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "POST",
+      "status": 405,
+      "headers": {
+        "allow": "GET, HEAD, OPTIONS",
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:14 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "POST is not allowed on a paid path: GET it"
+      }
+    }
+  ]
+}

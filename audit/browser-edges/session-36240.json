@@ -1,0 +1,40 @@
+{
+  "started": "2026-10-26T09:00:03.937Z",
+  "runnerPid": 36240,
+  "channel": "chrome",
+  "headless": true,
+  "video": false,
+  "trace": false,
+  "rowTimeoutMs": 90000,
+  "urls": {
+    "hosted": "https://hanko-dashboard-six.vercel.app",
+    "local": "http://localhost:5187",
+    "down": "http://localhost:5188",
+    "landing": "http://127.0.0.1:5197",
+    "reference": "http://127.0.0.1:5197/reference.html"
+  },
+  "processes": [
+    {
+      "label": "dashboard 5187",
+      "pid": 36242
+    },
+    {
+      "label": "dashboard 5188",
+      "pid": 36244
+    },
+    {
+      "label": "landing/reference static",
+      "pid": 36246
+    },
+    {
+      "label": "Google Chrome",
+      "pid": 36247
+    }
+  ],
+  "notes": [
+    "No gateway; down/502/503 local API points at closed loopback port. Faults and synthetic responses explicitly identified per check. No transaction signing or submission.",
+    "Timeout advances Chrome virtual time beyond the production 90-second timer, within the 90-second wall-clock row budget."
+  ],
+  "closedPortVerified": true,
+  "browser": "155.0.8059.85"
+}

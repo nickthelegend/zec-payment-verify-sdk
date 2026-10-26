@@ -1,0 +1,15 @@
+{
+  "id": "API-051",
+  "at": "2026-10-26T10:33:34.802Z",
+  "status": "PASS",
+  "note": "six absent-txid HTTP checks in existing suite do not close challenge; recorded matching payment then accepted",
+  "records": [
+    {
+      "command": "pnpm --filter @zpv/gateway test --reporter=verbose",
+      "log": "audit/reverify-backend/suite.txt",
+      "tests": [
+        " ✓ test/limits.test.ts > gateway limits > TX_NOT_FOUND (lightwalletd has not seen the payment yet) is not a refused attempt: 5 unknown txids, then the real payment is served 5511ms"
+      ]
+    }
+  ]
+}

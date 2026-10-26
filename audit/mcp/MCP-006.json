@@ -1,0 +1,80 @@
+{
+  "id": "MCP-006",
+  "at": "2026-10-26T10:22:21.360Z",
+  "status": "PASS",
+  "assertion": "Without store readOnlyHint true, replay warning, repeated payment remains paid/single_use false",
+  "evidence": [
+    {
+      "annotations": {
+        "readOnlyHint": true
+      },
+      "description": "Did transaction `txid` pay the merchant at least `amount_zat` zatoshis with memo `memo`, with at least `min_conf` confirmations and no transparent part? Checked live on Zcash testnet with the merchant’s incoming viewing key. Returns ok, verdict (paid, refused, or unverified when ZPV_LWD_URLS lists several lightwalletd endpoints and they disagree or too few answer), reasons (TX_NOT_FOUND, NO_OUTPUT_TO_KEY, MEMO_MISMATCH, AMOUNT_TOO_LOW, NOT_CONFIRMED, TRANSPARENT_PART, UNVERIFIED_DISAGREEMENT, UNVERIFIED_QUORUM, ALREADY_USED) and what the key saw. Replay: unless the server runs with ZPV_STORE (single_use true in the answer), a check does not mark a payment as used: the same txid passes every time it is asked, and without a memo any past payment to the merchant passes, so record the txids you accepted and always pass the invoice memo. With ZPV_STORE each payment is accepted once and a second check answers ALREADY_USED. min_conf cannot go below the server’s floor (ZPV_MCP_MIN_CONF, default 1)."
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22589,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22589,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    }
+  ]
+}

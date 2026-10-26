@@ -1,0 +1,1279 @@
+{
+  "id": "PAGE-015",
+  "attempt": 1,
+  "at": "2026-10-26T08:36:46.877Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "live",
+      "check": "reference HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "all code panes present",
+      "pass": true,
+      "actual": 19
+    },
+    {
+      "surface": "live",
+      "check": "pane 0 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 0 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 1 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 1 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 2 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 2 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 3 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 3 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 4 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 4 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 5 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 5 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 6 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 6 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 7 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 7 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 8 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 8 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 9 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 9 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 10 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 10 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 11 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 11 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 12 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 12 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 13 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 13 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 14 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 14 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 15 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 15 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 16 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 16 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 17 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 17 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 18 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 18 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 0 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 0 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 1 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 1 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 2 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 2 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 3 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 3 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 4 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 4 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 5 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 5 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 6 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 6 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 7 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 7 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 8 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 8 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 9 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 9 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 10 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 10 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 11 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 11 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 12 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 12 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 13 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 13 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 14 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 14 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 15 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 15 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 16 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 16 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 17 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 17 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 18 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 18 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 0 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 0 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 1 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 1 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 2 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 2 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 3 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 3 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 4 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 4 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 5 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 5 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 6 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 6 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 7 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 7 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 8 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 8 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 9 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 9 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 10 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 10 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 11 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 11 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 12 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 12 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 13 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 13 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 14 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 14 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 15 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 15 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 16 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 16 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 17 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 17 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 18 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "pane 18 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 93890
+    },
+    {
+      "surface": "live",
+      "check": "Copied resets to Copy after the 1600 ms timer",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "reference HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "all code panes present",
+      "pass": true,
+      "actual": 19
+    },
+    {
+      "surface": "local",
+      "check": "pane 0 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 0 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 1 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 1 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 2 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 2 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 3 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 3 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 4 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 4 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 5 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 5 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 6 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 6 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 7 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 7 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 8 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 8 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 9 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 9 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 10 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 10 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 11 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 11 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 12 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 12 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 13 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 13 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 14 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 14 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 15 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 15 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 16 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 16 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 17 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 17 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 18 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 18 copies exact trimmed visible ts text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 0 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 0 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 1 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 1 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 2 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 2 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 3 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 3 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 4 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 4 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 5 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 5 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 6 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 6 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 7 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 7 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 8 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 8 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 9 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 9 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 10 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 10 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 11 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 11 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 12 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 12 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 13 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 13 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 14 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 14 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 15 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 15 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 16 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 16 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 17 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 17 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 18 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 18 copies exact trimmed visible rust text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 0 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 0 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 1 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 1 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 2 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 2 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 3 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 3 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 4 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 4 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 5 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 5 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 6 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 6 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 7 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 7 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 8 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 8 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 9 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 9 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 10 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 10 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 11 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 11 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 12 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 12 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 13 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 13 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 14 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 14 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 15 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 15 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 16 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 16 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 17 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 17 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 18 has exactly one Copy button",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "pane 18 copies exact trimmed visible cli text",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 93890
+    },
+    {
+      "surface": "local",
+      "check": "Copied resets to Copy after the 1600 ms timer",
+      "pass": true
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:54657/reference.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "status": 200,
+      "resourceType": "document"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:54657/reference.html",
+      "status": 200,
+      "resourceType": "document"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/browser-reference/PAGE-015-live-copied-1.jpg",
+    "audit/browser-reference/PAGE-015-local-copied-1.jpg"
+  ],
+  "failures": {
+    "network": [],
+    "console": [],
+    "pageErrors": [],
+    "requestFailures": []
+  },
+  "status": "PASS"
+}

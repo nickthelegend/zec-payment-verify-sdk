@@ -1,0 +1,93 @@
+COMMAND: ["pnpm", "--filter", "@zpv/gateway", "test", "--reporter=verbose"]
+CWD: /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t5
+Started UTC: 2026-10-26T10:08:49Z
+
+> @zpv/gateway@0.1.0 test /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t5/packages/gateway
+> vitest run --reporter=verbose
+
+
+ RUN  v3.2.7 /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t5/packages/gateway
+
+ × test/kage-client.test.ts > Shielded x402’s own client (zec-shielded-x402 packages/x402-zcash) against Hanko > parsePaymentRequired accepts Hanko’s 402 with a stateless HMAC memo, and its ZIP 321 URI is Hanko’s (offline) 2ms
+   → Setup required: KAGE_X402_DIR (Shielded x402's packages/x402-zcash, not found at /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-shielded-x402/packages/x402-zcash)
+ × test/kage-client.test.ts > Shielded x402’s own client (zec-shielded-x402 packages/x402-zcash) against Hanko > fetchWithPayment presents a real mined payment → 200 with a successful settlement; the same payment again → 402 0ms
+   → Setup required: KAGE_X402_DIR (Shielded x402's packages/x402-zcash, not found at /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-shielded-x402/packages/x402-zcash)
+ ✓ test/limits.test.ts > gateway limits > 150 verify requests at once start at most ZPV_MAX_CHECKS checks; past the queue they are 503 + Retry-After 4860ms
+ ✓ test/limits.test.ts > gateway limits > TX_NOT_FOUND (lightwalletd has not seen the payment yet) is not a refused attempt: 5 unknown txids, then the real payment is served 4972ms
+ ✓ test/limits.test.ts > gateway limits > after 5 counted refusals a challenge is closed: a payment that pays it is still checked, never served, and recorded for a refund (CHALLENGE_CLOSED) 9653ms
+ ✓ test/refunds.test.ts > refunds > a refused payment whose funds reached the key is recorded and listed with the admin token; one that paid someone else is not 6561ms
+ ✓ test/refunds.test.ts > refunds > without an admin token /api/refunds is off: Setup required, even from loopback with no proxy headers 4ms
+ ✓ test/refunds.test.ts > mined-time expiry > a payment mined before its challenge expired is served when presented later; mined after expiry plus the grace it is PAYMENT_LATE and recorded 3125ms
+ ✓ test/api.test.ts > who can run a check > a paywall does not serve /api/verify unless asked to (verifyApi), so the production paywall exposes no free checks 13ms
+ ✓ test/api.test.ts > who can run a check > /api/verify answers 415 to a body that is not application/json, before any check (a cross-site simple POST) 16ms
+ ✓ test/api.test.ts > who can run a check > a flood of /api/verify calls cannot take the paywall’s own check slots: with ZPV_MAX_CHECKS=1 and ZPV_MAX_QUEUE=0 the payment is still served 8011ms
+ ✓ test/hardening.test.ts > paywall hardening > two concurrent requests with the same payment are served once, whatever the txid case 1805ms
+ ✓ test/hardening.test.ts > paywall hardening > open challenges are capped and expired ones are dropped 211ms
+ ✓ test/hardening.test.ts > paywall hardening > an X-PAYMENT that is JSON but not {memo, txid} strings is a 400, not a crash 5ms
+ ✓ test/hardening.test.ts > paywall hardening > a lightwalletd quorum shortfall → 503 unverified, nothing served, and the payment stays claimable 3152ms
+ ✓ test/paywall.test.ts > paywall > answers 402 with a challenge and a ZIP-321 URI 10ms
+ ✓ test/paywall.test.ts > paywall > a mined payment with the challenge memo and amount → 200 with a receipt; the same txid cannot pay again 1663ms
+ ✓ test/paywall.test.ts > paywall > someone else’s payment, an unknown memo or garbage is refused 1600ms
+ ✓ test/paywall.test.ts > paywall > /api/verify returns the SDK verdict for either rail, with CORS for the dashboard 1551ms
+ ✓ test/startup.test.ts > paywall startup checks > the published Hanko address with its own viewing key starts and listens 564ms
+ ✓ test/startup.test.ts > paywall startup checks > bad numbers are refused at startup with exit 2, naming the variable 2907ms
+ ✓ test/startup.test.ts > paywall startup checks > a payTo that the viewing key cannot see, or that is not a shielded testnet address, is refused 584ms
+ ✓ test/store.test.ts > SQLite paywall store > a restarted paywall on the same file refuses a payment it already served 1660ms
+ ✓ test/store.test.ts > SQLite paywall store > a challenge issued before a restart can still be answered after it 4ms
+ ✓ test/store.test.ts > SQLite paywall store > two paywall processes on one file > the same payment sent to both at once is served once 1661ms
+ ✓ test/store.test.ts > store claims > an expired lease can be taken over, the old holder can then neither release nor settle it, and a settled txid stays used 2ms
+ ✓ test/x402.test.ts > x402 v1 wire format > the 402 is an x402 v1 PaymentRequiredResponse that Kage’s parsePaymentRequired accepts (offline) 15ms
+ ✓ test/x402.test.ts > x402 v1 wire format > Kage’s X-PAYMENT for a real payment → 200, X-PAYMENT-RESPONSE {success, transaction, network, payer: ""}, the receipt in the body 1672ms
+ ✓ test/x402.test.ts > x402 v1 wire format > a v1 envelope with another scheme, network or version is 400 (offline) 7ms
+stdout | test/challenges.test.ts > stateless challenges > 10,000 GETs store nothing and do not stop the next buyer getting a 402
+10,000 GETs in 936 ms
+
+ ✓ test/challenges.test.ts > stateless challenges > 10,000 GETs store nothing and do not stop the next buyer getting a 402 948ms
+ ✓ test/challenges.test.ts > stateless challenges > OPTIONS is 204, HEAD gets the 402 headers without a body, other methods are 405 and issue nothing 49ms
+ ✓ test/challenges.test.ts > stateless challenges > a memo only answers its own resource and price, and a changed expiry, nonce or tag is refused before any check 11ms
+ ✓ test/challenges.test.ts > stateless challenges > with a SQLite store the HMAC key survives a restart; in memory it does not 5ms
+ ✓ test/status.test.ts > gateway status codes > malformed testnet key encoding has a stable public error without core parser details 18ms
+ ✓ test/status.test.ts > gateway status codes > lightwalletd unreachable: /api/verify is 502 with Retry-After, the paywall 503 with Retry-After 15ms
+ ✓ test/status.test.ts > gateway status codes > a missing zpay-verify binary is 503 Setup required on both 2ms
+ ✓ test/status.test.ts > gateway status codes > a body that is not a verify request is 400, never 502 23ms
+ ✓ test/status.test.ts > gateway status codes > an upstream failure is 502 with a one-line message, without the library’s request dump or version footer 458ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/kage-client.test.ts > Shielded x402’s own client (zec-shielded-x402 packages/x402-zcash) against Hanko > parsePaymentRequired accepts Hanko’s 402 with a stateless HMAC memo, and its ZIP 321 URI is Hanko’s (offline)
+Error: Setup required: KAGE_X402_DIR (Shielded x402's packages/x402-zcash, not found at /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-shielded-x402/packages/x402-zcash)
+ ❯ kage test/kage-client.test.ts:26:36
+     24| };
+     25| async function kage(): Promise<Kage> {
+     26|   if (!existsSync(KAGE_SRC)) throw new Error(`Setup required: KAGE_X40…
+       |                                    ^
+     27|   return (await import(pathToFileURL(KAGE_SRC).href)) as Kage;
+     28| }
+ ❯ test/kage-client.test.ts:41:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/kage-client.test.ts > Shielded x402’s own client (zec-shielded-x402 packages/x402-zcash) against Hanko > fetchWithPayment presents a real mined payment → 200 with a successful settlement; the same payment again → 402
+Error: Setup required: KAGE_X402_DIR (Shielded x402's packages/x402-zcash, not found at /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-shielded-x402/packages/x402-zcash)
+ ❯ kage test/kage-client.test.ts:26:36
+     24| };
+     25| async function kage(): Promise<Kage> {
+     26|   if (!existsSync(KAGE_SRC)) throw new Error(`Setup required: KAGE_X40…
+       |                                    ^
+     27|   return (await import(pathToFileURL(KAGE_SRC).href)) as Kage;
+     28| }
+ ❯ test/kage-client.test.ts:52:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 10 passed (11)
+      Tests  2 failed | 36 passed (38)
+   Start at  15:38:49
+   Duration  60.83s (transform 92ms, setup 0ms, collect 1.62s, tests 58.06s, environment 1ms, prepare 295ms)
+
+/Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t5/packages/gateway:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @zpv/gateway@0.1.0 test: `vitest run --reporter=verbose`
+Exit status 1
+EXIT: 1
+Elapsed seconds: 61.40

@@ -1,0 +1,98 @@
+{
+  "id": "HERO-009",
+  "attempt": 1,
+  "at": "2026-10-26T08:26:31.856Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "live",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "live hero HTTP 200 WebP 1600x900",
+      "pass": false,
+      "actual": {
+        "response": {
+          "surface": "live",
+          "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+          "status": 200,
+          "resourceType": "image",
+          "contentType": "image/webp"
+        },
+        "dimensions": [
+          1600,
+          901
+        ]
+      }
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/l/font?kit=tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYaTNPxDcwgknk-4&skey=48ad01c60053c2ae&v=v24",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/l/font?kit=ieVd2YZDLWuGJpnzaiwFXS9tYvBRzyFLlZg_f_Ncs2Y46ti9FeTyLsmLx61K8Joxh47n9VM&skey=5b527bd9249b78de&v=v12",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [
+    {
+      "surface": "live",
+      "message": "live hero HTTP 200 WebP 1600x900"
+    }
+  ],
+  "status": "FAIL",
+  "failureCounts": {
+    "assertions": 1,
+    "console": 0,
+    "pageErrors": 0,
+    "http": 0,
+    "requests": 0
+  }
+}

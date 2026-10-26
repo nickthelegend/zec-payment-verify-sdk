@@ -1,0 +1,20 @@
+{
+  "id": "CHAIN-013",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Read-only authorization verifies with the actual transparent previous outputs and published Sapling parameters; missing or one-zatoshi-altered previous output makes authorization fail.",
+  "detail": "Fresh recorded Sapling and Ironwood shielding authorization uses actual fetched transparent previous outputs; missing or one-zatoshi-altered previous output fails authorization. Published Sapling parameters are used.",
+  "checks": [
+    {
+      "suite": "core",
+      "test": "transparent_inputs_are_signed_over_with_their_previous_outputs_and_sapling_proofs_are_checked",
+      "passed": true
+    }
+  ],
+  "evidence": [
+    "audit/reverify-backend/core.txt"
+  ],
+  "passingLogLines": [
+    "test transparent_inputs_are_signed_over_with_their_previous_outputs_and_sapling_proofs_are_checked ... ok"
+  ]
+}
