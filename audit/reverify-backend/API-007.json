@@ -1,0 +1,71 @@
+{
+  "id": "API-007",
+  "at": "2026-10-26T10:33:01.213Z",
+  "status": "PASS",
+  "note": "production verify disabled by default; enabled by explicit flag and api.ts",
+  "records": [
+    {
+      "server": "main",
+      "pid": 7102,
+      "port": 51401,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/6.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 404,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:00 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "not found"
+      }
+    },
+    {
+      "server": "main",
+      "pid": 7209,
+      "port": 51403,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/7.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:00 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "the request must be an object with a rail (zcash or null402)"
+      }
+    },
+    {
+      "server": "api",
+      "pid": 7392,
+      "port": 51405,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/8.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:01 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "the request must be an object with a rail (zcash or null402)"
+      }
+    }
+  ]
+}

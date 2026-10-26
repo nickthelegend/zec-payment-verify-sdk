@@ -1,0 +1,15 @@
+{
+  "id": "CHAIN-017",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Reads target null-402's existing Fuji verifier `0x0b44836dDc460f589ce4EB97f276e533A2bE6060` and pool `0x39a9C4EfabEBA954545Ecb4b16Ba1d92ec46cA1C`, chainId 43113; report states Hanko deploys no contracts.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real eth_chainId=43113; proof calls use existing published verifier/pool; Hanko deploys no contracts. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-017 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real eth_chainId=43113; proof calls use existing published verifier/pool; Hanko deploys no contracts. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-017 Fuji existing-contract provenance 232ms"
+  ]
+}

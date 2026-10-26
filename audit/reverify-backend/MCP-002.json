@@ -1,0 +1,41 @@
+{
+  "id": "MCP-002",
+  "at": "2026-10-26T10:29:03.341Z",
+  "status": "PASS",
+  "assertion": "Paid JSON includes all documented fields, real outputs/height/depth and single_use false",
+  "evidence": [
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22596,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    }
+  ]
+}

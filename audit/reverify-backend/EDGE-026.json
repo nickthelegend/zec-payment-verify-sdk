@@ -1,0 +1,15 @@
+{
+  "id": "EDGE-026",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "`https://api.avax-test.network/ext/bc/C/rpc` reports chainId 43113; receipt and eth_call results are read-only, checked at one reported block for verifier/root/spent; no signing or submission method is used.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real RPC eth_chainId 43113 and success receipt; observed exactly three SDK eth_call methods at the reported common block; allowlisted read-only methods only. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT EDGE-026 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real RPC eth_chainId 43113 and success receipt; observed exactly three SDK eth_call methods at the reported common block; allowlisted read-only methods only. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > EDGE-026 Fuji RPC chain ID and same-block read calls 816ms"
+  ]
+}

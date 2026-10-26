@@ -1,0 +1,13 @@
+{
+  "id": "CLI-013",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "UNTESTED",
+  "expected": "Source maps decoded testnet UFVK to encoded incoming-only key, exit 0; executing this successful path requires prohibited UFVK access and key output, so later label UNTESTED unless restrictions are explicitly changed.",
+  "detail": "Successful derive requires prohibited UFVK access and incoming-key output. Source contract reviewed; only absent/malformed synthetic paths run under CLI-012. No successful derive executed.",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/documentation.json",
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": []
+}

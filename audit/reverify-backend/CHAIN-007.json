@@ -1,0 +1,15 @@
+{
+  "id": "CHAIN-007",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Same recorded payslip with expected 100000 zat yields `AMOUNT_TOO_LOW`, paidZat 50000.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 100000; paidZat 50000; exact reasons AMOUNT_TOO_LOW; memo/output matched. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-007 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 100000; paidZat 50000; exact reasons AMOUNT_TOO_LOW; memo/output matched. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-007 recorded payslip receiver/amount 1849ms"
+  ]
+}

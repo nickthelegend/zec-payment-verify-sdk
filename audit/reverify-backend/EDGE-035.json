@@ -1,0 +1,15 @@
+{
+  "id": "EDGE-035",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Changing payTo, requiredAmount or contextHash expectation yields PAY_TO_MISMATCH, AMOUNT_MISMATCH or CONTEXT_MISMATCH; tampering proof amount signal by 10\u00d7 yields BAD_PROOF; unknown root yields ROOT_UNKNOWN.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real Fuji verifier rejects 10x amount BAD_PROOF; root zero gives ROOT_UNKNOWN; merchant mismatches give all three exact mismatch reasons. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT EDGE-035 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real Fuji verifier rejects 10x amount BAD_PROOF; root zero gives ROOT_UNKNOWN; merchant mismatches give all three exact mismatch reasons. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > EDGE-035 proof amount x10, unknown root and expectation mismatches 1882ms"
+  ]
+}

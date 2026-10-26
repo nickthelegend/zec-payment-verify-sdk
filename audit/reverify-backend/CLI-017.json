@@ -1,0 +1,15 @@
+{
+  "id": "CLI-017",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "One answer at quorum 2 yields ok false, `verdict: unverified`, `UNVERIFIED_QUORUM`, paidZat 0, report null and endpoint failure details.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: one real paid answer plus dead endpoint at quorum 2 gives unverified, paidZat 0, report null, endpoint error. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-017 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: one real paid answer plus dead endpoint at quorum 2 gives unverified, paidZat 0, report null, endpoint error. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-017 quorum failure clears all payment fields 2756ms"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "CLI-003",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Floor above available depth emits `NOT_CONFIRMED` and actual confirmations; exit 1; min-conf zero is accepted by the CLI only as an explicit caller choice.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: floor 100000000 exits 1 NOT_CONFIRMED with actual depth; explicit --min-conf 0 exits 0. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-003 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: floor 100000000 exits 1 NOT_CONFIRMED with actual depth; explicit --min-conf 0 exits 0. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-003 confirmation floor including explicit zero 3471ms"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/nickthelegend/zec-shielded-x402",
+  "revision": "50acc85850aabfde02e6ad334e8cd67eebab8708",
+  "packagePath": "/var/folders/tp/gcpvr1451r350sq27v4csrq40000gn/T/hanko-reverify-kage-kyizl_kn/checkout/packages/x402-zcash",
+  "clonedFor": "read-only parser and recorded-payment HTTP client interoperability tests",
+  "credentialsUsed": false,
+  "signingOrSending": false,
+  "clientSourceSha256": "e0d052856287d79b678cfef3726578c1c03c34952f8f2a1f301164ebce512dd7",
+  "temporaryCheckoutRemoved": true
+}

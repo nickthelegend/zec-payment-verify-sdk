@@ -1,0 +1,29 @@
+{
+  "id": "API-014",
+  "at": "2026-10-26T10:33:02.943Z",
+  "status": "PASS",
+  "note": "malformed txid caller error with no report",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 8487,
+      "port": 51428,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/15.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "not a txid (64 hex characters): invalid"
+      }
+    }
+  ]
+}

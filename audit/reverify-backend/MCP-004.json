@@ -1,0 +1,268 @@
+{
+  "id": "MCP-004",
+  "at": "2026-10-26T10:29:17.175Z",
+  "status": "PASS",
+  "assertion": "Default/configured floor is reported and enforced; malformed/out-of-range floors are Setup required",
+  "evidence": [
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3",
+          "min_conf": 0
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22597,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_MCP_MIN_CONF": "100000000"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3",
+          "min_conf": 0
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "NOT_CONFIRMED"
+          ],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22597,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 100000000,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3",
+          "min_conf": 100000001
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "NOT_CONFIRMED"
+          ],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22597,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 100000001,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_MCP_MIN_CONF": "abc"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "Setup required: ZPV_MCP_MIN_CONF (a whole number from 0 to 4294967295)"
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_MCP_MIN_CONF": "1.5"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "Setup required: ZPV_MCP_MIN_CONF (a whole number from 0 to 4294967295)"
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_MCP_MIN_CONF": "-1"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "Setup required: ZPV_MCP_MIN_CONF (a whole number from 0 to 4294967295)"
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_MCP_MIN_CONF": "4294967296"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "Setup required: ZPV_MCP_MIN_CONF (a whole number from 0 to 4294967295)"
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_MCP_MIN_CONF": "9007199254740993"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "Setup required: ZPV_MCP_MIN_CONF (a whole number from 0 to 4294967295)"
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_MCP_MIN_CONF": "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "Setup required: ZPV_MCP_MIN_CONF (a whole number from 0 to 4294967295)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "CHAIN-016",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Read-only receipt/call data confirms recorded block 57020809; correct payTo/amount/recipient yield `paid`, settled true through SDK and MCP.",
+  "detail": "SDK and real stdio MCP both freshly verify recorded settlement at block 57020809 with matching payTo/amount/recipient as paid and settled.",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt",
+    "audit/reverify-backend/MCP-013.json",
+    "audit/reverify-backend/mcp.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-016 UNTESTED: SDK path PASS for recorded 0xd91c0ab7\u20261e5c at block57020809, correct recipient/payTo/amount and paid/settled. Dependency for complete row: live MCP result for this recorded settlement from the task owning MCP; this task is explicitly forbidden to run MCP suites; command: python3 audit/reverify-backend/run.py sdk; log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-016 second Fuji settlement SDK path; MCP evidence belongs to another task 728ms"
+  ]
+}

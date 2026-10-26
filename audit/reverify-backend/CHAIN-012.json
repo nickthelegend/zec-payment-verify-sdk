@@ -1,0 +1,15 @@
+{
+  "id": "CHAIN-012",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "UNTESTED",
+  "expected": "Transaction is confirmed and its five-note demo funding matches README's recorded funding claim; funding is not mislabelled as a merchant invoice acceptance.",
+  "detail": "Dependency: published payer incoming viewing credential for fundTx a2c0578b\u202657d3; deployments/testnet.json omits it. Read-only authorization/inclusion confirms the funding transaction, but five notes/amounts cannot be decrypted under the published merchant/x402 credentials. No wallet or private credential accessed; command: python3 audit/reverify-backend/run.py sdk; log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-012 UNTESTED: Dependency: published payer incoming viewing credential for fundTx a2c0578b\u202657d3; deployments/testnet.json omits it. Read-only authorization/inclusion confirms the funding transaction, but five notes/amounts cannot be decrypted under the published merchant/x402 credentials. No wallet or private credential accessed; command: python3 audit/reverify-backend/run.py sdk; log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-012 five-note funding is not invoice acceptance 1747ms"
+  ]
+}

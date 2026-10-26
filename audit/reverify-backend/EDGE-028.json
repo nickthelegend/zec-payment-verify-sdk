@@ -1,0 +1,26 @@
+{
+  "id": "EDGE-028",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Swapped bytes return `lightwalletd returned a transaction whose txid differs from the one requested`; recorded compact block locally missing txid or naming wrong height returns `lightwalletd answered inconsistently`, never paid.",
+  "detail": "Fresh actual transaction bytes run through the production txid parser. Swapped txid, missing inclusion and wrong compact-block height produce the required errors and no paid answer.",
+  "checks": [
+    {
+      "suite": "core",
+      "test": "recorded_transaction_bytes_cannot_be_swapped_for_another_requested_txid",
+      "passed": true
+    },
+    {
+      "suite": "core",
+      "test": "an_answer_whose_block_does_not_list_the_tx_is_inconsistent",
+      "passed": true
+    }
+  ],
+  "evidence": [
+    "audit/reverify-backend/core.txt"
+  ],
+  "passingLogLines": [
+    "test tests::recorded_transaction_bytes_cannot_be_swapped_for_another_requested_txid ... ok",
+    "test an_answer_whose_block_does_not_list_the_tx_is_inconsistent ... ok"
+  ]
+}

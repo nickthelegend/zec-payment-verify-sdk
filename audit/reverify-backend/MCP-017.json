@@ -1,0 +1,600 @@
+{
+  "id": "MCP-017",
+  "at": "2026-10-26T10:30:05.888Z",
+  "status": "PASS",
+  "assertion": "Each completed tool call (including schema rejection and both tools) appends at/tool/args/isError/result; new/existing logs mode 0600; no incoming credential in records",
+  "evidence": [
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "settled": true,
+          "status": "success",
+          "reasons": [
+            "UNBOUND"
+          ],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050637",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT",
+              "UNBOUND"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": true,
+        "settings": {
+          "ZPV_MCP_REQUIRE_MEMO": "1"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22599,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100001,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "AMOUNT_TOO_LOW"
+          ],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22599,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 1
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "memo is required: ZPV_MCP_REQUIRE_MEMO is set"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": -1,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Number must be greater than or equal to 0 at amount_zat"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_pay_to": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+          "expect_amount": "1000",
+          "expect_recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "settled": true,
+          "status": "success",
+          "reasons": [],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050643",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "existingFile": false,
+      "mode": "600",
+      "auditLog": [
+        {
+          "at": "2026-10-26T10:29:58.410Z",
+          "tool": "verify_zcash_payment",
+          "args": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "amount_zat": 100000,
+            "memo": "x402z-f19a63da20cbc0749ea800b3"
+          },
+          "isError": false,
+          "result": {
+            "ok": true,
+            "verdict": "paid",
+            "reasons": [],
+            "paid_zat": 100000,
+            "height": 4521112,
+            "confirmations": 22599,
+            "outputs": [
+              {
+                "pool": "Ironwood",
+                "value": 100000,
+                "memo": "x402z-f19a63da20cbc0749ea800b3",
+                "memo_binary": false
+              }
+            ],
+            "transparent": false,
+            "lightwalletd": "https://testnet.zec.rocks:443",
+            "min_conf": 1,
+            "single_use": false
+          }
+        },
+        {
+          "at": "2026-10-26T10:30:00.344Z",
+          "tool": "verify_zcash_payment",
+          "args": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "amount_zat": 100001,
+            "memo": "x402z-f19a63da20cbc0749ea800b3"
+          },
+          "isError": false,
+          "result": {
+            "ok": false,
+            "verdict": "refused",
+            "reasons": [
+              "AMOUNT_TOO_LOW"
+            ],
+            "paid_zat": 100000,
+            "height": 4521112,
+            "confirmations": 22599,
+            "outputs": [
+              {
+                "pool": "Ironwood",
+                "value": 100000,
+                "memo": "x402z-f19a63da20cbc0749ea800b3",
+                "memo_binary": false
+              }
+            ],
+            "transparent": false,
+            "lightwalletd": "https://testnet.zec.rocks:443",
+            "min_conf": 1,
+            "single_use": false
+          }
+        },
+        {
+          "at": "2026-10-26T10:30:00.345Z",
+          "tool": "verify_zcash_payment",
+          "args": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "amount_zat": 1
+          },
+          "isError": true,
+          "result": "memo is required: ZPV_MCP_REQUIRE_MEMO is set"
+        },
+        {
+          "at": "2026-10-26T10:30:00.347Z",
+          "tool": "verify_zcash_payment",
+          "args": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "amount_zat": -1,
+            "memo": "x402z-f19a63da20cbc0749ea800b3"
+          },
+          "isError": true,
+          "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Number must be greater than or equal to 0 at amount_zat"
+        },
+        {
+          "at": "2026-10-26T10:30:01.163Z",
+          "tool": "verify_null402_settlement",
+          "args": {
+            "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+            "expect_pay_to": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "expect_amount": "1000",
+            "expect_recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD"
+          },
+          "isError": false,
+          "result": {
+            "ok": true,
+            "verdict": "paid",
+            "settled": true,
+            "status": "success",
+            "reasons": [],
+            "checks": {
+              "proofValid": true,
+              "rootKnown": true,
+              "nullifierSpent": true
+            },
+            "signals": {
+              "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+              "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+              "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+              "requiredAmount": "1000",
+              "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+            },
+            "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+            "settled_in_block": "57020734",
+            "checked_at_block": "60050643",
+            "proof_check": {
+              "ok": false,
+              "reasons": [
+                "NULLIFIER_SPENT"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": true,
+        "settings": {
+          "ZPV_MCP_REQUIRE_MEMO": "1"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22599,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100001,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "AMOUNT_TOO_LOW"
+          ],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22599,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 1
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "memo is required: ZPV_MCP_REQUIRE_MEMO is set"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": -1,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Number must be greater than or equal to 0 at amount_zat"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_pay_to": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+          "expect_amount": "1000",
+          "expect_recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "settled": true,
+          "status": "success",
+          "reasons": [],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050650",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "existingFile": true,
+      "mode": "600",
+      "auditLog": [
+        {
+          "at": "2026-10-26T10:30:03.166Z",
+          "tool": "verify_zcash_payment",
+          "args": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "amount_zat": 100000,
+            "memo": "x402z-f19a63da20cbc0749ea800b3"
+          },
+          "isError": false,
+          "result": {
+            "ok": true,
+            "verdict": "paid",
+            "reasons": [],
+            "paid_zat": 100000,
+            "height": 4521112,
+            "confirmations": 22599,
+            "outputs": [
+              {
+                "pool": "Ironwood",
+                "value": 100000,
+                "memo": "x402z-f19a63da20cbc0749ea800b3",
+                "memo_binary": false
+              }
+            ],
+            "transparent": false,
+            "lightwalletd": "https://testnet.zec.rocks:443",
+            "min_conf": 1,
+            "single_use": false
+          }
+        },
+        {
+          "at": "2026-10-26T10:30:05.065Z",
+          "tool": "verify_zcash_payment",
+          "args": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "amount_zat": 100001,
+            "memo": "x402z-f19a63da20cbc0749ea800b3"
+          },
+          "isError": false,
+          "result": {
+            "ok": false,
+            "verdict": "refused",
+            "reasons": [
+              "AMOUNT_TOO_LOW"
+            ],
+            "paid_zat": 100000,
+            "height": 4521112,
+            "confirmations": 22599,
+            "outputs": [
+              {
+                "pool": "Ironwood",
+                "value": 100000,
+                "memo": "x402z-f19a63da20cbc0749ea800b3",
+                "memo_binary": false
+              }
+            ],
+            "transparent": false,
+            "lightwalletd": "https://testnet.zec.rocks:443",
+            "min_conf": 1,
+            "single_use": false
+          }
+        },
+        {
+          "at": "2026-10-26T10:30:05.066Z",
+          "tool": "verify_zcash_payment",
+          "args": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "amount_zat": 1
+          },
+          "isError": true,
+          "result": "memo is required: ZPV_MCP_REQUIRE_MEMO is set"
+        },
+        {
+          "at": "2026-10-26T10:30:05.067Z",
+          "tool": "verify_zcash_payment",
+          "args": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "amount_zat": -1,
+            "memo": "x402z-f19a63da20cbc0749ea800b3"
+          },
+          "isError": true,
+          "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Number must be greater than or equal to 0 at amount_zat"
+        },
+        {
+          "at": "2026-10-26T10:30:05.881Z",
+          "tool": "verify_null402_settlement",
+          "args": {
+            "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+            "expect_pay_to": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "expect_amount": "1000",
+            "expect_recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD"
+          },
+          "isError": false,
+          "result": {
+            "ok": true,
+            "verdict": "paid",
+            "settled": true,
+            "status": "success",
+            "reasons": [],
+            "checks": {
+              "proofValid": true,
+              "rootKnown": true,
+              "nullifierSpent": true
+            },
+            "signals": {
+              "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+              "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+              "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+              "requiredAmount": "1000",
+              "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+            },
+            "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+            "settled_in_block": "57020734",
+            "checked_at_block": "60050650",
+            "proof_check": {
+              "ok": false,
+              "reasons": [
+                "NULLIFIER_SPENT"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

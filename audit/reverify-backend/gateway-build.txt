@@ -1,0 +1,10 @@
+COMMAND: ["pnpm", "--filter", "@zpv/gateway", "build"]
+CWD: .
+START: 2026-10-26T10:27:07Z
+
+> @zpv/gateway@0.1.0 build /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t10/packages/gateway
+> tsc -p tsconfig.json
+
+
+EXIT: 0
+ELAPSED_SECONDS: 1.08

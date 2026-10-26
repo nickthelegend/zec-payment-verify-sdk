@@ -1,0 +1,15 @@
+{
+  "id": "CHAIN-005",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Confirmed transaction pays 10000 zat with matching memo and has a transparent part; shielded-only verification returns `TRANSPARENT_PART`.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded transparent-part; exact reasons TRANSPARENT_PART; paidZat 10000; decrypted output/pools checked. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-005 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded transparent-part; exact reasons TRANSPARENT_PART; paidZat 10000; decrypted output/pools checked. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-005 recorded transparent-part 2021ms"
+  ]
+}

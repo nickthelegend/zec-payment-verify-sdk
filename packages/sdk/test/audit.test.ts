@@ -20,9 +20,10 @@ const bin = process.env.ZPV_BIN ?? resolve(root, 'packages/core/target/release/z
 const merchant = run.wallets.merchant;
 const employee = run.wallets.employee;
 const x = { rail: 'zcash' as const, uivk: fx.x402.uivk, txid: fx.x402.txid, amountZat: 100000, memo: fx.x402.memo };
-const logDir = resolve(root, 'audit/cli-chain');
-const statusFile = resolve(root, 'audit/status/cli-chain.json');
+const logDir = resolve(root, process.env.HANKO_AUDIT_DIR ?? 'audit/cli-chain');
+const statusFile = resolve(root, process.env.HANKO_AUDIT_STATUS ?? 'audit/status/cli-chain.json');
 const auditLog = process.env.HANKO_AUDIT_LOG ?? 'audit.txt';
+const auditCommand = process.env.HANKO_AUDIT_COMMAND ?? `python3 audit/cli-chain/run.py ${auditLog.slice(0, -4)}`;
 const scrub = (s: string) => s.replace(/(?:uivktest1|uviewtest1|uivk1|uview1)[a-z0-9…]+/gi, '[REDACTED_VIEWING_KEY]');
 function record(id: string, status: string, evidence: string) {
   mkdirSync(logDir, { recursive: true });
@@ -37,10 +38,10 @@ function row(id: string, title: string, check: () => Promise<void>, assertion: s
   it(`${id} ${title}`, async () => {
     try {
       await check();
-      record(id, 'PASS', `Command: python3 audit/cli-chain/run.py ${auditLog.slice(0,-4)} (pnpm exec vitest run test/audit.test.ts); assertion: ${assertion}. Log: audit/cli-chain/${auditLog}`);
+      record(id, 'PASS', `Command: ${auditCommand} (pnpm exec vitest run test/audit.test.ts); assertion: ${assertion}. Log: ${process.env.HANKO_AUDIT_DIR ?? 'audit/cli-chain'}/${auditLog}`);
     } catch (e) {
-      if (e instanceof MissingRecordedEvidence) { record(id, 'UNTESTED', `${e.message}; command: python3 audit/cli-chain/run.py ${auditLog.slice(0,-4)}; log: audit/cli-chain/${auditLog}`); return; }
-      record(id, 'FAIL', `${title}: ${scrub(String(e)).split('\n')[0]}; command: python3 audit/cli-chain/run.py ${auditLog.slice(0,-4)}; log: audit/cli-chain/${auditLog}`);
+      if (e instanceof MissingRecordedEvidence) { record(id, 'UNTESTED', `${e.message}; command: ${auditCommand}; log: ${process.env.HANKO_AUDIT_DIR ?? 'audit/cli-chain'}/${auditLog}`); return; }
+      record(id, 'FAIL', `${title}: ${scrub(String(e)).split('\n')[0]}; command: ${auditCommand}; log: ${process.env.HANKO_AUDIT_DIR ?? 'audit/cli-chain'}/${auditLog}`);
       throw e;
     }
   });

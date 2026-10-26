@@ -1,0 +1,229 @@
+{
+  "id": "MCP-010",
+  "at": "2026-10-26T10:29:46.360Z",
+  "status": "PASS",
+  "assertion": "Real concurrent stdio BEING_CHECKED, refusal/error release, killed claimant five-minute lease takeover and stale token protection",
+  "evidence": [
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_LWD_URL": "http://127.0.0.1:64428",
+          "ZPV_CHECK_TIMEOUT_MS": "1500"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "BEING_CHECKED"
+          ],
+          "paid_zat": 0,
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    },
+    {
+      "killedClaimant": true,
+      "leaseMs": 300000,
+      "recoveredAfterLease": true,
+      "staleOwnerCouldSettle": false,
+      "staleOwnerCouldRelease": false
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "ALREADY_USED"
+          ],
+          "paid_zat": 0,
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100001,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "AMOUNT_TOO_LOW"
+          ],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22598,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22598,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {
+          "ZPV_LWD_URL": "http://127.0.0.1:1"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "cannot connect to lightwalletd: http://127.0.0.1:1: transport error"
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22599,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    }
+  ]
+}

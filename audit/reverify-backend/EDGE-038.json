@@ -1,0 +1,15 @@
+{
+  "id": "EDGE-038",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Invalid hash raises `settle tx must be a 0x-prefixed 32-byte hash`; non-pool transaction or wrong selector raises `is not a call to the null-402 pool` or `is not a null-402 settle() call`; no paid verdict.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: malformed settlement hash rejected before RPC; recorded pool transaction wrong selector and real non-pool transaction located read-only in its preceding 25-block window rejected with exact field errors; no paid verdict. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT EDGE-038 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: malformed settlement hash rejected before RPC; recorded pool transaction wrong selector and real non-pool transaction located read-only in its preceding 25-block window rejected with exact field errors; no paid verdict. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > EDGE-038 malformed hash, non-pool and wrong selector 78ms"
+  ]
+}

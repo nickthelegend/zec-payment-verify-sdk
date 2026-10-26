@@ -1,0 +1,64 @@
+{
+  "id": "API-005",
+  "at": "2026-10-26T10:32:59.428Z",
+  "status": "PASS",
+  "note": "wrong memo refused; report retained",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 6745,
+      "port": 51360,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/4.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:32:59 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "rail": "zcash",
+        "ok": false,
+        "verdict": "refused",
+        "reasons": [
+          "MEMO_MISMATCH",
+          "AMOUNT_TOO_LOW"
+        ],
+        "paidZat": 0,
+        "report": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "found": true,
+          "height": 4521112,
+          "block_time": 1792475145,
+          "confirmations": 22602,
+          "tip": 4543713,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "pools": {
+            "sapling": false,
+            "orchard": false,
+            "ironwood": true,
+            "transparent": false
+          }
+        },
+        "provenance": {
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "tip": 4543713,
+          "checkedAt": "2026-10-26T10:32:59.423Z",
+          "via": "zpay-verify"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "CLI-015",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Recorded settled proof returns checks, five signals and rpc/chainId/verifier/pool/block/time provenance; bound proof remains `NULLIFIER_SPENT`; no expectations add `UNBOUND`; proof result does not invent a settlement verdict.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real proof checks true/true/true; five signals; RPC/chain/contracts/block/time provenance; bound NULLIFIER_SPENT and unbound adds UNBOUND; no settlement verdict. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-015 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real proof checks true/true/true; five signals; RPC/chain/contracts/block/time provenance; bound NULLIFIER_SPENT and unbound adds UNBOUND; no settlement verdict. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-015 proof result and provenance without invented settlement 1469ms"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-26T10:32:05.077756+00:00",
+  "revision": "746049120d8495d471dc9fa7d3606b94f36af142",
+  "binary": "packages/core/target/release/zpay-verify",
+  "binarySha256": "50f346f084861b32d1da0175dd5144ed98be7430b10a94e7f6f7dd875311d136",
+  "auditContractSha256": "6cad8aaa6b25e67685a35f37088a9972e16802f2986be75ac25816ff0a24b3ee",
+  "versions": {
+    "node": "v26.5.0",
+    "pnpm": "10.29.2",
+    "cargo": "cargo 1.89.0 (c24e10642 2025-06-23)"
+  },
+  "coreBuildJobs": 1,
+  "freshSuiteCommands": [
+    "cargo test --release -- --test-threads=1",
+    "pnpm --filter @zpv/sdk test --reporter=verbose",
+    "pnpm --filter @zpv/gateway test --reporter=verbose",
+    "pnpm --filter @zpv/mcp test --reporter=verbose"
+  ],
+  "parentEnvironment": "Allowlisted runtime/toolchain/certificate variables only; application credentials and dotenv excluded. Published demo incoming credentials loaded internally by existing test harnesses.",
+  "forbiddenActionsExecuted": []
+}

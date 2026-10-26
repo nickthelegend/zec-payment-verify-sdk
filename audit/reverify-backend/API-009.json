@@ -1,0 +1,30 @@
+{
+  "id": "API-009",
+  "at": "2026-10-26T10:33:01.650Z",
+  "status": "PASS",
+  "note": "verify OPTIONS returns allowed origin headers with empty body",
+  "records": [
+    {
+      "server": "api",
+      "pid": 7755,
+      "port": 51413,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/10.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "OPTIONS",
+      "status": 204,
+      "headers": {
+        "access-control-allow-headers": "content-type, x-payment",
+        "access-control-allow-origin": "https://allowed.audit",
+        "access-control-expose-headers": "x-payment-response",
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:01 GMT",
+        "keep-alive": "timeout=5",
+        "vary": "origin"
+      },
+      "body": ""
+    }
+  ]
+}
