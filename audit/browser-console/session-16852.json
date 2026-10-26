@@ -1,0 +1,31 @@
+{
+  "started": "2026-10-26T08:47:03.780Z",
+  "runnerPid": 16852,
+  "channel": "chrome",
+  "headless": true,
+  "video": false,
+  "trace": false,
+  "rowTimeoutMs": 90000,
+  "processes": [
+    {
+      "label": "dashboard Vite dev server",
+      "pid": 16853,
+      "exited": true,
+      "code": 143,
+      "signal": null
+    },
+    {
+      "label": "Google Chrome",
+      "pid": 16855,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "urls": {
+    "hosted": "https://hanko-dashboard-six.vercel.app",
+    "local": "http://localhost:5180"
+  },
+  "browser": "155.0.8059.85",
+  "finished": "2026-10-26T08:47:14.404Z"
+}

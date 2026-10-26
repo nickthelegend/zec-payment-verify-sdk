@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-26T08:44:16.885712+00:00",
+  "method": "OPTIONS",
+  "url": "https://hanko-api.201-18-198-162.sslip.io/api/verify",
+  "results": [
+    {
+      "origin": "http://localhost:5180",
+      "status": 200,
+      "headers": {
+        "Access-Control-Allow-Headers": "Content-Type,Authorization,X-PAYMENT",
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+        "Access-Control-Expose-Headers": "X-PAYMENT-RESPONSE",
+        "Access-Control-Max-Age": "600"
+      }
+    },
+    {
+      "origin": "http://127.0.0.1:5180",
+      "status": 200,
+      "headers": {
+        "Access-Control-Allow-Headers": "Content-Type,Authorization,X-PAYMENT",
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+        "Access-Control-Expose-Headers": "X-PAYMENT-RESPONSE",
+        "Access-Control-Max-Age": "600"
+      }
+    },
+    {
+      "origin": "https://hanko-dashboard-six.vercel.app",
+      "status": 200,
+      "headers": {
+        "Access-Control-Allow-Headers": "Content-Type,Authorization,X-PAYMENT",
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+        "Access-Control-Allow-Origin": "https://hanko-dashboard-six.vercel.app",
+        "Access-Control-Expose-Headers": "X-PAYMENT-RESPONSE",
+        "Access-Control-Max-Age": "600"
+      }
+    }
+  ],
+  "conclusion": "Hosted preflight allows only the production dashboard origin. Both local dashboard origins lack Access-Control-Allow-Origin. Fix requires hosted API/reverse-proxy CORS configuration; no deployment is authorized."
+}

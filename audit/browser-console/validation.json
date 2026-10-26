@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-26T08:48:44.200Z",
+  "totalAuditBytes": 6932975,
+  "consoleEvidenceFiles": 52,
+  "maxConsoleScreenshotBytes": 87598,
+  "fullViewingKeysInConsoleText": false,
+  "statusEvidenceConsistent": true,
+  "hostedPassed": 15,
+  "localPassed": 7,
+  "localCorsFailures": 8,
+  "allTrackedProcessesExited": true,
+  "temporaryConfigRemoved": true
+}
