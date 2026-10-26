@@ -1,0 +1,1 @@
+{"channel":"chrome","headless":true,"viewport":{"width":1280,"height":800},"rowTimeoutMs":90000,"video":false,"trace":false,"screenshot":{"type":"jpeg","quality":45,"maxBytes":200000},"urls":{"live":"https://hanko-landing-six.vercel.app/","local":"http://127.0.0.1:5191/","pages":"http://127.0.0.1:5192/"}}

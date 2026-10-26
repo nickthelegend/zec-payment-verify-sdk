@@ -1,0 +1,196 @@
+{
+  "id": "PAGE-002",
+  "attempt": 23,
+  "at": "2026-10-26T08:29:09.295Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "live",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "request amount and memo",
+      "pass": true,
+      "actual": "const r = await verify({\n  rail: 'zcash', uivk, txid,\n  amountZat: 100_000,\n  memo: 'x402z-f19a63da20cbc0749ea800b3',\n});"
+    },
+    {
+      "surface": "live",
+      "check": "exact response values",
+      "pass": true,
+      "actual": "\"verdict\": {\n  \"ok\": true,\n  \"paid_zat\": 100000,\n  \"reasons\": []\n}"
+    },
+    {
+      "surface": "live",
+      "check": "paid exit label",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "seal labels",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "exact recorded caption",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 59893
+    },
+    {
+      "surface": "local",
+      "check": "landing document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "request amount and memo",
+      "pass": true,
+      "actual": "const r = await verify({\n  rail: 'zcash', uivk, txid,\n  amountZat: 100_000,\n  memo: 'x402z-f19a63da20cbc0749ea800b3',\n});"
+    },
+    {
+      "surface": "local",
+      "check": "exact response values",
+      "pass": true,
+      "actual": "\"verdict\": {\n  \"ok\": true,\n  \"paid_zat\": 100000,\n  \"reasons\": []\n}"
+    },
+    {
+      "surface": "local",
+      "check": "paid exit label",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "seal labels",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "exact recorded caption",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "screenshot at most 200 KB",
+      "pass": true,
+      "actual": 60153
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/",
+      "status": 200,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5191/assets/hero.webp",
+      "status": 200,
+      "resourceType": "image",
+      "contentType": "image/webp"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/browser-landing/PAGE-002-live-23.jpg",
+    "audit/browser-landing/PAGE-002-local-23.jpg"
+  ],
+  "status": "PASS",
+  "failureCounts": {
+    "assertions": 0,
+    "console": 0,
+    "pageErrors": 0,
+    "http": 0,
+    "requests": 0
+  }
+}
