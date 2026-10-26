@@ -1,0 +1,847 @@
+{
+  "id": "EDGE-024",
+  "attempt": 1,
+  "at": "2026-10-26T08:59:08.465Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "reference",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "reference",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": [
+        {
+          "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "label": "The settle tx"
+        }
+      ]
+    },
+    {
+      "surface": "reference",
+      "name": "rendered transaction links exist",
+      "pass": true
+    },
+    {
+      "surface": "reference",
+      "name": "published transaction target",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "The settle tx"
+      }
+    },
+    {
+      "surface": "reference",
+      "name": "explorer loads exact requested transaction",
+      "pass": false,
+      "actual": {
+        "status": 403,
+        "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "requestedHashVisible": false,
+        "title": "Just a moment..."
+      }
+    },
+    {
+      "surface": "reference",
+      "name": "explorer loads exact requested transaction",
+      "pass": false,
+      "actual": {
+        "error": "explorer loads exact requested transaction"
+      }
+    },
+    {
+      "surface": "hosted",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "hosted",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": [
+        {
+          "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "label": "0x8596f5…5ca593 ↗"
+        }
+      ]
+    },
+    {
+      "surface": "hosted",
+      "name": "rendered transaction links exist",
+      "pass": true
+    },
+    {
+      "surface": "hosted",
+      "name": "published transaction target",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "0x8596f5…5ca593 ↗"
+      }
+    },
+    {
+      "surface": "hosted",
+      "name": "hash label matches href",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "0x8596f5…5ca593 ↗"
+      }
+    },
+    {
+      "surface": "hosted",
+      "name": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 58058
+    },
+    {
+      "surface": "hosted",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": [
+        {
+          "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "label": "0x8596f5…5ca593 ↗"
+        }
+      ]
+    },
+    {
+      "surface": "local",
+      "name": "rendered transaction links exist",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "name": "published transaction target",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "0x8596f5…5ca593 ↗"
+      }
+    },
+    {
+      "surface": "local",
+      "name": "hash label matches href",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "0x8596f5…5ca593 ↗"
+      }
+    },
+    {
+      "surface": "local",
+      "name": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 76285
+    },
+    {
+      "surface": "local",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "landing",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "landing",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "landing",
+      "name": "landing overview has no invented explorer links",
+      "pass": true
+    },
+    {
+      "surface": "landing",
+      "name": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 45865
+    },
+    {
+      "surface": "landing",
+      "name": "zero uncaught page errors",
+      "pass": true
+    }
+  ],
+  "console": [
+    {
+      "surface": "reference",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 ()"
+    },
+    {
+      "surface": "local",
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "surface": "local",
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "surface": "local",
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "surface": "local",
+      "type": "error",
+      "text": "Access to fetch at 'https://hanko-api.201-18-198-162.sslip.io/api/health' from origin 'http://localhost:5187' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource."
+    },
+    {
+      "surface": "local",
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    }
+  ],
+  "network": [
+    {
+      "surface": "reference",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "status": 307,
+      "type": "document"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "status": 403,
+      "type": "document"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=a50843664b45e3fd",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/turnstile/v0/b/d2d3316b729e/api.js?onload=DraY9&render=explicit",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/cdn-cgi/challenge-platform/h/b/fo/3992557204:1793002205:A8rM25G5DfXbZevkvZA1jsG5E_kd2uWAfKL9rhQGFFw/a50843664b45e3fd/rD8ioSUBJ8ju.9Yt67pH.Ge6v1i7W2N7ezLqqyzLCBo-1793005149-1.2.1.1-O7OW9wIHmaQ3UNOKvOSNbTGw.bPvrNU01ncj5T1fr8_oZ6dUstmQ3BJkWNztZW6x",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://testnet.snowtrace.io/9db7d285-e621-4a97-8919-d97b9fa98604",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/tz86k/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-DpFU7OeH.css",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-jE2E0saT.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-api.201-18-198-162.sslip.io/api/health",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/main.tsx",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@vite/client",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@react-refresh",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react.js?v=96f7f6eb",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=96f7f6eb",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/styles.css",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/node_modules/.pnpm/vite@7.3.7_@types+node@22.20.5_tsx@4.23.15/node_modules/vite/dist/client/env.mjs",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/App.tsx",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-DS4ZRJLM.js?v=fd1fd691",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-AXQFWXYZ.js?v=fd1fd691",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/packages/sdk/dist/null402.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/fixtures/testnet.json?import",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/fixtures/console-recorded.json?import",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react-dom_client.js?v=d719afbd",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/packages/sdk/dist/errors.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/packages/sdk/dist/limiter.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem.js?v=89b0dc59",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem_chains.js?v=83d5d32e",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-TSDROGJN.js?v=fd1fd691",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-I2CEELMA.js?v=fd1fd691",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-PFXZJHIF.js?v=fd1fd691",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-MLMCMYHL.js?v=fd1fd691",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-KZUX4H5X.js?v=fd1fd691",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-RST5QK3N.js?v=fd1fd691",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-YG2HVMEF.js?v=fd1fd691",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/assets/hero.webp",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    }
+  ],
+  "requests": [
+    {
+      "surface": "reference",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=a50843664b45e3fd",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://testnet.snowtrace.io/e3d42221-17fc-49be-adb5-003e5ac9a616",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/turnstile/v0/b/d2d3316b729e/api.js?onload=DraY9&render=explicit",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/cdn-cgi/challenge-platform/h/b/fo/3992557204:1793002205:A8rM25G5DfXbZevkvZA1jsG5E_kd2uWAfKL9rhQGFFw/a50843664b45e3fd/rD8ioSUBJ8ju.9Yt67pH.Ge6v1i7W2N7ezLqqyzLCBo-1793005149-1.2.1.1-O7OW9wIHmaQ3UNOKvOSNbTGw.bPvrNU01ncj5T1fr8_oZ6dUstmQ3BJkWNztZW6x",
+      "method": "POST"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://testnet.snowtrace.io/9db7d285-e621-4a97-8919-d97b9fa98604",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/tz86k/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/25f47ee0-46b7-4da7-abc9-5e60b49ab06d",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/fo/3280037892:1793002210:MCB__Ru6TrJhjpmZtraejuHW-Rl0rbhMX7Mk2tNHX8M/a50843687dc7b0aa/zu0kGBHAX7fyqIctldLIy9ufQCj0Y7dgEou0Mi2D_VA-1793005149-1.2.1.1-m0CNKIMeLhN13zQRnF5Hk7LZp88RgIWDHlqQc9_2Y4Fgo6Wg11AXT5wA812jv7nF",
+      "method": "POST"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-jE2E0saT.js",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-DpFU7OeH.css",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-api.201-18-198-162.sslip.io/api/health",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@vite/client",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/main.tsx",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@react-refresh",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=96f7f6eb",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react.js?v=96f7f6eb",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react-dom_client.js?v=d719afbd",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/App.tsx",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/styles.css",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/node_modules/.pnpm/vite@7.3.7_@types+node@22.20.5_tsx@4.23.15/node_modules/vite/dist/client/env.mjs",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-DS4ZRJLM.js?v=fd1fd691",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-AXQFWXYZ.js?v=fd1fd691",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/packages/sdk/dist/null402.js",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/fixtures/testnet.json?import",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/fixtures/console-recorded.json?import",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem.js?v=89b0dc59",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem_chains.js?v=83d5d32e",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/packages/sdk/dist/errors.js",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/packages/sdk/dist/limiter.js",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-TSDROGJN.js?v=fd1fd691",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-I2CEELMA.js?v=fd1fd691",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-PFXZJHIF.js?v=fd1fd691",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-YG2HVMEF.js?v=fd1fd691",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-RST5QK3N.js?v=fd1fd691",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-KZUX4H5X.js?v=fd1fd691",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-MLMCMYHL.js?v=fd1fd691",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://hanko-api.201-18-198-162.sslip.io/api/health",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/assets/hero.webp",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    }
+  ],
+  "requestFailures": [
+    {
+      "surface": "local",
+      "url": "https://hanko-api.201-18-198-162.sslip.io/api/health",
+      "error": "net::ERR_FAILED"
+    }
+  ],
+  "pageErrors": [],
+  "errors": [
+    {
+      "surface": "reference",
+      "message": "explorer loads exact requested transaction"
+    }
+  ],
+  "screenshots": [
+    "audit/browser-edges/EDGE-024-hosted-result-1.jpg",
+    "audit/browser-edges/EDGE-024-local-result-1.jpg",
+    "audit/browser-edges/EDGE-024-landing-result-1.jpg"
+  ],
+  "surfaces": {
+    "reference": "FAIL",
+    "hosted": "PASS",
+    "local": "PASS",
+    "landing": "PASS"
+  },
+  "destinations": {
+    "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593": {
+      "error": "explorer loads exact requested transaction"
+    }
+  },
+  "status": "FAIL"
+}

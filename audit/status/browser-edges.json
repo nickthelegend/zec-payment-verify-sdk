@@ -1,0 +1,226 @@
+[
+  {
+    "id": "EDGE-001",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-001-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-002",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-002-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-003",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-003-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-004",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-004-1.json",
+      "audit/browser-edges/EDGE-004-2.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-005",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-005-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "down": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-006",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-006-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-007",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-007-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "down": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-008",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-008-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-009",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-009-1.json",
+      "audit/browser-edges/EDGE-009-2.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-010",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-010-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-011",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-011-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-012",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-012-1.json",
+      "audit/browser-edges/EDGE-012-2.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-015",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-015-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-017",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-017-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-020",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-020-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-022",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-022-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "landing": "PASS",
+      "reference": "PASS",
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-023",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-edges/EDGE-023-1.json",
+      "audit/browser-edges/EDGE-023-2.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "reference": "PASS",
+      "hosted": "PASS",
+      "local": "PASS",
+      "landing": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-024",
+    "status": "RUNNING",
+    "evidence": [
+      "audit/browser-edges/EDGE-024-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "reference": "FAIL",
+      "hosted": "PASS",
+      "local": "PASS",
+      "landing": "PASS"
+    }
+  }
+]

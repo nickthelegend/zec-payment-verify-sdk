@@ -3,8 +3,11 @@ import { proofFromSettleTx, verifyNull402, NULL402_FUJI, type Null402Result } fr
 import fx from '@fixtures/testnet.json';
 import recorded from '@fixtures/console-recorded.json';
 
-const API = import.meta.env.VITE_ZPV_API ?? 'http://127.0.0.1:8403';
-const API_FROM_ENV = Boolean(import.meta.env.VITE_ZPV_API);
+// The optional Vite proxy keeps hosted API checks same-origin during local development.
+const API = import.meta.env.DEV && import.meta.env.VITE_ZPV_PROXY_API
+  ? window.location.origin
+  : import.meta.env.VITE_ZPV_API ?? 'http://127.0.0.1:8403';
+const API_FROM_ENV = Boolean(import.meta.env.VITE_ZPV_API || (import.meta.env.DEV && import.meta.env.VITE_ZPV_PROXY_API));
 /** The GitHub Pages build (scripts/build-pages.sh): no verify API runs beside it, so it opens on the
  *  null-402 tab, which works entirely in the browser. */
 const PAGES = import.meta.env.VITE_ZPV_PAGES === '1';
