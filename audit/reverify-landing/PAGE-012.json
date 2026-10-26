@@ -1,0 +1,161 @@
+{
+  "id": "PAGE-012",
+  "at": "2026-10-26T09:06:16.132Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "live",
+      "check": "document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "cross leaves only Cross-check visible",
+      "pass": true,
+      "actual": [
+        "FN Cross-check"
+      ]
+    },
+    {
+      "surface": "live",
+      "check": "#crosscheck exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.6875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "live",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 52809
+    },
+    {
+      "surface": "local",
+      "check": "document HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "cross leaves only Cross-check visible",
+      "pass": true,
+      "actual": [
+        "FN Cross-check"
+      ]
+    },
+    {
+      "surface": "local",
+      "check": "#crosscheck exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 75.6875,
+        "bars": 60,
+        "height": 800
+      }
+    },
+    {
+      "surface": "local",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 52560
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "status": 200,
+      "resourceType": "document",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font",
+      "contentType": "font/woff2"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/reverify-landing/PAGE-012-live-cross.jpg",
+    "audit/reverify-landing/PAGE-012-local-cross.jpg"
+  ],
+  "failures": {
+    "console": [],
+    "network": [],
+    "pageErrors": [],
+    "requests": []
+  },
+  "status": "PASS",
+  "durationMs": 2054
+}
