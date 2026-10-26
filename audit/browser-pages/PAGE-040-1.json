@@ -1,0 +1,146 @@
+{
+  "id": "PAGE-040",
+  "attempt": 1,
+  "at": "2026-10-26T08:52:59.634Z",
+  "browser": "155.0.8059.85",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "checks": [
+    {
+      "name": "/dashboard/ HTTP 200",
+      "pass": true
+    },
+    {
+      "name": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 49226
+    },
+    {
+      "name": "all row expectations matched",
+      "pass": true
+    },
+    {
+      "name": "only read-only RPC methods",
+      "pass": true,
+      "actual": []
+    }
+  ],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:5193/dashboard/",
+      "method": "GET",
+      "resourceType": "document"
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET",
+      "resourceType": "stylesheet"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dashboard/assets/index-C8wetOgc.js",
+      "method": "GET",
+      "resourceType": "script"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dashboard/assets/index-DpFU7OeH.css",
+      "method": "GET",
+      "resourceType": "stylesheet"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET",
+      "resourceType": "font"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET",
+      "resourceType": "font"
+    },
+    {
+      "url": "http://127.0.0.1:8403/api/health",
+      "method": "GET",
+      "resourceType": "fetch"
+    }
+  ],
+  "network": [
+    {
+      "url": "http://127.0.0.1:5193/dashboard/",
+      "status": 200,
+      "method": "GET",
+      "resourceType": "document"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dashboard/assets/index-DpFU7OeH.css",
+      "status": 200,
+      "method": "GET",
+      "resourceType": "stylesheet"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dashboard/assets/index-C8wetOgc.js",
+      "status": 200,
+      "method": "GET",
+      "resourceType": "script"
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "method": "GET",
+      "resourceType": "stylesheet"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "method": "GET",
+      "resourceType": "font"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "method": "GET",
+      "resourceType": "font"
+    }
+  ],
+  "console": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "url": "http://127.0.0.1:8403/api/health"
+    }
+  ],
+  "pageErrors": [],
+  "requestFailures": [
+    {
+      "url": "http://127.0.0.1:8403/api/health",
+      "error": "net::ERR_CONNECTION_REFUSED"
+    }
+  ],
+  "screenshots": [
+    "audit/browser-pages/PAGE-040-no-recording-1.jpg"
+  ],
+  "errors": [],
+  "expectedSetupFailures": {
+    "requests": [
+      {
+        "url": "http://127.0.0.1:8403/api/health",
+        "error": "net::ERR_CONNECTION_REFUSED"
+      }
+    ],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "url": "http://127.0.0.1:8403/api/health"
+      }
+    ]
+  },
+  "unexpected": {
+    "http": [],
+    "console": [],
+    "pageErrors": [],
+    "requests": []
+  },
+  "status": "PASS",
+  "finished": "2026-10-26T08:53:00.782Z"
+}
