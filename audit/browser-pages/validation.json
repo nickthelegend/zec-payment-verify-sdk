@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-26T08:54:08.293Z",
+  "allSixRowsPass": true,
+  "auditBytes": 7841946,
+  "limitBytes": 15000000,
+  "imageSizes": {
+    "EDGE-021-history-1.jpg": 21298,
+    "EDGE-021-no-recording-1.jpg": 35788,
+    "EDGE-021-proof-checks-1.jpg": 24140,
+    "EDGE-021-proof-inputs-1.jpg": 20461,
+    "EDGE-021-recorded-1.jpg": 24257,
+    "EDGE-021-setup-1.jpg": 35826,
+    "PAGE-036-root-console-1.jpg": 58684,
+    "PAGE-036-root-landing-1.jpg": 55806,
+    "PAGE-036-subpath-console-1.jpg": 58684,
+    "PAGE-036-subpath-landing-1.jpg": 55102,
+    "PAGE-037-proof-checks-1.jpg": 75979,
+    "PAGE-038-setup-required-1.jpg": 83949,
+    "PAGE-039-matching-recording-1.jpg": 65126,
+    "PAGE-039-wrong-memo-1.jpg": 83237,
+    "PAGE-040-no-recording-1.jpg": 49226
+  },
+  "allScreenshotsUnder200KB": true,
+  "unredactedKeyMatches": [],
+  "unexpectedBrowserErrors": 0,
+  "productChanges": [],
+  "auditContractUnchanged": true,
+  "processesConfirmedStopped": [
+    63776,
+    63777
+  ],
+  "heavySlotReleased": true
+}
