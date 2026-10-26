@@ -1,0 +1,61 @@
+COMMAND: ["pnpm", "exec", "vitest", "run", "test/audit.test.ts", "--reporter=verbose", "-t", "EDGE-038"]
+CWD: packages/sdk
+START: 2026-10-26T08:39:48Z
+
+ RUN  v3.2.7 /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t3/packages/sdk
+
+ ↓ test/audit.test.ts > CLI-001 paid CLI report and exit
+ ↓ test/audit.test.ts > CLI-002 all recorded CLI refusals
+ ↓ test/audit.test.ts > CLI-003 confirmation floor including explicit zero
+ ↓ test/audit.test.ts > CLI-004 explicit transparent opt-in
+ ↓ test/audit.test.ts > CLI-005 argument errors
+ ↓ test/audit.test.ts > CLI-006 missing setup and invalid tx/key
+ ↓ test/audit.test.ts > CLI-007 inspect one and multiple in argument order
+ ↓ test/audit.test.ts > CLI-008 inspect absent, malformed, transport and interrupted inputs
+ ↓ test/audit.test.ts > CLI-009 owns matching receiver offline
+ ↓ test/audit.test.ts > CLI-010 owns another receiver offline
+ ↓ test/audit.test.ts > CLI-011 owns malformed, empty, transparent and invalid key
+ ↓ test/audit.test.ts > CLI-012 derive absent or malformed synthetic input only
+ ↓ test/audit.test.ts > CLI-014 SDK defaults, report and provenance
+ ↓ test/audit.test.ts > CLI-015 proof result and provenance without invented settlement
+ ↓ test/audit.test.ts > CLI-017 quorum failure clears all payment fields
+ ↓ test/audit.test.ts > CLI-019 lag rule on local copies of a live authenticated report
+ ↓ test/audit.test.ts > CLI-020 all invalid quorum configuration cases
+ ↓ test/audit.test.ts > CLI-021 SDK ownership matches CLI and error classes
+ ↓ test/audit.test.ts > CHAIN-002 historical current-paywall payment and receipts
+ ↓ test/audit.test.ts > CHAIN-003 recorded wrong-memo
+ ↓ test/audit.test.ts > CHAIN-004 recorded underpaid
+ ↓ test/audit.test.ts > CHAIN-005 recorded transparent-part
+ ↓ test/audit.test.ts > CHAIN-006 recorded payslip receiver/amount
+ ↓ test/audit.test.ts > CHAIN-007 recorded payslip receiver/amount
+ ↓ test/audit.test.ts > CHAIN-008 recorded payslip receiver/amount
+ ↓ test/audit.test.ts > CHAIN-009 recorded third-party payment
+ ↓ test/audit.test.ts > CHAIN-010 recorded auction receiver
+ ↓ test/audit.test.ts > CHAIN-011 recorded auction receiver
+ ↓ test/audit.test.ts > CHAIN-012 five-note funding is not invoice acceptance
+ ↓ test/audit.test.ts > CHAIN-015 first recorded Fuji settlement
+ ↓ test/audit.test.ts > CHAIN-017 Fuji existing-contract provenance
+ ↓ test/audit.test.ts > EDGE-026 Fuji RPC chain ID and same-block read calls
+ ↓ test/audit.test.ts > EDGE-029 missing unreadable/corrupt Sapling params and valid HOME/explicit path
+ ↓ test/audit.test.ts > EDGE-032 timeout kills child and frees limiter for next real request
+ ↓ test/audit.test.ts > EDGE-035 proof amount x10, unknown root and expectation mismatches
+ ↓ test/audit.test.ts > EDGE-036 each missing settlement binding plus wrong recipient
+stdout | test/audit.test.ts > EDGE-038 malformed hash, non-pool and wrong selector
+{"nonPoolHash":"0x6a7ccb9b9affbc84caf232c84d1a5e20b1dc4fc74c9edb443cc4095ac08ea671","recordedPoolHash":"0xbc62a275074dfb9434963ab04605c4102fcf937af4b8c8c0fb460368f007b025","nonPoolBlock":"57020727","anchorBlock":"57020728"}
+
+stdout | test/audit.test.ts > EDGE-038 malformed hash, non-pool and wrong selector
+AUDIT EDGE-038 PASS: Command: python3 audit/cli-chain/run.py audit-focused (pnpm exec vitest run test/audit.test.ts); assertion: malformed settlement hash rejected before RPC; recorded pool transaction wrong selector and real non-pool transaction located read-only in its preceding 25-block window rejected with exact field errors; no paid verdict. Log: audit/cli-chain/audit-focused.txt
+
+ ✓ test/audit.test.ts > EDGE-038 malformed hash, non-pool and wrong selector 163ms
+ ↓ test/audit.test.ts > CHAIN-001 recorded Oct 20 payment answers one reconstructed challenge
+ ↓ test/audit.test.ts > CHAIN-016 second Fuji settlement SDK path; MCP evidence belongs to another task
+ ↓ test/audit.test.ts > EDGE-025 all recorded Zcash transactions through actual lightwalletd
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 39 skipped (40)
+   Start at  14:09:49
+   Duration  403ms (transform 42ms, setup 0ms, collect 140ms, tests 163ms, environment 0ms, prepare 27ms)
+
+
+EXIT: 0
+ELAPSED_SECONDS: 0.77

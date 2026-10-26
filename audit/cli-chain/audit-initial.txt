@@ -1,0 +1,188 @@
+COMMAND: ["pnpm", "exec", "vitest", "run", "test/audit.test.ts", "--reporter=verbose"]
+CWD: packages/sdk
+START: 2026-10-26T08:31:03Z
+
+ RUN  v3.2.7 /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t3/packages/sdk
+
+stdout | test/audit.test.ts > CLI-001 paid CLI report and exit
+AUDIT CLI-001 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: CLI exit 0; JSON report/verdict/lightwalletd; paid_zat=100000; reasons=[]. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-001 paid CLI report and exit 1827ms
+stdout | test/audit.test.ts > CLI-002 all recorded CLI refusals
+AUDIT CLI-002 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: exit 1 and exact wrong-memo, underpayment, transparent, wrong-receiver reasons; real reports retained. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-002 all recorded CLI refusals 6322ms
+stdout | test/audit.test.ts > CLI-003 confirmation floor including explicit zero
+AUDIT CLI-003 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: floor 100000000 exits 1 NOT_CONFIRMED with actual depth; explicit --min-conf 0 exits 0. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-003 confirmation floor including explicit zero 3435ms
+stdout | test/audit.test.ts > CLI-004 explicit transparent opt-in
+AUDIT CLI-004 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: recorded transparent case exits 0 with --allow-transparent and no refusal reasons. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-004 explicit transparent opt-in 1614ms
+stdout | test/audit.test.ts > CLI-005 argument errors
+AUDIT CLI-005 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: missing/invalid amount, invalid min-conf, unknown option all exit 2 with exact diagnostics; no JSON verdict. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-005 argument errors 9ms
+stdout | test/audit.test.ts > CLI-006 missing setup and invalid tx/key
+AUDIT CLI-006 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: isolated missing-key env and malformed tx/key exit 2; expected Setup required or field diagnostic; no paid JSON. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-006 missing setup and invalid tx/key 458ms
+stdout | test/audit.test.ts > CLI-007 inspect one and multiple in argument order
+AUDIT CLI-007 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: one JSON report per input in order with all eight report fields, no verdict, exit 0. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-007 inspect one and multiple in argument order 3573ms
+stdout | test/audit.test.ts > CLI-008 inspect absent, malformed, transport and interrupted inputs
+AUDIT CLI-008 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: absent tx found=false; malformed/dead exit 2; SIGKILL at silent real socket emits no completed report/verdict. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-008 inspect absent, malformed, transport and interrupted inputs 1681ms
+stdout | test/audit.test.ts > CLI-009 owns matching receiver offline
+AUDIT CLI-009 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: owns matching address exits 0; owns=true with orchard/sapling boolean or null; offline. Log: audit/cli-chain/audit.txt
+
+stdout | test/audit.test.ts > CLI-010 owns another receiver offline
+AUDIT CLI-010 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: valid other published receiver owns=false exit 1; offline. Log: audit/cli-chain/audit.txt
+
+stdout | test/audit.test.ts > CLI-011 owns malformed, empty, transparent and invalid key
+AUDIT CLI-011 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: empty, transparent-only and malformed addresses exit 2 with expected diagnostic; bad incoming-key encoding exits 2. Log: audit/cli-chain/audit.txt
+
+stdout | test/audit.test.ts > CLI-012 derive absent or malformed synthetic input only
+AUDIT CLI-012 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: isolated env has no full viewing credential; derive exits 2 Setup required; synthetic non-secret malformed input exits 2 with empty stdout. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-009 owns matching receiver offline 11ms
+ ✓ test/audit.test.ts > CLI-010 owns another receiver offline 7ms
+ ✓ test/audit.test.ts > CLI-011 owns malformed, empty, transparent and invalid key 17ms
+ ✓ test/audit.test.ts > CLI-012 derive absent or malformed synthetic input only 6ms
+stdout | test/audit.test.ts > CLI-014 SDK defaults, report and provenance
+AUDIT CLI-014 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: SDK returns paid/report/via=zpay-verify; omitted memo counts all outputs; shielded-only default rejects transparent; depth enforced. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-014 SDK defaults, report and provenance 6512ms
+stdout | test/audit.test.ts > CLI-015 proof result and provenance without invented settlement
+AUDIT CLI-015 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real proof checks true/true/true; five signals; RPC/chain/contracts/block/time provenance; bound NULLIFIER_SPENT and unbound adds UNBOUND; no settlement verdict. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-015 proof result and provenance without invented settlement 1350ms
+stdout | test/audit.test.ts > CLI-017 quorum failure clears all payment fields
+AUDIT CLI-017 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: one real paid answer plus dead endpoint at quorum 2 gives unverified, paidZat 0, report null, endpoint error. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-017 quorum failure clears all payment fields 1602ms
+stdout | test/audit.test.ts > CLI-019 lag rule on local copies of a live authenticated report
+AUDIT CLI-019 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: live authenticated record then explicit local rule inputs: 1/2/3-block lag NOT_CONFIRMED/0 confirmations; lowest tip used; at/past/100-behind absence disagrees; no RPC mock. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-019 lag rule on local copies of a live authenticated report 1596ms
+stdout | test/audit.test.ts > CLI-020 all invalid quorum configuration cases
+AUDIT CLI-020 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: empty, canonical duplicates and quorum 0/2/fractional rejected with VerifyError; malformed env quorum Setup required. Log: audit/cli-chain/audit.txt
+
+stdout | test/audit.test.ts > CLI-021 SDK ownership matches CLI and error classes
+AUDIT CLI-021 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: ownership equals real CLI receiver JSON; empty/bad-key VerifyError; missing binary SetupRequiredError. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CLI-020 all invalid quorum configuration cases 1ms
+ ✓ test/audit.test.ts > CLI-021 SDK ownership matches CLI and error classes 7ms
+stdout | test/audit.test.ts > CHAIN-002 historical current-paywall payment and receipts
+AUDIT CHAIN-002 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: read-only historical payment block 4530239/10000/memo matches; recorded 200 success and 402 nonce_already_used receipts checked; no expired challenge presented as fresh. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-002 historical current-paywall payment and receipts 3310ms
+stdout | test/audit.test.ts > CHAIN-003 recorded wrong-memo
+AUDIT CHAIN-003 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded wrong-memo; exact reasons MEMO_MISMATCH,AMOUNT_TOO_LOW; paidZat 0; decrypted output/pools checked. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-003 recorded wrong-memo 1846ms
+stdout | test/audit.test.ts > CHAIN-004 recorded underpaid
+AUDIT CHAIN-004 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded underpaid; exact reasons AMOUNT_TOO_LOW; paidZat 5000; decrypted output/pools checked. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-004 recorded underpaid 1663ms
+stdout | test/audit.test.ts > CHAIN-005 recorded transparent-part
+AUDIT CHAIN-005 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded transparent-part; exact reasons TRANSPARENT_PART; paidZat 10000; decrypted output/pools checked. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-005 recorded transparent-part 1645ms
+stdout | test/audit.test.ts > CHAIN-006 recorded payslip receiver/amount
+AUDIT CHAIN-006 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 50000; paidZat 50000; exact reasons none; memo/output matched. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-006 recorded payslip receiver/amount 1587ms
+stdout | test/audit.test.ts > CHAIN-007 recorded payslip receiver/amount
+AUDIT CHAIN-007 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 100000; paidZat 50000; exact reasons AMOUNT_TOO_LOW; memo/output matched. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-007 recorded payslip receiver/amount 1614ms
+stdout | test/audit.test.ts > CHAIN-008 recorded payslip receiver/amount
+AUDIT CHAIN-008 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 50000; paidZat 0; exact reasons NO_OUTPUT_TO_KEY; memo/output matched. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-008 recorded payslip receiver/amount 1595ms
+stdout | test/audit.test.ts > CHAIN-009 recorded third-party payment
+AUDIT CHAIN-009 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: x402 block 4521112/100000/matching memo; paid; transparent false. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-009 recorded third-party payment 1570ms
+stdout | test/audit.test.ts > CHAIN-010 recorded auction receiver
+AUDIT CHAIN-010 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: auction block 4522268; paidZat 0; reasons NO_OUTPUT_TO_KEY; published amount/memo checked. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-010 recorded auction receiver 1677ms
+stdout | test/audit.test.ts > CHAIN-011 recorded auction receiver
+AUDIT CHAIN-011 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: auction block 4522268; paidZat 2000000; reasons none; published amount/memo checked. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-011 recorded auction receiver 1739ms
+stdout | test/audit.test.ts > CHAIN-012 five-note funding is not invoice acceptance
+AUDIT CHAIN-012 FAIL: five-note funding is not invoice acceptance: AssertionError: expected [] to have a length of 5 but got +0; command: python3 audit/cli-chain/run.py audit; log: audit/cli-chain/audit.txt
+
+ × test/audit.test.ts > CHAIN-012 five-note funding is not invoice acceptance 2005ms
+   → expected [] to have a length of 5 but got +0
+stdout | test/audit.test.ts > CHAIN-015 first recorded Fuji settlement
+AUDIT CHAIN-015 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: receipt success/block 57020734; decoded pool settle calldata; bound SDK paid/settled and true proof/root/spent; proofCheck NULLIFIER_SPENT. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-015 first recorded Fuji settlement 766ms
+stdout | test/audit.test.ts > CHAIN-017 Fuji existing-contract provenance
+Hanko reads existing null-402 contracts; Hanko deploys no contracts.
+
+stdout | test/audit.test.ts > CHAIN-017 Fuji existing-contract provenance
+AUDIT CHAIN-017 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real eth_chainId=43113; proof calls use existing published verifier/pool; Hanko deploys no contracts. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > CHAIN-017 Fuji existing-contract provenance 253ms
+stdout | test/audit.test.ts > EDGE-026 Fuji RPC chain ID and same-block read calls
+{"rpc":"https://api.avax-test.network/ext/bc/C/rpc","chainId":43113,"receiptBlock":"57020734","checkBlock":"60046054","methods":["eth_blockNumber","eth_call","eth_call","eth_call"],"callBlocks":["0x3943ae6","0x3943ae6","0x3943ae6"]}
+
+stdout | test/audit.test.ts > EDGE-026 Fuji RPC chain ID and same-block read calls
+AUDIT EDGE-026 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real RPC eth_chainId 43113 and success receipt; observed exactly three SDK eth_call methods at the reported common block; allowlisted read-only methods only. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > EDGE-026 Fuji RPC chain ID and same-block read calls 240ms
+stdout | test/audit.test.ts > EDGE-029 missing unreadable/corrupt Sapling params and valid HOME/explicit path
+AUDIT EDGE-029 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real Sapling authorization succeeds with HOME and explicit published-parameter path; missing/directory-unreadable/hash-mismatched parameter files exit 2 Setup required. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > EDGE-029 missing unreadable/corrupt Sapling params and valid HOME/explicit path 5827ms
+stdout | test/audit.test.ts > EDGE-032 timeout kills child and frees limiter for next real request
+AUDIT EDGE-032 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: silent real socket timeout returns LightwalletdUnreachableError/was stopped; same single-slot limiter immediately verifies next recorded payment successfully. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > EDGE-032 timeout kills child and frees limiter for next real request 2005ms
+stdout | test/audit.test.ts > EDGE-035 proof amount x10, unknown root and expectation mismatches
+AUDIT EDGE-035 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real Fuji verifier rejects 10x amount BAD_PROOF; root zero gives ROOT_UNKNOWN; merchant mismatches give all three exact mismatch reasons. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > EDGE-035 proof amount x10, unknown root and expectation mismatches 1655ms
+stdout | test/audit.test.ts > EDGE-036 each missing settlement binding plus wrong recipient
+AUDIT EDGE-036 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real recorded settlement missing payTo/amount/recipient separately is refused UNBOUND; wrong recipient refused RECIPIENT_MISMATCH. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > EDGE-036 each missing settlement binding plus wrong recipient 1455ms
+stdout | test/audit.test.ts > EDGE-038 malformed hash, non-pool and wrong selector
+AUDIT EDGE-038 PASS: Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: malformed settlement hash rejected before RPC; recorded pool transaction with non-settle selector rejected by proofFromSettleTx; no paid verdict. Log: audit/cli-chain/audit.txt
+
+ ✓ test/audit.test.ts > EDGE-038 malformed hash, non-pool and wrong selector 25ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/audit.test.ts > CHAIN-012 five-note funding is not invoice acceptance
+AssertionError: expected [] to have a length of 5 but got +0
+
+- Expected
++ Received
+
+- 5
++ 0
+
+ ❯ test/audit.test.ts:228:202
+
+ ❯ test/audit.test.ts:37:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 36 passed (37)
+   Start at  14:01:03
+   Duration  62.96s (transform 50ms, setup 0ms, collect 337ms, tests 62.51s, environment 0ms, prepare 47ms)
+
+
+EXIT: 1
+ELAPSED_SECONDS: 63.45

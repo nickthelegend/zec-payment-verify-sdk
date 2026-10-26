@@ -103,6 +103,9 @@ async fn an_answer_whose_block_does_not_list_the_tx_is_inconsistent() {
     let mut without = block.clone();
     without.vtx.retain(|tx| tx.txid != id.as_ref().to_vec());
     assert_eq!(without.vtx.len() + 1, block.vtx.len());
-    assert!(zpay_verify::check_inclusion(&without, h, &id).unwrap_err().contains("does not list"));
-    assert!(zpay_verify::check_inclusion(&block, h + 1, &id).unwrap_err().contains("height"));
+    for (candidate, height, detail) in [(&without, h, "does not list"), (&block, h + 1, "height")] {
+        let err = zpay_verify::check_inclusion(candidate, height, &id).map_err(zpay_verify::VerifyError::Inconsistent).unwrap_err();
+        assert!(err.to_string().starts_with("lightwalletd answered inconsistently"));
+        assert!(err.to_string().contains(detail));
+    }
 }
