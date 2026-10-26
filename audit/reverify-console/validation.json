@@ -1,0 +1,194 @@
+{
+  "validatedAt": "2026-10-26T10:17:31.689Z",
+  "rows": 39,
+  "totals": {
+    "PASS": 38,
+    "FAIL": 0,
+    "UNTESTED": 1
+  },
+  "assertions": 743,
+  "screenshots": 39,
+  "maxScreenshotBytes": 61796,
+  "maxRowDurationMs": 39675,
+  "auditBytes": 7187861,
+  "readOnlyFujiMethods": [
+    "eth_getTransactionByHash",
+    "eth_getTransactionReceipt",
+    "eth_blockNumber",
+    "eth_call"
+  ],
+  "allRecordedProcessesExited": true,
+  "heavySlotReleased": true,
+  "processes": [
+    {
+      "file": "console-session-18140.json",
+      "label": "dashboard Vite dev server",
+      "pid": 18239,
+      "exited": true,
+      "code": 143,
+      "signal": null
+    },
+    {
+      "file": "console-session-18140.json",
+      "label": "Google Chrome",
+      "pid": 18245,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "edges-session-85341.json",
+      "label": "dashboard 5187",
+      "pid": 85432,
+      "exited": true,
+      "code": 143,
+      "signal": null
+    },
+    {
+      "file": "edges-session-85341.json",
+      "label": "dashboard 5188",
+      "pid": 85434,
+      "exited": true,
+      "code": 143,
+      "signal": null
+    },
+    {
+      "file": "edges-session-85341.json",
+      "label": "landing/reference static",
+      "pid": 85436,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "file": "edges-session-85341.json",
+      "label": "verify-only API 18404",
+      "pid": 85437,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "file": "edges-session-85341.json",
+      "label": "verify-only API 18405",
+      "pid": 85438,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "file": "edges-session-85341.json",
+      "label": "verify-only API 18406",
+      "pid": 85439,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "file": "edges-session-85341.json",
+      "label": "temporary local TLS certificate",
+      "pid": 85474,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "edges-session-85341.json",
+      "label": "local HTTPS forwarding",
+      "pid": 85475,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "file": "edges-session-85341.json",
+      "label": "Google Chrome",
+      "pid": 85476,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "pages-session-78960.json",
+      "label": "static Pages server",
+      "pid": 78961,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "file": "pages-session-78960.json",
+      "label": "Google Chrome",
+      "pid": 78962,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "session.json",
+      "name": "sdk-build",
+      "pid": 16339,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "session.json",
+      "name": "gateway-build",
+      "pid": 16520,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "session.json",
+      "name": "dashboard-types",
+      "pid": 17030,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "session.json",
+      "name": "pages-build",
+      "pid": 17547,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "session.json",
+      "name": "console-run",
+      "pid": 18140,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "session.json",
+      "name": "pages-run",
+      "pid": 78960,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "session.json",
+      "name": "edges-run",
+      "pid": 85341,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "file": "session.json",
+      "name": "slot-release",
+      "pid": 45476,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "auditMdUnchanged": true,
+  "fullViewingKeysRedacted": true
+}

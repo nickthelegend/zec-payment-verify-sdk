@@ -1,0 +1,245 @@
+[
+  {
+    "id": "EDGE-001",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-001-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-002",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-002-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-003",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-003-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-004",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-004-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-005",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-005-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "down": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-006",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-006-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-007",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-007-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-008",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-008-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-009",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-009-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-010",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-010-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-011",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-011-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-012",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-012-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-015",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-015-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-017",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-017-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-020",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-020-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-021",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-021-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-022",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-022-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "landing": "PASS",
+      "reference": "PASS",
+      "liveLanding": "PASS",
+      "liveReference": "PASS",
+      "pagesLanding": "PASS",
+      "pagesReference": "PASS",
+      "pagesConsole": "PASS",
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-023",
+    "status": "PASS",
+    "evidence": [
+      "audit/reverify-console/EDGE-023-edges-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "reference": "PASS",
+      "liveReference": "PASS",
+      "hosted": "PASS",
+      "local": "PASS",
+      "landing": "PASS",
+      "liveLanding": "PASS"
+    }
+  },
+  {
+    "id": "EDGE-024",
+    "status": "UNTESTED",
+    "evidence": [
+      "audit/reverify-console/EDGE-024-edges-1.json"
+    ],
+    "fix": "",
+    "dependency": "needs testnet.snowtrace.io to serve the recorded settlement to headless Chrome without a Cloudflare challenge; the rendered href is the published hash.",
+    "surfaces": {
+      "reference": "UNTESTED",
+      "liveReference": "UNTESTED",
+      "hosted": "UNTESTED",
+      "local": "UNTESTED",
+      "landing": "PASS",
+      "liveLanding": "PASS"
+    }
+  }
+]

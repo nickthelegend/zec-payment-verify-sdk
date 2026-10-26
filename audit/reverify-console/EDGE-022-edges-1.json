@@ -1,0 +1,2089 @@
+{
+  "id": "EDGE-022",
+  "attempt": 1,
+  "at": "2026-10-26T10:14:08.522Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "landing",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "landing",
+      "name": "zero failed Google Fonts requests",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "landing",
+      "name": "fonts.googleapis.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "landing",
+          "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+          "status": 200,
+          "type": "stylesheet"
+        }
+      ]
+    },
+    {
+      "surface": "landing",
+      "name": "fonts.gstatic.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "landing",
+          "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+          "status": 200,
+          "type": "font"
+        },
+        {
+          "surface": "landing",
+          "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+          "status": 200,
+          "type": "font"
+        }
+      ]
+    },
+    {
+      "surface": "landing",
+      "name": "Hanken Grotesk loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "landing",
+      "name": "JetBrains Mono loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "landing",
+      "name": "font families used on body and code",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "landing",
+      "name": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 37604
+    },
+    {
+      "surface": "landing",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "reference",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "reference",
+      "name": "zero failed Google Fonts requests",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "reference",
+      "name": "fonts.googleapis.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "reference",
+          "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+          "status": 200,
+          "type": "stylesheet"
+        }
+      ]
+    },
+    {
+      "surface": "reference",
+      "name": "fonts.gstatic.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "reference",
+          "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+          "status": 200,
+          "type": "font"
+        },
+        {
+          "surface": "reference",
+          "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+          "status": 200,
+          "type": "font"
+        }
+      ]
+    },
+    {
+      "surface": "reference",
+      "name": "Hanken Grotesk loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "reference",
+      "name": "JetBrains Mono loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "reference",
+      "name": "font families used on body and code",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "reference",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "liveLanding",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "liveLanding",
+      "name": "zero failed Google Fonts requests",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "liveLanding",
+      "name": "fonts.googleapis.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "liveLanding",
+          "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+          "status": 200,
+          "type": "stylesheet"
+        }
+      ]
+    },
+    {
+      "surface": "liveLanding",
+      "name": "fonts.gstatic.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "liveLanding",
+          "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+          "status": 200,
+          "type": "font"
+        },
+        {
+          "surface": "liveLanding",
+          "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+          "status": 200,
+          "type": "font"
+        }
+      ]
+    },
+    {
+      "surface": "liveLanding",
+      "name": "Hanken Grotesk loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "liveLanding",
+      "name": "JetBrains Mono loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "liveLanding",
+      "name": "font families used on body and code",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "liveLanding",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "liveReference",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "liveReference",
+      "name": "zero failed Google Fonts requests",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "liveReference",
+      "name": "fonts.googleapis.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "liveReference",
+          "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+          "status": 200,
+          "type": "stylesheet"
+        }
+      ]
+    },
+    {
+      "surface": "liveReference",
+      "name": "fonts.gstatic.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "liveReference",
+          "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+          "status": 200,
+          "type": "font"
+        },
+        {
+          "surface": "liveReference",
+          "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+          "status": 200,
+          "type": "font"
+        }
+      ]
+    },
+    {
+      "surface": "liveReference",
+      "name": "Hanken Grotesk loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "liveReference",
+      "name": "JetBrains Mono loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "liveReference",
+      "name": "font families used on body and code",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "liveReference",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "pagesLanding",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "pagesLanding",
+      "name": "zero failed Google Fonts requests",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "pagesLanding",
+      "name": "fonts.googleapis.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "pagesLanding",
+          "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+          "status": 200,
+          "type": "stylesheet"
+        }
+      ]
+    },
+    {
+      "surface": "pagesLanding",
+      "name": "fonts.gstatic.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "pagesLanding",
+          "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+          "status": 200,
+          "type": "font"
+        },
+        {
+          "surface": "pagesLanding",
+          "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+          "status": 200,
+          "type": "font"
+        }
+      ]
+    },
+    {
+      "surface": "pagesLanding",
+      "name": "Hanken Grotesk loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "pagesLanding",
+      "name": "JetBrains Mono loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "pagesLanding",
+      "name": "font families used on body and code",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "pagesLanding",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "pagesReference",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "pagesReference",
+      "name": "zero failed Google Fonts requests",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "pagesReference",
+      "name": "fonts.googleapis.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "pagesReference",
+          "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+          "status": 200,
+          "type": "stylesheet"
+        }
+      ]
+    },
+    {
+      "surface": "pagesReference",
+      "name": "fonts.gstatic.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "pagesReference",
+          "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+          "status": 200,
+          "type": "font"
+        },
+        {
+          "surface": "pagesReference",
+          "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+          "status": 200,
+          "type": "font"
+        }
+      ]
+    },
+    {
+      "surface": "pagesReference",
+      "name": "Hanken Grotesk loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "pagesReference",
+      "name": "JetBrains Mono loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "pagesReference",
+      "name": "font families used on body and code",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "pagesReference",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "pagesConsole",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "pagesConsole",
+      "name": "zero failed Google Fonts requests",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "pagesConsole",
+      "name": "fonts.googleapis.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "pagesConsole",
+          "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+          "status": 200,
+          "type": "stylesheet"
+        }
+      ]
+    },
+    {
+      "surface": "pagesConsole",
+      "name": "fonts.gstatic.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "pagesConsole",
+          "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+          "status": 200,
+          "type": "font"
+        },
+        {
+          "surface": "pagesConsole",
+          "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+          "status": 200,
+          "type": "font"
+        }
+      ]
+    },
+    {
+      "surface": "pagesConsole",
+      "name": "Hanken Grotesk loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "pagesConsole",
+      "name": "JetBrains Mono loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "pagesConsole",
+      "name": "font families used on body and code",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "pagesConsole",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "hosted",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "hosted",
+      "name": "zero failed Google Fonts requests",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "hosted",
+      "name": "fonts.googleapis.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "hosted",
+          "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+          "status": 200,
+          "type": "stylesheet"
+        }
+      ]
+    },
+    {
+      "surface": "hosted",
+      "name": "fonts.gstatic.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "hosted",
+          "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+          "status": 200,
+          "type": "font"
+        },
+        {
+          "surface": "hosted",
+          "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+          "status": 200,
+          "type": "font"
+        }
+      ]
+    },
+    {
+      "surface": "hosted",
+      "name": "Hanken Grotesk loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "hosted",
+      "name": "JetBrains Mono loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "hosted",
+      "name": "font families used on body and code",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "hosted",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "name": "zero failed Google Fonts requests",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "local",
+      "name": "fonts.googleapis.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "local",
+          "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+          "status": 200,
+          "type": "stylesheet"
+        }
+      ]
+    },
+    {
+      "surface": "local",
+      "name": "fonts.gstatic.com actual requests succeeded",
+      "pass": true,
+      "actual": [
+        {
+          "surface": "local",
+          "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+          "status": 200,
+          "type": "font"
+        },
+        {
+          "surface": "local",
+          "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+          "status": 200,
+          "type": "font"
+        }
+      ]
+    },
+    {
+      "surface": "local",
+      "name": "Hanken Grotesk loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "local",
+      "name": "JetBrains Mono loaded",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "local",
+      "name": "font families used on body and code",
+      "pass": true,
+      "actual": {
+        "requested": {
+          "Hanken Grotesk": [
+            {
+              "family": "Hanken Grotesk",
+              "status": "loaded"
+            }
+          ],
+          "JetBrains Mono": [
+            {
+              "family": "JetBrains Mono",
+              "status": "loaded"
+            }
+          ]
+        },
+        "loaded": [
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "Hanken Grotesk",
+          "JetBrains Mono",
+          "JetBrains Mono"
+        ],
+        "body": "\"Hanken Grotesk\", system-ui, sans-serif",
+        "code": "\"JetBrains Mono\", ui-monospace, monospace"
+      }
+    },
+    {
+      "surface": "local",
+      "name": "zero uncaught page errors",
+      "pass": true
+    }
+  ],
+  "console": [
+    {
+      "surface": "local",
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "url": "http://localhost:5187/@vite/client"
+    },
+    {
+      "surface": "local",
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react-dom_client.js?v=378cd6d8"
+    },
+    {
+      "surface": "local",
+      "type": "debug",
+      "text": "[vite] connected.",
+      "url": "http://localhost:5187/@vite/client"
+    }
+  ],
+  "network": [
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/assets/hero.webp",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "reference",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "http://127.0.0.1:5198/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "http://127.0.0.1:5198/assets/hero.webp",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "pagesReference",
+      "url": "http://127.0.0.1:5198/reference.html",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "pagesReference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "pagesReference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "pagesReference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "http://127.0.0.1:5198/dashboard/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "http://127.0.0.1:5198/dashboard/assets/index-DpFU7OeH.css",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "http://127.0.0.1:5198/dashboard/assets/index-C8wetOgc.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-DpFU7OeH.css",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-jE2E0saT.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-api.201-18-198-162.sslip.io/api/health",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/main.tsx",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@vite/client",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@react-refresh",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=70ac6bff",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react.js?v=70ac6bff",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/node_modules/.pnpm/vite@7.3.7_@types+node@22.20.5_tsx@4.23.15/node_modules/vite/dist/client/env.mjs",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-AXQFWXYZ.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-DS4ZRJLM.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/App.tsx",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/styles.css",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react-dom_client.js?v=378cd6d8",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/testnet.json?import",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/null402.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/console-recorded.json?import",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-TSDROGJN.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/errors.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/limiter.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem.js?v=ac82d5c3",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem_chains.js?v=ffce1677",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-I2CEELMA.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-PFXZJHIF.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-KZUX4H5X.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-MLMCMYHL.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-RST5QK3N.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-YG2HVMEF.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/api/health",
+      "status": 200,
+      "type": "fetch"
+    }
+  ],
+  "requests": [
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/assets/hero.webp",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "method": "GET"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "http://127.0.0.1:5198/",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "http://127.0.0.1:5198/assets/hero.webp",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesLanding",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesReference",
+      "url": "http://127.0.0.1:5198/reference.html",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesReference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesReference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesReference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "http://127.0.0.1:5198/dashboard/",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "http://127.0.0.1:5198/dashboard/assets/index-C8wetOgc.js",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "http://127.0.0.1:5198/dashboard/assets/index-DpFU7OeH.css",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "pagesConsole",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-jE2E0saT.js",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-DpFU7OeH.css",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-api.201-18-198-162.sslip.io/api/health",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@vite/client",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/main.tsx",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@react-refresh",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=70ac6bff",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react.js?v=70ac6bff",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react-dom_client.js?v=378cd6d8",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/App.tsx",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/styles.css",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/node_modules/.pnpm/vite@7.3.7_@types+node@22.20.5_tsx@4.23.15/node_modules/vite/dist/client/env.mjs",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-DS4ZRJLM.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-AXQFWXYZ.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/null402.js",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/testnet.json?import",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/console-recorded.json?import",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-TSDROGJN.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem.js?v=ac82d5c3",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem_chains.js?v=ffce1677",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/errors.js",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/limiter.js",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-I2CEELMA.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-PFXZJHIF.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-YG2HVMEF.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-RST5QK3N.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-KZUX4H5X.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-MLMCMYHL.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/api/health",
+      "method": "GET"
+    }
+  ],
+  "requestFailures": [],
+  "pageErrors": [],
+  "errors": [],
+  "screenshots": [
+    "audit/reverify-console/EDGE-022.jpg"
+  ],
+  "surfaces": {
+    "landing": "PASS",
+    "reference": "PASS",
+    "liveLanding": "PASS",
+    "liveReference": "PASS",
+    "pagesLanding": "PASS",
+    "pagesReference": "PASS",
+    "pagesConsole": "PASS",
+    "hosted": "PASS",
+    "local": "PASS"
+  },
+  "expectedFaults": {
+    "http": [],
+    "console": [],
+    "requests": []
+  },
+  "unexpected": {
+    "http": [],
+    "console": [],
+    "requests": [],
+    "pageErrors": []
+  },
+  "durationMs": 6718,
+  "status": "PASS"
+}

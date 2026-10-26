@@ -1,0 +1,3 @@
+
+> @zpv/gateway@0.1.0 build /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/gateway
+> tsc -p tsconfig.json

@@ -1,0 +1,72 @@
+{
+  "started": "2026-10-26T10:09:28.812Z",
+  "runnerPid": 16299,
+  "video": false,
+  "trace": false,
+  "rowTimeoutMs": 90000,
+  "processes": [
+    {
+      "name": "sdk-build",
+      "pid": 16339,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "name": "gateway-build",
+      "pid": 16520,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "name": "dashboard-types",
+      "pid": 17030,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "name": "pages-build",
+      "pid": 17547,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "name": "console-run",
+      "pid": 18140,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "name": "pages-run",
+      "pid": 78960,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "name": "edges-run",
+      "pid": 85341,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "name": "slot-release",
+      "pid": 45476,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "slotOwner": "audit-t13 88543 2026-10-26T10:08:19Z",
+  "finished": "2026-10-26T10:14:37.638Z",
+  "totals": {
+    "PASS": 38,
+    "FAIL": 0,
+    "UNTESTED": 1
+  }
+}

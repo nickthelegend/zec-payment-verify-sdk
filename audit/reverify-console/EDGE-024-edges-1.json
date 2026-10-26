@@ -1,0 +1,1393 @@
+{
+  "id": "EDGE-024",
+  "attempt": 1,
+  "at": "2026-10-26T10:14:24.472Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "reference",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "reference",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": [
+        {
+          "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "label": "The settle tx"
+        }
+      ]
+    },
+    {
+      "surface": "reference",
+      "name": "rendered transaction links exist",
+      "pass": true
+    },
+    {
+      "surface": "reference",
+      "name": "published transaction target",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "The settle tx"
+      }
+    },
+    {
+      "surface": "reference",
+      "name": "explorer loads exact requested transaction",
+      "pass": false,
+      "actual": {
+        "status": 403,
+        "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "requestedHashVisible": false,
+        "title": "Just a moment...",
+        "bodyExcerpt": "testnet.snowtrace.io\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a508b1a79a95cda7\nPerformance and Security by Cloudflare\nPrivacy"
+      }
+    },
+    {
+      "surface": "reference",
+      "name": "explorer loads exact requested transaction",
+      "pass": false,
+      "actual": {
+        "status": 403,
+        "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "requestedHashVisible": false,
+        "title": "Just a moment...",
+        "bodyExcerpt": "testnet.snowtrace.io\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a508b1a79a95cda7\nPerformance and Security by Cloudflare\nPrivacy"
+      }
+    },
+    {
+      "surface": "reference",
+      "name": "explorer screenshot <=200 KB",
+      "pass": true
+    },
+    {
+      "surface": "liveReference",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "liveReference",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": [
+        {
+          "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "label": "The settle tx"
+        }
+      ]
+    },
+    {
+      "surface": "liveReference",
+      "name": "rendered transaction links exist",
+      "pass": true
+    },
+    {
+      "surface": "liveReference",
+      "name": "published transaction target",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "The settle tx"
+      }
+    },
+    {
+      "surface": "liveReference",
+      "name": "linked explorer destination satisfies contract",
+      "pass": false,
+      "actual": {
+        "status": 403,
+        "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "requestedHashVisible": false,
+        "title": "Just a moment...",
+        "bodyExcerpt": "testnet.snowtrace.io\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a508b1a79a95cda7\nPerformance and Security by Cloudflare\nPrivacy"
+      }
+    },
+    {
+      "surface": "hosted",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "hosted",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": [
+        {
+          "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "label": "0x8596f5…5ca593 ↗"
+        }
+      ]
+    },
+    {
+      "surface": "hosted",
+      "name": "rendered transaction links exist",
+      "pass": true
+    },
+    {
+      "surface": "hosted",
+      "name": "published transaction target",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "0x8596f5…5ca593 ↗"
+      }
+    },
+    {
+      "surface": "hosted",
+      "name": "hash label matches href",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "0x8596f5…5ca593 ↗"
+      }
+    },
+    {
+      "surface": "hosted",
+      "name": "linked explorer destination satisfies contract",
+      "pass": false,
+      "actual": {
+        "status": 403,
+        "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "requestedHashVisible": false,
+        "title": "Just a moment...",
+        "bodyExcerpt": "testnet.snowtrace.io\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a508b1a79a95cda7\nPerformance and Security by Cloudflare\nPrivacy"
+      }
+    },
+    {
+      "surface": "local",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": [
+        {
+          "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "label": "0x8596f5…5ca593 ↗"
+        }
+      ]
+    },
+    {
+      "surface": "local",
+      "name": "rendered transaction links exist",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "name": "published transaction target",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "0x8596f5…5ca593 ↗"
+      }
+    },
+    {
+      "surface": "local",
+      "name": "hash label matches href",
+      "pass": true,
+      "actual": {
+        "href": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "label": "0x8596f5…5ca593 ↗"
+      }
+    },
+    {
+      "surface": "local",
+      "name": "linked explorer destination satisfies contract",
+      "pass": false,
+      "actual": {
+        "status": 403,
+        "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "requestedHashVisible": false,
+        "title": "Just a moment...",
+        "bodyExcerpt": "testnet.snowtrace.io\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a508b1a79a95cda7\nPerformance and Security by Cloudflare\nPrivacy"
+      }
+    },
+    {
+      "surface": "landing",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "landing",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "landing",
+      "name": "landing overview has no invented explorer links",
+      "pass": true
+    },
+    {
+      "surface": "landing",
+      "name": "zero uncaught page errors",
+      "pass": true
+    },
+    {
+      "surface": "liveLanding",
+      "name": "page HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "liveLanding",
+      "name": "Actually rendered explorer links",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "surface": "liveLanding",
+      "name": "landing overview has no invented explorer links",
+      "pass": true
+    },
+    {
+      "surface": "liveLanding",
+      "name": "zero uncaught page errors",
+      "pass": true
+    }
+  ],
+  "console": [
+    {
+      "surface": "reference",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 ()",
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"
+    },
+    {
+      "surface": "reference",
+      "type": "startGroupCollapsed",
+      "text": "",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "debug",
+      "text": "Error",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "log",
+      "text": "/.*.*=.*/",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "log",
+      "text": "/.*.*=.*/",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "log",
+      "text": "function(){return AI(Qg,Qy)}",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "log",
+      "text": "function(){return AI(Qg,Qy)}",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "log",
+      "text": "JSHandle@node",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "log",
+      "text": "JSHandle@node",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "count",
+      "text": "\u0000: 1",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "count",
+      "text": "\u0000: 1",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "debug",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "debug",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "dir",
+      "text": " Error",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "dir",
+      "text": " Error",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "dirxml",
+      "text": "%c%d font-size:0;color:transparent Error",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "dirxml",
+      "text": "%c%d font-size:0;color:transparent Error",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "error",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "error",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "info",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "info",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "log",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "log",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "table",
+      "text": "%c%d font-size:0;color:transparent Error",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "table",
+      "text": "%c%d font-size:0;color:transparent Error",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "trace",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "trace",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "warning",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "warning",
+      "text": "%c%d font-size:0;color:transparent NaN",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "endGroup",
+      "text": "console.groupEnd",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "warning",
+      "text": "No available adapters.",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "error",
+      "text": "Connecting to 'data:,' violates the following Content Security Policy directive: \"connect-src 'self' https://hagen.challenges.cloudflare.com https://brunhild.challenges.cloudflare.com https://valid.alg13.dnstest.challenges.cloudflare.com https://invalid.alg13.dnstest.challenges.cloudflare.com https://dual-valid.mldsa44.dnstest.challenges.cloudflare.com https://valid.mldsa44.dnstest.challenges.cloudflare.com https://dnstest.dev\". The action has been blocked.",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "error",
+      "text": "Connecting to 'data:,' violates the following Content Security Policy directive: \"connect-src 'self' https://hagen.challenges.cloudflare.com https://brunhild.challenges.cloudflare.com https://valid.alg13.dnstest.challenges.cloudflare.com https://invalid.alg13.dnstest.challenges.cloudflare.com https://dual-valid.mldsa44.dnstest.challenges.cloudflare.com https://valid.mldsa44.dnstest.challenges.cloudflare.com https://dnstest.dev\". The action has been blocked.",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "error",
+      "text": "Connecting to 'data:,' violates the following Content Security Policy directive: \"connect-src 'self' https://hagen.challenges.cloudflare.com https://brunhild.challenges.cloudflare.com https://valid.alg13.dnstest.challenges.cloudflare.com https://invalid.alg13.dnstest.challenges.cloudflare.com https://dual-valid.mldsa44.dnstest.challenges.cloudflare.com https://valid.mldsa44.dnstest.challenges.cloudflare.com https://dnstest.dev\". The action has been blocked.",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "error",
+      "text": "Fetch API cannot load data:,. Refused to connect because it violates the document's Content Security Policy.",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "reference",
+      "type": "warning",
+      "text": "OTS parsing error: Size of decompressed WOFF 2.0 is less than compressed size",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+    },
+    {
+      "surface": "local",
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "url": "http://localhost:5187/@vite/client"
+    },
+    {
+      "surface": "local",
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react-dom_client.js?v=378cd6d8"
+    },
+    {
+      "surface": "local",
+      "type": "debug",
+      "text": "[vite] connected.",
+      "url": "http://localhost:5187/@vite/client"
+    }
+  ],
+  "network": [
+    {
+      "surface": "reference",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "status": 307,
+      "type": "document"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "status": 403,
+      "type": "document"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=a508b1a79a95cda7",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/turnstile/v0/b/d2d3316b729e/api.js?onload=DraY9&render=explicit",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/cdn-cgi/challenge-platform/h/b/fo/3648259888:1793005806:LqiIZJToeQRoNbPgL8YQQ7a1CpxMj-Wg_fucUlluwkA/a508b1a79a95cda7/WTB3hwyZSJtTWRgqjt.IC_dHZLIZBZ9paLPFTGcNp1w-1793009665-1.2.1.1-9.tAGQe7IqhowhWuuXAKAORNJePggNkDlyjJX88i2OPYqKLypHC9D0nuKMy8L8lx",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://testnet.snowtrace.io/f44509cd-7261-4443-98db-20db6ae118e1",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/fo/3412511531:1793005812:6n2cMwXyypLtvbIt6j54Xryq9bv9z_fYa664Ssr3WwY/a508b1a9fa912e8b/R0EyfO4c2eaToLTNKX.6UwW94L8TCTp6zugbipTkSmQ-1793009665-1.2.1.1-dG5IjyLs7i2APQDpSU0y_UO0ugoH7lzhhHjJnxBYob41GKQC.7sDsDTikeBie21q",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/7040b758-3bb4-4988-a9da-2c5ca6c5ee08",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/pat/a508b1a9fa912e8b/1793009665779/ea8c00606e4351a61245e26ea600ae1d9a52d0d28727d47be8ae4382813022ca/TIfOtxF4K4nHDEGRNkfbKRQSky5F.HEANK5EwcU1i68-1793009665-1.3.1.1-YZ5DWW_qKfxKdfTH3EyjBgEWBCoz9IiRMZBkev_XL5_IBj9zCw1OTQtR_CPnpUkY1A1FauZJ_TI5E9MoYwgEYB8MCdcfCS0kZmMaQASDBl9XKHDMdI5p03Au9ipX1.1wIuV3zag04gs9tyeIqJMh2lwia5EKA297NHnUGwcO0.VIxKxJZOqeU8L5e0SzoRrxCrji8Nrp.uSH_PMzsX4X3ltTSF3lEqe744pxbUG2_WJ3d8prMqjAj37qkDaUd9LsHI6juFCAh5fjNmG0ewsPz58dYYEis42VoTDPFG8R4IlN0DNs_ux_y_ymgc9KNntrYtBTnlSbDzhaFH0XKWackn3WwlMKqIHMTrYZiwi6u5l30sOptNsmiQviNmUG6wGU3SNvidwc5LhxxENz_dxv.rj5KghfM1nPZpIBl9K23unZ1Uk8RhWDB5ujcNTRogDc9RbVXCuJuzJEPVtJGRDiXH41e2HbX86MVQrrQMDAgZaCw6e0qdDg8WKAdomjaFwKlzitYAehef00uTLlsi29jToUwOnrVGP.un82EdmgQGUbjvtBDGnDVYfnRDp23VLsNnKkRncmWEbMRyeyzXXAOq9i24puLxpJuDIyOF2cVUsqzvhs1U.aon21aheWYHxug24dnyj536QhkoMgBv7vPAk05fCa4_49GPG7YCTP8hjBbn0oBfTC5U2f9nE9XWBE90WWseOxepe5dSehsUzLeyuUalZ.y2XaJypakboF3sL8S6gLor85tOgj8ufF4AhmxirrQZS5Qk5wqEeVZG.Et8Lr1v1wFMXaNIVAKmx_iO5z9CEhnwhThgtIYjBi4pfW",
+      "status": 401,
+      "type": "fetch"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/ci/a508b1a9fa912e8b/1793009665780/Xja9KNpsJ2fxTrrtmYzOw6jVxERwzSELYtHjaQ..WbY-1793009665-1.3.1.1-IFzQQryfCyQqo4MEpwmAvLDwSmRO81o6Abvt07223YJH1AHuB_XFd16EkeNOwRgCyodotTIkYVRWHnpMT6sAwFGGBHHQtS_lXs9fvuCn7mFcV2SPOYY7DUoU.px_ufL6j3Do9eJ4_1hvdz1ylRNJuz8QBhPF5CLNzSOFCsj5PJPKCv3_yQsdG1MpZJs1jgsH1bywnxVTLV.GbVYdDSRITiYCZvmpOWsiLn4CsUMd.CeSrdGG7.BRUjezoasho7XG9gvLI2e087ij5e.NFhlPYA.TibRIkoN.z0MhUqCMEvnWvJXV8sxCBs77RA145xzVnrMQyA6LBvyGQLS3nBVbaLyaJPBDnQoCZ1YLUOGUuGOfMGL1ZPxAXc66itxlO0ql6w9IwLSygxgX281RpM.zBcShtwteCiBuWONwlSYFiqnjq8snfGfLiPUaKqUPRRQiBqt4v8tMuIAo5n0N5RtkconLeXk_LCoS0jUUEDDoCCleY8kIMPZVVjEeY2rXZXFQq5sRL0uK69PJwjGa2mZf0LeOmj0C3BK.ScHMo3pgQWk5K3oZNLQTV1kHvSDqVqxloG7JsMIKwmOscL0OFRVHU295xLV8B5qAQb7enVTp.iZPGIKIgkmMSvlKaOY1yoICUii6wxmP4aDOH_LOre1LxWBH9zUjkMVTtnFY4IAh_VpYnT9hG6d4ExYoiPt.9TZqcV3RZfOrTj3SH6Z8RJpoYrDKGNdrqa7ohuXRXtAayeU",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/7040b758-3bb4-4988-a9da-2c5ca6c5ee08",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/7040b758-3bb4-4988-a9da-2c5ca6c5ee08",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/fo/3412511531:1793005812:6n2cMwXyypLtvbIt6j54Xryq9bv9z_fYa664Ssr3WwY/a508b1a9fa912e8b/R0EyfO4c2eaToLTNKX.6UwW94L8TCTp6zugbipTkSmQ-1793009665-1.2.1.1-dG5IjyLs7i2APQDpSU0y_UO0ugoH7lzhhHjJnxBYob41GKQC.7sDsDTikeBie21q",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/1b67ea35-171b-4cae-9a0e-c5a2c5d96657",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-DpFU7OeH.css",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-jE2E0saT.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-api.201-18-198-162.sslip.io/api/health",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/main.tsx",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@vite/client",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@react-refresh",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=70ac6bff",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react.js?v=70ac6bff",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/node_modules/.pnpm/vite@7.3.7_@types+node@22.20.5_tsx@4.23.15/node_modules/vite/dist/client/env.mjs",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-DS4ZRJLM.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-AXQFWXYZ.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/App.tsx",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/styles.css",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/null402.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/testnet.json?import",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/console-recorded.json?import",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react-dom_client.js?v=378cd6d8",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/errors.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem.js?v=ac82d5c3",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/limiter.js",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-TSDROGJN.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem_chains.js?v=ffce1677",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-I2CEELMA.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-PFXZJHIF.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-KZUX4H5X.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-MLMCMYHL.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-RST5QK3N.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-YG2HVMEF.js?v=d7029c75",
+      "status": 200,
+      "type": "script"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/api/health",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/assets/hero.webp",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "status": 200,
+      "type": "document"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "status": 200,
+      "type": "image"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "type": "stylesheet"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "type": "font"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "type": "font"
+    }
+  ],
+  "requests": [
+    {
+      "surface": "reference",
+      "url": "http://127.0.0.1:5197/reference.html",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=a508b1a79a95cda7",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://testnet.snowtrace.io/7eeb7ff0-dfcd-48e9-9647-9944caff31e9",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/turnstile/v0/b/d2d3316b729e/api.js?onload=DraY9&render=explicit",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://testnet.snowtrace.io/cdn-cgi/challenge-platform/h/b/fo/3648259888:1793005806:LqiIZJToeQRoNbPgL8YQQ7a1CpxMj-Wg_fucUlluwkA/a508b1a79a95cda7/WTB3hwyZSJtTWRgqjt.IC_dHZLIZBZ9paLPFTGcNp1w-1793009665-1.2.1.1-9.tAGQe7IqhowhWuuXAKAORNJePggNkDlyjJX88i2OPYqKLypHC9D0nuKMy8L8lx",
+      "method": "POST"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://testnet.snowtrace.io/f44509cd-7261-4443-98db-20db6ae118e1",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/67fc889e-1322-4739-813e-d79ac8b68b12",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/fo/3412511531:1793005812:6n2cMwXyypLtvbIt6j54Xryq9bv9z_fYa664Ssr3WwY/a508b1a9fa912e8b/R0EyfO4c2eaToLTNKX.6UwW94L8TCTp6zugbipTkSmQ-1793009665-1.2.1.1-dG5IjyLs7i2APQDpSU0y_UO0ugoH7lzhhHjJnxBYob41GKQC.7sDsDTikeBie21q",
+      "method": "POST"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/7040b758-3bb4-4988-a9da-2c5ca6c5ee08",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/pat/a508b1a9fa912e8b/1793009665779/ea8c00606e4351a61245e26ea600ae1d9a52d0d28727d47be8ae4382813022ca/TIfOtxF4K4nHDEGRNkfbKRQSky5F.HEANK5EwcU1i68-1793009665-1.3.1.1-YZ5DWW_qKfxKdfTH3EyjBgEWBCoz9IiRMZBkev_XL5_IBj9zCw1OTQtR_CPnpUkY1A1FauZJ_TI5E9MoYwgEYB8MCdcfCS0kZmMaQASDBl9XKHDMdI5p03Au9ipX1.1wIuV3zag04gs9tyeIqJMh2lwia5EKA297NHnUGwcO0.VIxKxJZOqeU8L5e0SzoRrxCrji8Nrp.uSH_PMzsX4X3ltTSF3lEqe744pxbUG2_WJ3d8prMqjAj37qkDaUd9LsHI6juFCAh5fjNmG0ewsPz58dYYEis42VoTDPFG8R4IlN0DNs_ux_y_ymgc9KNntrYtBTnlSbDzhaFH0XKWackn3WwlMKqIHMTrYZiwi6u5l30sOptNsmiQviNmUG6wGU3SNvidwc5LhxxENz_dxv.rj5KghfM1nPZpIBl9K23unZ1Uk8RhWDB5ujcNTRogDc9RbVXCuJuzJEPVtJGRDiXH41e2HbX86MVQrrQMDAgZaCw6e0qdDg8WKAdomjaFwKlzitYAehef00uTLlsi29jToUwOnrVGP.un82EdmgQGUbjvtBDGnDVYfnRDp23VLsNnKkRncmWEbMRyeyzXXAOq9i24puLxpJuDIyOF2cVUsqzvhs1U.aon21aheWYHxug24dnyj536QhkoMgBv7vPAk05fCa4_49GPG7YCTP8hjBbn0oBfTC5U2f9nE9XWBE90WWseOxepe5dSehsUzLeyuUalZ.y2XaJypakboF3sL8S6gLor85tOgj8ufF4AhmxirrQZS5Qk5wqEeVZG.Et8Lr1v1wFMXaNIVAKmx_iO5z9CEhnwhThgtIYjBi4pfW",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://brunhild.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/i/a508b1a9fa912e8b/R0EyfO4c2eaToLTNKX.6UwW94L8TCTp6zugbipTkSmQ-1793009665-1.2.1.1-dG5IjyLs7i2APQDpSU0y_UO0ugoH7lzhhHjJnxBYob41GKQC.7sDsDTikeBie21q",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/ci/a508b1a9fa912e8b/1793009665780/Xja9KNpsJ2fxTrrtmYzOw6jVxERwzSELYtHjaQ..WbY-1793009665-1.3.1.1-IFzQQryfCyQqo4MEpwmAvLDwSmRO81o6Abvt07223YJH1AHuB_XFd16EkeNOwRgCyodotTIkYVRWHnpMT6sAwFGGBHHQtS_lXs9fvuCn7mFcV2SPOYY7DUoU.px_ufL6j3Do9eJ4_1hvdz1ylRNJuz8QBhPF5CLNzSOFCsj5PJPKCv3_yQsdG1MpZJs1jgsH1bywnxVTLV.GbVYdDSRITiYCZvmpOWsiLn4CsUMd.CeSrdGG7.BRUjezoasho7XG9gvLI2e087ij5e.NFhlPYA.TibRIkoN.z0MhUqCMEvnWvJXV8sxCBs77RA145xzVnrMQyA6LBvyGQLS3nBVbaLyaJPBDnQoCZ1YLUOGUuGOfMGL1ZPxAXc66itxlO0ql6w9IwLSygxgX281RpM.zBcShtwteCiBuWONwlSYFiqnjq8snfGfLiPUaKqUPRRQiBqt4v8tMuIAo5n0N5RtkconLeXk_LCoS0jUUEDDoCCleY8kIMPZVVjEeY2rXZXFQq5sRL0uK69PJwjGa2mZf0LeOmj0C3BK.ScHMo3pgQWk5K3oZNLQTV1kHvSDqVqxloG7JsMIKwmOscL0OFRVHU295xLV8B5qAQb7enVTp.iZPGIKIgkmMSvlKaOY1yoICUii6wxmP4aDOH_LOre1LxWBH9zUjkMVTtnFY4IAh_VpYnT9hG6d4ExYoiPt.9TZqcV3RZfOrTj3SH6Z8RJpoYrDKGNdrqa7ohuXRXtAayeU",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/7040b758-3bb4-4988-a9da-2c5ca6c5ee08",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/7040b758-3bb4-4988-a9da-2c5ca6c5ee08",
+      "method": "GET"
+    },
+    {
+      "surface": "reference",
+      "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/fo/3412511531:1793005812:6n2cMwXyypLtvbIt6j54Xryq9bv9z_fYa664Ssr3WwY/a508b1a9fa912e8b/R0EyfO4c2eaToLTNKX.6UwW94L8TCTp6zugbipTkSmQ-1793009665-1.2.1.1-dG5IjyLs7i2APQDpSU0y_UO0ugoH7lzhhHjJnxBYob41GKQC.7sDsDTikeBie21q",
+      "method": "POST"
+    },
+    {
+      "surface": "reference",
+      "url": "blob:https://challenges.cloudflare.com/1b67ea35-171b-4cae-9a0e-c5a2c5d96657",
+      "method": "GET"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "method": "GET"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "liveReference",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-jE2E0saT.js",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-DpFU7OeH.css",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-api.201-18-198-162.sslip.io/api/health",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@vite/client",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/main.tsx",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@react-refresh",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=70ac6bff",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react.js?v=70ac6bff",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/react-dom_client.js?v=378cd6d8",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/App.tsx",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/src/styles.css",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/node_modules/.pnpm/vite@7.3.7_@types+node@22.20.5_tsx@4.23.15/node_modules/vite/dist/client/env.mjs",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-DS4ZRJLM.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-AXQFWXYZ.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/null402.js",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/testnet.json?import",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/console-recorded.json?import",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem.js?v=ac82d5c3",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/viem_chains.js?v=ffce1677",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/errors.js",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/limiter.js",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-TSDROGJN.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-I2CEELMA.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-PFXZJHIF.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-YG2HVMEF.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-RST5QK3N.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-KZUX4H5X.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/node_modules/.vite/deps/chunk-MLMCMYHL.js?v=d7029c75",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5187/api/health",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "http://127.0.0.1:5197/assets/hero.webp",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "landing",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://hanko-landing-six.vercel.app/",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://hanko-landing-six.vercel.app/assets/hero.webp",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET"
+    },
+    {
+      "surface": "liveLanding",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET"
+    }
+  ],
+  "requestFailures": [
+    {
+      "surface": "reference",
+      "url": "https://brunhild.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/i/a508b1a9fa912e8b/R0EyfO4c2eaToLTNKX.6UwW94L8TCTp6zugbipTkSmQ-1793009665-1.2.1.1-dG5IjyLs7i2APQDpSU0y_UO0ugoH7lzhhHjJnxBYob41GKQC.7sDsDTikeBie21q",
+      "error": "net::ERR_NAME_NOT_RESOLVED"
+    }
+  ],
+  "pageErrors": [],
+  "errors": [
+    {
+      "surface": "reference",
+      "message": "explorer loads exact requested transaction"
+    },
+    {
+      "surface": "liveReference",
+      "message": "linked explorer destination satisfies contract"
+    },
+    {
+      "surface": "hosted",
+      "message": "linked explorer destination satisfies contract"
+    },
+    {
+      "surface": "local",
+      "message": "linked explorer destination satisfies contract"
+    }
+  ],
+  "screenshots": [
+    "audit/reverify-console/EDGE-024.jpg"
+  ],
+  "surfaces": {
+    "reference": "UNTESTED",
+    "liveReference": "UNTESTED",
+    "hosted": "UNTESTED",
+    "local": "UNTESTED",
+    "landing": "PASS",
+    "liveLanding": "PASS"
+  },
+  "destinations": {
+    "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593": {
+      "status": 403,
+      "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+      "requestedHashVisible": false,
+      "title": "Just a moment...",
+      "bodyExcerpt": "testnet.snowtrace.io\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a508b1a79a95cda7\nPerformance and Security by Cloudflare\nPrivacy"
+    }
+  },
+  "expectedFaults": {
+    "http": [],
+    "console": [],
+    "requests": []
+  },
+  "unexpected": {
+    "http": [
+      {
+        "surface": "reference",
+        "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+        "status": 403,
+        "type": "document"
+      },
+      {
+        "surface": "reference",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/pat/a508b1a9fa912e8b/1793009665779/ea8c00606e4351a61245e26ea600ae1d9a52d0d28727d47be8ae4382813022ca/TIfOtxF4K4nHDEGRNkfbKRQSky5F.HEANK5EwcU1i68-1793009665-1.3.1.1-YZ5DWW_qKfxKdfTH3EyjBgEWBCoz9IiRMZBkev_XL5_IBj9zCw1OTQtR_CPnpUkY1A1FauZJ_TI5E9MoYwgEYB8MCdcfCS0kZmMaQASDBl9XKHDMdI5p03Au9ipX1.1wIuV3zag04gs9tyeIqJMh2lwia5EKA297NHnUGwcO0.VIxKxJZOqeU8L5e0SzoRrxCrji8Nrp.uSH_PMzsX4X3ltTSF3lEqe744pxbUG2_WJ3d8prMqjAj37qkDaUd9LsHI6juFCAh5fjNmG0ewsPz58dYYEis42VoTDPFG8R4IlN0DNs_ux_y_ymgc9KNntrYtBTnlSbDzhaFH0XKWackn3WwlMKqIHMTrYZiwi6u5l30sOptNsmiQviNmUG6wGU3SNvidwc5LhxxENz_dxv.rj5KghfM1nPZpIBl9K23unZ1Uk8RhWDB5ujcNTRogDc9RbVXCuJuzJEPVtJGRDiXH41e2HbX86MVQrrQMDAgZaCw6e0qdDg8WKAdomjaFwKlzitYAehef00uTLlsi29jToUwOnrVGP.un82EdmgQGUbjvtBDGnDVYfnRDp23VLsNnKkRncmWEbMRyeyzXXAOq9i24puLxpJuDIyOF2cVUsqzvhs1U.aon21aheWYHxug24dnyj536QhkoMgBv7vPAk05fCa4_49GPG7YCTP8hjBbn0oBfTC5U2f9nE9XWBE90WWseOxepe5dSehsUzLeyuUalZ.y2XaJypakboF3sL8S6gLor85tOgj8ufF4AhmxirrQZS5Qk5wqEeVZG.Et8Lr1v1wFMXaNIVAKmx_iO5z9CEhnwhThgtIYjBi4pfW",
+        "status": 401,
+        "type": "fetch"
+      }
+    ],
+    "console": [
+      {
+        "surface": "reference",
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 403 ()",
+        "url": "https://testnet.snowtrace.io/tx/0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"
+      },
+      {
+        "surface": "reference",
+        "type": "error",
+        "text": "%c%d font-size:0;color:transparent NaN",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+      },
+      {
+        "surface": "reference",
+        "type": "error",
+        "text": "%c%d font-size:0;color:transparent NaN",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+      },
+      {
+        "surface": "reference",
+        "type": "error",
+        "text": "Connecting to 'data:,' violates the following Content Security Policy directive: \"connect-src 'self' https://hagen.challenges.cloudflare.com https://brunhild.challenges.cloudflare.com https://valid.alg13.dnstest.challenges.cloudflare.com https://invalid.alg13.dnstest.challenges.cloudflare.com https://dual-valid.mldsa44.dnstest.challenges.cloudflare.com https://valid.mldsa44.dnstest.challenges.cloudflare.com https://dnstest.dev\". The action has been blocked.",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+      },
+      {
+        "surface": "reference",
+        "type": "error",
+        "text": "Connecting to 'data:,' violates the following Content Security Policy directive: \"connect-src 'self' https://hagen.challenges.cloudflare.com https://brunhild.challenges.cloudflare.com https://valid.alg13.dnstest.challenges.cloudflare.com https://invalid.alg13.dnstest.challenges.cloudflare.com https://dual-valid.mldsa44.dnstest.challenges.cloudflare.com https://valid.mldsa44.dnstest.challenges.cloudflare.com https://dnstest.dev\". The action has been blocked.",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+      },
+      {
+        "surface": "reference",
+        "type": "error",
+        "text": "Connecting to 'data:,' violates the following Content Security Policy directive: \"connect-src 'self' https://hagen.challenges.cloudflare.com https://brunhild.challenges.cloudflare.com https://valid.alg13.dnstest.challenges.cloudflare.com https://invalid.alg13.dnstest.challenges.cloudflare.com https://dual-valid.mldsa44.dnstest.challenges.cloudflare.com https://valid.mldsa44.dnstest.challenges.cloudflare.com https://dnstest.dev\". The action has been blocked.",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+      },
+      {
+        "surface": "reference",
+        "type": "error",
+        "text": "Fetch API cannot load data:,. Refused to connect because it violates the document's Content Security Policy.",
+        "url": "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/f/av0/rch/vamhu/0x4AAAAAAADnPIDROrmt1Wwj/light/fbE/new/normal?lang=auto"
+      }
+    ],
+    "requests": [
+      {
+        "surface": "reference",
+        "url": "https://brunhild.challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/i/a508b1a9fa912e8b/R0EyfO4c2eaToLTNKX.6UwW94L8TCTp6zugbipTkSmQ-1793009665-1.2.1.1-dG5IjyLs7i2APQDpSU0y_UO0ugoH7lzhhHjJnxBYob41GKQC.7sDsDTikeBie21q",
+        "error": "net::ERR_NAME_NOT_RESOLVED"
+      }
+    ],
+    "pageErrors": []
+  },
+  "durationMs": 11702,
+  "status": "UNTESTED"
+}
