@@ -1,0 +1,13 @@
+{
+  "id": "EDGE-040",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "UNTESTED",
+  "expected": "README/reference/TESTING claims match code and recorded evidence; `run-live` and `paywall-live` are identified as transaction-sending examples and never executed; no new-send script is used as an audit prerequisite.",
+  "detail": "Fresh documentation safety checks identify both transaction-sending examples and verify they are outside tests; neither executed. Full documentation/evidence match still depends on the absent published funding receiver credential (CHAIN-012). Historical 104/49 baseline is not this expanded rerun total.",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/documentation.json",
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": []
+}

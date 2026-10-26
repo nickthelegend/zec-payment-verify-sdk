@@ -1,0 +1,15 @@
+{
+  "id": "EDGE-029",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Missing, unreadable or hash-mismatched Sapling parameters produce `Setup required: ZPV_SAPLING_PARAMS`; valid parameters found through caller HOME or explicit path permit recorded Sapling authorization.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real Sapling authorization succeeds with HOME and explicit published-parameter path; missing/directory-unreadable/hash-mismatched parameter files exit 2 Setup required. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT EDGE-029 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real Sapling authorization succeeds with HOME and explicit published-parameter path; missing/directory-unreadable/hash-mismatched parameter files exit 2 Setup required. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > EDGE-029 missing unreadable/corrupt Sapling params and valid HOME/explicit path 5983ms"
+  ]
+}

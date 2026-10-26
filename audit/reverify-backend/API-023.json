@@ -1,0 +1,29 @@
+{
+  "id": "API-023",
+  "at": "2026-10-26T10:33:05.323Z",
+  "status": "PASS",
+  "note": "real failed Fuji HTTP request cleaned to a single line without request dump",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 8503,
+      "port": 51454,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/23.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 502,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:05 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "HTTP request failed."
+      }
+    }
+  ]
+}

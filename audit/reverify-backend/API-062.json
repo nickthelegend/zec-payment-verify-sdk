@@ -1,0 +1,102 @@
+{
+  "id": "API-062",
+  "at": "2026-10-26T10:34:00.016Z",
+  "status": "PASS",
+  "note": "past expiry plus 24 hours produces replacement challenge with no claim or content",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 31630,
+      "port": 51701,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/63.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:34:00 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "payment required",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "10000",
+            "resource": "/api/quote",
+            "description": "/api/quote: send 10000 zatoshi to payTo with the memo zpv-c3d1529ba80d3f1a28658921, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+            "maxTimeoutSeconds": 300,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "zpv-c3d1529ba80d3f1a28658921",
+              "expiresAt": 1792513244,
+              "paymentUri": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ",
+              "minConf": 1
+            },
+            "amountZat": "10000",
+            "memo": "zpv-c3d1529ba80d3f1a28658921",
+            "minConf": 1,
+            "expiresAt": 1792513244000,
+            "zip321": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:34:00 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjpmYWxzZSwiZXJyb3JSZWFzb24iOiJ1bmtub3duX2NoYWxsZW5nZSIsInRyYW5zYWN0aW9uIjoiIiwibmV0d29yayI6InpjYXNoLXRlc3RuZXQiLCJwYXllciI6IiJ9"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "unknown or expired payment memo",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "10000",
+            "resource": "/api/quote",
+            "description": "/api/quote: send 10000 zatoshi to payTo with the memo zpv-c3d1529ba80d3f1a28658921, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+            "maxTimeoutSeconds": 300,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "zpv-c3d1529ba80d3f1a28658921",
+              "expiresAt": 1792599944,
+              "paymentUri": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ",
+              "minConf": 1
+            },
+            "amountZat": "10000",
+            "memo": "zpv-c3d1529ba80d3f1a28658921",
+            "minConf": 1,
+            "expiresAt": 1792599944001,
+            "zip321": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ"
+          }
+        ]
+      },
+      "settlement": {
+        "success": false,
+        "errorReason": "unknown_challenge",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    }
+  ]
+}

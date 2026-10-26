@@ -1,0 +1,442 @@
+[
+  {
+    "id": "CHAIN-001",
+    "component": "Recorded Oct 20 paywall 7c1f6cc0…4c16",
+    "expected": "Read-only transaction/inclusion check confirms recorded block 4522621, 10000 zat and memo `zpv-c3d1529ba80d3f1a28658921`; reconstructed matching local challenge yields paid/200 once, without paying a fresh live challenge.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: recorded Oct20 tx authorization/inclusion/height4522621/time1792512944/10000/memo; isolated historical matching challenge returns 200 once with success receipt then replay402; no fresh payment. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-002",
+    "component": "Recorded current paywall 2867d542…664f",
+    "expected": "Read-only check confirms block 4530239 and 10000 zat with recorded HMAC memo; recorded run's 200/success receipt and 402 replay refer to this tx; an expired historical challenge is not represented as a fresh live acceptance.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: read-only historical payment block 4530239/10000/memo matches; recorded 200 success and 402 nonce_already_used receipts checked; no expired challenge presented as fresh. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-003",
+    "component": "Recorded wrong memo 1620eccc…49c0",
+    "expected": "Confirmed transaction exists; check against recorded expected challenge returns `MEMO_MISMATCH` and `AMOUNT_TOO_LOW`, counting zero toward that memo.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded wrong-memo; exact reasons MEMO_MISMATCH,AMOUNT_TOO_LOW; paidZat 0; decrypted output/pools checked. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-004",
+    "component": "Recorded underpay f9db1841…dce2",
+    "expected": "Confirmed transaction decrypts to 5000 zat for its recorded memo; expecting 10000 returns `AMOUNT_TOO_LOW` and paidZat 5000.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded underpaid; exact reasons AMOUNT_TOO_LOW; paidZat 5000; decrypted output/pools checked. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-005",
+    "component": "Recorded transparent part bb8d8842…82ec",
+    "expected": "Confirmed transaction pays 10000 zat with matching memo and has a transparent part; shielded-only verification returns `TRANSPARENT_PART`.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded transparent-part; exact reasons TRANSPARENT_PART; paidZat 10000; decrypted output/pools checked. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-006",
+    "component": "Recorded payslip 38958ceb…5869",
+    "expected": "Read-only check confirms block 4522626, 50000 zat and `payslip 2026-10 #7: net 0.0005 TAZ`; correct receiver expectation yields ok true.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 50000; paidZat 50000; exact reasons none; memo/output matched. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-007",
+    "component": "Payslip inflated claim",
+    "expected": "Same recorded payslip with expected 100000 zat yields `AMOUNT_TOO_LOW`, paidZat 50000.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 100000; paidZat 50000; exact reasons AMOUNT_TOO_LOW; memo/output matched. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-008",
+    "component": "Payslip wrong receiver",
+    "expected": "Same recorded payslip checked against merchant rather than employee yields `NO_OUTPUT_TO_KEY`, paidZat 0.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 50000; paidZat 0; exact reasons NO_OUTPUT_TO_KEY; memo/output matched. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-009",
+    "component": "Third-party x402 030c3cbf…8351",
+    "expected": "Read-only check confirms block 4521112, 100000 zat and `x402z-f19a63da20cbc0749ea800b3`; matching expectation yields paid and no transparent part.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: x402 block 4521112/100000/matching memo; paid; transparent false. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-010",
+    "component": "Auction deposit 06d12181…0af1 wrong receiver",
+    "expected": "Read-only check with x402 receiver expectation returns `NO_OUTPUT_TO_KEY`; no amount is counted.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: auction block 4522268; paidZat 0; reasons NO_OUTPUT_TO_KEY; published amount/memo checked. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-011",
+    "component": "Auction deposit 06d12181…0af1 correct receiver",
+    "expected": "Read-only check with auction receiver and its recorded amount/memo returns ok true and decrypted output matching the published record.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: auction block 4522268; paidZat 2000000; reasons none; published amount/memo checked. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-012",
+    "component": "Recorded demo funding a2c0578b…57d3",
+    "expected": "Transaction is confirmed and its five-note demo funding matches README's recorded funding claim; funding is not mislabelled as a merchant invoice acceptance.",
+    "status": "UNTESTED",
+    "evidence": "Dependency: published payer incoming viewing credential for fundTx a2c0578b…57d3; deployments/testnet.json omits it. Read-only authorization/inclusion confirms the funding transaction, but five notes/amounts cannot be decrypted under the published merchant/x402 credentials. No wallet or private credential accessed; command: python3 audit/reverify-backend/run.py sdk; log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-013",
+    "component": "Sapling shielding 4a9412fa…8634",
+    "expected": "Read-only authorization verifies with the actual transparent previous outputs and published Sapling parameters; missing or one-zatoshi-altered previous output makes authorization fail.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-014",
+    "component": "Ironwood shielding 6a508fd3…5126",
+    "expected": "Read-only authorization verifies against actual transparent previous outputs; missing or one-zatoshi-altered previous output makes authorization fail.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-015",
+    "component": "null-402 Fuji settlement 0x8596f52d…a593",
+    "expected": "Receipt status success; correct pool/settle calldata and expected payTo/amount/recipient yield `verdict: paid`, settled true, proofValid/rootKnown/nullifierSpent true; proofCheck retains `NULLIFIER_SPENT`.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: receipt success/block 57020734; decoded pool settle calldata; bound SDK paid/settled and true proof/root/spent; proofCheck NULLIFIER_SPENT. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-016",
+    "component": "null-402 Fuji settlement 0xd91c0ab7…1e5c",
+    "expected": "Read-only receipt/call data confirms recorded block 57020809; correct payTo/amount/recipient yield `paid`, settled true through SDK and MCP.",
+    "status": "UNTESTED",
+    "evidence": "SDK path PASS for recorded 0xd91c0ab7…1e5c at block57020809, correct recipient/payTo/amount and paid/settled. Dependency for complete row: live MCP result for this recorded settlement from the task owning MCP; this task is explicitly forbidden to run MCP suites; command: python3 audit/reverify-backend/run.py sdk; log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-017",
+    "component": "null-402 contract provenance",
+    "expected": "Reads target null-402's existing Fuji verifier `0x0b44836dDc460f589ce4EB97f276e533A2bE6060` and pool `0x39a9C4EfabEBA954545Ecb4b16Ba1d92ec46cA1C`, chainId 43113; report states Hanko deploys no contracts.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real eth_chainId=43113; proof calls use existing published verifier/pool; Hanko deploys no contracts. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-018",
+    "component": "New-root, valid unspent null-402 proof",
+    "expected": "This proof needs `NULL402_OPERATOR_KEY` to register a new root; later execution status must be `UNTESTED`, never PASS; no operator key is sought, root registered or transaction submitted.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "CLI-001",
+    "component": "zpay-verify verify paid",
+    "expected": "Recorded x402 tx with matching amount/memo emits JSON `{report,verdict,lightwalletd}`, verdict.ok true, paid_zat 100000 and reasons empty; exit 0.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: CLI exit 0; JSON report/verdict/lightwalletd; paid_zat=100000; reasons=[]. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-002",
+    "component": "zpay-verify verify refused",
+    "expected": "Recorded wrong memo/underpayment/wrong receiver/transparent cases emit their exact reason codes and report; exit 1.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: exit 1 and exact wrong-memo, underpayment, transparent, wrong-receiver reasons; real reports retained. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-003",
+    "component": "zpay-verify verify confirmation floor",
+    "expected": "Floor above available depth emits `NOT_CONFIRMED` and actual confirmations; exit 1; min-conf zero is accepted by the CLI only as an explicit caller choice.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: floor 100000000 exits 1 NOT_CONFIRMED with actual depth; explicit --min-conf 0 exits 0. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-004",
+    "component": "zpay-verify verify allow-transparent",
+    "expected": "Recorded transparent-part case with matching memo/amount and `--allow-transparent` clears `TRANSPARENT_PART` and yields exit 0 when all other rules pass.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: recorded transparent case exits 0 with --allow-transparent and no refusal reasons. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-005",
+    "component": "CLI malformed arguments",
+    "expected": "Missing --amount returns exit 2 `--amount is required`; invalid amount says `--amount must be zatoshis (a whole number)`; invalid min-conf says `--min-conf must be a whole number`; unknown option names itself and usage.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: missing/invalid amount, invalid min-conf, unknown option all exit 2 with exact diagnostics; no JSON verdict. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-006",
+    "component": "CLI missing setup or invalid tx/key",
+    "expected": "Missing key environment exits 2 `error: Setup required: ZPV_UIVK`; malformed txid/key exits 2 with `not a txid (64 hex characters)` or `not a testnet unified incoming viewing key`, without a paid verdict.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: isolated missing-key env and malformed tx/key exit 2; expected Setup required or field diagnostic; no paid JSON. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-007",
+    "component": "zpay-verify inspect one/multiple recorded txids",
+    "expected": "One JSON report per input txid in argument order includes found/height/block_time/confirmations/tip/outputs/pools, without a payment-rule verdict; success exit 0.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: one JSON report per input in order with all eight report fields, no verdict, exit 0. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-008",
+    "component": "inspect unknown/error/interrupted input",
+    "expected": "Absent well-formed txid reports found false; malformed input or failed transport exits 2; interruption never emits a completed paid verdict for an unchecked txid.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: absent tx found=false; malformed/dead exit 2; SIGKILL at silent real socket emits no completed report/verdict. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-009",
+    "component": "zpay-verify owns matching receiver",
+    "expected": "Published matching unified address yields JSON owns true, per-receiver orchard/sapling booleans or null and exit 0, offline.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: owns matching address exits 0; owns=true with orchard/sapling boolean or null; offline. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-010",
+    "component": "zpay-verify owns different receiver",
+    "expected": "Valid other published address yields owns false and exit 1; no chain RPC is needed.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: valid other published receiver owns=false exit 1; offline. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-011",
+    "component": "zpay-verify owns invalid address",
+    "expected": "Empty, transparent-only or malformed address yields exit 2 `not a testnet unified address with a shielded receiver`; invalid key also exits 2.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: empty, transparent-only and malformed addresses exit 2 with expected diagnostic; bad incoming-key encoding exits 2. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-012",
+    "component": "zpay-verify derive missing/invalid input",
+    "expected": "With ZPV_UFVK absent, exit 2 `error: Setup required: ZPV_UFVK`; malformed non-secret input returns exit 2; no key is read or printed during this audit.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: isolated env has no full viewing credential; derive exits 2 Setup required; synthetic non-secret malformed input exits 2 with empty stdout. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-013",
+    "component": "zpay-verify derive valid-input contract",
+    "expected": "Source maps decoded testnet UFVK to encoded incoming-only key, exit 0; executing this successful path requires prohibited UFVK access and key output, so later label UNTESTED unless restrictions are explicitly changed.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "CLI-014",
+    "component": "SDK verify() Zcash rail",
+    "expected": "Matching recorded payment yields `rail: zcash`, paid/refused verdict, report and provenance.via `zpay-verify`; no memo counts all outputs, default minConf 1 and allowTransparent false.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: SDK returns paid/report/via=zpay-verify; omitted memo counts all outputs; shielded-only default rejects transparent; depth enforced. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-015",
+    "component": "SDK verify() null402 rail",
+    "expected": "Recorded settled proof returns checks, five signals and rpc/chainId/verifier/pool/block/time provenance; bound proof remains `NULLIFIER_SPENT`; no expectations add `UNBOUND`; proof result does not invent a settlement verdict.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real proof checks true/true/true; five signals; RPC/chain/contracts/block/time provenance; bound NULLIFIER_SPENT and unbound adds UNBOUND; no settlement verdict. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-016",
+    "component": "SDK cross-check agreeing quorum",
+    "expected": "At least quorum real endpoint answers agreeing on transaction/rules yield paid or refused with crossCheck.agreed true; failed endpoints are listed but do not vote; repeated reads of one operator are never described as independent operators.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "CLI-017",
+    "component": "SDK cross-check too few answers",
+    "expected": "One answer at quorum 2 yields ok false, `verdict: unverified`, `UNVERIFIED_QUORUM`, paidZat 0, report null and endpoint failure details.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: one real paid answer plus dead endpoint at quorum 2 gives unverified, paidZat 0, report null, endpoint error. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-018",
+    "component": "SDK cross-check disagreement",
+    "expected": "Testnet payment answer vs mainnet absent-tx answer yields `UNVERIFIED_DISAGREEMENT` at quorum 1 or 2, report null and no paid verdict; self-inconsistent endpoint also counts as dissent.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "CLI-019",
+    "component": "SDK cross-check lag and depth",
+    "expected": "Endpoint up to three blocks behind the transaction block yields `NOT_CONFIRMED` and confirmations 0 rather than disagreement; agreeing mined tips use lowest tip for confirmations; at/past-block absence or 100-block lag yields disagreement.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: live authenticated record then explicit local rule inputs: 1/2/3-block lag NOT_CONFIRMED/0 confirmations; lowest tip used; at/past/100-behind absence disagrees; no RPC mock. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-020",
+    "component": "SDK cross-check invalid configuration",
+    "expected": "Empty URLs, duplicate canonical endpoint spellings and quorum outside 1..endpoint count raise VerifyError; malformed ZPV_LWD_QUORUM raises `Setup required: ZPV_LWD_QUORUM`, never paid.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: empty, canonical duplicates and quorum 0/2/fractional rejected with VerifyError; malformed env quorum Setup required. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-021",
+    "component": "SDK ownership wrapper",
+    "expected": "ownsAddress returns matching CLI owns/receiver JSON, rejects empty address and bad key with VerifyError, and missing binary with SetupRequiredError; no chain transaction is submitted.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: ownership equals real CLI receiver JSON; empty/bad-key VerifyError; missing binary SetupRequiredError. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-025",
+    "component": "External lightwalletd dependency",
+    "expected": "`https://testnet.zec.rocks:443` read-only GetTransaction/GetBlock/tip responses for recorded txids agree on recomputed txid, inclusion, height and block time; failure is reported as unavailable, never a paid answer.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: 10 unique published Zcash txids read via GetTransaction/GetBlock/tip at testnet.zec.rocks:443, txid recomputation/auth/inclusion enforced by inspect; heights/times/depth logged; unavailable transport emits error exit2/empty stdout. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-026",
+    "component": "External Fuji RPC dependency",
+    "expected": "`https://api.avax-test.network/ext/bc/C/rpc` reports chainId 43113; receipt and eth_call results are read-only, checked at one reported block for verifier/root/spent; no signing or submission method is used.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real RPC eth_chainId 43113 and success receipt; observed exactly three SDK eth_call methods at the reported common block; allowlisted read-only methods only. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-027",
+    "component": "Core tampered transaction authorization",
+    "expected": "Re-encrypted 10× note, altered proof byte and substituted binding signature in local copies of recorded transaction bytes fail authorization with `lightwalletd answered inconsistently`; no chain transaction is created or submitted.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-028",
+    "component": "Core inclusion/txid consistency",
+    "expected": "Swapped bytes return `lightwalletd returned a transaction whose txid differs from the one requested`; recorded compact block locally missing txid or naming wrong height returns `lightwalletd answered inconsistently`, never paid.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-029",
+    "component": "Sapling setup integrity",
+    "expected": "Missing, unreadable or hash-mismatched Sapling parameters produce `Setup required: ZPV_SAPLING_PARAMS`; valid parameters found through caller HOME or explicit path permit recorded Sapling authorization.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real Sapling authorization succeeds with HOME and explicit published-parameter path; missing/directory-unreadable/hash-mismatched parameter files exit 2 Setup required. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-030",
+    "component": "Transport plaintext policy",
+    "expected": "Remote http:// lightwalletd is refused before connecting with Setup required and CLI exit 2; loopback is allowed; explicit ZPV_ALLOW_INSECURE_LWD=1 override permits remote plaintext only when deliberately configured.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-031",
+    "component": "Transport SOCKS proxy behavior",
+    "expected": "socks5h forwards hostname resolution to proxy; socks5 resolves locally; dead proxy exits 2 without direct fallback; non-SOCKS URL reports `Setup required: ZPV_LWD_PROXY`.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-032",
+    "component": "SDK timeout and limiter release",
+    "expected": "Silent real socket causes child SIGKILL at ZPV_CHECK_TIMEOUT_MS and LightwalletdUnreachableError containing `was stopped`; slot is released for next request, not left permanently busy.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: silent real socket timeout returns LightwalletdUnreachableError/was stopped; same single-slot limiter immediately verifies next recorded payment successfully. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-033",
+    "component": "SDK per-rail check limits",
+    "expected": "Zcash max 3/queue 5 across 40 checks yields at most 3 active and 32 BusyErrors; null402 max 1/queue 0 across 3 checks yields one result and two BusyErrors; independent limiter has its own slots.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-034",
+    "component": "SDK malformed rail/value errors",
+    "expected": "Non-object/unsupported rail and invalid Zcash/null402 fields reject with VerifyError before a paid verdict; missing binary rejects SetupRequiredError; network errors retain their actionable error classes.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-035",
+    "component": "null-402 expectation mismatch reasons",
+    "expected": "Changing payTo, requiredAmount or contextHash expectation yields PAY_TO_MISMATCH, AMOUNT_MISMATCH or CONTEXT_MISMATCH; tampering proof amount signal by 10× yields BAD_PROOF; unknown root yields ROOT_UNKNOWN.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real Fuji verifier rejects 10x amount BAD_PROOF; root zero gives ROOT_UNKNOWN; merchant mismatches give all three exact mismatch reasons. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-036",
+    "component": "null-402 settlement missing binding",
+    "expected": "Missing any expected payTo, amount or recipient returns ok false, verdict refused, `UNBOUND`; wrong recipient returns `RECIPIENT_MISMATCH` even if proof names expected payee/amount.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: real recorded settlement missing payTo/amount/recipient separately is refused UNBOUND; wrong recipient refused RECIPIENT_MISMATCH. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-037",
+    "component": "null-402 pending/reverted settlement",
+    "expected": "Read-only recorded receipt status pending/reverted yields ok false, verdict unsettled, settled false and SETTLE_PENDING/SETTLE_REVERTED; if no recorded example exists later mark UNTESTED, never manufacture a receipt or submit a transaction.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-038",
+    "component": "null-402 settle calldata and malformed hash",
+    "expected": "Invalid hash raises `settle tx must be a 0x-prefixed 32-byte hash`; non-pool transaction or wrong selector raises `is not a call to the null-402 pool` or `is not a null-402 settle() call`; no paid verdict.",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: malformed settlement hash rejected before RPC; recorded pool transaction wrong selector and real non-pool transaction located read-only in its preceding 25-block window rejected with exact field errors; no paid verdict. Log: audit/reverify-backend/sdk.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-039",
+    "component": "Console/network zero-tolerance gate",
+    "expected": "Every exercised page/flow has zero unexpected console.error, pageerror, failed request or HTTP error; expected 400/402/setup-down request is identified by exact route/status or failure; any unrelated error fails its row.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-040",
+    "component": "Documentation and examples safety boundary",
+    "expected": "README/reference/TESTING claims match code and recorded evidence; `run-live` and `paywall-live` are identified as transaction-sending examples and never executed; no new-send script is used as an audit prerequisite.",
+    "status": "PENDING",
+    "evidence": [],
+    "fix": ""
+  }
+]

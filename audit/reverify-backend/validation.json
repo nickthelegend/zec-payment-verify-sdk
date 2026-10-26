@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-26T10:35:06.315541+00:00",
+  "coverage": 136,
+  "evidenceFilesChecked": 165,
+  "unredactedCredentialEncodings": 0,
+  "recordedHttpPidsStopped": 82,
+  "disposableHttpStoreDirectoriesRemoved": 1,
+  "auditBytes": 8311997,
+  "auditBudgetBytes": 15000000,
+  "diffCheck": "PASS",
+  "protectedSourcesUnchanged": true,
+  "changesScoped": true,
+  "transactionsSent": 0,
+  "committed": false,
+  "pushed": false
+}

@@ -1,0 +1,15 @@
+{
+  "id": "CLI-005",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Missing --amount returns exit 2 `--amount is required`; invalid amount says `--amount must be zatoshis (a whole number)`; invalid min-conf says `--min-conf must be a whole number`; unknown option names itself and usage.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: missing/invalid amount, invalid min-conf, unknown option all exit 2 with exact diagnostics; no JSON verdict. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-005 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: missing/invalid amount, invalid min-conf, unknown option all exit 2 with exact diagnostics; no JSON verdict. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-005 argument errors 10ms"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "EDGE-027",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Re-encrypted 10\u00d7 note, altered proof byte and substituted binding signature in local copies of recorded transaction bytes fail authorization with `lightwalletd answered inconsistently`; no chain transaction is created or submitted.",
+  "detail": "Recorded bytes are copied locally and the re-encrypted 10x note, proof-byte alteration, and substituted binding signature fail authorization with the inconsistent-lightwalletd diagnostic. No chain transaction is created or sent.",
+  "checks": [
+    {
+      "suite": "core",
+      "test": "real_payments_pass_and_a_payment_with_one_value_altered_and_reencrypted_is_refused",
+      "passed": true
+    },
+    {
+      "suite": "core",
+      "test": "a_changed_proof_or_binding_signature_keeps_the_txid_and_is_refused",
+      "passed": true
+    }
+  ],
+  "evidence": [
+    "audit/reverify-backend/core.txt"
+  ],
+  "passingLogLines": [
+    "test a_changed_proof_or_binding_signature_keeps_the_txid_and_is_refused ... ok",
+    "test real_payments_pass_and_a_payment_with_one_value_altered_and_reencrypted_is_refused ... ok"
+  ]
+}

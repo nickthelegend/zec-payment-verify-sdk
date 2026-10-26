@@ -1,0 +1,138 @@
+[
+  {
+    "id": "MCP-001",
+    "component": "stdio MCP tools/list",
+    "expected": "Server `zec-payment-verify` version `0.1.0` exposes `verify_zcash_payment` and `verify_null402_settlement`; descriptions state replay/binding limits and min_conf floor.",
+    "status": "PASS",
+    "evidence": "Server identity/version, exact two tools, replay/binding/confirmation-floor descriptions. Real stdio: audit/reverify-backend/MCP-001.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-002",
+    "component": "verify_zcash_payment successful check without store",
+    "expected": "Matching recorded payment returns text JSON ok true, verdict paid, reasons empty, paid_zat, height, confirmations, outputs, transparent, lightwalletd, min_conf and single_use false.",
+    "status": "PASS",
+    "evidence": "Paid JSON includes all documented fields, real outputs/height/depth and single_use false. Real stdio: audit/reverify-backend/MCP-002.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-003",
+    "component": "verify_zcash_payment refusal",
+    "expected": "Recorded wrong-memo/underpay/transparent/wrong-receiver request returns ok false, verdict refused and corresponding Zcash reasons in text JSON.",
+    "status": "PASS",
+    "evidence": "Wrong memo, underpayment, transparent part and wrong receiver return exact refused reasons. Real stdio: audit/reverify-backend/MCP-003.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-004",
+    "component": "MCP min_conf floor",
+    "expected": "Caller `min_conf: 0` is raised to default 1; configured ZPV_MCP_MIN_CONF raises the reported and checked floor; malformed floor returns isError with `Setup required: ZPV_MCP_MIN_CONF`.",
+    "status": "PASS",
+    "evidence": "Default/configured floor is reported and enforced; malformed/out-of-range floors are Setup required. Real stdio: audit/reverify-backend/MCP-004.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-005",
+    "component": "MCP missing merchant setup",
+    "expected": "Missing ZPV_MERCHANT_UIVK returns `isError: true` with `Setup required: ZPV_MERCHANT_UIVK`; no successful verdict is fabricated.",
+    "status": "PASS",
+    "evidence": "Missing merchant environment returns exactly isError Setup required and no verdict. Real stdio: audit/reverify-backend/MCP-005.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-006",
+    "component": "MCP annotations without store",
+    "expected": "Zcash tool lists `readOnlyHint: true`; description warns that repeated checks accept the same txid and callers must track accepted txids; repeating a matching recorded check remains paid with single_use false.",
+    "status": "PASS",
+    "evidence": "Without store readOnlyHint true, replay warning, repeated payment remains paid/single_use false. Real stdio: audit/reverify-backend/MCP-006.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-007",
+    "component": "MCP annotations and consumption with store",
+    "expected": "With isolated ZPV_STORE, Zcash annotation is readOnlyHint false, destructiveHint false, idempotentHint false; successful acceptance writes paid memo/tx claims and reports single_use true.",
+    "status": "PASS",
+    "evidence": "Disposable SQLite has exactly paid memo/tx claims after successful acceptance; non-read-only annotations. Real stdio: audit/reverify-backend/MCP-007.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-008",
+    "component": "MCP stored replay and shared gateway state",
+    "expected": "Second acceptance of consumed memo or normalized txid returns refused `ALREADY_USED`; a payment consumed through gateway on the same disposable store is also ALREADY_USED in MCP.",
+    "status": "PASS",
+    "evidence": "Same txid in uppercase, consumed memo, and actual gateway-paid shared SQLite state return ALREADY_USED. Real stdio: audit/reverify-backend/MCP-008.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-009",
+    "component": "MCP required memo",
+    "expected": "Missing memo with ZPV_STORE returns isError `memo is required: with ZPV_STORE each payment is accepted once, by its invoice memo and txid`; with ZPV_MCP_REQUIRE_MEMO=1 it names that setting.",
+    "status": "PASS",
+    "evidence": "Store and REQUIRE_MEMO settings return exact setting-specific error text. Real stdio: audit/reverify-backend/MCP-009.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-010",
+    "component": "MCP concurrent/interrupted claim",
+    "expected": "Concurrent stored claim returns refused `BEING_CHECKED`; verification error/refusal releases claim; after abandoned five-minute lease another owner can claim, and stale owner cannot consume it.",
+    "status": "PASS",
+    "evidence": "Real concurrent stdio BEING_CHECKED, refusal/error release, killed claimant five-minute lease takeover and stale token protection. Real stdio: audit/reverify-backend/MCP-010.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-011",
+    "component": "MCP cross-check result",
+    "expected": "Quorum/disagreement returns verdict unverified, corresponding UNVERIFIED reason, cross_check details and no consumed paid claim.",
+    "status": "PASS",
+    "evidence": "Quorum/disagreement return unverified, null report fields and cross_check details; disposable claims released. Real stdio: audit/reverify-backend/MCP-011.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-012",
+    "component": "MCP invalid schema input",
+    "expected": "Malformed txid/hash, negative/fractional amount or min_conf, over-512-character memo and invalid decimal/address expectations are rejected by schema; no verification or store consumption occurs.",
+    "status": "PASS",
+    "evidence": "Malformed hash, negative/fractional amounts/depth, oversized memo and invalid decimal/address expectations return schema errors with no SQLite claims or verification log. Real stdio: audit/reverify-backend/MCP-012.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-013",
+    "component": "verify_null402_settlement recorded successes",
+    "expected": "Both recorded Fuji settlements with matching expect_pay_to/expect_amount/expect_recipient return ok true, verdict paid, settled true, status success, checks/signals/recipient/blocks and proof_check `NULLIFIER_SPENT`; annotation stays readOnlyHint true.",
+    "status": "PASS",
+    "evidence": "Both bound recordings paid/success/settled with checks, five signals, recipient, blocks and spent proof; read-only annotation. Real stdio: audit/reverify-backend/MCP-013.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-014",
+    "component": "MCP unbound/misdirected settlement",
+    "expected": "Missing expected recipient returns `UNBOUND`; wrong recipient returns `RECIPIENT_MISMATCH`; wrong payTo/amount return `PAY_TO_MISMATCH`/`AMOUNT_MISMATCH`; ok remains false.",
+    "status": "PASS",
+    "evidence": "Missing recipient, wrong recipient, wrong payTo and wrong amount yield exact refusal reasons. Real stdio: audit/reverify-backend/MCP-014.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-015",
+    "component": "MCP settlement replay semantics",
+    "expected": "Repeating a bound successful settle hash remains paid because this tool stores no accepted settlements; description instructs caller to record settle hashes.",
+    "status": "PASS",
+    "evidence": "Repeated bound recorded settlement remains paid even with ZPV_STORE; description requires caller settlement-hash tracking. Real stdio: audit/reverify-backend/MCP-015.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-016",
+    "component": "MCP failed dependency",
+    "expected": "Failed lightwalletd/Fuji request returns `isError: true` text rather than paid; no successful acceptance is logged or retained as a paid claim.",
+    "status": "PASS",
+    "evidence": "Real closed loopback dependency returns isError text, no paid log and no retained SQLite paid claim. Real stdio: audit/reverify-backend/MCP-016.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-017",
+    "component": "MCP optional audit log",
+    "expected": "With isolated ZPV_MCP_LOG, each completed tool call appends one JSON line with at/tool/args/isError/result; existing file is tightened to mode 0600; evidence omits key material.",
+    "status": "PASS",
+    "evidence": "Each completed tool call (including schema rejection and both tools) appends at/tool/args/isError/result; new/existing logs mode 0600; no incoming credential in records. Real stdio: audit/reverify-backend/MCP-017.json; command: python3 audit/reverify-backend/run.py mcp; suite: audit/reverify-backend/mcp.txt",
+    "fix": ""
+  }
+]

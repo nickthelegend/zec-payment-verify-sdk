@@ -1,0 +1,12 @@
+{
+  "id": "CHAIN-018",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "UNTESTED",
+  "expected": "This proof needs `NULL402_OPERATOR_KEY` to register a new root; later execution status must be `UNTESTED`, never PASS; no operator key is sought, root registered or transaction submitted.",
+  "detail": "Explicit user restriction: a valid unspent new-root proof requires operator authorization and root registration. No operator credential sought and no root registered or transaction submitted.",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/documentation.json"
+  ],
+  "passingLogLines": []
+}

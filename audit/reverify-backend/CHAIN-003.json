@@ -1,0 +1,15 @@
+{
+  "id": "CHAIN-003",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Confirmed transaction exists; check against recorded expected challenge returns `MEMO_MISMATCH` and `AMOUNT_TOO_LOW`, counting zero toward that memo.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded wrong-memo; exact reasons MEMO_MISMATCH,AMOUNT_TOO_LOW; paidZat 0; decrypted output/pools checked. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-003 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded wrong-memo; exact reasons MEMO_MISMATCH,AMOUNT_TOO_LOW; paidZat 0; decrypted output/pools checked. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-003 recorded wrong-memo 1566ms"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "CLI-020",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Empty URLs, duplicate canonical endpoint spellings and quorum outside 1..endpoint count raise VerifyError; malformed ZPV_LWD_QUORUM raises `Setup required: ZPV_LWD_QUORUM`, never paid.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: empty, canonical duplicates and quorum 0/2/fractional rejected with VerifyError; malformed env quorum Setup required. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-020 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: empty, canonical duplicates and quorum 0/2/fractional rejected with VerifyError; malformed env quorum Setup required. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-020 all invalid quorum configuration cases 1ms"
+  ]
+}

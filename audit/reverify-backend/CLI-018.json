@@ -1,0 +1,26 @@
+{
+  "id": "CLI-018",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Testnet payment answer vs mainnet absent-tx answer yields `UNVERIFIED_DISAGREEMENT` at quorum 1 or 2, report null and no paid verdict; self-inconsistent endpoint also counts as dissent.",
+  "detail": "Actual testnet payment versus mainnet absent transaction at quorum 1/2 produces UNVERIFIED_DISAGREEMENT with no paid result. The local rule test also names a self-inconsistent endpoint as dissent, using the error exercised by core.",
+  "checks": [
+    {
+      "suite": "sdk",
+      "test": "a server that does not return the transaction disagrees",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "an endpoint whose answer contradicts itself is a dissent",
+      "passed": true
+    }
+  ],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    " \u2713 test/crosscheck.test.ts > lightwalletd cross-check > a server that does not return the transaction disagrees with one that does \u2192 unverified, whatever the quorum 3693ms",
+    " \u2713 test/hardening.test.ts > cross-check answers > an endpoint whose answer contradicts itself is a dissent: unverified, with that endpoint named 1804ms"
+  ]
+}

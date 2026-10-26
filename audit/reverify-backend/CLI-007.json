@@ -1,0 +1,15 @@
+{
+  "id": "CLI-007",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "One JSON report per input txid in argument order includes found/height/block_time/confirmations/tip/outputs/pools, without a payment-rule verdict; success exit 0.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: one JSON report per input in order with all eight report fields, no verdict, exit 0. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-007 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: one JSON report per input in order with all eight report fields, no verdict, exit 0. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-007 inspect one and multiple in argument order 3991ms"
+  ]
+}

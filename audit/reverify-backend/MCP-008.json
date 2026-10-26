@@ -1,0 +1,167 @@
+{
+  "id": "MCP-008",
+  "at": "2026-10-26T10:29:39.587Z",
+  "status": "PASS",
+  "assertion": "Same txid in uppercase, consumed memo, and actual gateway-paid shared SQLite state return ALREADY_USED",
+  "evidence": [
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22598,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030C3CBF78CE8460553BBA4E82C0BA813F039BD3ECF4D7F2E81C59837DC28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "ALREADY_USED"
+          ],
+          "paid_zat": 0,
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "06d121813387444ca3ecc9720e73160b5b80645d9204c6c411e51cef3a190af1",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "ALREADY_USED"
+          ],
+          "paid_zat": 0,
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "different-invoice"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "ALREADY_USED"
+          ],
+          "paid_zat": 0,
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    },
+    {
+      "gateway": {
+        "status": 200,
+        "body": {
+          "paid": {
+            "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+            "height": 4521112,
+            "confirmations": 22598,
+            "paidZat": 100000,
+            "memo": "x402z-f19a63da20cbc0749ea800b3",
+            "lightwalletd": "https://testnet.zec.rocks:443"
+          },
+          "data": {
+            "delivered": true
+          }
+        }
+      }
+    },
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "ALREADY_USED"
+          ],
+          "paid_zat": 0,
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "EDGE-033",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Zcash max 3/queue 5 across 40 checks yields at most 3 active and 32 BusyErrors; null402 max 1/queue 0 across 3 checks yields one result and two BusyErrors; independent limiter has its own slots.",
+  "detail": "Fresh tests enforce Zcash 3 active/5 queued across 40 calls (32 BusyErrors), Fuji 1 active/0 queued across 3 calls (2 BusyErrors), and independent limiter capacity.",
+  "checks": [
+    {
+      "suite": "sdk",
+      "test": "at most ZPV_MAX_CHECKS binaries run at once",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "at most ZPV_MAX_NULL402_CHECKS Fuji checks run at once",
+      "passed": true
+    },
+    {
+      "suite": "sdk",
+      "test": "a limiter of its own does not share slots",
+      "passed": true
+    }
+  ],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    " \u2713 test/hardening.test.ts > how zpay-verify reaches lightwalletd > at most ZPV_MAX_CHECKS binaries run at once; past ZPV_MAX_QUEUE waiting checks the rest are BusyError (offline) 6034ms",
+    " \u2713 test/hardening.test.ts > null402 rail limits > at most ZPV_MAX_NULL402_CHECKS Fuji checks run at once; past ZPV_MAX_QUEUE the rest are BusyError (live Fuji) 705ms",
+    " \u2713 test/hardening.test.ts > null402 rail limits > a limiter of its own does not share slots with the default one (offline) 0ms"
+  ]
+}

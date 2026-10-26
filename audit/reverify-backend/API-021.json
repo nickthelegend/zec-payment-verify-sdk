@@ -1,0 +1,29 @@
+{
+  "id": "API-021",
+  "at": "2026-10-26T10:33:04.635Z",
+  "status": "PASS",
+  "note": "missing binary yields Setup required without fabricated verdict",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 8502,
+      "port": 51452,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/22.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 503,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:04 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "Setup required: ZPV_BIN (/nonexistent/hanko-audit-binary does not exist)"
+      }
+    }
+  ]
+}

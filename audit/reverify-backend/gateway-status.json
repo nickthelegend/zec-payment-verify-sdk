@@ -1,0 +1,386 @@
+[
+  {
+    "id": "API-001",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: api.ts health resolves configured URL list and quorum. Evidence: audit/reverify-backend/API-001.json",
+    "fix": ""
+  },
+  {
+    "id": "API-002",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: main.ts health, default paths, price and confirmation floor. Evidence: audit/reverify-backend/API-002.json",
+    "fix": ""
+  },
+  {
+    "id": "API-003",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: hosted health 200 JSON; hosted console destination and health-derived endpoint note match. Evidence: audit/reverify-backend/API-003.json",
+    "fix": ""
+  },
+  {
+    "id": "API-004",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: recorded x402 transaction paid with report and provenance. Evidence: audit/reverify-backend/API-004.json",
+    "fix": ""
+  },
+  {
+    "id": "API-005",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: wrong memo refused; report retained. Evidence: audit/reverify-backend/API-005.json",
+    "fix": ""
+  },
+  {
+    "id": "API-006",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: recorded Fuji settlement proof extracted read-only and checked through HTTP. Evidence: audit/reverify-backend/API-006.json",
+    "fix": ""
+  },
+  {
+    "id": "API-007",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: production verify disabled by default; enabled by explicit flag and api.ts. Evidence: audit/reverify-backend/API-007.json",
+    "fix": ""
+  },
+  {
+    "id": "API-008",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: verify GET HEAD PUT DELETE rejected before checking. Evidence: audit/reverify-backend/API-008.json",
+    "fix": ""
+  },
+  {
+    "id": "API-009",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: verify OPTIONS returns allowed origin headers with empty body. Evidence: audit/reverify-backend/API-009.json",
+    "fix": ""
+  },
+  {
+    "id": "API-010",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: JSON-only gate and charset acceptance with a real unavailable upstream. Evidence: audit/reverify-backend/API-010.json",
+    "fix": ""
+  },
+  {
+    "id": "API-011",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: empty and malformed JSON rejected. Evidence: audit/reverify-backend/API-011.json",
+    "fix": ""
+  },
+  {
+    "id": "API-012",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: over 1,000,000 character JSON rejected without a verification. Evidence: audit/reverify-backend/API-012.json",
+    "fix": ""
+  },
+  {
+    "id": "API-013",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: nonobjects and unsupported rail rejected. Evidence: audit/reverify-backend/API-013.json",
+    "fix": ""
+  },
+  {
+    "id": "API-014",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: malformed txid caller error with no report. Evidence: audit/reverify-backend/API-014.json",
+    "fix": ""
+  },
+  {
+    "id": "API-015",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: wrong-prefix and malformed encoded key rejected; evidence has no keys. Evidence: audit/reverify-backend/API-015.json",
+    "fix": ""
+  },
+  {
+    "id": "API-016",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: invalid amount, confirmations, boolean, memo bytes/NUL and key controls. Evidence: audit/reverify-backend/API-016.json",
+    "fix": ""
+  },
+  {
+    "id": "API-017",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: null402 signal, expectation and proof validation. Evidence: audit/reverify-backend/API-017.json",
+    "fix": ""
+  },
+  {
+    "id": "API-018",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: exact allowed origin headers on success and error. Evidence: audit/reverify-backend/API-018.json",
+    "fix": ""
+  },
+  {
+    "id": "API-019",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: unlisted and absent origins receive JSON without CORS permission. Evidence: audit/reverify-backend/API-019.json",
+    "fix": ""
+  },
+  {
+    "id": "API-020",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: closed real local upstream yields 502 retry 30, never paid or caller error. Evidence: audit/reverify-backend/API-020.json",
+    "fix": ""
+  },
+  {
+    "id": "API-021",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: missing binary yields Setup required without fabricated verdict. Evidence: audit/reverify-backend/API-021.json",
+    "fix": ""
+  },
+  {
+    "id": "API-022",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: 150 real HTTP requests cap child checks at 4, queue at 4; 142 busy responses retry 5. Evidence: audit/reverify-backend/API-022.json",
+    "fix": ""
+  },
+  {
+    "id": "API-023",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: real failed Fuji HTTP request cleaned to a single line without request dump. Evidence: audit/reverify-backend/API-023.json",
+    "fix": ""
+  },
+  {
+    "id": "API-024",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: refund list disabled without admin token even behind proxy. Evidence: audit/reverify-backend/API-024.json",
+    "fix": ""
+  },
+  {
+    "id": "API-025",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: missing, malformed and wrong tokens cannot list refunds. Evidence: audit/reverify-backend/API-025.json",
+    "fix": ""
+  },
+  {
+    "id": "API-026",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: authorized fresh SQLite refund list empty. Evidence: audit/reverify-backend/API-026.json",
+    "fix": ""
+  },
+  {
+    "id": "API-027",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: actual underpayment recorded twice, one full SQLite refund row; suite verifies newest-first. Evidence: audit/reverify-backend/API-027.json",
+    "fix": ""
+  },
+  {
+    "id": "API-028",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: production unpaid /api/quote challenge, defaults and ZIP-321. Evidence: audit/reverify-backend/API-028.json",
+    "fix": ""
+  },
+  {
+    "id": "API-029",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: production unpaid /api/report challenge, defaults and ZIP-321. Evidence: audit/reverify-backend/API-029.json",
+    "fix": ""
+  },
+  {
+    "id": "API-030",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: unpaid quote HEAD has 402 JSON headers and no body. Evidence: audit/reverify-backend/API-030.json",
+    "fix": ""
+  },
+  {
+    "id": "API-031",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: report HEAD unpaid 402, recorded matching payment 200 receipt without body. Evidence: audit/reverify-backend/API-031.json",
+    "fix": ""
+  },
+  {
+    "id": "API-032",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: /api/quote OPTIONS empty; no challenge or claim stored. Evidence: audit/reverify-backend/API-032.json",
+    "fix": ""
+  },
+  {
+    "id": "API-033",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: /api/report OPTIONS empty; no challenge or claim stored. Evidence: audit/reverify-backend/API-033.json",
+    "fix": ""
+  },
+  {
+    "id": "API-034",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: /api/quote unsupported methods rejected before claims. Evidence: audit/reverify-backend/API-034.json",
+    "fix": ""
+  },
+  {
+    "id": "API-035",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: /api/report unsupported methods rejected before claims. Evidence: audit/reverify-backend/API-035.json",
+    "fix": ""
+  },
+  {
+    "id": "API-036",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: unknown route returns exact 404 with no challenge or claim. Evidence: audit/reverify-backend/API-036.json",
+    "fix": ""
+  },
+  {
+    "id": "API-037",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: external Kage parser suite. Evidence: audit/reverify-backend/API-037.json",
+    "fix": ""
+  },
+  {
+    "id": "API-038",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: malformed base64 JSON returns exact error and false settlement. Evidence: audit/reverify-backend/API-038.json",
+    "fix": ""
+  },
+  {
+    "id": "API-039",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: scalar, array and typed legacy header fields rejected. Evidence: audit/reverify-backend/API-039.json",
+    "fix": ""
+  },
+  {
+    "id": "API-040",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: wrong v1 version, scheme, network and payload rejected. Evidence: audit/reverify-backend/API-040.json",
+    "fix": ""
+  },
+  {
+    "id": "API-041",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: known memo without txid retains challenge and consumes nothing. Evidence: audit/reverify-backend/API-041.json",
+    "fix": ""
+  },
+  {
+    "id": "API-042",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: unknown and tampered HMAC/path rejected before verification; expired window also API-062. Evidence: audit/reverify-backend/API-042.json",
+    "fix": ""
+  },
+  {
+    "id": "API-043",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: fresh current challenge refuses historical memo with real report reasons. Evidence: audit/reverify-backend/API-043.json",
+    "fix": ""
+  },
+  {
+    "id": "API-044",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: published 10000-zat quote accepted only in disposable matching challenge. Evidence: audit/reverify-backend/API-044.json",
+    "fix": ""
+  },
+  {
+    "id": "API-045",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: v1 and legacy forms accepted once in separate disposable SQLite stores. Evidence: audit/reverify-backend/API-045.json",
+    "fix": ""
+  },
+  {
+    "id": "API-046",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: recorded payslip accepted for report with its receiver and one paid memo/txid pair. Evidence: audit/reverify-backend/API-046.json",
+    "fix": ""
+  },
+  {
+    "id": "API-047",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: case-normalized replay refused, including closed custom memo and reissued memo. Evidence: audit/reverify-backend/API-047.json",
+    "fix": ""
+  },
+  {
+    "id": "API-048",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: recorded wrong-memo payment refused in its own recorded challenge. Evidence: audit/reverify-backend/API-048.json",
+    "fix": ""
+  },
+  {
+    "id": "API-049",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: underpaid real refund row persists through process restart. Evidence: audit/reverify-backend/API-049.json",
+    "fix": ""
+  },
+  {
+    "id": "API-050",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: transparent-part real refund row persists through process restart. Evidence: audit/reverify-backend/API-050.json",
+    "fix": ""
+  },
+  {
+    "id": "API-051",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: six absent-txid HTTP checks in existing suite do not close challenge; recorded matching payment then accepted. Evidence: audit/reverify-backend/API-051.json",
+    "fix": ""
+  },
+  {
+    "id": "API-052",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: high confirmation floor produces pending receipt, no refusal increment/refund, claim released. Evidence: audit/reverify-backend/API-052.json",
+    "fix": ""
+  },
+  {
+    "id": "API-053",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: five real wrong-receiver refusals close challenge; matching payment becomes CHALLENGE_CLOSED refund. Evidence: audit/reverify-backend/API-053.json",
+    "fix": ""
+  },
+  {
+    "id": "API-054",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: testnet plus unavailable loopback causes real quorum shortfall with claim released. Evidence: audit/reverify-backend/API-054.json",
+    "fix": ""
+  },
+  {
+    "id": "API-055",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: real unreachable upstream retry 30, missing binary retry 60, paywall capacity retry 5; claims released. Evidence: audit/reverify-backend/API-055.json",
+    "fix": ""
+  },
+  {
+    "id": "API-056",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: concurrent lower/uppercase recorded payment yields exactly one 200 and one 402. Evidence: audit/reverify-backend/API-056.json",
+    "fix": ""
+  },
+  {
+    "id": "API-057",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: SIGKILL real claimant; 5-minute lease takeover; old owner guarded and HTTP loser refused. Evidence: audit/reverify-backend/API-057.json",
+    "fix": ""
+  },
+  {
+    "id": "API-058",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: actual SQLite refund and failure counts survive process restart; suite covers paid claims, HMAC and shared processes. Evidence: audit/reverify-backend/API-058.json",
+    "fix": ""
+  },
+  {
+    "id": "API-059",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: explicit memory-restart scenario forgets paid state and invalidates HMAC; production startup warning. Evidence: audit/reverify-backend/API-059.json",
+    "fix": ""
+  },
+  {
+    "id": "API-060",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: suite 10,001 default GETs store nothing; exact custom-cap retry and error over HTTP. Evidence: audit/reverify-backend/API-060.json",
+    "fix": ""
+  },
+  {
+    "id": "API-061",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: real block-time grace tested by suite; HTTP late receipt payment_expired and SQLite refund. Evidence: audit/reverify-backend/API-061.json",
+    "fix": ""
+  },
+  {
+    "id": "API-062",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: past expiry plus 24 hours produces replacement challenge with no claim or content. Evidence: audit/reverify-backend/API-062.json",
+    "fix": ""
+  },
+  {
+    "id": "API-063",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: saturating free verify slots still allows real recorded paywall payment; separate CheckLimiter. Evidence: audit/reverify-backend/API-063.json",
+    "fix": ""
+  },
+  {
+    "id": "API-064",
+    "status": "PASS",
+    "evidence": "Real HTTP assertions: production startup missing credentials, bad numeric/quorum/address/key settings; defaults. Evidence: audit/reverify-backend/API-064.json",
+    "fix": ""
+  }
+]

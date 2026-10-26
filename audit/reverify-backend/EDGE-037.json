@@ -1,0 +1,13 @@
+{
+  "id": "EDGE-037",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "UNTESTED",
+  "expected": "Read-only recorded receipt status pending/reverted yields ok false, verdict unsettled, settled false and SETTLE_PENDING/SETTLE_REVERTED; if no recorded example exists later mark UNTESTED, never manufacture a receipt or submit a transaction.",
+  "detail": "Both published recorded settlements have successful receipts. A real pending/reverted settle receipt is unavailable; the freshly passing rule-only SDK test does not satisfy this row. No receipt fabricated or transaction submitted.",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt",
+    "audit/reverify-backend/MCP-013.json"
+  ],
+  "passingLogLines": []
+}

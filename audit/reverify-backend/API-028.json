@@ -1,0 +1,54 @@
+{
+  "id": "API-028",
+  "at": "2026-10-26T10:33:10.610Z",
+  "status": "PASS",
+  "note": "production unpaid /api/quote challenge, defaults and ZIP-321",
+  "records": [
+    {
+      "server": "main",
+      "pid": 11333,
+      "port": 51474,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/28.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:10 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "payment required",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "10000",
+            "resource": "/api/quote",
+            "description": "/api/quote: send 10000 zatoshi to payTo with the memo zpv-1793011691-a0ef874c2f8d268e-HP660Cnx2yDpCCVwvf6Hi2, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+            "maxTimeoutSeconds": 900,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "zpv-1793011691-a0ef874c2f8d268e-HP660Cnx2yDpCCVwvf6Hi2",
+              "expiresAt": 1793011691,
+              "paymentUri": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTMwMTE2OTEtYTBlZjg3NGMyZjhkMjY4ZS1IUDY2MENueDJ5RHBDQ1Z3dmY2SGky",
+              "minConf": 1
+            },
+            "amountZat": "10000",
+            "memo": "zpv-1793011691-a0ef874c2f8d268e-HP660Cnx2yDpCCVwvf6Hi2",
+            "minConf": 1,
+            "expiresAt": 1793011691000,
+            "zip321": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTMwMTE2OTEtYTBlZjg3NGMyZjhkMjY4ZS1IUDY2MENueDJ5RHBDQ1Z3dmY2SGky"
+          }
+        ]
+      }
+    }
+  ]
+}

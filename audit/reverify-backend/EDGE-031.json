@@ -1,0 +1,38 @@
+{
+  "id": "EDGE-031",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "socks5h forwards hostname resolution to proxy; socks5 resolves locally; dead proxy exits 2 without direct fallback; non-SOCKS URL reports `Setup required: ZPV_LWD_PROXY`.",
+  "detail": "Real SOCKS forwarding carries actual chain reads: socks5h sends hostname, socks5 resolves locally, dead proxy exits 2 without direct fallback, and non-SOCKS configuration is Setup required.",
+  "checks": [
+    {
+      "suite": "core",
+      "test": "a_real_socks5_proxy_carries_the_check_and_resolves_the_name",
+      "passed": true
+    },
+    {
+      "suite": "core",
+      "test": "socks5_without_h_resolves_here_and_sends_an_address",
+      "passed": true
+    },
+    {
+      "suite": "core",
+      "test": "a_dead_proxy_fails_loudly_and_is_never_bypassed",
+      "passed": true
+    },
+    {
+      "suite": "core",
+      "test": "a_proxy_url_that_is_not_socks5_is_a_setup_error",
+      "passed": true
+    }
+  ],
+  "evidence": [
+    "audit/reverify-backend/core.txt"
+  ],
+  "passingLogLines": [
+    "test a_dead_proxy_fails_loudly_and_is_never_bypassed ... ok",
+    "test a_proxy_url_that_is_not_socks5_is_a_setup_error ... ok",
+    "test a_real_socks5_proxy_carries_the_check_and_resolves_the_name ... ok",
+    "test socks5_without_h_resolves_here_and_sends_an_address ... ok"
+  ]
+}

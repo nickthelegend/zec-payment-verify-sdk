@@ -1,0 +1,15 @@
+{
+  "id": "CHAIN-001",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Read-only transaction/inclusion check confirms recorded block 4522621, 10000 zat and memo `zpv-c3d1529ba80d3f1a28658921`; reconstructed matching local challenge yields paid/200 once, without paying a fresh live challenge.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: recorded Oct20 tx authorization/inclusion/height4522621/time1792512944/10000/memo; isolated historical matching challenge returns 200 once with success receipt then replay402; no fresh payment. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-001 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: recorded Oct20 tx authorization/inclusion/height4522621/time1792512944/10000/memo; isolated historical matching challenge returns 200 once with success receipt then replay402; no fresh payment. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-001 recorded Oct 20 payment answers one reconstructed challenge 3689ms"
+  ]
+}

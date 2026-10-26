@@ -1,0 +1,15 @@
+{
+  "id": "CHAIN-011",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Read-only check with auction receiver and its recorded amount/memo returns ok true and decrypted output matching the published record.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: auction block 4522268; paidZat 2000000; reasons none; published amount/memo checked. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-011 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: auction block 4522268; paidZat 2000000; reasons none; published amount/memo checked. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-011 recorded auction receiver 1681ms"
+  ]
+}

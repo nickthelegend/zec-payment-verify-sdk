@@ -1,0 +1,104 @@
+{
+  "id": "API-013",
+  "at": "2026-10-26T10:33:02.640Z",
+  "status": "PASS",
+  "note": "nonobjects and unsupported rail rejected",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 8391,
+      "port": 51425,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/14.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "the request must be an object with a rail (zcash or null402)"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "the request must be an object with a rail (zcash or null402)"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "the request must be an object with a rail (zcash or null402)"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "the request must be an object with a rail (zcash or null402)"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "the request must be an object with a rail (zcash or null402)"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:02 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "unknown rail 'btc' (zcash or null402)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "CHAIN-002",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "Read-only check confirms block 4530239 and 10000 zat with recorded HMAC memo; recorded run's 200/success receipt and 402 replay refer to this tx; an expired historical challenge is not represented as a fresh live acceptance.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: read-only historical payment block 4530239/10000/memo matches; recorded 200 success and 402 nonce_already_used receipts checked; no expired challenge presented as fresh. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CHAIN-002 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: read-only historical payment block 4530239/10000/memo matches; recorded 200 success and 402 nonce_already_used receipts checked; no expired challenge presented as fresh. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CHAIN-002 historical current-paywall payment and receipts 6631ms"
+  ]
+}

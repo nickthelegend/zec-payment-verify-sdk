@@ -1,0 +1,15 @@
+{
+  "id": "EDGE-025",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "`https://testnet.zec.rocks:443` read-only GetTransaction/GetBlock/tip responses for recorded txids agree on recomputed txid, inclusion, height and block time; failure is reported as unavailable, never a paid answer.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: 10 unique published Zcash txids read via GetTransaction/GetBlock/tip at testnet.zec.rocks:443, txid recomputation/auth/inclusion enforced by inspect; heights/times/depth logged; unavailable transport emits error exit2/empty stdout. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT EDGE-025 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: 10 unique published Zcash txids read via GetTransaction/GetBlock/tip at testnet.zec.rocks:443, txid recomputation/auth/inclusion enforced by inspect; heights/times/depth logged; unavailable transport emits error exit2/empty stdout. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > EDGE-025 all recorded Zcash transactions through actual lightwalletd 6738ms"
+  ]
+}

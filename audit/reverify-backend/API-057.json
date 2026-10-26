@@ -1,0 +1,218 @@
+{
+  "id": "API-057",
+  "at": "2026-10-26T10:33:47.234Z",
+  "status": "PASS",
+  "note": "SIGKILL real claimant; 5-minute lease takeover; old owner guarded and HTTP loser refused",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 19691,
+      "port": 51641,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/interrupted.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:42 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "payment required",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "10000",
+            "resource": "/api/quote",
+            "description": "/api/quote: send 10000 zatoshi to payTo with the memo zpv-c3d1529ba80d3f1a28658921, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+            "maxTimeoutSeconds": 900,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "zpv-c3d1529ba80d3f1a28658921",
+              "expiresAt": 1793011721,
+              "paymentUri": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ",
+              "minConf": 1
+            },
+            "amountZat": "10000",
+            "memo": "zpv-c3d1529ba80d3f1a28658921",
+            "minConf": 1,
+            "expiresAt": 1793011721776,
+            "zip321": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ"
+          }
+        ]
+      }
+    },
+    {
+      "server": "createPaywall",
+      "pid": 19696,
+      "port": 51645,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/interrupted.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:44 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjp0cnVlLCJ0cmFuc2FjdGlvbiI6IjdjMWY2Y2MwOWE3YWU5MTcxYmVmZmJiYjJkZmJmMTU2Njg0MzFkN2I5OTdmNzQyZTE4NzA2ZDkyOTZiMzRjMTYiLCJuZXR3b3JrIjoiemNhc2gtdGVzdG5ldCIsInBheWVyIjoiIn0="
+      },
+      "body": {
+        "paid": {
+          "txid": "7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16",
+          "height": 4522621,
+          "confirmations": 21098,
+          "paidZat": 10000,
+          "memo": "zpv-c3d1529ba80d3f1a28658921",
+          "lightwalletd": "https://testnet.zec.rocks:443"
+        },
+        "data": {
+          "path": "/api/quote",
+          "note": "paid with a shielded Zcash payment, checked with a viewing key"
+        }
+      },
+      "settlement": {
+        "success": true,
+        "transaction": "7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    },
+    {
+      "server": "createPaywall",
+      "pid": 19935,
+      "port": 51652,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/lease-race.sqlite"
+    },
+    {
+      "server": "createPaywall",
+      "pid": 20027,
+      "port": 51653,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/lease-race.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:45 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "payment required",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "10000",
+            "resource": "/api/quote",
+            "description": "/api/quote: send 10000 zatoshi to payTo with the memo zpv-c3d1529ba80d3f1a28658921, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+            "maxTimeoutSeconds": 900,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "zpv-c3d1529ba80d3f1a28658921",
+              "expiresAt": 1793011721,
+              "paymentUri": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ",
+              "minConf": 1
+            },
+            "amountZat": "10000",
+            "memo": "zpv-c3d1529ba80d3f1a28658921",
+            "minConf": 1,
+            "expiresAt": 1793011721776,
+            "zip321": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:47 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "this payment was claimed by another request while it was being checked",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "10000",
+            "resource": "/api/quote",
+            "description": "/api/quote: send 10000 zatoshi to payTo with the memo zpv-c3d1529ba80d3f1a28658921, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+            "maxTimeoutSeconds": 900,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "zpv-c3d1529ba80d3f1a28658921",
+              "expiresAt": 1793011721,
+              "paymentUri": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ",
+              "minConf": 1
+            },
+            "amountZat": "10000",
+            "memo": "zpv-c3d1529ba80d3f1a28658921",
+            "minConf": 1,
+            "expiresAt": 1793011721776,
+            "zip321": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LWMzZDE1MjliYTgwZDNmMWEyODY1ODkyMQ"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:47 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjp0cnVlLCJ0cmFuc2FjdGlvbiI6IjdjMWY2Y2MwOWE3YWU5MTcxYmVmZmJiYjJkZmJmMTU2Njg0MzFkN2I5OTdmNzQyZTE4NzA2ZDkyOTZiMzRjMTYiLCJuZXR3b3JrIjoiemNhc2gtdGVzdG5ldCIsInBheWVyIjoiIn0="
+      },
+      "body": {
+        "paid": {
+          "txid": "7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16",
+          "height": 4522621,
+          "confirmations": 21098,
+          "paidZat": 10000,
+          "memo": "zpv-c3d1529ba80d3f1a28658921",
+          "lightwalletd": "https://testnet.zec.rocks:443"
+        },
+        "data": {
+          "path": "/api/quote",
+          "note": "paid with a shielded Zcash payment, checked with a viewing key"
+        }
+      },
+      "settlement": {
+        "success": true,
+        "transaction": "7c1f6cc09a7ae9171beffbbb2dfbf15668431d7b997f742e18706d9296b34c16",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    }
+  ]
+}

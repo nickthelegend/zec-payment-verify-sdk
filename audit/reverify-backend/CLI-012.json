@@ -1,0 +1,15 @@
+{
+  "id": "CLI-012",
+  "mappedAt": "2026-10-26T10:35:06.102165+00:00",
+  "status": "PASS",
+  "expected": "With ZPV_UFVK absent, exit 2 `error: Setup required: ZPV_UFVK`; malformed non-secret input returns exit 2; no key is read or printed during this audit.",
+  "detail": "Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: isolated env has no full viewing credential; derive exits 2 Setup required; synthetic non-secret malformed input exits 2 with empty stdout. Log: audit/reverify-backend/sdk.txt",
+  "checks": [],
+  "evidence": [
+    "audit/reverify-backend/sdk.txt"
+  ],
+  "passingLogLines": [
+    "AUDIT CLI-012 PASS: Command: python3 audit/reverify-backend/run.py sdk (pnpm exec vitest run test/audit.test.ts); assertion: isolated env has no full viewing credential; derive exits 2 Setup required; synthetic non-secret malformed input exits 2 with empty stdout. Log: audit/reverify-backend/sdk.txt",
+    " \u2713 test/audit.test.ts > CLI-012 derive absent or malformed synthetic input only 6ms"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "id": "API-029",
+  "at": "2026-10-26T10:33:10.861Z",
+  "status": "PASS",
+  "note": "production unpaid /api/report challenge, defaults and ZIP-321",
+  "records": [
+    {
+      "server": "main",
+      "pid": 11336,
+      "port": 51476,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/29.sqlite"
+    },
+    {
+      "path": "/api/report",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:10 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "payment required",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "50000",
+            "resource": "/api/report",
+            "description": "/api/report: send 50000 zatoshi to payTo with the memo zpv-1793011691-4e3fb8b0a40c6201-LedHKQlvbDD1xIfJ4FpFKQ, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+            "maxTimeoutSeconds": 900,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "zpv-1793011691-4e3fb8b0a40c6201-LedHKQlvbDD1xIfJ4FpFKQ",
+              "expiresAt": 1793011691,
+              "paymentUri": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0005&memo=enB2LTE3OTMwMTE2OTEtNGUzZmI4YjBhNDBjNjIwMS1MZWRIS1FsdmJERDF4SWZKNEZwRktR",
+              "minConf": 1
+            },
+            "amountZat": "50000",
+            "memo": "zpv-1793011691-4e3fb8b0a40c6201-LedHKQlvbDD1xIfJ4FpFKQ",
+            "minConf": 1,
+            "expiresAt": 1793011691000,
+            "zip321": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0005&memo=enB2LTE3OTMwMTE2OTEtNGUzZmI4YjBhNDBjNjIwMS1MZWRIS1FsdmJERDF4SWZKNEZwRktR"
+          }
+        ]
+      }
+    }
+  ]
+}

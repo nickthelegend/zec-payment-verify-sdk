@@ -1,0 +1,38 @@
+{
+  "id": "API-001",
+  "at": "2026-10-26T10:32:53.990Z",
+  "status": "PASS",
+  "note": "api.ts health resolves configured URL list and quorum",
+  "records": [
+    {
+      "server": "api",
+      "pid": 6728,
+      "port": 51338,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/1.sqlite"
+    },
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:32:53 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "ok": true,
+        "payTo": "",
+        "paths": [],
+        "lightwalletd": {
+          "urls": [
+            "http://127.0.0.1:9",
+            "https://testnet.zec.rocks:443"
+          ],
+          "quorum": 1
+        }
+      }
+    }
+  ]
+}

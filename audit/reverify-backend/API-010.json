@@ -1,0 +1,90 @@
+{
+  "id": "API-010",
+  "at": "2026-10-26T10:33:01.879Z",
+  "status": "PASS",
+  "note": "JSON-only gate and charset acceptance with a real unavailable upstream",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 7936,
+      "port": 51415,
+      "store": "/tmp/hanko-gateway-http-vaNkiV/11.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 415,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:01 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "POST /api/verify with content-type application/json"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 415,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:01 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "POST /api/verify with content-type application/json"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 415,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:01 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "POST /api/verify with content-type application/json"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 415,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:01 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "POST /api/verify with content-type application/json"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 502,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:33:01 GMT",
+        "keep-alive": "timeout=5",
+        "retry-after": "30",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "cannot connect to lightwalletd: http://127.0.0.1:9: transport error"
+      }
+    }
+  ]
+}
