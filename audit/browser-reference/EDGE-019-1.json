@@ -1,0 +1,1493 @@
+{
+  "id": "EDGE-019",
+  "attempt": 1,
+  "at": "2026-10-26T08:37:12.816Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "live",
+      "check": "reference HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "375px no horizontal page scroll",
+      "pass": true,
+      "actual": 375
+    },
+    {
+      "surface": "live",
+      "check": "pane 0 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 332.421875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 323.921875,
+          "width": 343,
+          "height": 287.8125
+        },
+        "title": {
+          "x": 31,
+          "y": 329.65625,
+          "width": 53.9375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 1 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 131.234375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 122.734375,
+          "width": 343,
+          "height": 691.1875
+        },
+        "title": {
+          "x": 31,
+          "y": 128.46875,
+          "width": 61.640625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 2 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 391.328125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 382.828125,
+          "width": 343,
+          "height": 171.1875
+        },
+        "title": {
+          "x": 31,
+          "y": 388.5625,
+          "width": 38.53125,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 3 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 634.515625,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 626.015625,
+          "width": 343,
+          "height": 149.125
+        },
+        "title": {
+          "x": 31,
+          "y": 631.75,
+          "width": 46.234375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 4 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 380.703125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 372.203125,
+          "width": 343,
+          "height": 190.625
+        },
+        "title": {
+          "x": 31,
+          "y": 377.9375,
+          "width": 215.75,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 5 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 324.328125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 315.828125,
+          "width": 343,
+          "height": 496.8125
+        },
+        "title": {
+          "x": 31,
+          "y": 321.5625,
+          "width": 61.640625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 6 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 351.5625,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 340.046875,
+          "width": 343,
+          "height": 254.96875
+        },
+        "title": {
+          "x": 31,
+          "y": 341.046875,
+          "width": 258.1875,
+          "height": 47.03125
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 7 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 131.515625,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 123.015625,
+          "width": 343,
+          "height": 1343.3125
+        },
+        "title": {
+          "x": 31,
+          "y": 128.75,
+          "width": 61.640625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 8 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 238.984375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 227.46875,
+          "width": 343,
+          "height": 481.21875
+        },
+        "title": {
+          "x": 31,
+          "y": 228.46875,
+          "width": 194.78125,
+          "height": 47.03125
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 9 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 708.1875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 699.6875,
+          "width": 343,
+          "height": 112.875
+        },
+        "title": {
+          "x": 31,
+          "y": 705.421875,
+          "width": 115.59375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 10 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 390.609375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 382.109375,
+          "width": 343,
+          "height": 171.1875
+        },
+        "title": {
+          "x": 31,
+          "y": 387.84375,
+          "width": 53.9375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 11 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 324.796875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 316.296875,
+          "width": 343,
+          "height": 496.8125
+        },
+        "title": {
+          "x": 31,
+          "y": 322.03125,
+          "width": 61.640625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 12 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": -63.09375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": -71.59375,
+          "width": 343,
+          "height": 1079.9375
+        },
+        "title": {
+          "x": 31,
+          "y": -65.859375,
+          "width": 107.890625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 13 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 297.84375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 289.34375,
+          "width": 343,
+          "height": 356.375
+        },
+        "title": {
+          "x": 31,
+          "y": 295.078125,
+          "width": 200.34375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 14 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 371.796875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 363.296875,
+          "width": 343,
+          "height": 210.0625
+        },
+        "title": {
+          "x": 31,
+          "y": 369.03125,
+          "width": 53.9375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 15 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 322.75,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 314.25,
+          "width": 343,
+          "height": 307.25
+        },
+        "title": {
+          "x": 31,
+          "y": 319.984375,
+          "width": 100.171875,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 16 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 306.078125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 294.5625,
+          "width": 343,
+          "height": 347.34375
+        },
+        "title": {
+          "x": 31,
+          "y": 295.5625,
+          "width": 258.1875,
+          "height": 47.03125
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 17 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 361.671875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 353.171875,
+          "width": 343,
+          "height": 229.5
+        },
+        "title": {
+          "x": 31,
+          "y": 358.90625,
+          "width": 146.421875,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "pane 18 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 459.828125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 451.328125,
+          "width": 343,
+          "height": 229.5
+        },
+        "title": {
+          "x": 31,
+          "y": 457.0625,
+          "width": 215.75,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "live",
+      "check": "#overview exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 111.390625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#quickstart exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.921875,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#zcash exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 124.140625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#crosscheck exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.640625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#reasons exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 124.328125,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#null402 exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.5625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#paywall exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 124.109375,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#api exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.71875,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#mcp exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 124.359375,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#evidence exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.5,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#tests exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.90625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#trust exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.671875,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "no horizontal page scroll after navigation",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 40590
+    },
+    {
+      "surface": "live",
+      "check": "#overview exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 111.390625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "live",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 35451
+    },
+    {
+      "surface": "local",
+      "check": "reference HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "375px no horizontal page scroll",
+      "pass": true,
+      "actual": 375
+    },
+    {
+      "surface": "local",
+      "check": "pane 0 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 332.421875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 323.921875,
+          "width": 343,
+          "height": 287.8125
+        },
+        "title": {
+          "x": 31,
+          "y": 329.65625,
+          "width": 53.9375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 1 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 131.234375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 122.734375,
+          "width": 343,
+          "height": 691.1875
+        },
+        "title": {
+          "x": 31,
+          "y": 128.46875,
+          "width": 61.640625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 2 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 391.328125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 382.828125,
+          "width": 343,
+          "height": 171.1875
+        },
+        "title": {
+          "x": 31,
+          "y": 388.5625,
+          "width": 38.53125,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 3 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 634.515625,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 626.015625,
+          "width": 343,
+          "height": 149.125
+        },
+        "title": {
+          "x": 31,
+          "y": 631.75,
+          "width": 46.234375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 4 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 380.703125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 372.203125,
+          "width": 343,
+          "height": 190.625
+        },
+        "title": {
+          "x": 31,
+          "y": 377.9375,
+          "width": 215.75,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 5 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 324.328125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 315.828125,
+          "width": 343,
+          "height": 496.8125
+        },
+        "title": {
+          "x": 31,
+          "y": 321.5625,
+          "width": 61.640625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 6 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 351.5625,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 340.046875,
+          "width": 343,
+          "height": 254.96875
+        },
+        "title": {
+          "x": 31,
+          "y": 341.046875,
+          "width": 258.1875,
+          "height": 47.03125
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 7 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 131.515625,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 123.015625,
+          "width": 343,
+          "height": 1343.3125
+        },
+        "title": {
+          "x": 31,
+          "y": 128.75,
+          "width": 61.640625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 8 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 238.984375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 227.46875,
+          "width": 343,
+          "height": 481.21875
+        },
+        "title": {
+          "x": 31,
+          "y": 228.46875,
+          "width": 194.78125,
+          "height": 47.03125
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 9 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 708.1875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 699.6875,
+          "width": 343,
+          "height": 112.875
+        },
+        "title": {
+          "x": 31,
+          "y": 705.421875,
+          "width": 115.59375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 10 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 390.609375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 382.109375,
+          "width": 343,
+          "height": 171.1875
+        },
+        "title": {
+          "x": 31,
+          "y": 387.84375,
+          "width": 53.9375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 11 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 324.796875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 316.296875,
+          "width": 343,
+          "height": 496.8125
+        },
+        "title": {
+          "x": 31,
+          "y": 322.03125,
+          "width": 61.640625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 12 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": -63.09375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": -71.59375,
+          "width": 343,
+          "height": 1079.9375
+        },
+        "title": {
+          "x": 31,
+          "y": -65.859375,
+          "width": 107.890625,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 13 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 297.84375,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 289.34375,
+          "width": 343,
+          "height": 356.375
+        },
+        "title": {
+          "x": 31,
+          "y": 295.078125,
+          "width": 200.34375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 14 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 371.796875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 363.296875,
+          "width": 343,
+          "height": 210.0625
+        },
+        "title": {
+          "x": 31,
+          "y": 369.03125,
+          "width": 53.9375,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 15 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 322.75,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 314.25,
+          "width": 343,
+          "height": 307.25
+        },
+        "title": {
+          "x": 31,
+          "y": 319.984375,
+          "width": 100.171875,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 16 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 306.078125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 294.5625,
+          "width": 343,
+          "height": 347.34375
+        },
+        "title": {
+          "x": 31,
+          "y": 295.5625,
+          "width": 258.1875,
+          "height": 47.03125
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 17 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 361.671875,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 353.171875,
+          "width": 343,
+          "height": 229.5
+        },
+        "title": {
+          "x": 31,
+          "y": 358.90625,
+          "width": 146.421875,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "pane 18 Copy fits without title overlap",
+      "pass": true,
+      "actual": {
+        "button": {
+          "x": 299.1875,
+          "y": 459.828125,
+          "width": 46.8125,
+          "height": 26
+        },
+        "pane": {
+          "x": 16,
+          "y": 451.328125,
+          "width": 343,
+          "height": 229.5
+        },
+        "title": {
+          "x": 31,
+          "y": 457.0625,
+          "width": 215.75,
+          "height": 31.515625
+        }
+      }
+    },
+    {
+      "surface": "local",
+      "check": "#overview exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 111.390625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#quickstart exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.921875,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#zcash exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 124.140625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#crosscheck exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.640625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#reasons exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 124.328125,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#null402 exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.5625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#paywall exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 124.109375,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#api exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.71875,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#mcp exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 124.359375,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#evidence exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.5,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#tests exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.90625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#trust exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 123.671875,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "no horizontal page scroll after navigation",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 40590
+    },
+    {
+      "surface": "local",
+      "check": "#overview exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 111.390625,
+        "bars": 111.390625,
+        "height": 812
+      }
+    },
+    {
+      "surface": "local",
+      "check": "exactly one current section",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 35451
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:54657/reference.html",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "status": 200,
+      "resourceType": "document"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:54657/reference.html",
+      "status": 200,
+      "resourceType": "document"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/browser-reference/EDGE-019-live-mobile-trust-1.jpg",
+    "audit/browser-reference/EDGE-019-live-mobile-overview-1.jpg",
+    "audit/browser-reference/EDGE-019-local-mobile-trust-1.jpg",
+    "audit/browser-reference/EDGE-019-local-mobile-overview-1.jpg"
+  ],
+  "failures": {
+    "network": [],
+    "console": [],
+    "pageErrors": [],
+    "requestFailures": []
+  },
+  "status": "PASS"
+}

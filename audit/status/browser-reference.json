@@ -1,0 +1,122 @@
+[
+  {
+    "id": "PAGE-009",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-009-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-010",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-010-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-011",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-011-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-012",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-012-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-013",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-013-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-014",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-014-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-015",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-015-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-016",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-016-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-017",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-017-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-018",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-018-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-019",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-019-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-020",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/PAGE-020-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-014",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/EDGE-014-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-016",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/EDGE-016-1.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-019",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-reference/EDGE-019-1.json"
+    ],
+    "fix": ""
+  }
+]
