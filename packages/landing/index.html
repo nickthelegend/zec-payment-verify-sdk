@@ -96,12 +96,24 @@
       footer a { text-decoration: none; }
       footer a:hover { color: var(--ink); }
 
+
+      /* cinematic hero: a stone seal and its fresh vermilion impression on washi (generated art, assets/hero.*) */
+      .top { position: absolute; inset: 0 0 auto; z-index: 3; }
+      .top nav { background: rgba(255, 251, 249, 0.82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-radius: 12px; padding: 4px; box-shadow: 0 10px 30px -18px rgba(22, 22, 22, 0.5); }
+      .hero { position: relative; isolation: isolate; overflow: hidden; min-height: min(100svh, 940px); display: flex; align-items: center; background: var(--paper); }
+      .hero > .wrap { width: 100%; padding-top: 136px; align-items: end; }
+      .stage { position: absolute; inset: 0; z-index: -1; }
+      .stage img, .stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 80% 50%; }
+      .stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #fffbf9 0%, rgba(255, 251, 249, 0.9) 32%, rgba(255, 251, 249, 0.25) 60%, rgba(255, 251, 249, 0) 80%), linear-gradient(0deg, #fffbf9 0%, rgba(255, 251, 249, 0) 30%); }
+      .hero .panes { margin-top: 220px; -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1); }
+      @media (prefers-reduced-motion: no-preference) { .stage img, .stage video { animation: hk-settle 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; } @keyframes hk-settle { from { transform: scale(1.06); opacity: 0; } to { transform: none; opacity: 1; } } }
+      @media (max-width: 1000px) { .hero { min-height: 0; display: block; } .stage { bottom: auto; height: min(80vw, 640px); } .stage img, .stage video { object-position: 82% 50%; } .stage::after { background: linear-gradient(90deg, rgba(255, 251, 249, 0.92) 0%, rgba(255, 251, 249, 0.35) 75%), linear-gradient(0deg, #fffbf9 0%, rgba(255, 251, 249, 0) 45%); } .hero .panes { margin-top: 8px; } }
       @media (prefers-reduced-motion: reduce) {
         .seal.armed, .seal.land { animation: none; opacity: 0.94; transform: rotate(-9deg); }
         .seal .bleed { display: none; }
       }
       @media (max-width: 1000px) {
-        .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 56px; padding-top: 40px; padding-bottom: 96px; }
+        .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 112px; padding-bottom: 72px; }
         .steps { grid-template-columns: minmax(0, 1fr); gap: 32px; }
       }
       @media (max-width: 640px) {
@@ -142,6 +154,7 @@
 
     <main>
       <section class="hero" aria-labelledby="h1">
+        <div class="stage" aria-hidden="true"><img src="assets/hero.webp" alt="" width="1600" height="900" fetchpriority="high" decoding="async" /></div>
         <div class="wrap">
           <div>
             <p class="kicker">zpay-verify · Zcash testnet</p>

@@ -18,6 +18,7 @@ case "$OUT" in "" | "/" | "." | "..") echo "error: refusing to build into '$OUT'
 rm -rf "$OUT"
 mkdir -p "$OUT"
 cp packages/landing/index.html packages/landing/reference.html "$OUT/"
+cp -R packages/landing/assets "$OUT/assets"
 env -u VITE_ZPV_API VITE_ZPV_PAGES=1 node packages/dashboard/node_modules/vite/bin/vite.js build packages/dashboard --base ./ --outDir "$(cd "$OUT" && pwd)/dashboard" --emptyOutDir --logLevel warn
 touch "$OUT/.nojekyll"
 echo "site: $OUT/index.html and $OUT/dashboard/"
