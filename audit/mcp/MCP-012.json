@@ -1,0 +1,173 @@
+{
+  "id": "MCP-012",
+  "at": "2026-10-26T10:22:38.348Z",
+  "status": "PASS",
+  "assertion": "Malformed hash, negative/fractional amounts/depth, oversized memo and invalid decimal/address expectations return schema errors with no SQLite claims or verification log",
+  "evidence": [
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": true,
+        "settings": {
+          "ZPV_LWD_URL": "http://127.0.0.1:1",
+          "ZPV_FUJI_RPC": "http://127.0.0.1:1"
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "bad",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Invalid at txid"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": -1,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Number must be greater than or equal to 0 at amount_zat"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 1.5,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Expected integer, received float at amount_zat"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3",
+          "min_conf": -1
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Number must be greater than or equal to 0 at min_conf"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3",
+          "min_conf": 0.5
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Expected integer, received float at min_conf"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: String must contain at most 512 character(s) at memo"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "bad"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_null402_settlement: Invalid at settle_tx"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_pay_to": "-1"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_null402_settlement: Invalid at expect_pay_to"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_amount": "1.5"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_null402_settlement: Invalid at expect_amount"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_pay_to": "1e3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_null402_settlement: Invalid at expect_pay_to"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_recipient": "0x1"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_null402_settlement: Invalid at expect_recipient"
+      }
+    },
+    {
+      "claims": [],
+      "verificationOccurred": false
+    }
+  ]
+}

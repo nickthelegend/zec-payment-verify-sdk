@@ -1,0 +1,16 @@
+{
+  "base_commit": "0c6af88c0cfb4e2a8ab8d562ae962cadbce77be0",
+  "node": "v26.5.0",
+  "pnpm": "10.29.2",
+  "verifier": {
+    "path": "/Volumes/Extreme SSD/Projects/grokbot/projects/zec-payment-verify-sdk/packages/core/target/release/zpay-verify",
+    "sha256": "fe012fcc64bfe9cd4f7545f08a239b5aff3b96f4b38b4a982c79d29979d86152",
+    "bytes": 7802752
+  },
+  "mcp_transport": "actual stdio SDK Client; built packages/mcp/dist/main.js",
+  "operations": "recorded-transaction reads and isolated local SQLite/HTTP only",
+  "forbidden_paths_accessed": false,
+  "chain_transactions_submitted": 0,
+  "committed": false,
+  "pushed": false
+}

@@ -1,0 +1,9 @@
+COMMAND: ["pnpm", "--filter", "@zpv/mcp", "build"]
+START: 2026-10-26T10:21:30Z
+
+> @zpv/mcp@0.1.0 build /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t7/packages/mcp
+> tsc -p tsconfig.json
+
+
+EXIT: 0
+ELAPSED_SECONDS: 0.76

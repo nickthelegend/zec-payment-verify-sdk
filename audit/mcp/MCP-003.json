@@ -1,0 +1,150 @@
+{
+  "id": "MCP-003",
+  "at": "2026-10-26T10:22:11.406Z",
+  "status": "PASS",
+  "assertion": "Wrong memo, underpayment, transparent part and wrong receiver return exact refused reasons",
+  "evidence": [
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "1620eccca54f2558e3cde640f3f378b55278ee5e2e553006cff41bbf238549c0",
+          "amount_zat": 10000,
+          "memo": "zpv-54a3e415500a1434263becdb"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "MEMO_MISMATCH",
+            "AMOUNT_TOO_LOW"
+          ],
+          "paid_zat": 0,
+          "height": 4522621,
+          "confirmations": 21080,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 10000,
+              "memo": "zpv-not-the-challenge",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "f9db1841853b2e7befb516b62563c770aceef538769f35a15cd4c4021cf4dce2",
+          "amount_zat": 10000,
+          "memo": "zpv-826fce7c54e46328748cefc7"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "AMOUNT_TOO_LOW"
+          ],
+          "paid_zat": 5000,
+          "height": 4522621,
+          "confirmations": 21080,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 5000,
+              "memo": "zpv-826fce7c54e46328748cefc7",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "bb8d88426b96a4cd92ec90446d154de5321da7b2bb863d9249a43838e49a82ec",
+          "amount_zat": 10000,
+          "memo": "zpv-d7289a63fabd56ff2f8a7261"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "TRANSPARENT_PART"
+          ],
+          "paid_zat": 10000,
+          "height": 4522621,
+          "confirmations": 21080,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 10000,
+              "memo": "zpv-d7289a63fabd56ff2f8a7261",
+              "memo_binary": false
+            }
+          ],
+          "transparent": true,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "06d121813387444ca3ecc9720e73160b5b80645d9204c6c411e51cef3a190af1",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "NO_OUTPUT_TO_KEY"
+          ],
+          "paid_zat": 0,
+          "height": 4522268,
+          "confirmations": 21433,
+          "outputs": [],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    }
+  ]
+}

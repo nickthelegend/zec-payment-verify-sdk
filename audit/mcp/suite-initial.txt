@@ -1,0 +1,124 @@
+COMMAND: ["pnpm", "--filter", "@zpv/mcp", "test"]
+START: 2026-10-26T10:18:37Z
+
+> @zpv/mcp@0.1.0 test /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t7/packages/mcp
+> vitest run
+
+
+ RUN  v3.2.7 /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t7/packages/mcp
+
+stdout | test/audit.test.ts > MCP-001 initialize and tools/list
+AUDIT MCP-001 PASS
+
+stdout | test/audit.test.ts > MCP-002 matching recorded Zcash check
+AUDIT MCP-002 PASS
+
+stdout | test/audit.test.ts > MCP-003 all recorded Zcash refusal types
+AUDIT MCP-003 PASS
+
+stdout | test/audit.test.ts > MCP-004 confirmation floor and malformed configuration
+AUDIT MCP-004 FAIL
+
+stdout | test/audit.test.ts > MCP-005 missing merchant credential is expected setup error
+AUDIT MCP-005 PASS
+
+stdout | test/audit.test.ts > MCP-006 read-only repeated check
+AUDIT MCP-006 PASS
+
+stdout | test/audit.test.ts > MCP-007 stored single-use annotations and paid claims
+AUDIT MCP-007 PASS
+
+stdout | test/audit.test.ts > MCP-008 normalized replay and shared gateway state
+AUDIT MCP-008 PASS
+
+stdout | test/audit.test.ts > MCP-009 required invoice memo settings
+AUDIT MCP-009 PASS
+
+stdout | test/audit.test.ts > MCP-010 concurrent, interrupted, refused and failed claims
+AUDIT MCP-010 PASS
+
+stdout | test/audit.test.ts > MCP-011 real quorum shortfall and disagreement
+AUDIT MCP-011 PASS
+
+stdout | test/audit.test.ts > MCP-012 schema rejects before verification/claims
+AUDIT MCP-012 PASS
+
+stdout | test/audit.test.ts > MCP-013 both recorded successful Fuji settlements
+AUDIT MCP-013 PASS
+
+stdout | test/audit.test.ts > MCP-014 unbound and all misdirected settlement expectations
+AUDIT MCP-014 PASS
+
+stdout | test/audit.test.ts > MCP-015 Fuji replay remains paid
+AUDIT MCP-015 PASS
+
+stdout | test/audit.test.ts > MCP-016 real failed lightwalletd and Fuji dependencies
+AUDIT MCP-016 PASS
+
+stdout | test/audit.test.ts > MCP-017 audit JSONL and existing permissions
+AUDIT MCP-017 PASS
+
+ ❯ test/audit.test.ts (17 tests | 1 failed) 44962ms
+   ✓ MCP-001 initialize and tools/list 4ms
+   ✓ MCP-002 matching recorded Zcash check  1580ms
+   ✓ MCP-003 all recorded Zcash refusal types  6460ms
+   × MCP-004 confirmation floor and malformed configuration 5487ms
+     → expected '--min-conf must be a whole number' to match /^Setup required: ZPV_MCP_MIN_CONF/
+   ✓ MCP-005 missing merchant credential is expected setup error 182ms
+   ✓ MCP-006 read-only repeated check  3263ms
+   ✓ MCP-007 stored single-use annotations and paid claims  1877ms
+   ✓ MCP-008 normalized replay and shared gateway state  3544ms
+   ✓ MCP-009 required invoice memo settings  353ms
+   ✓ MCP-010 concurrent, interrupted, refused and failed claims  6085ms
+   ✓ MCP-011 real quorum shortfall and disagreement  3529ms
+   ✓ MCP-012 schema rejects before verification/claims 191ms
+   ✓ MCP-013 both recorded successful Fuji settlements  1700ms
+   ✓ MCP-014 unbound and all misdirected settlement expectations  1887ms
+   ✓ MCP-015 Fuji replay remains paid  1106ms
+   ✓ MCP-016 real failed lightwalletd and Fuji dependencies  724ms
+   ✓ MCP-017 audit JSONL and existing permissions  6793ms
+ ✓ test/mcp.test.ts (8 tests) 13500ms
+   ✓ zpv-mcp > verify_zcash_payment: the published x402 payment is ok; a wrong memo is not  3098ms
+   ✓ zpv-mcp > the model cannot lower min_conf below ZPV_MCP_MIN_CONF (default 1); it can raise it  3137ms
+   ✓ zpv-mcp > with ZPV_STORE a payment is accepted once: the second call is ALREADY_USED, and a memo is required  2200ms
+   ✓ zpv-mcp > ZPV_MCP_REQUIRE_MEMO makes the memo required; ZPV_MCP_LOG is written 0600  327ms
+   ✓ zpv-mcp > verify_null402_settlement: a real successful settle() bound to the merchant is paid; unbound or another recipient is not  3280ms
+   ✓ zpv-mcp > verify_zcash_payment is annotated read-only only when it writes nothing: with ZPV_STORE it consumes the payment  378ms
+   ✓ zpv-mcp > without the merchant key: Setup required, not a verdict  502ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/audit.test.ts > MCP-004 confirmation floor and malformed configuration
+AssertionError: expected '--min-conf must be a whole number' to match /^Setup required: ZPV_MCP_MIN_CONF/
+
+- Expected: 
+/^Setup required: ZPV_MCP_MIN_CONF/
+
++ Received: 
+"--min-conf must be a whole number"
+
+ ❯ test/audit.test.ts:152:22
+    150|       const r = await call(s, ZCASH, paidArgs);
+    151|       expect(r.isError).toBe(true);
+    152|       expect(r.text).toMatch(/^Setup required: ZPV_MCP_MIN_CONF/);
+       |                      ^
+    153|     });
+    154|   }
+ ❯ withSession test/audit.test.ts:52:9
+ ❯ test/audit.test.ts:149:5
+ ❯ test/audit.test.ts:86:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 24 passed (25)
+   Start at  15:48:37
+   Duration  59.38s (transform 72ms, setup 0ms, collect 622ms, tests 58.46s, environment 0ms, prepare 110ms)
+
+/Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t7/packages/mcp:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @zpv/mcp@0.1.0 test: `vitest run`
+Exit status 1
+
+EXIT: 1
+ELAPSED_SECONDS: 60.11

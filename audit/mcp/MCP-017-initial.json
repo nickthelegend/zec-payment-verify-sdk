@@ -1,0 +1,187 @@
+{
+  "id": "MCP-017",
+  "status": "FAIL",
+  "assertion": "Each completed tool call (including schema rejection and both tools) appends at/tool/args/isError/result; new/existing logs mode 0600; no incoming credential in records",
+  "error": "AssertionError: expected [ { …(5) }, { …(5) }, { …(5) }, …(1) ] to have a length of 5 but got 4",
+  "evidence": [
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "settled": true,
+          "status": "success",
+          "reasons": [
+            "UNBOUND"
+          ],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050264",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT",
+              "UNBOUND"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22582,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100001,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "reasons": [
+            "AMOUNT_TOO_LOW"
+          ],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22582,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": false
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 1
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "memo is required: ZPV_MCP_REQUIRE_MEMO is set"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": -1,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "MCP error -32602: Input validation error: Invalid arguments for tool verify_zcash_payment: Number must be greater than or equal to 0 at amount_zat"
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_pay_to": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+          "expect_amount": "1000",
+          "expect_recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "settled": true,
+          "status": "success",
+          "reasons": [],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050269",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
