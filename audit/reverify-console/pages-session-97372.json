@@ -1,0 +1,11 @@
+{
+  "started": "2026-10-26T09:56:29.495Z",
+  "runnerPid": 97372,
+  "channel": "chrome",
+  "headless": true,
+  "video": false,
+  "trace": false,
+  "rowTimeoutMs": 90000,
+  "processes": [],
+  "finished": "2026-10-26T09:56:29.496Z"
+}

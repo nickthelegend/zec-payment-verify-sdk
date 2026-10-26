@@ -1,0 +1,28 @@
+{
+  "started": "2026-10-26T09:56:29.665Z",
+  "runnerPid": 97373,
+  "channel": "chrome",
+  "headless": true,
+  "video": false,
+  "trace": false,
+  "rowTimeoutMs": 90000,
+  "urls": {
+    "hosted": "https://hanko-dashboard-six.vercel.app",
+    "local": "http://localhost:5187",
+    "down": "http://localhost:5188",
+    "landing": "http://127.0.0.1:5197",
+    "reference": "http://127.0.0.1:5197/reference.html",
+    "liveLanding": "https://hanko-landing-six.vercel.app/",
+    "liveReference": "https://hanko-landing-six.vercel.app/reference.html",
+    "pagesLanding": "http://127.0.0.1:5198/",
+    "pagesReference": "http://127.0.0.1:5198/reference.html",
+    "pagesConsole": "http://127.0.0.1:5198/dashboard/"
+  },
+  "processes": [],
+  "notes": [
+    "Real verify-only API, real binary and real lightwalletd. No paywall, fabricated API/chain responses, transaction signing or submission. Only transport faults/delays are injected.",
+    "A temporary local TLS certificate is trusted only by its SPKI hash; Chrome local-network-access permission is granted to the hosted origin for real loopback API failure cases.",
+    "Timeout advances Chrome virtual time beyond the production 90-second timer, within the 90-second wall-clock row budget."
+  ],
+  "finished": "2026-10-26T09:56:29.666Z"
+}

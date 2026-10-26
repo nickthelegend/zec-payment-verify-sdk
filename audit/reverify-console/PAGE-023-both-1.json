@@ -1,0 +1,428 @@
+{
+  "id": "PAGE-023",
+  "attempt": 1,
+  "at": "2026-10-26T10:09:35.733Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "hosted",
+      "check": "dashboard HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "hosted",
+      "check": "hosted verify health HTTP 200 ok",
+      "pass": true
+    },
+    {
+      "surface": "hosted",
+      "check": "edited exact JSON and numeric types",
+      "pass": true,
+      "actual": {
+        "rail": "zcash",
+        "uivk": "[shortened-key]",
+        "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+        "amountZat": 100001,
+        "memo": "x402z-another-invoice",
+        "minConf": 3
+      }
+    },
+    {
+      "surface": "hosted",
+      "check": "preview key shortened",
+      "pass": true
+    },
+    {
+      "surface": "hosted",
+      "check": "empty memo omitted from JSON",
+      "pass": true
+    },
+    {
+      "surface": "hosted",
+      "check": "screenshot <=200 KB",
+      "pass": true,
+      "actual": 42501
+    },
+    {
+      "surface": "hosted",
+      "check": "all row expectations matched on this surface",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "dashboard HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "hosted verify health HTTP 200 ok",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "edited exact JSON and numeric types",
+      "pass": true,
+      "actual": {
+        "rail": "zcash",
+        "uivk": "[shortened-key]",
+        "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+        "amountZat": 100001,
+        "memo": "x402z-another-invoice",
+        "minConf": 3
+      }
+    },
+    {
+      "surface": "local",
+      "check": "preview key shortened",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "empty memo omitted from JSON",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "all row expectations matched on this surface",
+      "pass": true
+    }
+  ],
+  "surfaces": [
+    {
+      "name": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app",
+      "health": {
+        "ok": true,
+        "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+        "paths": [
+          "/api/quote",
+          "/api/report"
+        ],
+        "lightwalletd": {
+          "urls": [
+            "https://testnet.zec.rocks:443"
+          ],
+          "quorum": 1
+        }
+      },
+      "responses": []
+    },
+    {
+      "name": "local",
+      "url": "http://localhost:5180",
+      "health": {
+        "ok": true,
+        "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+        "paths": [
+          "/api/quote",
+          "/api/report"
+        ],
+        "lightwalletd": {
+          "urls": [
+            "https://testnet.zec.rocks:443"
+          ],
+          "quorum": 1
+        }
+      },
+      "responses": []
+    }
+  ],
+  "console": [
+    {
+      "surface": "local",
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "surface": "local",
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "surface": "local",
+      "type": "debug",
+      "text": "[vite] connected."
+    }
+  ],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "document"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-DpFU7OeH.css",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "stylesheet"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-dashboard-six.vercel.app/assets/index-jE2E0saT.js",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "stylesheet"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "hosted",
+      "url": "https://hanko-api.201-18-198-162.sslip.io/api/health",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "fetch"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "document"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/src/main.tsx",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/@vite/client",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/@react-refresh",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/react.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/node_modules/.pnpm/vite@7.3.7_@types+node@22.20.5_tsx@4.23.15/node_modules/vite/dist/client/env.mjs",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/chunk-AXQFWXYZ.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/chunk-DS4ZRJLM.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/src/App.tsx",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/src/styles.css",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/null402.js",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/testnet.json?import",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/fixtures/console-recorded.json?import",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/react-dom_client.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/chunk-TSDROGJN.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/errors.js",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/viem.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/@fs/Volumes/Extreme%20SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t13/packages/sdk/dist/limiter.js",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/viem_chains.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/chunk-I2CEELMA.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/chunk-PFXZJHIF.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/chunk-KZUX4H5X.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/chunk-RST5QK3N.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/chunk-YG2HVMEF.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/node_modules/.vite/deps/chunk-MLMCMYHL.js?v=2cb4344d",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "script"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "stylesheet"
+    },
+    {
+      "surface": "local",
+      "url": "http://localhost:5180/api/health",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "fetch"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "method": "GET",
+      "status": 200,
+      "resourceType": "font"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [
+    "audit/reverify-console/PAGE-023.jpg"
+  ],
+  "failures": {
+    "network": [],
+    "console": [],
+    "pageErrors": [],
+    "requestFailures": []
+  },
+  "surfaceResults": {
+    "hosted": "PASS",
+    "local": "PASS"
+  },
+  "status": "PASS",
+  "durationMs": 1113
+}

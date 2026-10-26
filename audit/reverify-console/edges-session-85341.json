@@ -1,0 +1,100 @@
+{
+  "started": "2026-10-26T10:12:02.503Z",
+  "runnerPid": 85341,
+  "channel": "chrome",
+  "headless": true,
+  "video": false,
+  "trace": false,
+  "rowTimeoutMs": 90000,
+  "urls": {
+    "hosted": "https://hanko-dashboard-six.vercel.app",
+    "local": "http://localhost:5187",
+    "down": "http://localhost:5188",
+    "landing": "http://127.0.0.1:5197",
+    "reference": "http://127.0.0.1:5197/reference.html",
+    "liveLanding": "https://hanko-landing-six.vercel.app/",
+    "liveReference": "https://hanko-landing-six.vercel.app/reference.html",
+    "pagesLanding": "http://127.0.0.1:5198/",
+    "pagesReference": "http://127.0.0.1:5198/reference.html",
+    "pagesConsole": "http://127.0.0.1:5198/dashboard/"
+  },
+  "processes": [
+    {
+      "label": "dashboard 5187",
+      "pid": 85432,
+      "exited": true,
+      "code": 143,
+      "signal": null
+    },
+    {
+      "label": "dashboard 5188",
+      "pid": 85434,
+      "exited": true,
+      "code": 143,
+      "signal": null
+    },
+    {
+      "label": "landing/reference static",
+      "pid": 85436,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "label": "verify-only API 18404",
+      "pid": 85437,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "label": "verify-only API 18405",
+      "pid": 85438,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "label": "verify-only API 18406",
+      "pid": 85439,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "label": "temporary local TLS certificate",
+      "pid": 85474,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "local HTTPS forwarding",
+      "pid": 85475,
+      "exited": true,
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    {
+      "label": "Google Chrome",
+      "pid": 85476,
+      "exited": true,
+      "code": 0,
+      "signal": null
+    }
+  ],
+  "notes": [
+    "Real verify-only API, real binary and real lightwalletd. No paywall, fabricated API/chain responses, transaction signing or submission. Only transport faults/delays are injected.",
+    "A temporary local TLS certificate is trusted only by its SPKI hash; Chrome local-network-access permission is granted to the hosted origin for real loopback API failure cases.",
+    "Timeout advances Chrome virtual time beyond the production 90-second timer, within the 90-second wall-clock row budget."
+  ],
+  "slotOwner": "audit-t13 88543 2026-10-26T10:08:19Z",
+  "closedPortVerified": true,
+  "verifierBinary": {
+    "path": "/Volumes/Extreme SSD/Projects/grokbot/projects/zec-payment-verify-sdk/packages/core/target/release/zpay-verify",
+    "sha256": "fe012fcc64bfe9cd4f7545f08a239b5aff3b96f4b38b4a982c79d29979d86152",
+    "note": "Pre-existing release verifier; the SDK and gateway are built from this worktree."
+  },
+  "browser": "155.0.8059.85",
+  "finished": "2026-10-26T10:14:36.404Z"
+}
