@@ -1,0 +1,193 @@
+[
+  {
+    "id": "PAGE-021",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-console/PAGE-021-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "PAGE-022",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-console/PAGE-022-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "PAGE-023",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-console/PAGE-023-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "PAGE-024",
+    "status": "FAIL",
+    "evidence": [
+      "audit/browser-console/PAGE-024-1.json",
+      "audit/browser-console/PAGE-024-2.json",
+      "audit/browser-console/PAGE-024-3.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "FAIL"
+    },
+    "blocker": "Hosted API OPTIONS /api/verify omits Access-Control-Allow-Origin for http://localhost:5180. The browser blocks the verify request before POST. Requires hosted API/reverse-proxy CORS configuration; deployment prohibited."
+  },
+  {
+    "id": "PAGE-025",
+    "status": "FAIL",
+    "evidence": [
+      "audit/browser-console/PAGE-025-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "FAIL"
+    },
+    "blocker": "Hosted API OPTIONS /api/verify omits Access-Control-Allow-Origin for http://localhost:5180. The browser blocks the verify request before POST. Requires hosted API/reverse-proxy CORS configuration; deployment prohibited."
+  },
+  {
+    "id": "PAGE-026",
+    "status": "FAIL",
+    "evidence": [
+      "audit/browser-console/PAGE-026-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "FAIL"
+    },
+    "blocker": "Hosted API OPTIONS /api/verify omits Access-Control-Allow-Origin for http://localhost:5180. The browser blocks the verify request before POST. Requires hosted API/reverse-proxy CORS configuration; deployment prohibited."
+  },
+  {
+    "id": "PAGE-027",
+    "status": "FAIL",
+    "evidence": [
+      "audit/browser-console/PAGE-027-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "FAIL"
+    },
+    "blocker": "Hosted API OPTIONS /api/verify omits Access-Control-Allow-Origin for http://localhost:5180. The browser blocks the verify request before POST. Requires hosted API/reverse-proxy CORS configuration; deployment prohibited."
+  },
+  {
+    "id": "PAGE-028",
+    "status": "FAIL",
+    "evidence": [
+      "audit/browser-console/PAGE-028-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "FAIL"
+    },
+    "blocker": "Hosted API OPTIONS /api/verify omits Access-Control-Allow-Origin for http://localhost:5180. The browser blocks the verify request before POST. Requires hosted API/reverse-proxy CORS configuration; deployment prohibited."
+  },
+  {
+    "id": "PAGE-029",
+    "status": "FAIL",
+    "evidence": [
+      "audit/browser-console/PAGE-029-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "FAIL"
+    },
+    "blocker": "Hosted API OPTIONS /api/verify omits Access-Control-Allow-Origin for http://localhost:5180. The browser blocks the verify request before POST. Requires hosted API/reverse-proxy CORS configuration; deployment prohibited."
+  },
+  {
+    "id": "PAGE-030",
+    "status": "FAIL",
+    "evidence": [
+      "audit/browser-console/PAGE-030-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "FAIL"
+    },
+    "blocker": "Hosted API OPTIONS /api/verify omits Access-Control-Allow-Origin for http://localhost:5180. The browser blocks the verify request before POST. Requires hosted API/reverse-proxy CORS configuration; deployment prohibited."
+  },
+  {
+    "id": "PAGE-031",
+    "status": "FAIL",
+    "evidence": [
+      "audit/browser-console/PAGE-031-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "FAIL"
+    },
+    "blocker": "Hosted API OPTIONS /api/verify omits Access-Control-Allow-Origin for http://localhost:5180. The browser blocks the verify request before POST. Requires hosted API/reverse-proxy CORS configuration; deployment prohibited."
+  },
+  {
+    "id": "PAGE-032",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-console/PAGE-032-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "PAGE-033",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-console/PAGE-033-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "PAGE-034",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-console/PAGE-034-1.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  },
+  {
+    "id": "PAGE-035",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-console/PAGE-035-1.json",
+      "audit/browser-console/PAGE-035-2.json"
+    ],
+    "fix": "",
+    "surfaces": {
+      "hosted": "PASS",
+      "local": "PASS"
+    }
+  }
+]
