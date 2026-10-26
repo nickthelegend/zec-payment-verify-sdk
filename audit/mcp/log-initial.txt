@@ -1,0 +1,64 @@
+COMMAND: ["pnpm", "--filter", "@zpv/mcp", "exec", "vitest", "run", "test/audit.test.ts", "-t", "MCP-017"]
+START: 2026-10-26T10:20:20Z
+
+ RUN  v3.2.7 /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t7/packages/mcp
+
+stdout | test/audit.test.ts > MCP-017 audit JSONL and existing permissions
+AUDIT MCP-017 FAIL
+
+ ❯ test/audit.test.ts (17 tests | 1 failed | 16 skipped) 5209ms
+   ↓ MCP-001 initialize and tools/list
+   ↓ MCP-002 matching recorded Zcash check
+   ↓ MCP-003 all recorded Zcash refusal types
+   ↓ MCP-004 confirmation floor and malformed configuration
+   ↓ MCP-005 missing merchant credential is expected setup error
+   ↓ MCP-006 read-only repeated check
+   ↓ MCP-007 stored single-use annotations and paid claims
+   ↓ MCP-008 normalized replay and shared gateway state
+   ↓ MCP-009 required invoice memo settings
+   ↓ MCP-010 concurrent, interrupted, refused and failed claims
+   ↓ MCP-011 real quorum shortfall and disagreement
+   ↓ MCP-012 schema rejects before verification/claims
+   ↓ MCP-013 both recorded successful Fuji settlements
+   ↓ MCP-014 unbound and all misdirected settlement expectations
+   ↓ MCP-015 Fuji replay remains paid
+   ↓ MCP-016 real failed lightwalletd and Fuji dependencies
+   × MCP-017 audit JSONL and existing permissions 5030ms
+     → expected [ { …(5) }, { …(5) }, { …(5) }, …(1) ] to have a length of 5 but got 4
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/audit.test.ts > MCP-017 audit JSONL and existing permissions
+AssertionError: expected [ { …(5) }, { …(5) }, { …(5) }, …(1) ] to have a length of 5 but got 4
+
+- Expected
++ Received
+
+- 5
++ 4
+
+ ❯ test/audit.test.ts:394:23
+    392|       expect(raw.includes(deployment.wallets.merchant.uivk)).toBe(fals…
+    393|       const entries = raw.trim().split('\n').map(s => JSON.parse(s));
+    394|       expect(entries).toHaveLength(5);
+       |                       ^
+    395|       expect(entries.map(r => r.isError)).toEqual([false, false, true,…
+    396|       for (const e of entries) {
+ ❯ withSession test/audit.test.ts:52:9
+ ❯ test/audit.test.ts:383:5
+ ❯ test/audit.test.ts:86:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 16 skipped (17)
+   Start at  15:50:21
+   Duration  5.52s (transform 43ms, setup 0ms, collect 191ms, tests 5.21s, environment 0ms, prepare 46ms)
+
+undefined
+/Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t7/packages/mcp:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run test/audit.test.ts -t MCP-017
+
+EXIT: 1
+ELAPSED_SECONDS: 6.02

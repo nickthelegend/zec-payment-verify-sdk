@@ -1,0 +1,227 @@
+{
+  "id": "MCP-014",
+  "at": "2026-10-26T10:22:42.033Z",
+  "status": "PASS",
+  "assertion": "Missing recipient, wrong recipient, wrong payTo and wrong amount yield exact refusal reasons",
+  "evidence": [
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "settled": true,
+          "status": "success",
+          "reasons": [
+            "UNBOUND"
+          ],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050356",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT",
+              "UNBOUND"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_pay_to": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+          "expect_amount": "1000"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "settled": true,
+          "status": "success",
+          "reasons": [
+            "UNBOUND"
+          ],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050356",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_pay_to": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+          "expect_amount": "1000",
+          "expect_recipient": "0x0000000000000000000000000000000000000001"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "settled": true,
+          "status": "success",
+          "reasons": [
+            "RECIPIENT_MISMATCH"
+          ],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050359",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_pay_to": "12571058244225308636482144950735848463267199877607700220033742556724671780814",
+          "expect_amount": "1000",
+          "expect_recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "settled": true,
+          "status": "success",
+          "reasons": [
+            "PAY_TO_MISMATCH"
+          ],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050359",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT",
+              "PAY_TO_MISMATCH"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "verify_null402_settlement",
+        "arguments": {
+          "settle_tx": "0x8596f52de2d8c15680c96a0fa25b1bb5073324155f586203507cddf92f5ca593",
+          "expect_pay_to": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+          "expect_amount": "1001",
+          "expect_recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": false,
+          "verdict": "refused",
+          "settled": true,
+          "status": "success",
+          "reasons": [
+            "AMOUNT_MISMATCH"
+          ],
+          "checks": {
+            "proofValid": true,
+            "rootKnown": true,
+            "nullifierSpent": true
+          },
+          "signals": {
+            "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+            "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+            "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+            "requiredAmount": "1000",
+            "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+          },
+          "recipient": "0x605ab54711b69C1D783fd72447d92C3dA10797CD",
+          "settled_in_block": "57020734",
+          "checked_at_block": "60050359",
+          "proof_check": {
+            "ok": false,
+            "reasons": [
+              "NULLIFIER_SPENT",
+              "AMOUNT_MISMATCH"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

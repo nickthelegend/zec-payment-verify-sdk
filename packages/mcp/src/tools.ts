@@ -9,6 +9,7 @@
 //   ZPV_MCP_LOG            one JSON line per call (decrypted memos and amounts), written with mode 0600.
 import { appendFileSync, closeSync, fchmodSync, openSync } from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { CallToolRequestSchema, CallToolResultSchema } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
 import { SetupRequiredError, verify, verifyNull402Settlement, VerifyError } from '@zpv/sdk';
 import { SqliteStore } from '@zpv/gateway';
@@ -25,14 +26,12 @@ function log(tool: string, args: unknown, isError: boolean, result: unknown) {
   }
 }
 
-async function run(tool: string, args: unknown, fn: () => Promise<unknown>) {
+async function run(fn: () => Promise<unknown>) {
   try {
     const result = await fn();
-    log(tool, args, false, result);
     return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] };
   } catch (e) {
     const text = (e as Error).message;
-    log(tool, args, true, text);
     return { isError: true, content: [{ type: 'text' as const, text }] };
   }
 }
@@ -40,8 +39,13 @@ async function run(tool: string, args: unknown, fn: () => Promise<unknown>) {
 function minConfFloor(): number {
   const v = process.env.ZPV_MCP_MIN_CONF?.trim();
   if (!v) return 1;
-  if (!/^\d+$/.test(v)) throw new SetupRequiredError('ZPV_MCP_MIN_CONF', `a whole number, got ${v}`);
-  return Number(v);
+  // The verifier parses confirmations as u32. Reject the setting here, rather
+  // than misclassifying an invalid server floor as a caller/verification error.
+  const n = Number(v);
+  if (!/^\d+$/.test(v) || !Number.isSafeInteger(n) || n > 0xffff_ffff) {
+    throw new SetupRequiredError('ZPV_MCP_MIN_CONF', 'a whole number from 0 to 4294967295');
+  }
+  return n;
 }
 
 let store: SqliteStore | undefined;
@@ -54,6 +58,21 @@ const singleUse = () => {
 
 export function createServer(): McpServer {
   const server = new McpServer({ name: 'zec-payment-verify', version: '0.1.0' });
+  // Decorate the public request-handler registration before tools are registered.
+  // The SDK rejects invalid tool arguments before invoking our tool callback, so
+  // logging inside that callback silently omitted completed schema-error calls.
+  const register = server.server.setRequestHandler.bind(server.server);
+  server.server.setRequestHandler = (schema, handler) => register(schema, async (request, extra) => {
+    const result = await handler(request, extra);
+    const call = CallToolRequestSchema.safeParse(request);
+    if (call.success && process.env.ZPV_MCP_LOG) {
+      const response = CallToolResultSchema.parse(result);
+      const text = response.content.find(c => c.type === 'text')?.text ?? '';
+      const isError = Boolean(response.isError);
+      log(call.data.params.name, call.data.params.arguments ?? {}, isError, isError ? text : JSON.parse(text));
+    }
+    return result;
+  });
   // With ZPV_STORE the zcash tool writes: a paid answer consumes the payment, so it is not read-only, and a
   // client that auto-approves read-only tools must not run it on a "just checking" call.
   const consumes = Boolean(process.env.ZPV_STORE);
@@ -75,7 +94,7 @@ export function createServer(): McpServer {
       annotations: consumes ? { readOnlyHint: false, destructiveHint: false, idempotentHint: false } : { readOnlyHint: true },
     },
     (a) =>
-      run('verify_zcash_payment', a, async () => {
+      run(async () => {
         const uivk = process.env.ZPV_MERCHANT_UIVK;
         if (!uivk) throw new SetupRequiredError('ZPV_MERCHANT_UIVK');
         const minConf = Math.max(a.min_conf ?? 0, minConfFloor());
@@ -136,7 +155,7 @@ export function createServer(): McpServer {
       annotations: { readOnlyHint: true },
     },
     (a) =>
-      run('verify_null402_settlement', a, async () => {
+      run(async () => {
         const r = await verifyNull402Settlement(a.settle_tx as `0x${string}`, { payTo: a.expect_pay_to, requiredAmount: a.expect_amount, recipient: a.expect_recipient });
         return {
           ok: r.ok,

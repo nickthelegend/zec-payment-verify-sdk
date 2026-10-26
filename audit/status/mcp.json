@@ -1,0 +1,104 @@
+[
+  {
+    "id": "MCP-001",
+    "status": "PASS",
+    "evidence": "Server identity/version, exact two tools, replay/binding/confirmation-floor descriptions. Real stdio: audit/mcp/MCP-001.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-002",
+    "status": "PASS",
+    "evidence": "Paid JSON includes all documented fields, real outputs/height/depth and single_use false. Real stdio: audit/mcp/MCP-002.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-003",
+    "status": "PASS",
+    "evidence": "Wrong memo, underpayment, transparent part and wrong receiver return exact refused reasons. Real stdio: audit/mcp/MCP-003.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-004",
+    "status": "PASS",
+    "evidence": "Default/configured floor is reported and enforced; malformed/out-of-range floors are Setup required. Real stdio: audit/mcp/MCP-004.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": "packages/mcp/src/tools.ts rejects malformed/unsafe/out-of-u32 server confirmation floors as Setup required: ZPV_MCP_MIN_CONF before verification. Initial failure: audit/mcp/MCP-004-initial.json; complete row rerun PASS in audit/mcp/suite.txt (25/25 tests passed)."
+  },
+  {
+    "id": "MCP-005",
+    "status": "PASS",
+    "evidence": "Missing merchant environment returns exactly isError Setup required and no verdict. Real stdio: audit/mcp/MCP-005.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-006",
+    "status": "PASS",
+    "evidence": "Without store readOnlyHint true, replay warning, repeated payment remains paid/single_use false. Real stdio: audit/mcp/MCP-006.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-007",
+    "status": "PASS",
+    "evidence": "Disposable SQLite has exactly paid memo/tx claims after successful acceptance; non-read-only annotations. Real stdio: audit/mcp/MCP-007.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-008",
+    "status": "PASS",
+    "evidence": "Same txid in uppercase, consumed memo, and actual gateway-paid shared SQLite state return ALREADY_USED. Real stdio: audit/mcp/MCP-008.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-009",
+    "status": "PASS",
+    "evidence": "Store and REQUIRE_MEMO settings return exact setting-specific error text. Real stdio: audit/mcp/MCP-009.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-010",
+    "status": "PASS",
+    "evidence": "Real concurrent stdio BEING_CHECKED, refusal/error release, killed claimant five-minute lease takeover and stale token protection. Real stdio: audit/mcp/MCP-010.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-011",
+    "status": "PASS",
+    "evidence": "Quorum/disagreement return unverified, null report fields and cross_check details; disposable claims released. Real stdio: audit/mcp/MCP-011.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-012",
+    "status": "PASS",
+    "evidence": "Malformed hash, negative/fractional amounts/depth, oversized memo and invalid decimal/address expectations return schema errors with no SQLite claims or verification log. Real stdio: audit/mcp/MCP-012.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-013",
+    "status": "PASS",
+    "evidence": "Both bound recordings paid/success/settled with checks, five signals, recipient, blocks and spent proof; read-only annotation. Real stdio: audit/mcp/MCP-013.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-014",
+    "status": "PASS",
+    "evidence": "Missing recipient, wrong recipient, wrong payTo and wrong amount yield exact refusal reasons. Real stdio: audit/mcp/MCP-014.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-015",
+    "status": "PASS",
+    "evidence": "Repeated bound recorded settlement remains paid even with ZPV_STORE; description requires caller settlement-hash tracking. Real stdio: audit/mcp/MCP-015.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-016",
+    "status": "PASS",
+    "evidence": "Real closed loopback dependency returns isError text, no paid log and no retained SQLite paid claim. Real stdio: audit/mcp/MCP-016.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": ""
+  },
+  {
+    "id": "MCP-017",
+    "status": "PASS",
+    "evidence": "Each completed tool call (including schema rejection and both tools) appends at/tool/args/isError/result; new/existing logs mode 0600; no incoming credential in records. Real stdio: audit/mcp/MCP-017.json; command: python3 audit/mcp/run.py suite; suite: audit/mcp/suite.txt",
+    "fix": "packages/mcp/src/tools.ts logs at the tools/call request boundary, including SDK schema rejections exactly once. Initial failure: audit/mcp/MCP-017-initial.json; complete row rerun PASS in audit/mcp/suite.txt (25/25 tests passed)."
+  }
+]

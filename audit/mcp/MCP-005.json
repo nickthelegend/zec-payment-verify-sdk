@@ -1,0 +1,30 @@
+{
+  "id": "MCP-005",
+  "at": "2026-10-26T10:22:17.925Z",
+  "status": "PASS",
+  "assertion": "Missing merchant environment returns exactly isError Setup required and no verdict",
+  "evidence": [
+    {
+      "session": {
+        "merchantConfigured": false,
+        "isolatedStore": false,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": true,
+        "result": "Setup required: ZPV_MERCHANT_UIVK"
+      }
+    }
+  ]
+}

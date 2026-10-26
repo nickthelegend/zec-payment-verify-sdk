@@ -1,0 +1,71 @@
+{
+  "id": "MCP-007",
+  "at": "2026-10-26T10:22:23.249Z",
+  "status": "PASS",
+  "assertion": "Disposable SQLite has exactly paid memo/tx claims after successful acceptance; non-read-only annotations",
+  "evidence": [
+    {
+      "session": {
+        "merchantConfigured": true,
+        "isolatedStore": true,
+        "auditLogConfigured": false,
+        "settings": {}
+      }
+    },
+    {
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false
+      },
+      "title": "Accept a shielded Zcash payment to the merchant (single use)"
+    },
+    {
+      "request": {
+        "name": "verify_zcash_payment",
+        "arguments": {
+          "txid": "030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "amount_zat": 100000,
+          "memo": "x402z-f19a63da20cbc0749ea800b3"
+        }
+      },
+      "response": {
+        "isError": false,
+        "result": {
+          "ok": true,
+          "verdict": "paid",
+          "reasons": [],
+          "paid_zat": 100000,
+          "height": 4521112,
+          "confirmations": 22589,
+          "outputs": [
+            {
+              "pool": "Ironwood",
+              "value": 100000,
+              "memo": "x402z-f19a63da20cbc0749ea800b3",
+              "memo_binary": false
+            }
+          ],
+          "transparent": false,
+          "lightwalletd": "https://testnet.zec.rocks:443",
+          "min_conf": 1,
+          "single_use": true
+        }
+      }
+    },
+    {
+      "claims": [
+        {
+          "key": "memo:x402z-f19a63da20cbc0749ea800b3",
+          "state": "paid",
+          "until": 0
+        },
+        {
+          "key": "tx:030c3cbf78ce8460553bba4e82c0ba813f039bd3ecf4d7f2e81c59837dc28351",
+          "state": "paid",
+          "until": 0
+        }
+      ]
+    }
+  ]
+}
