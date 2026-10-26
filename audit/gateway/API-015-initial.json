@@ -1,0 +1,45 @@
+{
+  "id": "API-015",
+  "at": "2026-10-26T10:04:04.252Z",
+  "status": "FAIL",
+  "note": "wrong-prefix and malformed encoded key rejected; evidence has no keys",
+  "error": "AssertionError: expected value\n+ actual - expected\n\n+ 'not a testnet unified incoming viewing key: Address is not Bech32m encoded'\n- 'not a testnet unified incoming viewing key'\n",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 88388,
+      "port": 56931,
+      "store": "/tmp/hanko-gateway-http-BcQFKD/16.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:04:04 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "uivk must be a testnet unified incoming viewing key ([REDACTED_VIEWING_KEY])"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:04:04 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "not a testnet unified incoming viewing key: Address is not Bech32m encoded"
+      }
+    }
+  ]
+}

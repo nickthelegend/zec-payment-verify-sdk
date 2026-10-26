@@ -1,0 +1,8 @@
+{
+  "id": "API-018",
+  "at": "2026-10-26T10:04:15.458Z",
+  "status": "FAIL",
+  "note": "exact allowed origin headers on success and error",
+  "error": "AssertionError: local api listened",
+  "records": []
+}

@@ -48,17 +48,17 @@ describe('paywall hardening', () => {
     }
   });
 
-  it('lightwalletd endpoints that disagree → 503 unverified, nothing served, and the payment stays claimable', async () => {
-    // testnet.zec.rocks has the payment; zec.rocks (a real mainnet lightwalletd) does not, like a server withholding it.
-    const split = await start({ lwdUrls: ['https://testnet.zec.rocks:443', 'https://zec.rocks:443'] });
+  it('a lightwalletd quorum shortfall → 503 unverified, nothing served, and the payment stays claimable', async () => {
+    // Testnet plus a closed loopback port: exercise unavailable quorum without contacting mainnet.
+    const split = await start({ lwdUrls: ['https://testnet.zec.rocks:443', 'http://127.0.0.1:9'] });
     await fetch(`${split}/api/quote`);
     const r = await fetch(`${split}/api/quote`, { headers: header({ memo: fx.x402.memo, txid: fx.x402.txid }) });
     expect(r.status).toBe(503);
     expect(r.headers.get('retry-after')).toBe('30');
     const body = (await r.json()) as { reasons: string[]; data?: unknown };
-    expect(body.reasons).toEqual(['UNVERIFIED_DISAGREEMENT']);
+    expect(body.reasons).toEqual(['UNVERIFIED_QUORUM']);
     expect(body.data).toBeUndefined();
-    expect(await (await fetch(`${split}/api/health`)).json()).toMatchObject({ lightwalletd: { urls: ['https://testnet.zec.rocks:443', 'https://zec.rocks:443'], quorum: 2 } });
+    expect(await (await fetch(`${split}/api/health`)).json()).toMatchObject({ lightwalletd: { urls: ['https://testnet.zec.rocks:443', 'http://127.0.0.1:9'], quorum: 2 } });
     // The payment stayed claimable: a retry that reaches a quorum is served. testnet.zec.rocks plus a
     // closed local port with quorum 1 (one server under two spellings is refused as one endpoint twice).
     const agree = await start({ lwdUrls: ['https://testnet.zec.rocks:443', 'http://127.0.0.1:9'], lwdQuorum: 1 });

@@ -1,0 +1,8 @@
+{
+  "id": "API-019",
+  "at": "2026-10-26T10:04:26.187Z",
+  "status": "FAIL",
+  "note": "unlisted and absent origins receive JSON without CORS permission",
+  "error": "AssertionError: local api listened",
+  "records": []
+}

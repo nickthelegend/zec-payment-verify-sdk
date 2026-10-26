@@ -1,0 +1,96 @@
+{
+  "id": "API-064",
+  "at": "2026-10-26T10:11:52.466Z",
+  "status": "PASS",
+  "note": "production startup missing credentials, bad numeric/quorum/address/key settings; defaults",
+  "records": [
+    {
+      "invalidSetting": "ZPV_PAY_TO",
+      "pid": 79471,
+      "exit": 2,
+      "output": "Setup required: ZPV_PAY_TO\n"
+    },
+    {
+      "invalidSetting": "ZPV_MERCHANT_UIVK",
+      "pid": 79571,
+      "exit": 2,
+      "output": "Setup required: ZPV_MERCHANT_UIVK\n"
+    },
+    {
+      "invalidSetting": "ZPV_LWD_QUORUM",
+      "pid": 79573,
+      "exit": 2,
+      "output": "Setup required: ZPV_LWD_QUORUM (a whole number, got abc)\n"
+    },
+    {
+      "invalidSetting": "ZPV_LWD_QUORUM",
+      "pid": 79927,
+      "exit": 2,
+      "output": "Setup required: ZPV_LWD_QUORUM (a whole number from 1 to 2)\n"
+    },
+    {
+      "invalidSetting": "ZPV_MIN_CONF",
+      "pid": 80891,
+      "exit": 2,
+      "output": "Setup required: ZPV_MIN_CONF (a whole number ≥ 1 and ≤ 4294967295 (0 accepts mempool transactions, which can still be replaced; set ZPV_ALLOW_ZERO_CONF=1 to allow it), got 9007199254740993)\n"
+    },
+    {
+      "invalidSetting": "ZPV_MIN_CONF",
+      "pid": 81794,
+      "exit": 2,
+      "output": "Setup required: ZPV_MIN_CONF (a whole number ≥ 1 and ≤ 4294967295 (0 accepts mempool transactions, which can still be replaced; set ZPV_ALLOW_ZERO_CONF=1 to allow it), got 4294967296)\n"
+    },
+    {
+      "invalidSetting": "ZPV_PRICE_ZAT",
+      "pid": 82202,
+      "exit": 2,
+      "output": "Setup required: ZPV_PRICE_ZAT (a whole number ≥ 1 and ≤ 420000000000000, got 2100000000000001)\n"
+    },
+    {
+      "server": "main",
+      "pid": 82206,
+      "port": 8403,
+      "store": "/tmp/hanko-gateway-http-urp3Qs/1.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 402,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:11:52 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "x402Version": 1,
+        "error": "payment required",
+        "accepts": [
+          {
+            "scheme": "zcash-shielded",
+            "network": "zcash-testnet",
+            "maxAmountRequired": "10000",
+            "resource": "/api/quote",
+            "description": "/api/quote: send 10000 zatoshi to payTo with the memo zpv-1793010413-8c086cb0be88b3a0-R3u27GS-eistM3OxmLnXY_, then retry with X-PAYMENT",
+            "mimeType": "application/json",
+            "payTo": "utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7",
+            "maxTimeoutSeconds": 900,
+            "asset": "ZEC",
+            "extra": {
+              "memoNonce": "zpv-1793010413-8c086cb0be88b3a0-R3u27GS-eistM3OxmLnXY_",
+              "expiresAt": 1793010413,
+              "paymentUri": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTMwMTA0MTMtOGMwODZjYjBiZTg4YjNhMC1SM3UyN0dTLWVpc3RNM094bUxuWFlf",
+              "minConf": 1
+            },
+            "amountZat": "10000",
+            "memo": "zpv-1793010413-8c086cb0be88b3a0-R3u27GS-eistM3OxmLnXY_",
+            "minConf": 1,
+            "expiresAt": 1793010413000,
+            "zip321": "zcash:utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7?amount=0.0001&memo=enB2LTE3OTMwMTA0MTMtOGMwODZjYjBiZTg4YjNhMC1SM3UyN0dTLWVpc3RNM094bUxuWFlf"
+          }
+        ]
+      }
+    }
+  ]
+}

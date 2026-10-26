@@ -28,6 +28,13 @@ const pay = (base: string) => fetch(`${base}/api/quote`, { headers: { 'x-payment
 const zcash = { rail: 'zcash', uivk: fx.x402.uivk, txid: fx.x402.txid, amountZat: 100_000, memo: fx.x402.memo };
 
 describe('gateway status codes', () => {
+  it('malformed testnet key encoding has a stable public error without core parser details', async () => {
+    const base = await start();
+    const r = await post(base, JSON.stringify({ ...zcash, uivk: 'uivktest1malformed' }));
+    expect(r.status).toBe(400);
+    expect(await r.json()).toEqual({ error: 'not a testnet unified incoming viewing key' });
+  });
+
   it('lightwalletd unreachable: /api/verify is 502 with Retry-After, the paywall 503 with Retry-After', async () => {
     const base = await start();
     const v = await post(base, JSON.stringify(zcash));

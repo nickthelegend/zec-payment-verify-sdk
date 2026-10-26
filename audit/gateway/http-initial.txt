@@ -1,0 +1,86 @@
+COMMAND: ["node", "--import", "tsx", "../../audit/gateway/http.ts"]
+CWD: /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t5/packages/gateway
+Started UTC: 2026-10-26T10:03:13Z
+API-001 FAIL AssertionError: local api listened
+API-002 PASS main.ts health, default paths, price and confirmation floor
+API-003 FAIL AssertionError: expected value
++ actual - expected
+
++ 'utest19wj09n80xgs6njmsl0k2junzcm2093upxp6h7qtfqwymxvn35ewl62pccfcnhqxkmk93p8kprkslnrqfc8ygvg0kn298h7hz2urjyus7'
+- ''
+
+API-004 PASS recorded x402 transaction paid with report and provenance
+API-005 PASS wrong memo refused; report retained
+API-006 PASS recorded Fuji settlement proof extracted read-only and checked through HTTP
+API-007 FAIL AssertionError: local api listened
+API-008 FAIL AssertionError: local api listened
+API-009 FAIL AssertionError: local api listened
+API-010 PASS JSON-only gate and charset acceptance with a real unavailable upstream
+API-011 PASS empty and malformed JSON rejected
+API-012 PASS over 1,000,000 character JSON rejected without a verification
+API-013 PASS nonobjects and unsupported rail rejected
+API-014 PASS malformed txid caller error with no report
+API-015 FAIL AssertionError: expected value
++ actual - expected
+
++ 'not a testnet unified incoming viewing key: Address is not Bech32m encoded'
+- 'not a testnet unified incoming viewing key'
+
+API-016 PASS invalid amount, confirmations, boolean, memo bytes/NUL and key controls
+API-017 PASS null402 signal, expectation and proof validation
+API-018 FAIL AssertionError: local api listened
+API-019 FAIL AssertionError: local api listened
+API-020 PASS closed real local upstream yields 502 retry 30, never paid or caller error
+API-021 PASS missing binary yields Setup required without fabricated verdict
+API-022 PASS 150 real HTTP requests cap child checks at 4, queue at 4; 142 busy responses retry 5
+API-023 PASS real failed Fuji HTTP request cleaned to a single line without request dump
+API-024 PASS refund list disabled without admin token even behind proxy
+API-025 PASS missing, malformed and wrong tokens cannot list refunds
+API-026 PASS authorized fresh SQLite refund list empty
+API-027 PASS actual underpayment recorded twice, one full SQLite refund row; suite verifies newest-first
+API-028 PASS production unpaid /api/quote challenge, defaults and ZIP-321
+API-029 PASS production unpaid /api/report challenge, defaults and ZIP-321
+API-030 PASS unpaid quote HEAD has 402 JSON headers and no body
+API-031 PASS report HEAD unpaid 402, recorded matching payment 200 receipt without body
+API-032 PASS /api/quote OPTIONS empty; no challenge or claim stored
+API-033 PASS /api/report OPTIONS empty; no challenge or claim stored
+API-034 PASS /api/quote unsupported methods rejected before claims
+API-035 PASS /api/report unsupported methods rejected before claims
+API-036 PASS unknown route returns exact 404 with no challenge or claim
+API-037 UNTESTED needs KAGE_X402_DIR
+API-038 PASS malformed base64 JSON returns exact error and false settlement
+API-039 PASS scalar, array and typed legacy header fields rejected
+API-040 PASS wrong v1 version, scheme, network and payload rejected
+API-041 PASS known memo without txid retains challenge and consumes nothing
+API-042 PASS unknown and tampered HMAC/path rejected before verification; expired window also API-062
+API-043 PASS fresh current challenge refuses historical memo with real report reasons
+API-044 PASS published 10000-zat quote accepted only in disposable matching challenge
+API-045 PASS v1 and legacy forms accepted once in separate disposable SQLite stores
+API-046 PASS recorded payslip accepted for report with its receiver and one paid memo/txid pair
+API-047 PASS case-normalized replay refused, including closed custom memo and reissued memo
+API-048 PASS recorded wrong-memo payment refused in its own recorded challenge
+API-049 PASS underpaid real refund row persists through process restart
+API-050 PASS transparent-part real refund row persists through process restart
+API-051 PASS six absent-txid HTTP checks in existing suite do not close challenge; recorded matching payment then accepted
+API-052 PASS high confirmation floor produces pending receipt, no refusal increment/refund, claim released
+API-053 PASS five real wrong-receiver refusals close challenge; matching payment becomes CHALLENGE_CLOSED refund
+API-054 PASS testnet plus unavailable loopback causes real quorum shortfall with claim released
+API-055 PASS real unreachable upstream retry 30 and missing binary retry 60; claims released
+API-056 PASS concurrent lower/uppercase recorded payment yields exactly one 200 and one 402
+API-057 PASS SIGKILL real claimant; 5-minute lease takeover; old owner guarded and HTTP loser refused
+API-058 PASS actual SQLite refund and failure counts survive process restart; suite covers paid claims, HMAC and shared processes
+API-059 PASS explicit memory-restart scenario forgets paid state and invalidates HMAC; production startup warning
+API-060 FAIL AssertionError: expected value
+
+402 !== 503
+
+API-061 PASS real block-time grace tested by suite; HTTP late receipt payment_expired and SQLite refund
+API-062 PASS past expiry plus 24 hours produces replacement challenge with no claim or content
+API-063 PASS saturating free verify slots still allows real recorded paywall payment; separate CheckLimiter
+API-064 FAIL AssertionError: invalid ZPV_LWD_QUORUM exits 2
+
+0 !== 2
+
+HTTP audit complete: 10 failed rows; all spawned server PIDs stopped; disposable SQLite files removed.
+EXIT: 1
+Elapsed seconds: 119.87

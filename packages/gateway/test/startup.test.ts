@@ -48,11 +48,19 @@ describe('paywall startup checks', () => {
     const bad: [Record<string, string>, RegExp][] = [
       [{ ZPV_MIN_CONF: 'abc' }, /^Setup required: ZPV_MIN_CONF \(a whole number ≥ 1/],
       [{ ZPV_MIN_CONF: '0' }, /^Setup required: ZPV_MIN_CONF .*ZPV_ALLOW_ZERO_CONF=1/],
+      [{ ZPV_MIN_CONF: '9007199254740993' }, /^Setup required: ZPV_MIN_CONF/],
+      [{ ZPV_MIN_CONF: '4294967296' }, /^Setup required: ZPV_MIN_CONF/],
       [{ ZPV_PRICE_ZAT: '-1' }, /^Setup required: ZPV_PRICE_ZAT/],
       [{ ZPV_PRICE_ZAT: '0' }, /^Setup required: ZPV_PRICE_ZAT/],
       [{ ZPV_PRICE_ZAT: '1.5' }, /^Setup required: ZPV_PRICE_ZAT/],
+      [{ ZPV_PRICE_ZAT: '2100000000000001' }, /^Setup required: ZPV_PRICE_ZAT/],
+      [{ ZPV_PRICE_ZAT: '420000000000001' }, /^Setup required: ZPV_PRICE_ZAT/],
       [{ ZPV_PORT: '70000' }, /^Setup required: ZPV_PORT/],
       [{ ZPV_ADMIN_TOKEN: 'short' }, /^Setup required: ZPV_ADMIN_TOKEN \(at least 16 characters/],
+      [{ ZPV_LWD_QUORUM: '0' }, /^Setup required: ZPV_LWD_QUORUM/],
+      [{ ZPV_LWD_URLS: 'https://testnet.zec.rocks:443,http://127.0.0.1:9', ZPV_LWD_QUORUM: '0' }, /^Setup required: ZPV_LWD_QUORUM/],
+      [{ ZPV_LWD_URLS: 'https://testnet.zec.rocks:443,http://127.0.0.1:9', ZPV_LWD_QUORUM: '3' }, /^Setup required: ZPV_LWD_QUORUM/],
+      [{ ZPV_LWD_URLS: 'https://testnet.zec.rocks:443,http://127.0.0.1:9', ZPV_LWD_QUORUM: 'abc' }, /^Setup required: ZPV_LWD_QUORUM/],
     ];
     for (const [env, msg] of bad) {
       const r = await startMain({ ...GOOD, ...env });
@@ -63,6 +71,8 @@ describe('paywall startup checks', () => {
     // 0 confirmations only when asked for explicitly.
     const zero = await startMain({ ...GOOD, ZPV_MIN_CONF: '0', ZPV_ALLOW_ZERO_CONF: '1' });
     expect(zero.listening, zero.err).toBe(true);
+    const upper = await startMain({ ...GOOD, ZPV_MIN_CONF: '4294967295', ZPV_PRICE_ZAT: '420000000000000', ZPV_LWD_URLS: 'https://testnet.zec.rocks:443,http://127.0.0.1:9', ZPV_LWD_QUORUM: '2' });
+    expect(upper.listening, upper.err).toBe(true);
   });
 
   it('a payTo that the viewing key cannot see, or that is not a shielded testnet address, is refused', async () => {

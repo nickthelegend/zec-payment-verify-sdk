@@ -1,0 +1,28 @@
+{
+  "id": "API-032",
+  "at": "2026-10-26T10:10:25.435Z",
+  "status": "PASS",
+  "note": "/api/quote OPTIONS empty; no challenge or claim stored",
+  "records": [
+    {
+      "server": "main",
+      "pid": 41915,
+      "port": 59514,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/33.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "OPTIONS",
+      "status": 204,
+      "headers": {
+        "access-control-allow-methods": "GET, HEAD, OPTIONS",
+        "allow": "GET, HEAD, OPTIONS",
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:25 GMT",
+        "keep-alive": "timeout=5"
+      },
+      "body": ""
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "API-064",
+  "at": "2026-10-26T10:05:13.317Z",
+  "status": "FAIL",
+  "note": "production startup missing credentials, bad numeric/quorum/address/key settings; defaults",
+  "error": "AssertionError: invalid ZPV_LWD_QUORUM exits 2\n\n0 !== 2\n",
+  "records": [
+    {
+      "invalidSetting": "ZPV_PAY_TO",
+      "pid": 14078,
+      "exit": 2,
+      "output": "Setup required: ZPV_PAY_TO\n"
+    },
+    {
+      "invalidSetting": "ZPV_MERCHANT_UIVK",
+      "pid": 14082,
+      "exit": 2,
+      "output": "Setup required: ZPV_MERCHANT_UIVK\n"
+    },
+    {
+      "invalidSetting": "ZPV_LWD_QUORUM",
+      "pid": 14083,
+      "exit": 2,
+      "output": "Setup required: ZPV_LWD_QUORUM (a whole number, got abc)\n"
+    },
+    {
+      "invalidSetting": "ZPV_LWD_QUORUM",
+      "pid": 14174,
+      "exit": 0,
+      "output": "zpv paywall on http://127.0.0.1:57292 (payTo utest19wj09n80xg…, min 1 confirmation(s), state in /tmp/hanko-gateway-http-BcQFKD/startup.sqlite)\n"
+    }
+  ]
+}

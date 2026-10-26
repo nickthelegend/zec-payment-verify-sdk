@@ -1,0 +1,7 @@
+COMMAND: ["node", "--import", "tsx", "../../audit/gateway/http.ts"]
+CWD: /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t5/packages/gateway
+Started UTC: 2026-10-26T10:13:24Z
+API-037 UNTESTED needs KAGE_X402_DIR
+HTTP audit complete: 0 failed rows; all spawned server PIDs stopped; disposable SQLite files removed.
+EXIT: 0
+Elapsed seconds: 0.75

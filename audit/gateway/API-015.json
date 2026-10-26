@@ -1,0 +1,44 @@
+{
+  "id": "API-015",
+  "at": "2026-10-26T10:10:16.349Z",
+  "status": "PASS",
+  "note": "wrong-prefix and malformed encoded key rejected; evidence has no keys",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 38784,
+      "port": 59451,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/16.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:16 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "uivk must be a testnet unified incoming viewing key ([REDACTED_VIEWING_KEY])"
+      }
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:16 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "not a testnet unified incoming viewing key"
+      }
+    }
+  ]
+}

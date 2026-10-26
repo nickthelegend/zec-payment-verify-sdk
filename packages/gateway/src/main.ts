@@ -32,10 +32,20 @@ async function main() {
   const payTo = need('ZPV_PAY_TO');
   const uivk = need('ZPV_MERCHANT_UIVK');
   const zeroConf = process.env.ZPV_ALLOW_ZERO_CONF === '1';
-  const minConf = Number(whole('ZPV_MIN_CONF', '1', zeroConf ? 0n : 1n, zeroConf ? '' : ' (0 accepts mempool transactions, which can still be replaced; set ZPV_ALLOW_ZERO_CONF=1 to allow it)'));
-  const price = whole('ZPV_PRICE_ZAT', '10000', 1n);
+  // zpay-verify represents confirmation counts as u32.
+  const minConf = Number(whole('ZPV_MIN_CONF', '1', zeroConf ? 0n : 1n, zeroConf ? '' : ' (0 accepts mempool transactions, which can still be replaced; set ZPV_ALLOW_ZERO_CONF=1 to allow it)', 4_294_967_295n));
+  // Both paths must stay inside the SDK's Zcash amount range; the report costs five quotes.
+  const price = whole('ZPV_PRICE_ZAT', '10000', 1n, '', 2_100_000_000_000_000n / 5n);
   const port = Number(whole('ZPV_PORT', '8403', 0n, '', 65535n));
-  crossCheckFromEnv(); // a malformed ZPV_LWD_QUORUM is Setup required now, not on the first payment
+  const crossCheck = crossCheckFromEnv();
+  // Check the range before listening too, rather than accepting payments that no check can verify.
+  if (process.env.ZPV_LWD_QUORUM?.trim()) {
+    if (!crossCheck) throw new SetupRequiredError('ZPV_LWD_QUORUM', 'requires ZPV_LWD_URLS');
+    const quorum = crossCheck.quorum!;
+    if (!Number.isSafeInteger(quorum) || quorum < 1 || quorum > crossCheck.lwdUrls.length) {
+      throw new SetupRequiredError('ZPV_LWD_QUORUM', `a whole number from 1 to ${crossCheck.lwdUrls.length}`);
+    }
+  }
   const adminToken = process.env.ZPV_ADMIN_TOKEN?.trim() || undefined;
   if (adminToken !== undefined && adminToken.length < 16) throw new SetupRequiredError('ZPV_ADMIN_TOKEN', 'at least 16 characters (it guards the refund list)');
 
