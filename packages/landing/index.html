@@ -108,7 +108,10 @@
       .hero .panes { margin-top: 220px; -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1); }
       @media (prefers-reduced-motion: no-preference) { .stage img, .stage video { animation: hk-settle 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; } @keyframes hk-settle { from { transform: scale(1.06); opacity: 0; } to { transform: none; opacity: 1; } } }
       @media (max-width: 1000px) { .hero { min-height: 0; display: block; } .stage { bottom: auto; height: min(80vw, 640px); } .stage img, .stage video { object-position: 82% 50%; } .stage::after { background: linear-gradient(90deg, rgba(255, 251, 249, 0.92) 0%, rgba(255, 251, 249, 0.35) 75%), linear-gradient(0deg, #fffbf9 0%, rgba(255, 251, 249, 0) 45%); } .hero .panes { margin-top: 8px; } }
-      @media (prefers-reduced-motion: reduce) {
+            /* motion: a slow camera drift and one soft light sweep across the art (off with reduced motion) */
+      .stage::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: soft-light; background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.5) 50%, transparent 62%) no-repeat; background-size: 260% 100%; background-position: 150% 0; }
+      @media (prefers-reduced-motion: no-preference) { .stage { animation: hk-drift 24s ease-in-out infinite alternate; } .stage::before { animation: hk-sweep 9s cubic-bezier(0.45, 0, 0.25, 1) 2.6s infinite; } @keyframes hk-drift { from { transform: scale(1) translate3d(0, 0, 0); } to { transform: scale(1.05) translate3d(-1.2%, -0.8%, 0); } } @keyframes hk-sweep { 0% { background-position: 150% 0; } 55%, 100% { background-position: -50% 0; } } }
+@media (prefers-reduced-motion: reduce) {
         .seal.armed, .seal.land { animation: none; opacity: 0.94; transform: rotate(-9deg); }
         .seal .bleed { display: none; }
       }
