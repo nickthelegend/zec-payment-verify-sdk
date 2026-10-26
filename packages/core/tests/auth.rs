@@ -108,6 +108,7 @@ async fn a_changed_proof_or_binding_signature_keeps_the_txid_and_is_refused() {
     let bad_proof = with_ironwood(&tx, rebuild(b, actions.clone(), Authorized::from_parts(Proof::new(proof), b.authorization().binding_signature().clone())));
     assert_eq!(bad_proof.txid(), tx.txid());
     assert!(matches!(auth::check_authorization(&bad_proof, &[]), Err(auth::AuthError::Invalid(_))));
+    assert!(authorized(&bad_proof, &[]).unwrap_err().to_string().starts_with("lightwalletd answered inconsistently"));
 
     // Another real transaction's binding signature.
     let (other, _) = fetch(fixtures()["x402"]["txid"].as_str().unwrap()).await;
@@ -115,6 +116,7 @@ async fn a_changed_proof_or_binding_signature_keeps_the_txid_and_is_refused() {
     let bad_sig = with_ironwood(&tx, rebuild(b, actions, Authorized::from_parts(b.authorization().proof().clone(), sig)));
     assert_eq!(bad_sig.txid(), tx.txid());
     assert!(matches!(auth::check_authorization(&bad_sig, &[]), Err(auth::AuthError::Invalid(_))));
+    assert!(authorized(&bad_sig, &[]).unwrap_err().to_string().starts_with("lightwalletd answered inconsistently"));
 }
 
 /// Two third-party testnet transactions that spend transparent coins into a shielded pool (found by

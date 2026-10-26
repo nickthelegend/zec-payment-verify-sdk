@@ -1,0 +1,53 @@
+COMMAND: ["pnpm", "exec", "vitest", "run", "--reporter=verbose"]
+CWD: packages/sdk
+START: 2026-10-26T08:27:38Z
+
+ RUN  v3.2.7 /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t3/packages/sdk
+
+ ✓ test/verify.test.ts > zcash rail > the published x402 payment verifies, with provenance 2513ms
+ ✓ test/verify.test.ts > zcash rail > wrong memo, too high an amount, someone else’s payment, unknown txid: refused with reasons 6082ms
+ ✓ test/verify.test.ts > zcash rail > a Sapling transaction is checked with the Sapling parameters the binary finds from the caller’s environment 2099ms
+ ✓ test/verify.test.ts > zcash rail > bad input and a missing binary are errors, not verdicts 3ms
+ ✓ test/verify.test.ts > null402 rail (Avalanche Fuji) > a real settled proof: valid on the deployed verifier, root known, nullifier spent → refused as a replay 1404ms
+ ✓ test/verify.test.ts > null402 rail (Avalanche Fuji) > without an expected payTo and amount the result is never ok: UNBOUND 942ms
+ ✓ test/verify.test.ts > null402 rail (Avalanche Fuji) > the same proof with its nullifier or amount changed fails the deployed verifier 981ms
+ ✓ test/verify.test.ts > null402 rail (Avalanche Fuji) > a merchant expecting another payTo, amount or context refuses the proof 431ms
+ ✓ test/verify.test.ts > null402 rail (Avalanche Fuji) > a non-settle tx or malformed signals are errors 17ms
+ ✓ test/verify.test.ts > null402 settlement (was this mined settle() a payment to me?) > a successful settle() is read with its receipt status, payee and amount 30ms
+ ✓ test/verify.test.ts > null402 settlement (was this mined settle() a payment to me?) > a successful settle() bound to the merchant is paid; another payee, amount or recipient, or no binding, is not 2003ms
+ ✓ test/verify.test.ts > null402 settlement (was this mined settle() a payment to me?) > a reverted or pending settle() is never ok, whatever the proof (the rule, on the real proof check) 664ms
+ ✓ test/verify.test.ts > null402 settlement (was this mined settle() a payment to me?) > a settlement is never paid unless the merchant says which address the pool must have paid (offline rule) 0ms
+ ✓ test/verify.test.ts > null402 settlement (was this mined settle() a payment to me?) > expected values and signals that are not decimal uint256 strings are VerifyErrors, never a match (offline) 1ms
+ ✓ test/verify.test.ts > null402 settlement (was this mined settle() a payment to me?) > a hash Fuji does not know is an error, not a verdict 157ms
+ ✓ test/crosscheck.test.ts > lightwalletd cross-check > two agreeing answers meet a quorum of 2 even with a third endpoint dead → paid, with every endpoint listed 1736ms
+ ✓ test/crosscheck.test.ts > lightwalletd cross-check > one answer when the quorum is 2 → unverified, never paid 1587ms
+ ✓ test/crosscheck.test.ts > lightwalletd cross-check > a server that does not return the transaction disagrees with one that does → unverified, whatever the quorum 3503ms
+ ✓ test/crosscheck.test.ts > lightwalletd cross-check > agreeing refusals stay refusals: the wrong memo is refused by both 1707ms
+stdout | test/crosscheck.test.ts > lightwalletd cross-check > the two public testnet indexers: paid only if both answer and agree, else unverified
+zaino testnet: did not answer (lightwalletd RPC failed: Internal: protocol error: received message with invalid compression flag: 83 (valid flags are 0 and 1) while receiving response with status: 503 Service Unavailable) → unverified
+
+ ✓ test/crosscheck.test.ts > lightwalletd cross-check > the two public testnet indexers: paid only if both answer and agree, else unverified 1589ms
+ ✓ test/crosscheck.test.ts > lightwalletd cross-check > ZPV_LWD_URLS and ZPV_LWD_QUORUM switch verify() to a cross-check; bad settings are errors (offline) 8ms
+ ✓ test/crosscheck.test.ts > cross-check rule with lightwalletd lag (offline: answers shaped like the real x402 payment at chosen tips) > one endpoint a block behind, still holding the tx in its mempool: pending (NOT_CONFIRMED), not a disagreement 0ms
+ ✓ test/crosscheck.test.ts > cross-check rule with lightwalletd lag (offline: answers shaped like the real x402 payment at chosen tips) > one endpoint a block behind that has not seen the tx at all: pending, not a disagreement 0ms
+ ✓ test/crosscheck.test.ts > cross-check rule with lightwalletd lag (offline: answers shaped like the real x402 payment at chosen tips) > both mined it, tips a block apart: the confirmations are counted at the lower tip 0ms
+ ✓ test/crosscheck.test.ts > cross-check rule with lightwalletd lag (offline: answers shaped like the real x402 payment at chosen tips) > only in mempools, one endpoint has not received it yet: pending 0ms
+ ✓ test/crosscheck.test.ts > cross-check rule with lightwalletd lag (offline: answers shaped like the real x402 payment at chosen tips) > an endpoint at or past the block that says the tx does not exist, or one far behind, is still a disagreement 0ms
+ ✓ test/hardening.test.ts > zcash rail input > a non-integer or negative amount, a bad minConf or memo, an unknown rail and a non-object are VerifyErrors (offline) 1ms
+ ✓ test/hardening.test.ts > zcash rail input > two spellings of one endpoint are not two votes (offline) 0ms
+ ✓ test/hardening.test.ts > how zpay-verify reaches lightwalletd > ZPV_LWD_PROXY reaches the binary: a dead proxy is a connection error, never a direct check 3ms
+ ✓ test/hardening.test.ts > how zpay-verify reaches lightwalletd > a plaintext URL to a remote host is a setup problem, not bad input (offline) 2ms
+ ✓ test/hardening.test.ts > how zpay-verify reaches lightwalletd > a check that gets no answer is killed after ZPV_CHECK_TIMEOUT_MS (offline) 1541ms
+ ✓ test/hardening.test.ts > how zpay-verify reaches lightwalletd > at most ZPV_MAX_CHECKS binaries run at once; past ZPV_MAX_QUEUE waiting checks the rest are BusyError (offline) 6044ms
+ ✓ test/hardening.test.ts > null402 rail limits > at most ZPV_MAX_NULL402_CHECKS Fuji checks run at once; past ZPV_MAX_QUEUE the rest are BusyError (live Fuji) 713ms
+ ✓ test/hardening.test.ts > null402 rail limits > a limiter of its own does not share slots with the default one (offline) 1ms
+ ✓ test/hardening.test.ts > cross-check answers > an endpoint whose answer contradicts itself is a dissent: unverified, with that endpoint named 1636ms
+
+ Test Files  3 passed (3)
+      Tests  35 passed (35)
+   Start at  13:57:40
+   Duration  38.49s (transform 48ms, setup 0ms, collect 725ms, tests 37.41s, environment 0ms, prepare 96ms)
+
+
+EXIT: 0
+ELAPSED_SECONDS: 40.46

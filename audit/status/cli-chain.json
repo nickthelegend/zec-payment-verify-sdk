@@ -1,0 +1,332 @@
+[
+  {
+    "id": "CLI-001",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: CLI exit 0; JSON report/verdict/lightwalletd; paid_zat=100000; reasons=[]. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-002",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: exit 1 and exact wrong-memo, underpayment, transparent, wrong-receiver reasons; real reports retained. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-003",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: floor 100000000 exits 1 NOT_CONFIRMED with actual depth; explicit --min-conf 0 exits 0. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-004",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: recorded transparent case exits 0 with --allow-transparent and no refusal reasons. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-005",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: missing/invalid amount, invalid min-conf, unknown option all exit 2 with exact diagnostics; no JSON verdict. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-006",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: isolated missing-key env and malformed tx/key exit 2; expected Setup required or field diagnostic; no paid JSON. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-007",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: one JSON report per input in order with all eight report fields, no verdict, exit 0. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-008",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: absent tx found=false; malformed/dead exit 2; SIGKILL at silent real socket emits no completed report/verdict. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-009",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: owns matching address exits 0; owns=true with orchard/sapling boolean or null; offline. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-010",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: valid other published receiver owns=false exit 1; offline. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-011",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: empty, transparent-only and malformed addresses exit 2 with expected diagnostic; bad incoming-key encoding exits 2. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-012",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: isolated env has no full viewing credential; derive exits 2 Setup required; synthetic non-secret malformed input exits 2 with empty stdout. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-013",
+    "status": "UNTESTED",
+    "evidence": "Source packages/core/src/lib.rs:uivk_from_ufvk decodes testnet full viewing credential, converts to incoming-only and encodes; main.rs derive prints result. Dependency: successful path requires prohibited UFVK access and incoming-key output. No successful derive executed; no credential read.",
+    "fix": ""
+  },
+  {
+    "id": "CLI-014",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: SDK returns paid/report/via=zpay-verify; omitted memo counts all outputs; shielded-only default rejects transparent; depth enforced. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-015",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real proof checks true/true/true; five signals; RPC/chain/contracts/block/time provenance; bound NULLIFIER_SPENT and unbound adds UNBOUND; no settlement verdict. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-016",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py sdk; test/crosscheck.test.ts: two agreeing answers meet quorum2 (two real reads of testnet.zec.rocks with port alias, SAME operator) plus dead endpoint -> paid, crossCheck.agreed true, failed endpoint excluded; agreeing refusals remain refused. This proves quorum arithmetic, NOT operator independence. Actual two-indexer test ran too: Zaino HTTP503 -> unverified. Log audit/cli-chain/sdk.txt.",
+    "fix": ""
+  },
+  {
+    "id": "CLI-017",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: one real paid answer plus dead endpoint at quorum 2 gives unverified, paidZat 0, report null, endpoint error. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-018",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py sdk; crosscheck.test.ts real testnet payment versus mainnet TX_NOT_FOUND at quorum1 and2 -> UNVERIFIED_DISAGREEMENT, no paid result/report. hardening.test.ts pairs a real fetched record with the exact inconsistent-block error tested by core, rule -> named dissent/unverified. No mock RPC. Logs audit/cli-chain/sdk.txt and core.txt. Source crossCheckVerdict returns report:null/paidZat:0 for disagreement.",
+    "fix": ""
+  },
+  {
+    "id": "CLI-019",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: live authenticated record then explicit local rule inputs: 1/2/3-block lag NOT_CONFIRMED/0 confirmations; lowest tip used; at/past/100-behind absence disagrees; no RPC mock. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-020",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: empty, canonical duplicates and quorum 0/2/fractional rejected with VerifyError; malformed env quorum Setup required. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CLI-021",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: ownership equals real CLI receiver JSON; empty/bad-key VerifyError; missing binary SetupRequiredError. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-001",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: recorded Oct20 tx authorization/inclusion/height4522621/time1792512944/10000/memo; isolated historical matching challenge returns 200 once with success receipt then replay402; no fresh payment. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-002",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: read-only historical payment block 4530239/10000/memo matches; recorded 200 success and 402 nonce_already_used receipts checked; no expired challenge presented as fresh. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-003",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded wrong-memo; exact reasons MEMO_MISMATCH,AMOUNT_TOO_LOW; paidZat 0; decrypted output/pools checked. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-004",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded underpaid; exact reasons AMOUNT_TOO_LOW; paidZat 5000; decrypted output/pools checked. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-005",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: confirmed recorded transparent-part; exact reasons TRANSPARENT_PART; paidZat 10000; decrypted output/pools checked. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-006",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 50000; paidZat 50000; exact reasons none; memo/output matched. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-007",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 100000; paidZat 50000; exact reasons AMOUNT_TOO_LOW; memo/output matched. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-008",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: payslip block 4522626 expected 50000; paidZat 0; exact reasons NO_OUTPUT_TO_KEY; memo/output matched. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-009",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: x402 block 4521112/100000/matching memo; paid; transparent false. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-010",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: auction block 4522268; paidZat 0; reasons NO_OUTPUT_TO_KEY; published amount/memo checked. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-011",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: auction block 4522268; paidZat 2000000; reasons none; published amount/memo checked. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-012",
+    "status": "UNTESTED",
+    "evidence": "Dependency: published payer incoming viewing credential for fundTx a2c0578b\u202657d3; deployments/testnet.json omits it. Read-only authorization/inclusion confirms the funding transaction, but five notes/amounts cannot be decrypted under the published merchant/x402 credentials. No wallet or private credential accessed; command: python3 audit/cli-chain/run.py audit; log: audit/cli-chain/audit.txt",
+    "fix": "Audit check now detects absent published payer credential explicitly; removed accidental fallback to unrelated fixture receiver. No product defect or credential access."
+  },
+  {
+    "id": "CHAIN-013",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py core; tests/auth.rs transparent_inputs_are_signed_over_with_their_previous_outputs_and_sapling_proofs_are_checked iterates recorded 4a9412fa\u20268634 Sapling shielding. Actual fetched transparent previous outputs authorize; missing or +1 zat prevout fails AuthError::Invalid. Sapling uses actual published parameters. Log audit/cli-chain/core.txt.",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-014",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py core; tests/auth.rs transparent_inputs_are_signed_over_with_their_previous_outputs_and_sapling_proofs_are_checked iterates recorded 6a508fd3\u20265126 Ironwood shielding. Actual fetched transparent previous outputs authorize; missing or +1 zat prevout fails AuthError::Invalid. Sapling uses actual published parameters. Log audit/cli-chain/core.txt.",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-015",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: receipt success/block 57020734; decoded pool settle calldata; bound SDK paid/settled and true proof/root/spent; proofCheck NULLIFIER_SPENT. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-016",
+    "status": "UNTESTED",
+    "evidence": "SDK path PASS for recorded 0xd91c0ab7\u20261e5c at block57020809, correct recipient/payTo/amount and paid/settled. Dependency for complete row: live MCP result for this recorded settlement from the task owning MCP; this task is explicitly forbidden to run MCP suites; command: python3 audit/cli-chain/run.py audit; log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-017",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real eth_chainId=43113; proof calls use existing published verifier/pool; Hanko deploys no contracts. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "CHAIN-018",
+    "status": "UNTESTED",
+    "evidence": "Dependency: NULL402_OPERATOR_KEY to register a new root for a valid unspent null402 proof. User explicitly requires UNTESTED. No credential sought/read, root registered or transaction submitted.",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-025",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: 10 unique published Zcash txids read via GetTransaction/GetBlock/tip at testnet.zec.rocks:443, txid recomputation/auth/inclusion enforced by inspect; heights/times/depth logged; unavailable transport emits error exit2/empty stdout. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-026",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real RPC eth_chainId 43113 and success receipt; observed exactly three SDK eth_call methods at the reported common block; allowlisted read-only methods only. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-027",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py core; tests/auth.rs: locally re-encrypted 10x note would pass amount rules but fails authorization; changed proof byte and substituted real binding signature preserve txid and fail authorization. All three additionally assert authorized() error starts lightwalletd answered inconsistently. Only copies of actual fetched transaction bytes modified; no transaction created on chain/submitted. Log audit/cli-chain/core.txt.",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-028",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py core; src/lib.rs live unit test fetches both published x402/auction tx bytes and passes each to the SAME private parse_transaction routine used by inspect and prevouts: own id accepted; other requested id returns exact lightwalletd returned a transaction whose txid differs from the one requested. tests/live.rs removes tx from real compact block or changes requested height: mapped error starts lightwalletd answered inconsistently, never paid. Log audit/cli-chain/core.txt.",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-029",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real Sapling authorization succeeds with HOME and explicit published-parameter path; missing/directory-unreadable/hash-mismatched parameter files exit 2 Setup required. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-030",
+    "status": "PASS",
+    "evidence": "Commands: python3 audit/cli-chain/run.py core and sdk. core tests/cli.rs: remote plaintext refused before connection (<3s), exit2; loopback attempts permitted; explicit ZPV_ALLOW_INSECURE_LWD=1 permits remote plaintext attempt. SDK hardening classifies remote policy rejection SetupRequiredError. Logs audit/cli-chain/core.txt, sdk.txt.",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-031",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py core; tests/transport.rs real SOCKS proxy forwards to actual testnet.zec.rocks: socks5h gives hostname to proxy; socks5 gives locally resolved address. tests/cli.rs dead proxy exits2/empty stdout, no direct fallback; non-SOCKS URL exits2 Setup required: ZPV_LWD_PROXY. Log audit/cli-chain/core.txt.",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-032",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: silent real socket timeout returns LightwalletdUnreachableError/was stopped; same single-slot limiter immediately verifies next recorded payment successfully. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-033",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py sdk; test/hardening.test.ts: 40 actual binary checks at real silent socket, max3/queue5 -> peak <=3, 32 BusyErrors and8 transport failures; 3 live Fuji checks max1/queue0 -> one valid result/two BusyErrors; independently instantiated limiter has own slots. Log audit/cli-chain/sdk.txt.",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-034",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py sdk; hardening.test.ts invalid Zcash amount/minConf/memo/rail/non-object => VerifyError; verify.test.ts invalid null402 signals/proof/expectations => VerifyError, missing binary => SetupRequiredError; real dead proxy retains LightwalletdUnreachableError. No malformed request is a paid verdict. Logs audit/cli-chain/sdk.txt; additional bad-input CLI/ownership checks in audit.txt.",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-035",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real Fuji verifier rejects 10x amount BAD_PROOF; root zero gives ROOT_UNKNOWN; merchant mismatches give all three exact mismatch reasons. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-036",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit (pnpm exec vitest run test/audit.test.ts); assertion: real recorded settlement missing payTo/amount/recipient separately is refused UNBOUND; wrong recipient refused RECIPIENT_MISMATCH. Log: audit/cli-chain/audit.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-037",
+    "status": "UNTESTED",
+    "evidence": "Dependency: recorded pending or reverted null402 settle() transaction. Published deployment and SDK recorded settlement hashes contain successful receipts only. Existing sdk verify.test.ts pending/reverted rule test passed, but it is not a real recorded pending/reverted receipt and does not satisfy this row.",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-038",
+    "status": "PASS",
+    "evidence": "Command: python3 audit/cli-chain/run.py audit-focused (pnpm exec vitest run test/audit.test.ts); assertion: malformed settlement hash rejected before RPC; recorded pool transaction wrong selector and real non-pool transaction located read-only in its preceding 25-block window rejected with exact field errors; no paid verdict. Log: audit/cli-chain/audit-focused.txt",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-039",
+    "status": "UNTESTED",
+    "evidence": "Dependency: page console/pageerror/request/HTTP evidence from the task owning browser flows. This task prohibits Chrome, Playwright, dashboard and heavy slot. No page flow exercised; core/SDK logs cannot prove browser console cleanliness.",
+    "fix": ""
+  },
+  {
+    "id": "EDGE-040",
+    "status": "UNTESTED",
+    "evidence": "Command: python3 audit/cli-chain/finalize.py; source assertions verify README/reference recorded txid links and TESTING safety split. Both examples call quicksend (transaction-sending) and were NEVER executed; no send script used as prerequisite. Dependency for full claims/evidence match: published payer incoming viewing credential for README five-note funding claim (CHAIN-012); no credential sought. Historical full-suite totals are not claimed as this scoped run. Log audit/cli-chain/documentation.txt.",
+    "fix": ""
+  }
+]

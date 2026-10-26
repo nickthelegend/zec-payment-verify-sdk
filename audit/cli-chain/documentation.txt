@@ -1,0 +1,5 @@
+README/reference recorded txid links match deployments/testnet.json and fixtures/testnet.json.
+Both examples scripts route to transaction-sending quicksend paths. Never executed in this audit.
+TESTING.md explicitly separates those sends from pnpm test. No new-send script used as prerequisite.
+Historical 104-test/49-chain counts are documented Oct23 results; this scoped audit does not claim to rerun all gateway/MCP/browser tests.
+Dependency: published payer incoming viewing credential for five-note funding claim; see CHAIN-012. Full docs-evidence match cannot be PASS with that missing evidence.

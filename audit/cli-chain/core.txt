@@ -1,0 +1,76 @@
+COMMAND: ["cargo", "test", "--release", "--", "--test-threads=1"]
+CWD: packages/core
+START: 2026-10-26T08:31:44Z
+   Compiling zpay-verify v0.1.0 (/Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t3/packages/core)
+    Finished `release` profile [optimized] target(s) in 23.22s
+     Running unittests src/lib.rs (target/release/deps/zpay_verify-661f7762fe3b7fa2)
+
+running 4 tests
+test tests::each_failure_has_its_reason ... ok
+test tests::exact_payment_passes_and_counts_only_matching_memos ... ok
+test tests::recorded_transaction_bytes_cannot_be_swapped_for_another_requested_txid ... ok
+test tests::transparent_allowed_when_asked ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.80s
+
+     Running unittests src/main.rs (target/release/deps/zpay_verify-6a963db646c9cddb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/auth.rs (target/release/deps/auth-c0ad87e5008c257a)
+
+running 4 tests
+test a_changed_proof_or_binding_signature_keeps_the_txid_and_is_refused ... ok
+test a_sapling_transaction_without_the_sapling_parameters_is_setup_required ... ok
+test real_payments_pass_and_a_payment_with_one_value_altered_and_reencrypted_is_refused ... ok
+test transparent_inputs_are_signed_over_with_their_previous_outputs_and_sapling_proofs_are_checked ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.29s
+
+     Running tests/cli.rs (target/release/deps/cli-d3171aabdf9c3376)
+
+running 6 tests
+test a_dead_proxy_fails_loudly_and_is_never_bypassed ... ok
+test a_proxy_url_that_is_not_socks5_is_a_setup_error ... ok
+test owns_says_whether_an_address_belongs_to_the_viewing_key ... ok
+test plaintext_http_to_a_remote_host_is_refused_before_any_connection ... ok
+test plaintext_http_to_loopback_is_allowed ... ok
+test zpv_allow_insecure_lwd_lets_a_remote_plaintext_url_through ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+     Running tests/live.rs (target/release/deps/live-d0405d5e0af389f0)
+
+running 7 tests
+test a_payment_to_someone_else_shows_nothing_to_this_key ... ok
+test an_answer_whose_block_does_not_list_the_tx_is_inconsistent ... ok
+test the_block_lightwalletd_names_lists_the_tx_and_gives_its_time ... ok
+test unknown_txid_and_bad_inputs ... ok
+test unreachable_lightwalletd_is_an_error_not_a_verdict ... ok
+test wrong_memo_or_higher_amount_is_refused ... ok
+test x402_payment_verifies_with_the_merchant_key ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.04s
+
+     Running tests/transport.rs (target/release/deps/transport-52bf3de0f39be811)
+
+running 4 tests
+test a_dead_proxy_is_an_error_and_never_a_direct_connection ... ok
+test a_real_socks5_proxy_carries_the_check_and_resolves_the_name ... ok
+test plaintext_to_a_remote_host_is_refused_without_a_connection_attempt ... ok
+test socks5_without_h_resolves_here_and_sends_an_address ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.21s
+
+   Doc-tests zpay_verify
+
+running 1 test
+test src/lib.rs - (line 4) - compile ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+
+EXIT: 0
+ELAPSED_SECONDS: 48.84

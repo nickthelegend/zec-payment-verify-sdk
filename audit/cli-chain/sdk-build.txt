@@ -1,0 +1,10 @@
+COMMAND: ["pnpm", "build"]
+CWD: packages/sdk
+START: 2026-10-26T08:32:22Z
+
+> @zpv/sdk@0.1.0 build /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t3/packages/sdk
+> tsc -p tsconfig.json
+
+
+EXIT: 0
+ELAPSED_SECONDS: 1.63
