@@ -1,0 +1,30 @@
+{
+  "id": "API-020",
+  "at": "2026-10-26T10:10:17.521Z",
+  "status": "PASS",
+  "note": "closed real local upstream yields 502 retry 30, never paid or caller error",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 38975,
+      "port": 59466,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/21.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 502,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:17 GMT",
+        "keep-alive": "timeout=5",
+        "retry-after": "30",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "cannot connect to lightwalletd: http://127.0.0.1:9: transport error"
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "API-038",
+  "at": "2026-10-26T10:10:26.544Z",
+  "status": "PASS",
+  "note": "malformed base64 JSON returns exact error and false settlement",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 41925,
+      "port": 59525,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/38.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjpmYWxzZSwiZXJyb3JSZWFzb24iOiJpbnZhbGlkX3BheWxvYWQiLCJ0cmFuc2FjdGlvbiI6IiIsIm5ldHdvcmsiOiJ6Y2FzaC10ZXN0bmV0IiwicGF5ZXIiOiIifQ=="
+      },
+      "body": {
+        "error": "X-PAYMENT is not base64 JSON {memo, txid}"
+      },
+      "settlement": {
+        "success": false,
+        "errorReason": "invalid_payload",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    }
+  ]
+}

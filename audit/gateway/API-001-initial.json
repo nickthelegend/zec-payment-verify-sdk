@@ -1,0 +1,8 @@
+{
+  "id": "API-001",
+  "at": "2026-10-26T10:03:24.862Z",
+  "status": "FAIL",
+  "note": "api.ts health resolves configured URL list and quorum",
+  "error": "AssertionError: local api listened",
+  "records": []
+}

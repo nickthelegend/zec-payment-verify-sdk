@@ -1,0 +1,54 @@
+{
+  "id": "API-006",
+  "at": "2026-10-26T10:10:13.275Z",
+  "status": "PASS",
+  "note": "recorded Fuji settlement proof extracted read-only and checked through HTTP",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 38491,
+      "port": 59411,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/5.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:13 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "rail": "null402",
+        "ok": false,
+        "reasons": [
+          "NULLIFIER_SPENT",
+          "UNBOUND"
+        ],
+        "checks": {
+          "proofValid": true,
+          "rootKnown": true,
+          "nullifierSpent": true
+        },
+        "signals": {
+          "nullifier": "18379680495100403617674027335066983776124833794543946286501685427163752625424",
+          "merkleRoot": "21471593931932926452254007188556698096820911734759948520223015224713992706148",
+          "payTo": "12571058244225308636482144950735848463267199877607700220033742556724671780813",
+          "requiredAmount": "1000",
+          "contextHash": "17308029270359403635016118688622732768020038449243667523492360172650349619901"
+        },
+        "provenance": {
+          "rpc": "https://api.avax-test.network/ext/bc/C/rpc",
+          "chainId": 43113,
+          "verifier": "0x0b44836dDc460f589ce4EB97f276e533A2bE6060",
+          "pool": "0x39a9C4EfabEBA954545Ecb4b16Ba1d92ec46cA1C",
+          "blockNumber": "60049868",
+          "checkedAt": "2026-10-26T10:10:13.269Z"
+        }
+      }
+    }
+  ]
+}

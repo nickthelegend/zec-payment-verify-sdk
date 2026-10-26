@@ -1,0 +1,25 @@
+{
+  "id": "API-030",
+  "at": "2026-10-26T10:10:23.224Z",
+  "status": "PASS",
+  "note": "unpaid quote HEAD has 402 JSON headers and no body",
+  "records": [
+    {
+      "server": "main",
+      "pid": 41897,
+      "port": 59501,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/30.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "HEAD",
+      "status": 402,
+      "headers": {
+        "connection": "close",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:23 GMT"
+      },
+      "body": ""
+    }
+  ]
+}

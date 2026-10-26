@@ -1,0 +1,62 @@
+{
+  "id": "API-035",
+  "at": "2026-10-26T10:10:26.104Z",
+  "status": "PASS",
+  "note": "/api/report unsupported methods rejected before claims",
+  "records": [
+    {
+      "server": "main",
+      "pid": 41921,
+      "port": 59520,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/36.sqlite"
+    },
+    {
+      "path": "/api/report",
+      "method": "POST",
+      "status": 405,
+      "headers": {
+        "allow": "GET, HEAD, OPTIONS",
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "POST is not allowed on a paid path: GET it"
+      }
+    },
+    {
+      "path": "/api/report",
+      "method": "PUT",
+      "status": 405,
+      "headers": {
+        "allow": "GET, HEAD, OPTIONS",
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "PUT is not allowed on a paid path: GET it"
+      }
+    },
+    {
+      "path": "/api/report",
+      "method": "DELETE",
+      "status": 405,
+      "headers": {
+        "allow": "GET, HEAD, OPTIONS",
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "DELETE is not allowed on a paid path: GET it"
+      }
+    }
+  ]
+}

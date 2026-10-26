@@ -1,0 +1,175 @@
+{
+  "id": "API-040",
+  "at": "2026-10-26T10:10:27.000Z",
+  "status": "PASS",
+  "note": "wrong v1 version, scheme, network and payload rejected",
+  "records": [
+    {
+      "server": "createPaywall",
+      "pid": 41927,
+      "port": 59530,
+      "store": "/tmp/hanko-gateway-http-sKnqrB/40.sqlite"
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjpmYWxzZSwiZXJyb3JSZWFzb24iOiJpbnZhbGlkX3BheWxvYWQiLCJ0cmFuc2FjdGlvbiI6IiIsIm5ldHdvcmsiOiJ6Y2FzaC10ZXN0bmV0IiwicGF5ZXIiOiIifQ=="
+      },
+      "body": {
+        "error": "X-PAYMENT must be x402Version 1, scheme zcash-shielded, network zcash-testnet"
+      },
+      "settlement": {
+        "success": false,
+        "errorReason": "invalid_payload",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjpmYWxzZSwiZXJyb3JSZWFzb24iOiJpbnZhbGlkX3BheWxvYWQiLCJ0cmFuc2FjdGlvbiI6IiIsIm5ldHdvcmsiOiJ6Y2FzaC10ZXN0bmV0IiwicGF5ZXIiOiIifQ=="
+      },
+      "body": {
+        "error": "X-PAYMENT must be x402Version 1, scheme zcash-shielded, network zcash-testnet"
+      },
+      "settlement": {
+        "success": false,
+        "errorReason": "invalid_payload",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjpmYWxzZSwiZXJyb3JSZWFzb24iOiJpbnZhbGlkX3BheWxvYWQiLCJ0cmFuc2FjdGlvbiI6IiIsIm5ldHdvcmsiOiJ6Y2FzaC10ZXN0bmV0IiwicGF5ZXIiOiIifQ=="
+      },
+      "body": {
+        "error": "X-PAYMENT must be x402Version 1, scheme zcash-shielded, network zcash-testnet"
+      },
+      "settlement": {
+        "success": false,
+        "errorReason": "invalid_payload",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjpmYWxzZSwiZXJyb3JSZWFzb24iOiJpbnZhbGlkX3BheWxvYWQiLCJ0cmFuc2FjdGlvbiI6IiIsIm5ldHdvcmsiOiJ6Y2FzaC10ZXN0bmV0IiwicGF5ZXIiOiIifQ=="
+      },
+      "body": {
+        "error": "X-PAYMENT payload must be {txid: string, memoNonce: string}"
+      },
+      "settlement": {
+        "success": false,
+        "errorReason": "invalid_payload",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjpmYWxzZSwiZXJyb3JSZWFzb24iOiJpbnZhbGlkX3BheWxvYWQiLCJ0cmFuc2FjdGlvbiI6IiIsIm5ldHdvcmsiOiJ6Y2FzaC10ZXN0bmV0IiwicGF5ZXIiOiIifQ=="
+      },
+      "body": {
+        "error": "X-PAYMENT payload must be {txid: string, memoNonce: string}"
+      },
+      "settlement": {
+        "success": false,
+        "errorReason": "invalid_payload",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjpmYWxzZSwiZXJyb3JSZWFzb24iOiJpbnZhbGlkX3BheWxvYWQiLCJ0cmFuc2FjdGlvbiI6IiIsIm5ldHdvcmsiOiJ6Y2FzaC10ZXN0bmV0IiwicGF5ZXIiOiIifQ=="
+      },
+      "body": {
+        "error": "X-PAYMENT payload must be {txid: string, memoNonce: string}"
+      },
+      "settlement": {
+        "success": false,
+        "errorReason": "invalid_payload",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    },
+    {
+      "path": "/api/quote",
+      "method": "GET",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:10:26 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked",
+        "x-payment-response": "eyJzdWNjZXNzIjpmYWxzZSwiZXJyb3JSZWFzb24iOiJpbnZhbGlkX3BheWxvYWQiLCJ0cmFuc2FjdGlvbiI6IiIsIm5ldHdvcmsiOiJ6Y2FzaC10ZXN0bmV0IiwicGF5ZXIiOiIifQ=="
+      },
+      "body": {
+        "error": "X-PAYMENT payload must be {txid: string, memoNonce: string}"
+      },
+      "settlement": {
+        "success": false,
+        "errorReason": "invalid_payload",
+        "transaction": "",
+        "network": "zcash-testnet",
+        "payer": ""
+      }
+    }
+  ]
+}

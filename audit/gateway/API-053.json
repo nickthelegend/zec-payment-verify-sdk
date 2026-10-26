@@ -1,0 +1,15 @@
+{
+  "id": "API-053",
+  "at": "2026-10-26T10:10:46.142Z",
+  "status": "PASS",
+  "note": "five real wrong-receiver refusals close challenge; matching payment becomes CHALLENGE_CLOSED refund",
+  "records": [
+    {
+      "command": "pnpm --filter @zpv/gateway test --reporter=verbose",
+      "log": "audit/gateway/suite.txt",
+      "tests": [
+        " ✓ test/limits.test.ts > gateway limits > after 5 counted refusals a challenge is closed: a payment that pays it is still checked, never served, and recorded for a refund (CHALLENGE_CLOSED) 9653ms"
+      ]
+    }
+  ]
+}

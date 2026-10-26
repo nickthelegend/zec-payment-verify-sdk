@@ -1,0 +1,51 @@
+{
+  "id": "API-007",
+  "at": "2026-10-26T10:03:41.417Z",
+  "status": "FAIL",
+  "note": "production verify disabled by default; enabled by explicit flag and api.ts",
+  "error": "AssertionError: local api listened",
+  "records": [
+    {
+      "server": "main",
+      "pid": 70021,
+      "port": 56861,
+      "store": "/tmp/hanko-gateway-http-BcQFKD/6.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 404,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:03:30 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "not found"
+      }
+    },
+    {
+      "server": "main",
+      "pid": 70159,
+      "port": 56863,
+      "store": "/tmp/hanko-gateway-http-BcQFKD/7.sqlite"
+    },
+    {
+      "path": "/api/verify",
+      "method": "POST",
+      "status": 400,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "date": "Mon, 26 Oct 2026 10:03:30 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": {
+        "error": "the request must be an object with a rail (zcash or null402)"
+      }
+    }
+  ]
+}

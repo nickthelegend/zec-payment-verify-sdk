@@ -131,6 +131,8 @@ export function errorText(e: unknown): string {
   const m = (e as { shortMessage?: unknown }).shortMessage;
   const text = typeof m === 'string' && m ? m : e instanceof Error ? e.message : String(e);
   const line = text.split('\n')[0].trim() || 'unexpected error';
+  // Keep this public validation error stable across the core's encoding/parser diagnostics.
+  if (line.startsWith('not a testnet unified incoming viewing key:')) return 'not a testnet unified incoming viewing key';
   return line.length > 300 ? `${line.slice(0, 300)}…` : line;
 }
 

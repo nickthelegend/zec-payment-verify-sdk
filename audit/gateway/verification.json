@@ -1,0 +1,29 @@
+{
+  "apiRows": {
+    "PASS": 63,
+    "UNTESTED": 1
+  },
+  "untested": {
+    "API-037": "needs KAGE_X402_DIR"
+  },
+  "gatewaySuite": {
+    "passed": 36,
+    "setupErrors": 2,
+    "setupErrorDependency": "KAGE_X402_DIR"
+  },
+  "regression": {
+    "passed": 8
+  },
+  "gatewayBuild": "PASS",
+  "httpRowsFailed": 0,
+  "evidenceFilesCheckedForFixtureKeyValues": 90,
+  "credentialValuesFoundInEvidence": 0,
+  "recordedServerOrStartupPidsNoLongerAlive": 90,
+  "disposableHttpStoreDirectoriesRemoved": 3,
+  "auditBytes": 5172647,
+  "diffCheck": "PASS",
+  "sourceChangesScopedToGateway": true,
+  "transactionsSent": 0,
+  "committed": false,
+  "pushed": false
+}

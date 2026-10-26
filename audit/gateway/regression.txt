@@ -1,0 +1,22 @@
+COMMAND: ["pnpm", "--filter", "@zpv/gateway", "exec", "vitest", "run", "test/startup.test.ts", "test/status.test.ts", "--reporter=verbose"]
+CWD: /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t5
+Started UTC: 2026-10-26T10:11:49Z
+
+ RUN  v3.2.7 /Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t5/packages/gateway
+
+ ✓ test/startup.test.ts > paywall startup checks > the published Hanko address with its own viewing key starts and listens 383ms
+ ✓ test/startup.test.ts > paywall startup checks > bad numbers are refused at startup with exit 2, naming the variable 3868ms
+ ✓ test/startup.test.ts > paywall startup checks > a payTo that the viewing key cannot see, or that is not a shielded testnet address, is refused 628ms
+ ✓ test/status.test.ts > gateway status codes > malformed testnet key encoding has a stable public error without core parser details 21ms
+ ✓ test/status.test.ts > gateway status codes > lightwalletd unreachable: /api/verify is 502 with Retry-After, the paywall 503 with Retry-After 20ms
+ ✓ test/status.test.ts > gateway status codes > a missing zpay-verify binary is 503 Setup required on both 5ms
+ ✓ test/status.test.ts > gateway status codes > a body that is not a verify request is 400, never 502 24ms
+ ✓ test/status.test.ts > gateway status codes > an upstream failure is 502 with a one-line message, without the library’s request dump or version footer 456ms
+
+ Test Files  2 passed (2)
+      Tests  8 passed (8)
+   Start at  15:41:49
+   Duration  6.20s (transform 70ms, setup 0ms, collect 423ms, tests 5.41s, environment 0ms, prepare 95ms)
+
+EXIT: 0
+Elapsed seconds: 6.83

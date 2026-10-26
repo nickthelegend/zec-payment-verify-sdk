@@ -1,0 +1,15 @@
+{
+  "id": "API-022",
+  "at": "2026-10-26T10:10:17.745Z",
+  "status": "PASS",
+  "note": "150 real HTTP requests cap child checks at 4, queue at 4; 142 busy responses retry 5",
+  "records": [
+    {
+      "command": "pnpm --filter @zpv/gateway test --reporter=verbose",
+      "log": "audit/gateway/suite.txt",
+      "tests": [
+        " ✓ test/limits.test.ts > gateway limits > 150 verify requests at once start at most ZPV_MAX_CHECKS checks; past the queue they are 503 + Retry-After 4860ms"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "API-037",
+  "at": "2026-10-26T10:13:25.539Z",
+  "status": "UNTESTED",
+  "reason": "needs KAGE_X402_DIR",
+  "configuredClient": false,
+  "siblingCheckoutPresent": false,
+  "evidence": "audit/gateway/suite.txt",
+  "independentZip321": [
+    "API-028.json",
+    "API-029.json"
+  ],
+  "independentWireForms": "API-045.json"
+}
