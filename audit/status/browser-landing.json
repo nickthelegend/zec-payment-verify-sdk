@@ -1,0 +1,235 @@
+[
+  {
+    "id": "PAGE-001",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/PAGE-001-2.json",
+      "audit/browser-landing/PAGE-001-live-2.jpg",
+      "audit/browser-landing/PAGE-001-local-2.jpg",
+      "audit/browser-landing/PAGE-001-22.json",
+      "audit/browser-landing/PAGE-001-live-22.jpg",
+      "audit/browser-landing/PAGE-001-local-22.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-002",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/PAGE-002-3.json",
+      "audit/browser-landing/PAGE-002-live-3.jpg",
+      "audit/browser-landing/PAGE-002-local-3.jpg",
+      "audit/browser-landing/PAGE-002-23.json",
+      "audit/browser-landing/PAGE-002-live-23.jpg",
+      "audit/browser-landing/PAGE-002-local-23.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-003",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/PAGE-003-4.json",
+      "audit/browser-landing/PAGE-003-24.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-004",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/PAGE-004-5.json",
+      "audit/browser-landing/PAGE-004-25.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-005",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/PAGE-005-6.json",
+      "audit/browser-landing/PAGE-005-26.json"
+    ],
+    "fix": "Audit assertion corrected to inspect DOM text for the CSS-uppercase Spend keys label. No landing change; exact numbers and TESTING.md totals pass."
+  },
+  {
+    "id": "PAGE-006",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/PAGE-006-7.json",
+      "audit/browser-landing/PAGE-006-27.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-007",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/PAGE-007-8.json",
+      "audit/browser-landing/PAGE-007-28.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "PAGE-008",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/PAGE-008-9.json",
+      "audit/browser-landing/PAGE-008-29.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-001",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/HERO-001-10.json",
+      "audit/browser-landing/HERO-001-30.json"
+    ],
+    "fix": "96d03e7: cropped the extra bottom pixel from the hero asset to produce the declared 1600x900 WebP; local Chrome decode passes."
+  },
+  {
+    "id": "HERO-002",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/HERO-002-11.json",
+      "audit/browser-landing/HERO-002-31.json",
+      "audit/browser-landing/HERO-002-41.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-003",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/HERO-003-12.json",
+      "audit/browser-landing/HERO-003-32.json"
+    ],
+    "fix": "7b02fc9: added .webp: image/webp to e2e/serve-static.mjs after the observed application/octet-stream failure. Also includes asset dimension fix 96d03e7; rerun passes."
+  },
+  {
+    "id": "HERO-004",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/HERO-004-13.json",
+      "audit/browser-landing/HERO-004-local-13.jpg",
+      "audit/browser-landing/HERO-004-live-13.jpg",
+      "audit/browser-landing/HERO-004-33.json",
+      "audit/browser-landing/HERO-004-local-33.jpg",
+      "audit/browser-landing/HERO-004-live-33.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-005",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/HERO-005-14.json",
+      "audit/browser-landing/HERO-005-34.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-006",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/HERO-006-15.json",
+      "audit/browser-landing/HERO-006-35.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-007",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/HERO-007-16.json",
+      "audit/browser-landing/HERO-007-36.json"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "HERO-008",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/HERO-008-17.json",
+      "audit/browser-landing/HERO-008-37.json"
+    ],
+    "fix": "96d03e7 and 7b02fc9: rebuilt site/ with scripts/build-pages.sh, then confirmed copied asset HTTP 200 image/webp and decoded 1600x900 in Chrome."
+  },
+  {
+    "id": "HERO-009",
+    "status": "FAIL",
+    "evidence": [
+      "audit/browser-landing/HERO-009-1.json",
+      "audit/browser-landing/HERO-009-21.json"
+    ],
+    "fix": "96d03e7 fixes the local source asset. Live rerun still decodes 1600x901; requires redeployment of hanko-landing-six with the corrected asset. No deploy performed (forbidden). Remains FAIL because the live hero exists and misses the exact size contract."
+  },
+  {
+    "id": "HERO-010",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/HERO-010-18.json",
+      "audit/browser-landing/HERO-010-local-18.jpg",
+      "audit/browser-landing/HERO-010-live-18.jpg",
+      "audit/browser-landing/HERO-010-38.json",
+      "audit/browser-landing/HERO-010-local-38.jpg",
+      "audit/browser-landing/HERO-010-live-38.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-013",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/EDGE-013-19.json",
+      "audit/browser-landing/EDGE-013-local-19.jpg",
+      "audit/browser-landing/EDGE-013-live-19.jpg",
+      "audit/browser-landing/EDGE-013-39.json",
+      "audit/browser-landing/EDGE-013-local-39.jpg",
+      "audit/browser-landing/EDGE-013-live-39.jpg"
+    ],
+    "fix": ""
+  },
+  {
+    "id": "EDGE-018",
+    "status": "PASS",
+    "evidence": [
+      "audit/browser-landing/EDGE-018-20.json",
+      "audit/browser-landing/EDGE-018-local-ctas-20.jpg",
+      "audit/browser-landing/EDGE-018-local-panenthchild1-20.jpg",
+      "audit/browser-landing/EDGE-018-local-panenthchild2-20.jpg",
+      "audit/browser-landing/EDGE-018-local-seal-20.jpg",
+      "audit/browser-landing/EDGE-018-local-facts-20.jpg",
+      "audit/browser-landing/EDGE-018-local-strip-20.jpg",
+      "audit/browser-landing/EDGE-018-local-footer-20.jpg",
+      "audit/browser-landing/EDGE-018-local-20.jpg",
+      "audit/browser-landing/EDGE-018-live-ctas-20.jpg",
+      "audit/browser-landing/EDGE-018-live-panenthchild1-20.jpg",
+      "audit/browser-landing/EDGE-018-live-panenthchild2-20.jpg",
+      "audit/browser-landing/EDGE-018-live-seal-20.jpg",
+      "audit/browser-landing/EDGE-018-live-facts-20.jpg",
+      "audit/browser-landing/EDGE-018-live-strip-20.jpg",
+      "audit/browser-landing/EDGE-018-live-footer-20.jpg",
+      "audit/browser-landing/EDGE-018-live-20.jpg",
+      "audit/browser-landing/EDGE-018-40.json",
+      "audit/browser-landing/EDGE-018-local-ctas-40.jpg",
+      "audit/browser-landing/EDGE-018-local-panenthchild1-40.jpg",
+      "audit/browser-landing/EDGE-018-local-panenthchild2-40.jpg",
+      "audit/browser-landing/EDGE-018-local-seal-40.jpg",
+      "audit/browser-landing/EDGE-018-local-facts-40.jpg",
+      "audit/browser-landing/EDGE-018-local-strip-40.jpg",
+      "audit/browser-landing/EDGE-018-local-footer-40.jpg",
+      "audit/browser-landing/EDGE-018-local-40.jpg",
+      "audit/browser-landing/EDGE-018-live-ctas-40.jpg",
+      "audit/browser-landing/EDGE-018-live-panenthchild1-40.jpg",
+      "audit/browser-landing/EDGE-018-live-panenthchild2-40.jpg",
+      "audit/browser-landing/EDGE-018-live-seal-40.jpg",
+      "audit/browser-landing/EDGE-018-live-facts-40.jpg",
+      "audit/browser-landing/EDGE-018-live-strip-40.jpg",
+      "audit/browser-landing/EDGE-018-live-footer-40.jpg",
+      "audit/browser-landing/EDGE-018-live-40.jpg"
+    ],
+    "fix": ""
+  }
+]
