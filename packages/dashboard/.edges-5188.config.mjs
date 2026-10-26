@@ -1,0 +1,3 @@
+import base from './vite.config.ts';
+import react from '@vitejs/plugin-react';
+export default {...base,envDir:false,plugins:[react()],resolve:{alias:{'@fixtures':"/Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12/fixtures"}},define:{'import.meta.env.VITE_ZPV_API':"\"http://127.0.0.1:18403\"",'import.meta.env.VITE_ZPV_PROXY_API':undefined,'import.meta.env.VITE_ZPV_PAGES':'undefined'},server:{...base.server,host:'localhost',port:5188,strictPort:true,fs:{allow:["/Volumes/Extreme SSD/Projects/grokbot/projects/.loom-worktrees/zec-payment-verify-sdk-db1cb9d13ca0/omvoze23f/t12"]}}};
