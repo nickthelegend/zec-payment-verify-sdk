@@ -1,0 +1,312 @@
+{
+  "id": "PAGE-019",
+  "attempt": 1,
+  "at": "2026-10-26T08:37:06.186Z",
+  "browser": "155.0.8059.85",
+  "checks": [
+    {
+      "surface": "live",
+      "check": "reference HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "live",
+      "check": "fragment #overview has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #overview has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #overview has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #quickstart has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #zcash has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #crosscheck has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #reasons has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #null402 has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #paywall has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #api has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #mcp has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #evidence has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #tests has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #trust has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #trust has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "fragment #crosscheck has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "#overview exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 60,
+        "bars": 60,
+        "height": 900
+      }
+    },
+    {
+      "surface": "live",
+      "check": "footer overview returns to ./",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "footer source targets repo",
+      "pass": true
+    },
+    {
+      "surface": "live",
+      "check": "exact footer copyright",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "reference HTTP 200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "surface": "local",
+      "check": "fragment #overview has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #overview has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #overview has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #quickstart has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #zcash has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #crosscheck has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #reasons has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #null402 has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #paywall has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #api has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #mcp has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #evidence has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #tests has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #trust has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #trust has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "fragment #crosscheck has exactly one target",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "#overview exposed below sticky bars",
+      "pass": true,
+      "actual": {
+        "y": 60,
+        "bars": 60,
+        "height": 900
+      }
+    },
+    {
+      "surface": "local",
+      "check": "footer overview returns to ./",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "footer source targets repo",
+      "pass": true
+    },
+    {
+      "surface": "local",
+      "check": "exact footer copyright",
+      "pass": true
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "reducedMotion": "no-preference"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:54657/reference.html",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "reducedMotion": "no-preference"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "network": [
+    {
+      "surface": "live",
+      "url": "https://hanko-landing-six.vercel.app/reference.html",
+      "status": 200,
+      "resourceType": "document"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "live",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "local",
+      "url": "http://127.0.0.1:54657/reference.html",
+      "status": 200,
+      "resourceType": "document"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+      "status": 200,
+      "resourceType": "stylesheet"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/hankengrotesk/v12/ieVn2YZDLWuGJpnzaiwFXS9tYtpd59CxCis4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    },
+    {
+      "surface": "local",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2",
+      "status": 200,
+      "resourceType": "font"
+    }
+  ],
+  "requestFailures": [],
+  "errors": [],
+  "screenshots": [],
+  "failures": {
+    "network": [],
+    "console": [],
+    "pageErrors": [],
+    "requestFailures": []
+  },
+  "status": "PASS"
+}
